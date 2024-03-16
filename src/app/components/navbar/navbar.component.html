@@ -1,0 +1,29 @@
+
+<div class="card mb-5">
+    @if(isLoggedIn) {
+        <p-menubar [model]="items">
+            <ng-template pTemplate="start">
+                <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
+            </ng-template>
+            <ng-template pTemplate="end">
+                    <p-menu #menu [model]="userMenu" [popup]="true"></p-menu>
+                    <p-button icon="pi pi-user" styleClass="mr-2 rounded"  (click)="menu.toggle($event)" [style]="{'background-color':'#2196F3', 'color': '#ffffff','cursor': 'pointer'}" ></p-button>
+                
+            </ng-template>
+        </p-menubar>
+    }
+    @else {
+        <p-menubar>
+            <ng-template pTemplate="start">
+                <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
+            </ng-template>
+            <ng-template pTemplate="end">
+            </ng-template>
+        </p-menubar>
+    }
+    
+</div>
+
+
+
+
