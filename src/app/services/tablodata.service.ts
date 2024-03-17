@@ -15,10 +15,10 @@ interface TreeNode {
   providedIn: 'root'
 })
 export class TablodataService {
-  public ornekData: string[][] = [
+  public ornekData: any[][] = [
     ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam'],
     ['1', 'Başlık', '', '','',''],
-    ['1.1', 'x işi', 'Markası', 'metre','20000',''],
+    ['1.1', 'x işi', 'Markası', 'metre',20,''],
     ['1.2', '', '', '','',''],
     ['1.2.1', '', '', '','','']
   ];
@@ -26,7 +26,7 @@ export class TablodataService {
 
   constructor() { }
 
-  columns(ornekData: string[][]) {
+  columns(ornekData: any[][]) {
     let cols : Column[] =[]
     let len = ornekData[0].length;
     for(let i=0; i<len; i++) {
@@ -39,7 +39,9 @@ export class TablodataService {
         field: ornekData[0][i],
         header: ornekData[0][i],
         editable: editable,
-        numberField: nf
+        numberField: nf,
+        isBirim: false,
+        isToplam: false
       })
     }
     return cols;

@@ -91,7 +91,9 @@ export class KesifOlusturComponent implements OnInit {
       field: name,
       header: name,
       editable: true,
-      numberField: false
+      numberField: false,
+      isBirim: false,
+      isToplam: false
     })
 
     this.colNames.push(name);
@@ -99,35 +101,40 @@ export class KesifOlusturComponent implements OnInit {
     //Satırları Güncelle
     this.dataService.addColumnToTree(this.files,name,'');
 
-    console.log( this.files);
+    //console.log( this.files);
 
   }
 
   addBirimCol(name: string = 'Diğer') {
     let birimName = name +' Birim Fiyat'
     let toplamName = name +' Toplam Fiyat'
+    console.log(this.cols);
     this.cols.push({
       field: birimName,
       header: birimName,
       editable: true,
       numberField: true,
-      relatedField: name + ' Toplam Fiyat'
+      relatedField: toplamName,
+      isBirim:true,
+      isToplam: false
     });
+    console.log(this.cols)
     this.colNames.push(birimName);
 
-    this.dataService.addColumnToTree(this.files,birimName,0);
+    //this.dataService.addColumnToTree(this.files,birimName,0);
 
     this.cols.push({
       field: toplamName,
       header: toplamName,
       editable: false,
       numberField: true,
-      relatedField: name + ' Birim Fiyat'
+      isBirim: false,
+      isToplam: true
     })
 
     this.colNames.push(toplamName);
 
-    this.dataService.addColumnToTree(this.files,toplamName,0);
+    //this.dataService.addColumnToTree(this.files,toplamName,0);
 
   }
 
@@ -141,11 +148,27 @@ export class KesifOlusturComponent implements OnInit {
   }
 
   onCellEdit(event: any, rowData: any, field: string) {
-    if (field.includes('Birim Fiyat')) {
-      
+    let col = this.cols.find(x=>x.field == field)
+    if (col) {
+      //rowData[rowData.relatedField] = 12000;
+      if ( col.relatedField) {      
+        rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
+      }
     }
    rowData[field] = event;
-   console.log(event, field, rowData, this.files)
+   let toplamCols = this.cols.filter(x=>x.isToplam==true);
+   let toplam = 0;
+   if(toplamCols) {
+    for (let i=0; i<toplamCols.length; i++) {
+      toplam += Number(rowData[toplamCols[i].field])
+    }
+
+    rowData['Toplam'] = toplam;
+   
+   }
+   
+   console.log( field);
+   //console.log(event, field, rowData, this.files)
     // Here you can handle the changed data, for example, you can send it to backend or update your data model.
   }
 

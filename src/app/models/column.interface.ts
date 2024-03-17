@@ -4,4 +4,6 @@ export interface Column {
     editable: boolean;
     numberField: boolean;
     relatedField?: string;
+    isBirim: boolean;
+    isToplam: boolean;
   }
