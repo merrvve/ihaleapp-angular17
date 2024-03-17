@@ -16,7 +16,7 @@ interface TreeNode {
 })
 export class TablodataService {
   public ornekData: string[][] = [
-    ['Key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam'],
+    ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam'],
     ['1', 'Başlık', '', '','',''],
     ['1.1', 'x işi', 'Markası', 'metre','20000',''],
     ['1.2', '', '', '','',''],
@@ -31,7 +31,10 @@ export class TablodataService {
     let len = ornekData[0].length;
     for(let i=0; i<len; i++) {
       let editable = i ===0 ? false : true;
-      let nf = i===len-1 ? true : false;
+      let nf=false;
+      if(ornekData[0][i].toLocaleLowerCase().includes('miktar') || ornekData[0][i].toLocaleLowerCase().includes('toplam')) {
+          nf=true;
+      }
       cols.push({
         field: ornekData[0][i],
         header: ornekData[0][i],
@@ -42,12 +45,18 @@ export class TablodataService {
     return cols;
   }
 
-  convertToTreeTable(data: string[][], columns:string[]): any[] {
-    console.log(data);
+  convertToTreeTable(data: string[][], cols?: string[]): any[] {
     if (data.length < 2) {
         throw new Error('Input data should have at least two lists: column names and row data.');
     }
-
+    let columns = [];
+    
+    if (cols) {
+      columns = cols;
+    }
+    else {
+      columns = data[0];
+    }
     const result: any[] = [];
 
     // Create a map to store nodes by their keys for easy access
@@ -79,7 +88,6 @@ export class TablodataService {
         // Assign data to the node
         for (let j = 1; j < columns.length; j++) {
             node.data[columns[j]] = row[j];
-           // node.expanded = true;
         }
     }
 
@@ -87,11 +95,12 @@ export class TablodataService {
 }
 
 
-addColumnToTree(dataTree: any[], columnName: string): void {
+
+addColumnToTree(dataTree: any[], columnName: string, value: any): void {
   // Iterate through each node in the dataTree
   const traverseTree = (node: any) => {
       // Add the new column with empty values to the node
-      node.data[columnName] = '';
+      node.data[columnName] = value;
 
       // Recursively traverse through children
       for (const child of node.children) {

@@ -44,22 +44,22 @@
                   }
                   <p-treeTableCellEditor>
                     <ng-template pTemplate="input">
-                      @if (col.numberField== true) {
-                        <p-inputNumber [(ngModel)]="rowData[col.field]"
-                          (ngModelChange)="onCellEdit($event, rowData, col.field)"
-                        inputId="locale-german" mode="decimal" locale="de-DE" [minFractionDigits]="2"> </p-inputNumber>
-                      }
-                      @if (col.numberField== false) {
-                        <input pInputText type="text"
-                          [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field)" />
-                        }
-                        <input pInputText [type]="col.numberField ? 'number' : 'text'"
-                          mode="decimal" locale="de-DE"
-                          [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field)" />
-                        </ng-template>
-                        <ng-template pTemplate="output">{{ rowData[col.field] }}</ng-template>
-                      </p-treeTableCellEditor>
-                    </td>
+                        <div class="input-container">
+                            @if (col.numberField== true) {
+                                <p-inputNumber [(ngModel)]="rowData[col.field]"
+                                  (ngModelChange)="onCellEdit($event, rowData, col.field)"
+                                inputId="locale-german" mode="decimal" locale="de-DE" [minFractionDigits]="2"> </p-inputNumber>
+                              }
+                              @else {
+                                <input pInputText type="text"
+                                  [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field)" />
+                                }
+                        </div>
+                    
+                    </ng-template>
+                    <ng-template pTemplate="output">{{ rowData[col.field] }}</ng-template>
+                </p-treeTableCellEditor>
+                </td>
                   }
                 </tr>
               </ng-template>
@@ -71,25 +71,3 @@
     </div>
 
 
-    
-<div class="card">
-    <p-treeTable [value]="files" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Type</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-            <tr [ttRow]="rowNode">
-                <td>
-                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                    {{ rowData.name }}
-                </td>
-                <td>{{ rowData.size }}</td>
-                <td>{{ rowData.type }}</td>
-            </tr>
-        </ng-template>
-    </p-treeTable>
-</div>
