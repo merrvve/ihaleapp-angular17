@@ -1,1 +1,95 @@
-<p>kesif-olustur works!</p>
+<div class="container mt-5">
+  <div class="card">
+    <!-- Bilgilendirme -->
+    <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
+
+    <!-- Araçlar -->
+    <p-toolbar>
+      <div class="p-toolbar-group-start">
+        <button pButton icon="pi pi-download" label="Excel Dosyası Yükle" class="mr-2"></button>
+
+        <button pButton icon="pi pi-upload" label="Excel'e Aktar" class="mr-2"></button>
+
+
+        <button pButton type="button" class="p-button-success mx-2"  (click)="menu.toggle($event)" icon="pi pi-plus" label="Sütun Ekle"></button>
+        <button pButton type="button" class="p-button-danger mx-2"  icon="pi pi-trash" label="Sütun Sil"></button>
+
+        <p-menu #menu [model]="addColItems" [popup]="true"></p-menu>
+
+      </div>
+      <div class="p-toolbar-group-end">
+        <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="{0} sütun seçildi" [style]="{ width: '20em' }" defaultLabel="Gösterilecek Sütunları Seç" display="chip"></p-multiSelect>
+      </div>
+
+    </p-toolbar>
+    <!-- Tablo -->
+    <p-treeTable [reorderableColumns]="true"  [value]="files" [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines" [tableStyle]="{'min-width':'50rem'}">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            @for (col of columns; track col) {
+              <th ttReorderableColumn [ttSortableColumn]="col.field">
+                {{ col.header }}
+                <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+              </th>
+            }
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+            <tr [ttRow]="rowNode" [ttContextMenuRow]="rowNode">
+              @for (col of columns; track col; let i = $index) {
+                <td ttEditableColumn [ttEditableColumnDisabled]="col.editable == false" [ngClass]="{ 'p-toggler-column': i === 0 }">
+                  @if (i === 0) {
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                  }
+                  <p-treeTableCellEditor>
+                    <ng-template pTemplate="input">
+                      @if (col.numberField== true) {
+                        <p-inputNumber [(ngModel)]="rowData[col.field]"
+                          (ngModelChange)="onCellEdit($event, rowData, col.field)"
+                        inputId="locale-german" mode="decimal" locale="de-DE" [minFractionDigits]="2"> </p-inputNumber>
+                      }
+                      @if (col.numberField== false) {
+                        <input pInputText type="text"
+                          [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field)" />
+                        }
+                        <input pInputText [type]="col.numberField ? 'number' : 'text'"
+                          mode="decimal" locale="de-DE"
+                          [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field)" />
+                        </ng-template>
+                        <ng-template pTemplate="output">{{ rowData[col.field] }}</ng-template>
+                      </p-treeTableCellEditor>
+                    </td>
+                  }
+                </tr>
+              </ng-template>
+     
+   
+        </p-treeTable>
+        <p-contextMenu #cm [model]="rowContextItems"></p-contextMenu>
+      </div>
+    </div>
+
+
+    
+<div class="card">
+    <p-treeTable [value]="files" [scrollable]="true" [tableStyle]="{'min-width':'50rem'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th>Type</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr [ttRow]="rowNode">
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                    {{ rowData.name }}
+                </td>
+                <td>{{ rowData.size }}</td>
+                <td>{{ rowData.type }}</td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>

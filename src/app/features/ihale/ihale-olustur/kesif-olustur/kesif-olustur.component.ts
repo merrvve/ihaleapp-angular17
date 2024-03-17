@@ -2,6 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { MenuItem, Message, TreeNode } from 'primeng/api';
 import { TablodataService } from '../../../../services/tablodata.service';
 import { Column } from '../../../../models/column.interface';
+import { MessagesModule } from 'primeng/messages';
+import { ToolbarModule } from 'primeng/toolbar';
+import { MenuModule } from 'primeng/menu';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { TreeTableModule } from 'primeng/treetable';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ContextMenuModule } from 'primeng/contextmenu';
+import { NgClass } from '@angular/common';
 
 
 
@@ -10,7 +20,9 @@ import { Column } from '../../../../models/column.interface';
 @Component({
   selector: 'app-kesif-olustur',
   standalone: true,
-  imports: [],
+  imports: [MessagesModule, MenuModule, ToolbarModule, MultiSelectModule, 
+    FormsModule, ButtonModule, TreeTableModule, InputNumberModule,
+   ContextMenuModule, NgClass],
   templateUrl: './kesif-olustur.component.html',
   styleUrl: './kesif-olustur.component.scss'
 })
@@ -37,7 +49,7 @@ export class KesifOlusturComponent implements OnInit {
     this.colNames = this.dataService.ornekData[0];
     this.cols = this.dataService.columns(this.dataService.ornekData); 
     this.files = this.dataService.convertToTreeTable(this.dataService.ornekData, this.colNames); 
-
+console.log( this.files);
     // menüleri oluştur
 
     this.rowContextItems = [

@@ -43,6 +43,7 @@ export class TablodataService {
   }
 
   convertToTreeTable(data: string[][], columns:string[]): any[] {
+    console.log(data);
     if (data.length < 2) {
         throw new Error('Input data should have at least two lists: column names and row data.');
     }
@@ -78,6 +79,7 @@ export class TablodataService {
         // Assign data to the node
         for (let j = 1; j < columns.length; j++) {
             node.data[columns[j]] = row[j];
+           // node.expanded = true;
         }
     }
 
