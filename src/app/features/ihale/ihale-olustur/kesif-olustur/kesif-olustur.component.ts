@@ -12,6 +12,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ContextMenuModule } from 'primeng/contextmenu';
+import { DialogModule } from 'primeng/dialog';
 import { NgClass } from '@angular/common';
 
 
@@ -23,7 +24,7 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [MessagesModule, MenuModule, ToolbarModule, MultiSelectModule, 
     FormsModule, ButtonModule, TreeTableModule, InputNumberModule,
-   ContextMenuModule, NgClass, InputTextModule],
+   ContextMenuModule, NgClass, InputTextModule, DialogModule],
   templateUrl: './kesif-olustur.component.html',
   styleUrl: './kesif-olustur.component.scss'
 })
@@ -42,7 +43,14 @@ export class KesifOlusturComponent implements OnInit {
   addColItems!: MenuItem[]; //Sütun Ekle Menüsü
 
   messages: Message[] =[]; // bilgilendirme mesajı
+
   
+  visible: boolean = false;
+
+    showDialog() {
+        this.visible = true;
+    }
+
   constructor(private dataService: TablodataService) {}
 
   ngOnInit(): void {
@@ -64,7 +72,7 @@ export class KesifOlusturComponent implements OnInit {
     { label: 'Malzeme Birim Fiyat', icon: 'pi pi-shopping-bag', command: (event) => this.addBirimCol('Malzeme')  },
     { label: 'İşçilik Birim Fiyat', icon: 'pi pi-id-card', command: (event) => this.addBirimCol('İşçilik') },
     { label: 'Diğer Birim Fiyat', icon: 'pi pi-calculator', command: (event) => this.addBirimCol() },
-    { label: 'Diğer Sütun', icon: 'pi pi-server', command: (event) => this.addOtherCol('Diğer') }
+    { label: 'Diğer Sütun', icon: 'pi pi-server', command: (event) => this.showDialog() }
     ];
 
 
@@ -87,7 +95,7 @@ export class KesifOlusturComponent implements OnInit {
   
   addOtherCol(name: string) {
     //Sütunları Güncelle
-    this.cols.push({
+    this.cols.splice(2,0,{
       field: name,
       header: name,
       editable: true,
@@ -97,6 +105,7 @@ export class KesifOlusturComponent implements OnInit {
     })
 
     this.colNames.push(name);
+    this.visible = false;
 
     //Satırları Güncelle
     this.dataService.addColumnToTree(this.files,name,'');
@@ -109,7 +118,7 @@ export class KesifOlusturComponent implements OnInit {
     let birimName = name +' Birim Fiyat'
     let toplamName = name +' Toplam Fiyat'
     console.log(this.cols);
-    this.cols.push({
+    this.cols.splice(this.cols.length-1,0,{
       field: birimName,
       header: birimName,
       editable: true,
@@ -123,7 +132,7 @@ export class KesifOlusturComponent implements OnInit {
 
     //this.dataService.addColumnToTree(this.files,birimName,0);
 
-    this.cols.push({
+    this.cols.splice(this.cols.length-1,0,{
       field: toplamName,
       header: toplamName,
       editable: false,

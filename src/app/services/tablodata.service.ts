@@ -90,6 +90,7 @@ export class TablodataService {
         // Assign data to the node
         for (let j = 1; j < columns.length; j++) {
             node.data[columns[j]] = row[j];
+            node.expanded = true;
         }
     }
 

@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  <div class="card">
+  <div class="card mb-5">
     <!-- Bilgilendirme -->
     <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
 
@@ -22,6 +22,17 @@
       </div>
 
     </p-toolbar>
+
+    
+<div class="card flex justify-content-center">
+  <p-dialog header="Sütun Ekle" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '25vw' }" [draggable]="false" [resizable]="false">
+      <p>
+      Sütun Adı:     
+      </p>
+      <input type="text" pInputText #colName placeholder="Sütun Adı Giriniz"/>
+      <p-button (click)="addOtherCol(colName.value)" label="Sütun Ekle" class="mt-5"></p-button>
+  </p-dialog>
+</div>
     <!-- Tablo -->
     <p-treeTable [reorderableColumns]="true"  [value]="files" [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines" [tableStyle]="{'min-width':'50rem'}">
         <ng-template pTemplate="header" let-columns>
@@ -67,6 +78,9 @@
    
         </p-treeTable>
         <p-contextMenu #cm [model]="rowContextItems"></p-contextMenu>
+      </div>
+      <div class="card align-items-end">
+        <p-button label="Satır Ekle" icon="pi pi-plus" severity="succeess"></p-button>
       </div>
     </div>
 
