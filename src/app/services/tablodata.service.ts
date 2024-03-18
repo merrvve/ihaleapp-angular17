@@ -47,7 +47,7 @@ export class TablodataService {
     return cols;
   }
 
-  convertToTreeTable(data: string[][], cols?: string[]): any[] {
+  convertToTreeTable(data: string[][], cols?: string[]): TreeNode[] {
     if (data.length < 2) {
         throw new Error('Input data should have at least two lists: column names and row data.');
     }
@@ -117,70 +117,46 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
   }
   }
 
-  addRowBelow(dataTree: any[], rowIndex: number): void {
-    // Generate a unique key for the new row
-    const generateKey = () => {
-        let maxKey = 0;
-        const traverseTree = (node: any) => {
-            const key = parseInt(node.data.key.split('.')[0]);
-            if (key > maxKey) {
-                maxKey = key;
-            }
-            for (const child of node.children) {
-                traverseTree(child);
-            }
-        };
-        for (const rootNode of dataTree) {
-            traverseTree(rootNode);
-        }
-        return (maxKey + 1).toString();
-    };
-
-    // Function to update key values recursively
-    const updateKeys = (node: any, parentKey: string) => {
-        const oldKey = node.data.key;
-        const newKey = parentKey ? `${parentKey}.${generateKey()}` : generateKey();
-        node.data.key = newKey;
-
-        // Recursively update key values for children
-        for (const child of node.children) {
-            updateKeys(child, newKey);
-        }
-    };
-
-    // Find the node at the specified rowIndex
-    let count = 0;
-    let targetNode : TreeNode = {
-      data: {
-        key: ''
-      },
-      children: []
-    } ;
-    const findNodeAtIndex = (node: any) => {
-        if (count === rowIndex) {
-            targetNode = node;
-            return;
-        }
-        count++;
-        for (const child of node.children) {
-            findNodeAtIndex(child);
-        }
-    };
-    for (const rootNode of dataTree) {
-        findNodeAtIndex(rootNode);
+  findNodeByKey(node: TreeNode, key: string): TreeNode | null {
+    // Check if the current node has the given key
+    if (node.data.key === key) {
+        return node;
     }
 
-    if (!targetNode) {
-        throw new Error('Row index out of bounds.');
+    // Traverse children nodes recursively
+    for (const child of node.children) {
+        const foundNode = this.findNodeByKey(child, key);
+        if (foundNode !== null) {
+            return foundNode;
+        }
     }
 
-    // Create a new row node
-    const newRow: TreeNode = { data: { key: '' }, children: [] };
-    updateKeys(newRow, targetNode.data.key);
+    // Key not found in this branch
+    return null;
+}
 
-    // Insert the new row node below the target node
-    const index = dataTree.indexOf(targetNode);
-    dataTree.splice(index + 1, 0, newRow);
+ addRowBelow(dataTree: any[], rowKey: string, parentKey: string): void {
+  
+  
+  let parentNode: TreeNode |null = {
+    data: {
+      key: ''
+    },
+    children: []
   }
+  
+  for (const nodes of dataTree) {
+    parentNode=this.findNodeByKey(nodes,parentKey)
+  }
+
+  if(parentNode) {
+    const newNode: TreeNode = { data: { key:rowKey }, children: [] };
+    parentNode.children.push(newNode);  
+  }
+ 
+
+}
+
+
 
 }

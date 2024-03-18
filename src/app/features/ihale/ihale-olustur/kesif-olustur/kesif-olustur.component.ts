@@ -83,7 +83,8 @@ export class KesifOlusturComponent implements OnInit {
   }
   addRowBelow(): void {
     console.log(this.selectedNode);
-    this.dataService.addRowBelow(this.files,2);
+    this.dataService.addRowBelow(this.files, '1.2.2', '1.2'); 
+    console.log(this.files)
   }
   deleteNode(selectedNode: TreeNode<any>): void {
     throw new Error('Method not implemented.');
