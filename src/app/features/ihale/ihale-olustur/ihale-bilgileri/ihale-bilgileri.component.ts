@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { IhaleOlusturComponent } from '../ihale-olustur.component';
 
 @Component({
   selector: 'app-ihale-bilgileri',
   standalone: true,
-  imports: [],
+  imports: [IhaleOlusturComponent],
   templateUrl: './ihale-bilgileri.component.html',
   styleUrl: './ihale-bilgileri.component.scss'
 })

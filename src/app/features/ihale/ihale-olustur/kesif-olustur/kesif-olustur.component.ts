@@ -14,6 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
 import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { IhaleOlusturComponent } from '../ihale-olustur.component';
 
 
 
@@ -24,7 +26,7 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [MessagesModule, MenuModule, ToolbarModule, MultiSelectModule, 
     FormsModule, ButtonModule, TreeTableModule, InputNumberModule,
-   ContextMenuModule, NgClass, InputTextModule, DialogModule],
+   ContextMenuModule, NgClass, InputTextModule, DialogModule, RouterLink, IhaleOlusturComponent],
   templateUrl: './kesif-olustur.component.html',
   styleUrl: './kesif-olustur.component.scss'
 })

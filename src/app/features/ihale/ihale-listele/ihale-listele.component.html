@@ -1,1 +1,25 @@
-<p>ihale-listele works!</p>
+
+<div class="card">
+    <p-table [value]="ihaleler" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>No</th>
+                <th>Adı</th>
+                <th>Tarih</th>
+                <th>Diğer</th>
+                <th style="width: 5rem">Detay</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ihale>
+            <tr>
+                <td>{{ ihale.id }}</td>
+                <td>{{ ihale.adi }}</td>
+                <td>{{ ihale.tarih }}</td>
+                <td>{{ ihale.link }}</td>
+                <td>
+                    <button type="button" pButton pRipple icon="pi pi-arrow-right" (click)="selectIhale(ihale)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

@@ -1,3 +1,4 @@
+<app-ihale-olustur></app-ihale-olustur>
 <div class="container mt-5">
   <div class="card mb-5">
     <!-- Bilgilendirme -->
@@ -83,7 +84,7 @@
       <div class="flex">
         <div class="card text-end">
           <p-button label="Taslak Olarak Kaydet" icon="pi pi-save" severity="success" (click)="saveDraft()" class="mx-3"></p-button>
-          <p-button label="İlerle" icon="pi pi-arrow-right"></p-button>
+          <p-button label="İlerle" icon="pi pi-arrow-right" [routerLink]="['/ihale/ihale-olustur/dokumanlar']"></p-button>
         </div>
       </div>
     </div>

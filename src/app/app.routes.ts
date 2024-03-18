@@ -12,12 +12,13 @@ import { IhaleListeleComponent } from './features/ihale/ihale-listele/ihale-list
 export const routes: Routes = [
     {path:'login', component: LoginComponent},
     {path:'ihale', children: [
-        {path:'ihale-olustur', component: IhaleOlusturComponent, children: [
+        {path:'ihale-olustur', children: [
             {path:'kesif-olustur', component: KesifOlusturComponent},
             {path:'dokumanlar', component: DokumanlarComponent},
             {path:'istenen-dokumanlar', component: IstenenDokumanlarComponent},
             {path:'teklifci-ekleme', component: TeklifciEklemeComponent},
             {path:'ihale-bilgileri', component: IhaleBilgileriComponent},
+            {path:'', redirectTo:'kesif-olustur', pathMatch:'full'}
         ]},
         {path: 'listele', component: IhaleListeleComponent},
         {path: '', redirectTo:'listele', pathMatch:'full' }

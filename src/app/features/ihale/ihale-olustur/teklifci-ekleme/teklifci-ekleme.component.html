@@ -1,1 +1,8 @@
-<p>teklifci-ekleme works!</p>
+<app-ihale-olustur></app-ihale-olustur>
+<div class="container mt-5">
+    <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
+</div>
+<div class="flex justify-content-center mt-5">
+    <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/teklifci-ekleme']"></p-button>
+    <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-3" [routerLink]="['/ihale/ihale-olustur/ihale-bilgileri']"></p-button>
+</div>

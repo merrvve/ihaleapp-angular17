@@ -1,1 +1,24 @@
-<p>dokumanlar works!</p>
+<app-ihale-olustur></app-ihale-olustur>
+<div class="container mt-5">
+    <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
+</div>
+<div class="container flex justify-content-center mt-5">
+    
+    <p-fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true">
+        <ng-template pTemplate="toolbar">
+            <div class="py-3">Lütfen yüklenecek dosyaları seçiniz.</div>
+        </ng-template>
+        <ng-template let-file pTemplate="file">
+            <div>
+                
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content" let-files>
+            <div></div>
+        </ng-template>
+    </p-fileUpload>
+</div>
+<div class="flex justify-content-center mt-5">
+    <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
+    <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-3" [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"></p-button>
+</div>
