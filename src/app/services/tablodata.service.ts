@@ -135,7 +135,7 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     return null;
 }
 
- addRowBelow(dataTree: any[], rowKey: string, parentKey: string): void {
+ addRowBelow(dataTree: any[], rowKey: string, parentKey: string, keyNum?: number): void {
   
   
   let parentNode: TreeNode |null = {
@@ -150,13 +150,62 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
   }
 
   if(parentNode) {
+    for (const child of parentNode.children) {
+      if(child.data.key==rowKey) {
+        this.incrementKeysOfTree(parentNode.children, keyNum);
+      }
+    }
     const newNode: TreeNode = { data: { key:rowKey }, children: [] };
     parentNode.children.push(newNode);  
   }
  
 
+ }
+
+incrementKeysOfTree(datatree: TreeNode[], keyNum?: number) {
+  let key = '';
+
+  for (let i=0; i<datatree.length; i++) { 
+    key = datatree[i].data.key
+    const lastIndex = key.lastIndexOf('.')
+    const firstPart = key.substring(0,lastIndex);
+    let num = Number(key.substring(lastIndex+1,key.length))
+    if(keyNum) {
+      console.log(keyNum, num)
+      if(keyNum<= num) {
+        key = firstPart + '.' + String(num+1);
+        datatree[i].data.key = key;
+      }
+    }
+    else {
+      key = firstPart + '.' + String(num+1);
+      datatree[i].data.key = key;
+    }
+    if (datatree[i].children.length>0) {
+      this.incrementDownKeysOfTree(datatree[i].children);
+    }
+   
+  }
+
+  return datatree;
 }
 
+incrementDownKeysOfTree(datatree: TreeNode[]) {
+  let key = '';
 
-
+  for (let i=0; i<datatree.length; i++) { 
+    key = datatree[i].data.key
+    const firstIndex = key.indexOf('.')
+    const secondIndex = key.lastIndexOf('.')
+    const firstPart = key.substring(0,firstIndex);
+    
+    let numPart = key.substring(firstIndex+1,secondIndex)
+    const lastPart = key.substring(secondIndex,key.length)
+    let num = Number(numPart)
+    key = firstPart+'.'+ (num+1) + lastPart;
+    datatree[i].data.key = key;
+    console.log(firstIndex,secondIndex,firstPart, numPart,lastPart)
+    
+  }
+}
 }

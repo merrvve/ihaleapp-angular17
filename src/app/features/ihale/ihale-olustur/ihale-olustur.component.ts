@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { StepsModule } from 'primeng/steps';
 
 @Component({
@@ -10,6 +11,7 @@ import { StepsModule } from 'primeng/steps';
 })
 export class IhaleOlusturComponent implements OnInit {
   steps:any[] =[];
+  constructor(private router: Router) {}
   ngOnInit(): void {
     this.steps = [
       {
@@ -33,6 +35,11 @@ export class IhaleOlusturComponent implements OnInit {
         routerLink: [('/ihale/ihale-olustur/ihale-bilgileri')]
     }
     ];
+    
   }
+
+  ngAfterViewInit() {
+    this.router.navigate(['/ihale/ihale-olustur/kesif-olustur'])
+  }  
 
 }

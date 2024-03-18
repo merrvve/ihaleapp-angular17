@@ -62,7 +62,7 @@ export class KesifOlusturComponent implements OnInit {
     // menüleri oluştur
 
     this.rowContextItems = [
-      { label: 'Alta Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowBelow() },
+      { label: 'Alta Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowBelow(1) },
       { label: 'Üste Satır Ekle', icon: 'pi pi-arrow-up', command: (event) => this.addNode(this.selectedNode) },
       { label: 'Poz No Değiştir', icon: 'pi pi-file-edit', command: (event) => this.addNode(this.selectedNode) },
       { label: 'Satırı Sil', icon: 'pi pi-trash', command: (event) => this.deleteNode(this.selectedNode) }
@@ -81,10 +81,35 @@ export class KesifOlusturComponent implements OnInit {
       { severity: 'info', summary: 'Keşif Oluşturma', detail: 'Tablo üzerinde değişiklik yapmak için sağ tuşa tıklayarak açılan menüyü kullanabilirsiniz.' },
     ];
   }
-  addRowBelow(): void {
-    console.log(this.selectedNode);
-    this.dataService.addRowBelow(this.files, '1.2.2', '1.2'); 
-    console.log(this.files)
+  addRowBelow(rowType: number): void {
+    let parentKey=''
+    let newKey =''
+    if (rowType == 0 ) {
+      parentKey= this.selectedNode.data.key;
+      newKey = parentKey +'.1'  
+      this.dataService.addRowBelow(this.files, newKey, parentKey);
+      return;
+    }
+    else if (rowType == 1 ) {
+      let oldParentKey= this.selectedNode.data.key;
+      const lastIndex = oldParentKey.lastIndexOf('.');
+      if(lastIndex>-1) {
+        parentKey = oldParentKey.substring(0, lastIndex);
+        let lastNum = Number(oldParentKey.substring(lastIndex+1,oldParentKey.length));
+        newKey = parentKey +'.'+ (lastNum+1);
+        this.dataService.addRowBelow(this.files, newKey, parentKey, (lastNum+1));
+        if(this.selectedNode.children) {
+          console.log(this.selectedNode.children)
+        }
+      }
+      else {
+        return;
+      }
+      console.log(newKey)
+    }
+    
+    //this.dataService.addRowBelow(this.files, newKey, parentKey); 
+    //console.log(this.files)
   }
   deleteNode(selectedNode: TreeNode<any>): void {
     throw new Error('Method not implemented.');
@@ -156,6 +181,14 @@ export class KesifOlusturComponent implements OnInit {
         }
     });
   }
+
+  cutStringBeforeLastDot(input: string): string {
+    const lastIndex = input.lastIndexOf('.');
+    if (lastIndex !== -1) {
+        return input.substring(0, lastIndex);
+    }
+    return '';
+}
 
   onCellEdit(event: any, rowData: any, field: string) {
     let col = this.cols.find(x=>x.field == field)
