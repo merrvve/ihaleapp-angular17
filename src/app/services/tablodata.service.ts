@@ -6,6 +6,7 @@ interface TreeNode {
       key: string;
   };
   children: TreeNode[];
+  expanded?: boolean;
 }
 
 
@@ -17,10 +18,7 @@ interface TreeNode {
 export class TablodataService {
   public ornekData: any[][] = [
     ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam'],
-    ['1', 'Başlık', '', '','',''],
-    ['1.1', 'x işi', 'Markası', 'metre',20,''],
-    ['1.2', '', '', '','',''],
-    ['1.2.1', '', '', '','','']
+    ['1', 'Başlık', '', '','','']
   ];
 
 
@@ -142,7 +140,8 @@ addRowToNode(node: any) {
     data: {
       key: key+'.'+String(len+1)
     },
-    children: []
+    children: [],
+    expanded: true
   }
   node.children.push(newNode);
 }
@@ -158,4 +157,5 @@ addNewNode(datatree: any[]) {
   datatree.push(newNode);
  }
 
+ 
 }

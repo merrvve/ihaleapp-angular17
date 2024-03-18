@@ -83,11 +83,14 @@ export class KesifOlusturComponent implements OnInit {
 
   addRowToNode(node: TreeNode) {
     this.dataService.addRowToNode(node);
-    console.log(this.files)
+    this.updateView();
+    this.expandAllNodes(this.files);
   }
 
   addNewNode() {
     this.dataService.addNewNode(this.files);
+    this.updateView();
+    this.expandAllNodes(this.files);
   }
 
   deleteNode(selectedNode: TreeNode<any>): void {
@@ -189,4 +192,7 @@ export class KesifOlusturComponent implements OnInit {
 
   saveDraft() {}
 
+  updateView() { 
+    this.files = [...this.files]; 
+  } 
 }

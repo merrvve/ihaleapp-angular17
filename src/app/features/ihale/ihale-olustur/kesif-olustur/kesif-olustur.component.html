@@ -34,7 +34,8 @@
   </p-dialog>
 </div>
     <!-- Tablo -->
-    <p-treeTable [reorderableColumns]="true"  [value]="files" [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines" [tableStyle]="{'min-width':'50rem'}">
+    <p-treeTable [reorderableColumns]="true"  [value]="files" [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines" 
+    [tableStyle]="{'min-width':'50rem'}">
         <ng-template pTemplate="header" let-columns>
           <tr>
             @for (col of columns; track col) {

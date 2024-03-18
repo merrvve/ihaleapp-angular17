@@ -1,4 +1,7 @@
 .input-container {
-    overflow: hidden;
     max-width: 100%; /* Limit the width to the size of the column */
   }
+
+.input-container input {
+  width: 90%;
+}
