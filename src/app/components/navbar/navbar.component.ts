@@ -34,7 +34,8 @@ ngOnInit(): void {
                 items: [
                   {
                       label: 'Tümünü Listele',
-                      icon: 'pi pi-fw pi-bookmark'
+                      icon: 'pi pi-fw pi-bookmark',
+                      routerLink: [('ihale/listele')]
                   },
                   {
                       label: 'Örnek İhale',
