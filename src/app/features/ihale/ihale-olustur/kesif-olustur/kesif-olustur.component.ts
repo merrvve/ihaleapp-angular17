@@ -171,9 +171,7 @@ export class KesifOlusturComponent implements OnInit {
       //rowData[rowData.relatedField] = 12000;
       if ( col.relatedField) {      
         rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
-      }
-    }
-   rowData[field] = event;
+           // Bu satırdaki toplamı hesapla
    let toplamCols = this.cols.filter(x=>x.isToplam==true);
    let toplam = 0;
    if(toplamCols) {
@@ -182,8 +180,37 @@ export class KesifOlusturComponent implements OnInit {
     }
 
     rowData['Toplam'] = toplam;
+
+    const currentKey = rowData.key;
+    const parentKey = currentKey.substring(0,currentKey.lastIndexOf('.'))
+   
+    if(parentKey!='') {
+      let allToplam = 0;
+      for (let i=0; i<this.files.length; i++) {
+        const child = this.files[i].children
+        
+        if(child) {
+          for (let j=0; j< child.length; j++) {
+            console.log('iteration','child',child)
+            let x = child[j].data?.Toplam;
+            if(x) {
+              allToplam += x;
+            }      
+          }
+        }
+      
+        this.files[i].data.Toplam = allToplam; 
+      }
+    }
    
    }
+
+      }
+    }
+
+    
+   rowData[field] = event;
+
    
    console.log( field);
    //console.log(event, field, rowData, this.files)

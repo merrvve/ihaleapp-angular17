@@ -30,7 +30,8 @@ export class TablodataService {
     for(let i=0; i<len; i++) {
       let editable = i ===0 ? false : true;
       let nf=false;
-      if(ornekData[0][i].toLocaleLowerCase().includes('miktar') || ornekData[0][i].toLocaleLowerCase().includes('toplam')) {
+      const isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam')
+      if(ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam ) {
           nf=true;
       }
       cols.push({
