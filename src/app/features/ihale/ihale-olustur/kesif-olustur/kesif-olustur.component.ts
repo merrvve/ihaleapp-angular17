@@ -126,14 +126,12 @@ delCols: Column[] =[];
     //Satırları Güncelle
     this.dataService.addColumnToTree(this.files,name,'');
 
-    //console.log( this.files);
-
+  
   }
 
   addBirimCol(name: string = 'Diğer') {
     let birimName = name +' Birim Fiyat'
     let toplamName = name +' Toplam Fiyat'
-    console.log(this.cols);
     this.cols.splice(this.cols.length-1,0,{
       field: birimName,
       header: birimName,
@@ -143,7 +141,6 @@ delCols: Column[] =[];
       isBirim:true,
       isToplam: false
     });
-    console.log(this.cols)
     
     //this.dataService.addColumnToTree(this.files,birimName,0);
 
@@ -173,55 +170,63 @@ delCols: Column[] =[];
 
   onCellEdit(event: any, rowData: any, field: string) {
     let col = this.cols.find(x=>x.field == field)
+    const isMiktar: boolean = field.toLowerCase()=='miktar';
     if (col) {
-      //rowData[rowData.relatedField] = 12000;
-      if ( col.relatedField) {      
-        rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
-           // Bu satırdaki toplamı hesapla
-   let toplamCols = this.cols.filter(x=>x.isToplam==true);
-   let toplam = 0;
-   if(toplamCols) {
-    for (let i=0; i<toplamCols.length; i++) {
-      toplam += Number(rowData[toplamCols[i].field])
-    }
+      if(col.relatedField || isMiktar) {
+        if ( col.relatedField ) {      
+          rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
+        }
 
-    rowData['Toplam'] = toplam;
-
-    const currentKey = rowData.key;
-    const parentKey = currentKey.substring(0,currentKey.lastIndexOf('.'))
-   
-    if(parentKey!='') {
-      let allToplam = 0;
-      for (let i=0; i<this.files.length; i++) {
-        const child = this.files[i].children
-        
-        if(child) {
-          for (let j=0; j< child.length; j++) {
-            console.log('iteration','child',child)
-            let x = child[j].data?.Toplam;
-            if(x) {
-              allToplam += x;
-            }      
+        else if(isMiktar) {
+          const birimCols = this.cols.filter(x=>x.isBirim==true);
+          if(birimCols) {
+            for (let i=0; i<birimCols.length; i++) {
+              const rf =birimCols[i].relatedField
+              if(rf) {
+                rowData[rf] =  Number(rowData[birimCols[i].field]) * Number(event);
+              }
+              
+            }
           }
         }
-      
-        this.files[i].data.Toplam = allToplam; 
-      }
-    }
-   
-   }
-
+             // Bu satırdaki toplamı hesapla
+          const toplamCols = this.cols.filter(x=>x.isToplam==true);
+          let toplam = 0;
+          if(toplamCols) {
+            for (let i=0; i<toplamCols.length; i++) {
+              toplam += Number(rowData[toplamCols[i].field])
+            }
+  
+            rowData['Toplam'] = toplam;
+  
+            const currentKey = rowData.key;
+            const parentKey = currentKey.substring(0,currentKey.lastIndexOf('.'))
+          
+            if(parentKey!='') {
+              let allToplam = 0;
+              for (let i=0; i<this.files.length; i++) {
+                const child = this.files[i].children
+                
+                if(child) {
+                  for (let j=0; j< child.length; j++) {
+                    let x = child[j].data?.Toplam;
+                    if(x) {
+                      allToplam += x;
+                    }      
+                  }
+                }
+              
+                this.files[i].data.Toplam = allToplam; 
+              }
+            }
+          
+          }
       }
     }
 
     
    rowData[field] = event;
-
-   
-   console.log( field);
-   //console.log(event, field, rowData, this.files)
-    // Here you can handle the changed data, for example, you can send it to backend or update your data model.
-  }
+}
 
   
 
