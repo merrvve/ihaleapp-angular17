@@ -1,15 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Column } from '../models/column.interface';
-
-interface TreeNode {
-  data: {
-      key: string;
-  };
-  children: TreeNode[];
-  expanded?: boolean;
-}
+import { TreeNode } from 'primeng/api';
 
 
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -20,6 +14,11 @@ export class TablodataService {
     ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam'],
     ['1', 'Başlık', '', '','','']
   ];
+
+
+
+
+
 
 
   constructor() { }
@@ -121,15 +120,16 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     if (node.data.key === key) {
         return node;
     }
-
-    // Traverse children nodes recursively
+  if(node.children) {
+// Traverse children nodes recursively
     for (const child of node.children) {
-        const foundNode = this.findNodeByKey(child, key);
-        if (foundNode !== null) {
-            return foundNode;
-        }
+      const foundNode = this.findNodeByKey(child, key);
+      if (foundNode !== null) {
+          return foundNode;
+      }
     }
 
+  }    
     // Key not found in this branch
     return null;
 }

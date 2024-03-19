@@ -35,8 +35,7 @@ export class KesifOlusturComponent implements OnInit {
   
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
-  colNames: string[] = []; // tüm sütun adları
-
+  
   selectedColumns!: Column[]; // görüntülenecek sütunlar
 
   selectedNode!: TreeNode; // sağ tuşla seçilen node
@@ -48,6 +47,9 @@ export class KesifOlusturComponent implements OnInit {
 
   
   visible: boolean = false;
+  visibleBirimDialog: boolean = false;
+visibleDeleteColDialog: boolean = false;
+delCols: Column[] =[];
 
     showDialog() {
         this.visible = true;
@@ -57,7 +59,6 @@ export class KesifOlusturComponent implements OnInit {
 
   ngOnInit(): void {
     // verileri yükle
-    this.colNames = this.dataService.ornekData[0];
     this.cols = this.dataService.columns(this.dataService.ornekData); 
     this.selectedColumns = this.cols;
     this.files = this.dataService.convertToTreeTable(this.dataService.ornekData); 
@@ -72,7 +73,7 @@ export class KesifOlusturComponent implements OnInit {
     this.addColItems = [
     { label: 'Malzeme Birim Fiyat', icon: 'pi pi-shopping-bag', command: (event) => this.addBirimCol('Malzeme')  },
     { label: 'İşçilik Birim Fiyat', icon: 'pi pi-id-card', command: (event) => this.addBirimCol('İşçilik') },
-    { label: 'Diğer Birim Fiyat', icon: 'pi pi-calculator', command: (event) => this.addBirimCol() },
+    { label: 'Diğer Birim Fiyat', icon: 'pi pi-calculator', command: (event) => this.visibleBirimDialog=true },
     { label: 'Diğer Sütun', icon: 'pi pi-server', command: (event) => this.showDialog() }
     ];
 
@@ -99,7 +100,16 @@ export class KesifOlusturComponent implements OnInit {
     throw new Error('Method not implemented.');
   }
  
-  
+  deleteCol(columns: Column[]) {
+    for (let i=0; i<columns.length; i++){
+      const index = this.cols.indexOf(columns[i]);
+      if(i>-1){
+        this.cols.splice(index,1)
+      }
+    }
+    this.delCols =[];
+   
+  }
   addOtherCol(name: string) {
     //Sütunları Güncelle
     this.cols.splice(2,0,{
@@ -111,7 +121,6 @@ export class KesifOlusturComponent implements OnInit {
       isToplam: false
     })
 
-    this.colNames.push(name);
     this.visible = false;
 
     //Satırları Güncelle
@@ -135,8 +144,7 @@ export class KesifOlusturComponent implements OnInit {
       isToplam: false
     });
     console.log(this.cols)
-    this.colNames.push(birimName);
-
+    
     //this.dataService.addColumnToTree(this.files,birimName,0);
 
     this.cols.splice(this.cols.length-1,0,{
@@ -147,8 +155,6 @@ export class KesifOlusturComponent implements OnInit {
       isBirim: false,
       isToplam: true
     })
-
-    this.colNames.push(toplamName);
 
     //this.dataService.addColumnToTree(this.files,toplamName,0);
 
