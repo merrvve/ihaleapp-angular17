@@ -16,7 +16,15 @@ export class TablodataService {
   ];
 
 
+  private _datatreeSubject = new BehaviorSubject<any[]>(this.convertToTreeTable(this.ornekData));
+  datatree$ = this._datatreeSubject.asObservable();
 
+  private _colsSubject = new BehaviorSubject<Column[]>(this.columns(this.ornekData));
+  cols$ = this._colsSubject.asObservable();
+
+  // updateData(newData: any[]) {
+  //   this._dataSubject.next(newData);
+  // }
 
 
 
@@ -95,24 +103,76 @@ export class TablodataService {
     return result;
 }
 
+deleteCol(columns: Column[],delcols: Column[]) {
+  for (let i=0; i<delcols.length; i++){
+    const index = columns.indexOf(delcols[i]);
+    if(i>-1){
+      columns.splice(index,1)
+    }
+  }
+  this._colsSubject.next(columns);  
+}
+
+
+addOtherCol(name: string, columns: Column[]) {
+  //Sütunları Güncelle
+  columns.splice(2,0,{
+    field: name,
+    header: name,
+    editable: true,
+    numberField: false,
+    isBirim: false,
+    isToplam: false
+  })
+  this._colsSubject.next(columns);
+}
+
+addBirimCol(name: string = 'Diğer', columns: Column[]) {
+  let birimName = name +' Birim Fiyat'
+  let toplamName = name +' Toplam Fiyat'
+  columns.splice(columns.length-1,0,{
+    field: birimName,
+    header: birimName,
+    editable: true,
+    numberField: true,
+    relatedField: toplamName,
+    isBirim:true,
+    isToplam: false
+  });
+  
+ 
+  columns.splice(columns.length-1,0,{
+    field: toplamName,
+    header: toplamName,
+    editable: false,
+    numberField: true,
+    isBirim: false,
+    isToplam: true
+  })
+
+  this._colsSubject.next(columns);
+  //this.dataService.addColumnToTree(this.files,toplamName,0);
+
+}
 
 
 addColumnToTree(dataTree: any[], columnName: string, value: any): void {
   // Iterate through each node in the dataTree
-  const traverseTree = (node: any) => {
-      // Add the new column with empty values to the node
-      node.data[columnName] = value;
+    const traverseTree = (node: any) => {
+        // Add the new column with empty values to the node
+        node.data[columnName] = value;
 
-      // Recursively traverse through children
-      for (const child of node.children) {
-          traverseTree(child);
-      }
-  };
+        // Recursively traverse through children
+        for (const child of node.children) {
+            traverseTree(child);
+        }
+    };
 
-  // Traverse the tree starting from each root node
-  for (const rootNode of dataTree) {
-      traverseTree(rootNode);
-  }
+    // Traverse the tree starting from each root node
+    for (const rootNode of dataTree) {
+        traverseTree(rootNode);
+    }
+   this._datatreeSubject.next(dataTree);  
   }
 
   findNodeByKey(node: TreeNode, key: string): TreeNode | null {
@@ -120,43 +180,44 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     if (node.data.key === key) {
         return node;
     }
-  if(node.children) {
-// Traverse children nodes recursively
-    for (const child of node.children) {
-      const foundNode = this.findNodeByKey(child, key);
-      if (foundNode !== null) {
-          return foundNode;
+    if(node.children) {
+  // Traverse children nodes recursively
+      for (const child of node.children) {
+        const foundNode = this.findNodeByKey(child, key);
+        if (foundNode !== null) {
+            return foundNode;
+        }
       }
-    }
 
-  }    
+    }    
     // Key not found in this branch
     return null;
-}
-
-addRowToNode(node: any) {
-  const key = node.data.key;
-  const len = node.children.length;
-  const newNode : TreeNode = {
-    data: {
-      key: key+'.'+String(len+1)
-    },
-    children: [],
-    expanded: true
   }
-  node.children.push(newNode);
-}
 
-addNewNode(datatree: any[]) {
-  const len = datatree.length;
-  const newNode : TreeNode = {
-    data: {
-      key: String(len+1)
-    },
-    children: []
+  addRowToNode(node: any) {
+    const key = node.data.key;
+    const len = node.children.length;
+    const newNode : TreeNode = {
+      data: {
+        key: key+'.'+String(len+1)
+      },
+      children: [],
+      expanded: true
+    }
+    node.children.push(newNode);
   }
-  datatree.push(newNode);
- }
+
+  addNewNode(datatree: any[]) {
+    const len = datatree.length;
+    const newNode : TreeNode = {
+      data: {
+        key: String(len+1)
+      },
+      children: []
+    }
+    datatree.push(newNode);
+    this._datatreeSubject.next(datatree);
+  }
 
  
 }

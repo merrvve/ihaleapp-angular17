@@ -17,7 +17,7 @@ import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
 
-
+import { Subscription } from 'rxjs';
 
 
 
@@ -45,7 +45,7 @@ export class KesifOlusturComponent implements OnInit {
 
   messages: Message[] =[]; // bilgilendirme mesajı
 
-  
+  subscription!: Subscription;
   visible: boolean = false;
   visibleBirimDialog: boolean = false;
 visibleDeleteColDialog: boolean = false;
@@ -59,7 +59,11 @@ delCols: Column[] =[];
 
   ngOnInit(): void {
     // verileri yükle
-    this.cols = this.dataService.columns(this.dataService.ornekData); 
+    this.subscription = this.dataService.cols$.subscribe({
+      next: (v) => this.cols=v,
+      error: (e) => console.error(e),
+      complete: () => console.info('complete') 
+  }); 
     this.selectedColumns = this.cols;
     this.files = this.dataService.convertToTreeTable(this.dataService.ornekData); 
     // menüleri oluştur
@@ -107,8 +111,7 @@ delCols: Column[] =[];
         this.cols.splice(index,1)
       }
     }
-    this.delCols =[];
-   
+    this.delCols =[];   
   }
   addOtherCol(name: string) {
     //Sütunları Güncelle
@@ -125,7 +128,6 @@ delCols: Column[] =[];
 
     //Satırları Güncelle
     this.dataService.addColumnToTree(this.files,name,'');
-
   
   }
 
@@ -142,7 +144,7 @@ delCols: Column[] =[];
       isToplam: false
     });
     
-    //this.dataService.addColumnToTree(this.files,birimName,0);
+    this.dataService.addColumnToTree(this.files,birimName,0);
 
     this.cols.splice(this.cols.length-1,0,{
       field: toplamName,
@@ -153,7 +155,7 @@ delCols: Column[] =[];
       isToplam: true
     })
 
-    //this.dataService.addColumnToTree(this.files,toplamName,0);
+    this.dataService.addColumnToTree(this.files,toplamName,0);
 
   }
 
@@ -234,5 +236,9 @@ delCols: Column[] =[];
 
   updateView() { 
     this.files = [...this.files]; 
-  } 
+  }
+  
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe(); // Unsubscribe to prevent memory leaks
+  }
 }
