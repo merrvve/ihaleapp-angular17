@@ -22,14 +22,13 @@ export class TablodataService {
   private _colsSubject = new BehaviorSubject<Column[]>(this.columns(this.ornekData));
   cols$ = this._colsSubject.asObservable();
 
-  // updateData(newData: any[]) {
-  //   this._dataSubject.next(newData);
-  // }
-
-
-
 
   constructor() { }
+
+  loadData(datalist:any[]) {
+    this._colsSubject.next(this.columns(datalist));
+    this._datatreeSubject.next(this.convertToTreeTable(datalist));
+  }
 
   columns(ornekData: any[][]) {
     let cols : Column[] =[]
@@ -110,7 +109,7 @@ export class TablodataService {
     for (const col of cols ) {
       colNames.push(col.field);
     }
-    datatree.push(colNames);
+    datalist.push(colNames);
     for (let i=0; i<datatree.length; i++) {
       let row=[]
       for (const value of colNames) {

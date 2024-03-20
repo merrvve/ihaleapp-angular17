@@ -26,7 +26,7 @@ import { XlsxService } from '../../../../services/xlsx.service';
   selector: 'app-kesif-olustur',
   standalone: true,
   imports: [MessagesModule, MenuModule, ToolbarModule, MultiSelectModule, 
-    FormsModule, ButtonModule, TreeTableModule, InputNumberModule,
+    FormsModule, ButtonModule, TreeTableModule, InputNumberModule, 
    ContextMenuModule, NgClass, InputTextModule, DialogModule, RouterLink, IhaleOlusturComponent],
   templateUrl: './kesif-olustur.component.html',
   styleUrl: './kesif-olustur.component.scss'
@@ -48,10 +48,12 @@ export class KesifOlusturComponent implements OnInit {
 
   subscription!: Subscription;
   visible: boolean = false;
+  visibleExcelDialog: boolean = false;
   visibleBirimDialog: boolean = false;
 visibleDeleteColDialog: boolean = false;
 delCols: Column[] =[];
   subscription2!: Subscription;
+  selectedFile!: File;
 
     showDialog() {
         this.visible = true;
@@ -217,9 +219,25 @@ delCols: Column[] =[];
 }
 
   exportAsExcel() {
+    console.log(this.files,this.cols);
     let datalist = this.dataService.convertTreeToDatalist(this.files, this.cols);
-    console.log(datalist)
+    console.log(datalist);
     this.excelService.exportAsExcelFile(datalist,'deneme.xlsx')
+
+  }
+
+  onFileChange(event: any) {
+    this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile)
+  }
+
+  importExcel() {
+     let excelData;
+     this.excelService.importExcelFile(this.selectedFile).then(
+       data=> { excelData = data,
+         this.dataService.loadData(excelData)}
+     );
+    
   }
 
   saveDraft() {}

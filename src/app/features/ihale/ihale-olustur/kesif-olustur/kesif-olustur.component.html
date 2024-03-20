@@ -7,8 +7,7 @@
     <!-- Araçlar -->
     <p-toolbar>
       <div class="p-toolbar-group-start">
-        <button pButton icon="pi pi-download" label="Excel Dosyası Yükle" class="mr-2"></button>
-
+        <button pButton icon="pi pi-download" label="Excel Dosyası Yükle" (click)="visibleExcelDialog=true" class="mr-2"></button>
         <button pButton icon="pi pi-upload" label="Excel'e Aktar" (click)="exportAsExcel()" class="mr-2"></button>
 
 
@@ -25,7 +24,19 @@
     </p-toolbar>
 
  <!-- Modal Dialoglar -->
+ <!-- Excel Yükle -->
+ <div class="card flex justify-content-center">
+  <p-dialog header="Excel Dosyası Yükle" [(visible)]="visibleExcelDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+      <label for="file-upload" class="custom-file-upload">
+        {{ selectedFile ? selectedFile.name : 'Dosya Seçiniz' }}
+    </label>
+<input id="file-upload" (change)="onFileChange($event)" type="file" />
+      <p-button (click)="importExcel(); visibleExcelDialog=false;" label="Yükle" class="m-3"></p-button>
+  </p-dialog>
+</div>
+
  
+
  <!-- Diğer Sütun Ekle -->
 <div class="card flex justify-content-center">
   <p-dialog header="Sütun Ekle" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
