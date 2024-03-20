@@ -5,6 +5,17 @@
 .input-container input {
   width: 90%;
 }
+.p-inputnumber-input {
+  width: 90%;
+  box-sizing: border-box;
+}
+
+::ng-deep .p-treetable .input-container input,
+::ng-deep .p-treetable .input-container .p-inputnumber-input {
+  width: 90%;
+  box-sizing: border-box;
+}
+
 
 
 input[type="file"] {
