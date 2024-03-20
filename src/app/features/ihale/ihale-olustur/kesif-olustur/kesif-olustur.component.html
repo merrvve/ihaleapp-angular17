@@ -9,7 +9,7 @@
       <div class="p-toolbar-group-start">
         <button pButton icon="pi pi-download" label="Excel Dosyası Yükle" class="mr-2"></button>
 
-        <button pButton icon="pi pi-upload" label="Excel'e Aktar" class="mr-2"></button>
+        <button pButton icon="pi pi-upload" label="Excel'e Aktar" (click)="exportAsExcel()" class="mr-2"></button>
 
 
         <button pButton type="button" class="p-button-success mx-2"  (click)="menu.toggle($event)" icon="pi pi-plus" label="Sütun Ekle"></button>

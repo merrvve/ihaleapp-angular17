@@ -103,6 +103,45 @@ export class TablodataService {
     return result;
 }
 
+
+  convertTreeToDatalist(datatree: any[], cols: Column[]) {
+    let datalist = [];
+    let colNames = [];
+    for (const col of cols ) {
+      colNames.push(col.field);
+    }
+    datatree.push(colNames);
+    for (let i=0; i<datatree.length; i++) {
+      let row=[]
+      for (const value of colNames) {
+        if(datatree[i].data[value]) {
+          row.push(datatree[i].data[value])
+        }
+        else {
+          row.push('');
+        }
+      }
+     datalist.push(row);
+     if(datatree[i].children.length>0) {
+      
+      for (let j=0; j<datatree[i].children.length; j++) {
+
+        let row=[]
+        for (const value of colNames) {
+          if(datatree[i].children[j].data[value]) {
+            row.push(datatree[i].children[j].data[value])
+          }
+          else {
+            row.push('');
+          }
+        }
+        datalist.push(row);
+      }
+     }
+    }
+    return datalist;
+  }
+
 deleteCol(columns: Column[],delcols: Column[]) {
   for (let i=0; i<delcols.length; i++){
     const index = columns.indexOf(delcols[i]);

@@ -18,6 +18,7 @@ import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
 
 import { Subscription } from 'rxjs';
+import { XlsxService } from '../../../../services/xlsx.service';
 
 
 
@@ -56,7 +57,7 @@ delCols: Column[] =[];
         this.visible = true;
     }
 
-  constructor(private dataService: TablodataService) {}
+  constructor(private dataService: TablodataService, private excelService: XlsxService) {}
 
   ngOnInit(): void {
     // verileri yükle
@@ -215,7 +216,11 @@ delCols: Column[] =[];
    rowData[field] = event;
 }
 
-  
+  exportAsExcel() {
+    let datalist = this.dataService.convertTreeToDatalist(this.files, this.cols);
+    console.log(datalist)
+    this.excelService.exportAsExcelFile(datalist,'deneme.xlsx')
+  }
 
   saveDraft() {}
 

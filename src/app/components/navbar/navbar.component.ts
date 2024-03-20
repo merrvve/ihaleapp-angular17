@@ -19,6 +19,11 @@ export class NavbarComponent implements OnInit {
 ngOnInit(): void {
   this.items = [
     {
+        label: 'Ana Sayfa',
+        icon: 'pi pi-fw pi-home',
+        routerLink: [('/')]
+    },
+    {
         label: 'İhalelerim',
         icon: 'pi pi-fw pi-file',
         items: [
@@ -47,8 +52,9 @@ ngOnInit(): void {
                 separator: true
             },
             {
-                label: 'Export',
-                icon: 'pi pi-fw pi-external-link'
+                label: 'Taslaklar',
+                icon: 'pi pi-fw pi-external-link',
+                routerLink: [('ihale/taslaklar')]
             }
         ]
     },
@@ -58,7 +64,8 @@ ngOnInit(): void {
         items: [
             {
                 label: 'Yeni Teklifçi',
-                icon: 'pi pi-fw pi-user-plus'
+                icon: 'pi pi-fw pi-user-plus',
+                routerLink: [('teklifci/olustur')]
             },
             {
                 label: 'Listele',
@@ -67,6 +74,7 @@ ngOnInit(): void {
                   {
                       label: 'Tümünü Listele',
                       icon: 'pi pi-fw pi-users',
+                      routerLink: [('teklifci/listele')]
                       
                   },
                   {
@@ -75,7 +83,8 @@ ngOnInit(): void {
                       items: [
                         {
                             label: 'Yetkili Ekle',
-                            icon: 'pi pi-fw pi-user-plus'
+                            icon: 'pi pi-fw pi-user-plus',
+                            routerLink: [('teklifci/{id}/yetkili-ekle')]
                         }
                     ]
                   }
@@ -83,36 +92,7 @@ ngOnInit(): void {
             }
         ]
     },
-    {
-        label: 'Geçmiş',
-        icon: 'pi pi-fw pi-calendar',
-        items: [
-            {
-                label: 'Edit',
-                icon: 'pi pi-fw pi-pencil',
-                items: [
-                    {
-                        label: 'Save',
-                        icon: 'pi pi-fw pi-calendar-plus'
-                    },
-                    {
-                        label: 'Delete',
-                        icon: 'pi pi-fw pi-calendar-minus'
-                    }
-                ]
-            },
-            {
-                label: 'Archieve',
-                icon: 'pi pi-fw pi-calendar-times',
-                items: [
-                    {
-                        label: 'Remove',
-                        icon: 'pi pi-fw pi-calendar-minus'
-                    }
-                ]
-            }
-        ]
-    },
+    
     {
         label: 'Çıkış Yap',
         icon: 'pi pi-fw pi-power-off'
