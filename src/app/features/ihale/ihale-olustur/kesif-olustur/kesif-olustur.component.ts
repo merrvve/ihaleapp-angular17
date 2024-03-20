@@ -50,6 +50,7 @@ export class KesifOlusturComponent implements OnInit {
   visibleBirimDialog: boolean = false;
 visibleDeleteColDialog: boolean = false;
 delCols: Column[] =[];
+  subscription2!: Subscription;
 
     showDialog() {
         this.visible = true;
@@ -65,7 +66,11 @@ delCols: Column[] =[];
       complete: () => console.info('complete') 
   }); 
     this.selectedColumns = this.cols;
-    this.files = this.dataService.convertToTreeTable(this.dataService.ornekData); 
+    this.subscription2 = this.dataService.datatree$.subscribe({
+      next: (v) => this.files=v,
+      error: (e) => console.error(e),
+      complete: () => console.info('complete') 
+  });
     // menüleri oluştur
 
     this.rowContextItems = [
@@ -115,14 +120,8 @@ delCols: Column[] =[];
   }
   addOtherCol(name: string) {
     //Sütunları Güncelle
-    this.cols.splice(2,0,{
-      field: name,
-      header: name,
-      editable: true,
-      numberField: false,
-      isBirim: false,
-      isToplam: false
-    })
+    
+    this.dataService.addOtherCol(name, this.cols)
 
     this.visible = false;
 
@@ -132,28 +131,14 @@ delCols: Column[] =[];
   }
 
   addBirimCol(name: string = 'Diğer') {
+    this.dataService.addBirimCol(name,this.cols);
     let birimName = name +' Birim Fiyat'
     let toplamName = name +' Toplam Fiyat'
-    this.cols.splice(this.cols.length-1,0,{
-      field: birimName,
-      header: birimName,
-      editable: true,
-      numberField: true,
-      relatedField: toplamName,
-      isBirim:true,
-      isToplam: false
-    });
+   
     
     this.dataService.addColumnToTree(this.files,birimName,0);
 
-    this.cols.splice(this.cols.length-1,0,{
-      field: toplamName,
-      header: toplamName,
-      editable: false,
-      numberField: true,
-      isBirim: false,
-      isToplam: true
-    })
+   
 
     this.dataService.addColumnToTree(this.files,toplamName,0);
 
@@ -240,5 +225,6 @@ delCols: Column[] =[];
   
   ngOnDestroy(): void {
     this.subscription.unsubscribe(); // Unsubscribe to prevent memory leaks
+    this.subscription2.unsubscribe();
   }
 }
