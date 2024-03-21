@@ -3,8 +3,6 @@ import {  MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
-import { BrowserModule } from '@angular/platform-browser';
-import { ɵBrowserAnimationBuilder } from '@angular/animations';
 
 @Component({
   selector: 'app-navbar',
@@ -65,29 +63,24 @@ ngOnInit(): void {
             {
                 label: 'Yeni Teklifçi',
                 icon: 'pi pi-fw pi-user-plus',
-                routerLink: [('teklifci/olustur')]
+                routerLink: [('teklif/teklifci/ekle')]
             },
             {
                 label: 'Listele',
                 icon: 'pi pi-fw pi-list',
                 items: [
                   {
-                      label: 'Tümünü Listele',
+                      label: 'Tüm Teklifçiler',
                       icon: 'pi pi-fw pi-users',
-                      routerLink: [('teklifci/listele')]
+                      routerLink: [('teklif/teklifci/listele')]
                       
                   },
                   {
-                      icon: 'pi pi-fw pi-verified',
-                      label: 'Firma X',
-                      items: [
-                        {
-                            label: 'Yetkili Ekle',
-                            icon: 'pi pi-fw pi-user-plus',
-                            routerLink: [('teklifci/{id}/yetkili-ekle')]
-                        }
-                    ]
-                  }
+                    label: 'Tüm Firmalar',
+                    icon: 'pi pi-fw pi-verified',
+                    routerLink: [('teklif/firmalar')]
+                    
+                }
               ]
             }
         ]
