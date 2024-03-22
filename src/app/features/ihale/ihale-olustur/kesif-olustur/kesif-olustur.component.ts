@@ -109,7 +109,8 @@ delCols: Column[] =[];
   }
 
   deleteNode(selectedNode: TreeNode<any>): void {
-    throw new Error('Method not implemented.');
+    this.dataService.deleteRow(selectedNode,this.files);
+    this.updateView();
   }
  
   deleteCol(columns: Column[]) {

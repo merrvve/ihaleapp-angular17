@@ -102,6 +102,36 @@ export class TablodataService {
     return result;
 }
 
+  deleteRow(node: any,datatree: any[]) {
+    // Ara başlık ya da satır sil
+    if(node.parent?.children) {
+      let foundIndex = node.parent.children.indexOf(node);
+      node.parent.children.splice(foundIndex,1);
+      
+        for (let i = foundIndex; i<node.parent.children.length; i++){
+          node.parent.children[i].data.key =node.parent.data.key + '.'+ (i+1);
+        }
+      return true;
+      //toplamı güncelle yapılacak ...
+    }
+
+    //Parentı olmayan ana başlık sil
+    else {
+      let foundIndexTitle = datatree.indexOf(node);
+      const len =datatree.length;
+      if(len==1) {
+        return false; // tek bir ana başlık varsa silme false dön
+      }
+      else {
+        datatree.splice(foundIndexTitle,1);
+        for (let i = foundIndexTitle; i<(len-1); i++){
+          datatree[i].data.key=i+1;
+        }
+        return true;
+      }
+      
+    }
+  }
 
   convertTreeToDatalist(datatree: any[], cols: Column[]) {
     let datalist = [];
