@@ -15,7 +15,7 @@ export const IHALE_ROUTES: Route[] = [
             {path:'istenen-dokumanlar', component: IstenenDokumanlarComponent},
             {path:'teklifci-ekleme', component: TeklifciEklemeComponent},
             {path:'ihale-bilgileri', component: IhaleBilgileriComponent},
-            {path:'', redirectTo:'kesif-olustur', pathMatch:'full'}
+            {path:'', redirectTo:'ihale-bilgileri', pathMatch:'full'}
         ]},
         {path: 'listele', component: IhaleListeleComponent},
         {path: '', redirectTo:'listele', pathMatch:'full' }

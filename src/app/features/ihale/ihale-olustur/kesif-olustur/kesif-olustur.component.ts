@@ -159,7 +159,8 @@ delCols: Column[] =[];
 
   
 
-  onCellEdit(event: any, rowData: any, field: string) {
+  onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
+    console.log(rowNode)
     let col = this.cols.find(x=>x.field == field)
     const isMiktar: boolean = field.toLowerCase()=='miktar';
     if (col) {
@@ -191,8 +192,12 @@ delCols: Column[] =[];
             rowData['Toplam'] = toplam;
   
             const currentKey = rowData.key;
-            const parentKey = currentKey.substring(0,currentKey.lastIndexOf('.'))
-          
+            const parentKey = rowNode.parent.data.key;
+            if (rowNode.parent.children) {
+              for(const child of rowNode.parent.children) {
+                console.log(child.data)
+              }
+            }
             if(parentKey!='') {
               let allToplam = 0;
               for (let i=0; i<this.files.length; i++) {

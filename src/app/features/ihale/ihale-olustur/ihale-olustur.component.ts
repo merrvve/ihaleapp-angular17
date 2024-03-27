@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { StepsModule } from 'primeng/steps';
 
 @Component({
@@ -11,17 +10,17 @@ import { StepsModule } from 'primeng/steps';
 })
 export class IhaleOlusturComponent implements OnInit {
   steps:any[] =[];
-  constructor(private router: Router) {
+  constructor() {
   }
   ngOnInit(): void {
     this.steps = [
       {
+        label: 'İhale Bilgileri',
+        routerLink: [('/ihale/ihale-olustur/ihale-bilgileri')]
+    },
+    {
           label: 'Keşif Oluşturma',
           routerLink: [('/ihale/ihale-olustur/kesif-olustur')]
-      },
-      {
-          label: 'Dökümanlar',
-          routerLink: [('/ihale/ihale-olustur/dokumanlar')]
       },
       {
           label: 'İstenen Dökümanlar',
@@ -30,15 +29,10 @@ export class IhaleOlusturComponent implements OnInit {
       {
           label: 'Teklifçi Ekleme',
           routerLink: [('/ihale/ihale-olustur/teklifci-ekleme')]
-      },
-      {
-        label: 'ihale Bilgileri',
-        routerLink: [('/ihale/ihale-olustur/ihale-bilgileri')]
-    }
+      }
+     
     ];
   }
 
-  ngAfterViewInit() {
-  }  
 
 }

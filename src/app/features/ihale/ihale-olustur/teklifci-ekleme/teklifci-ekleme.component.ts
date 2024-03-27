@@ -18,8 +18,8 @@ export class TeklifciEklemeComponent implements OnInit {
   ngOnInit(): void {
      //mesajları oluştur
      this.messages = [
-      { severity: 'info', summary: 'Teklifçilerden İstenen Dökümanlar', 
-      detail: 'Bu adımda teklifçilerin göndermesi gereken dökümanları belirleyebilirsiniz.' },
+      { severity: 'info', summary: 'Teklifçi Ekleme', 
+      detail: 'Bu adımda listeden teklifçi seçebilir ya da yeni teklifçi oluşturabilirsiniz.' },
     ];
   }
 }

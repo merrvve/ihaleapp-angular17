@@ -95,12 +95,12 @@
                         <div class="input-container">
                             @if (col.numberField== true) {
                                 <p-inputNumber [(ngModel)]="rowData[col.field]"
-                                  (ngModelChange)="onCellEdit($event, rowData, col.field)"
+                                  (ngModelChange)="onCellEdit($event, rowData, col.field, rowNode)"
                                 inputId="locale-german" mode="decimal" locale="de-DE" [minFractionDigits]="2"> </p-inputNumber>
                               }
                               @else {
                                 <input pInputText type="text"
-                                  [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field)" />
+                                  [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field, rowNode)" />
                                 }
                         </div>
                     
@@ -116,12 +116,15 @@
         </p-treeTable>
         <p-contextMenu #cm [model]="rowContextItems"></p-contextMenu>
       </div>
-      <div class="flex">
-        <div class="card text-end">
+      
+        <div  class="flex justify-content-end mt-5">
           <p-button label="Taslak Olarak Kaydet" icon="pi pi-save" severity="success" (click)="saveDraft()" class="mx-3"></p-button>
-          <p-button label="İlerle" icon="pi pi-arrow-right" [routerLink]="['/ihale/ihale-olustur/dokumanlar']"></p-button>
-        </div>
+          <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" class="mx-2" [routerLink]="['/ihale/ihale-olustur/ihale-bilgileri']"></p-button>
+          
+          <p-button label="İlerle" icon="pi pi-arrow-right" [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"></p-button>
+        
       </div>
+      
     </div>
 
 

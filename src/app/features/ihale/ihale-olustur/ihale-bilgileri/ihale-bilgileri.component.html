@@ -1,2 +1,78 @@
 <app-ihale-olustur></app-ihale-olustur>
-<p>ihale-bilgileri works!</p>
+<div class="card">
+       
+</div>
+
+<div class="card flex justify-content-center border-1 border-solid surface-border border-round">
+    <div class="flex-1 md:flex-none m-2 px-5 py-3">
+        <div class="field mb-5">
+            <label >İhale Açıklaması</label>
+            <input  type="text" 
+            class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field mb-5">
+            <label>Para Birimi</label>
+            <div class="flex flex-column gap-3">
+                
+                    @for(currency of currencies; track currency) {
+                        <div  class="field-checkbox">
+                        <p-radioButton [inputId]="currency" name="category" [value]="currency" [(ngModel)]="selectedCurrency"></p-radioButton>
+                        <label [for]="currency" class="ml-2">{{ currency }}</label> 
+                    </div>   
+                    }
+                
+            </div>
+        </div>
+    </div>
+    <div class="flex-1 md:flex-none m-2 px-5 py-3">
+        <div class="field">
+            <label>Dökümanlar</label>
+            <!-- <label for="file-upload" class="cursor-pointer p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" >
+                {{ selectedFiles ? selectedFiles.length + ' dosya seçildi' : 'Dosya Seçiniz' }}
+            </label>
+        <input id="file-upload" (change)="onFileChange($event)" type="file" multiple="true"/>
+        
+            @if(selectedFiles) {
+                <ul>
+                @for(file of selectedFiles; track file) {
+                    <li>
+                        {{file.name}}
+                    </li>
+                }
+                </ul>
+            }
+            -->
+        
+        </div>
+        <div class="card flex justify-content-center">
+            <p-fileUpload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" [multiple]="true"
+            chooseLabel="Seç"
+        uploadLabel="Yükle"
+        cancelLabel="İptal">
+                <ng-template pTemplate="content">
+                    @if(uploadedFiles.length) {
+                        <ul>
+                            @for (file of uploadedFiles; track file) {
+                                <li>{{ file.name }} - {{ file.size }} bytes</li>
+                            }
+                          
+                        </ul>
+                    }
+                    
+                </ng-template>
+            </p-fileUpload>
+        </div>
+
+
+
+        <div class="flex justify-content-end mt-5">
+            <p-button pRipple label="İlerle" icon="pi pi-arrow-right" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
+        </div>
+    
+    </div>  
+     
+</div>
+
+ 
+
+ 
