@@ -11,8 +11,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TablodataService {
   public ornekData: any[][] = [
-    ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam'],
-    ['1', 'Başlık', '', '','','']
+    ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam Birim Fiyat','Toplam'],
+    ['1', 'Başlık', '', '','','','']
   ];
 
 
@@ -112,7 +112,7 @@ export class TablodataService {
           node.parent.children[i].data.key =node.parent.data.key + '.'+ (i+1);
         }
       return true;
-      //toplamı güncelle yapılacak ...
+      
     }
 
     //Parentı olmayan ana başlık sil
