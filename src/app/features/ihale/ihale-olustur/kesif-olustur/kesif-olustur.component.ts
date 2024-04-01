@@ -217,22 +217,41 @@ delCols: Column[] =[];
   onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
     let col = this.cols.find(x=>x.field == field)
     const isMiktar: boolean = field.toLowerCase()=='miktar';
+    
+    
+    rowData[field] = event;
+
     if (col) {
       if(col.relatedField || isMiktar) {
         if ( col.relatedField ) {      
           rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
+          const birimCols = this.cols.filter(x=>x.isBirim==true);
+          let birimToplam=0;
+          if(birimCols) {
+            for (let i=0; i<birimCols.length; i++) {
+             // birimToplam+= Number(rowData[birimCols[i].field])
+             const name = birimCols[i].field
+             birimToplam += rowData[name];
+            }
+            rowData['Toplam Birim Fiyat']=birimToplam;
+          }
         }
 
         else if(isMiktar) {
           const birimCols = this.cols.filter(x=>x.isBirim==true);
+          let birimToplam=0;
           if(birimCols) {
             for (let i=0; i<birimCols.length; i++) {
+             // birimToplam+= Number(rowData[birimCols[i].field])
+             const name = birimCols[i].field
+             birimToplam += rowData[name];
               const rf =birimCols[i].relatedField
               if(rf) {
                 rowData[rf] =  Number(rowData[birimCols[i].field]) * Number(event);
               }
               
             }
+            rowData['Toplam Birim Fiyat']=birimToplam;
           }
         }
              // Bu satırdaki toplamı hesapla
@@ -240,9 +259,10 @@ delCols: Column[] =[];
           let toplam = 0;
           if(toplamCols) {
             for (let i=0; i<toplamCols.length; i++) {
-              toplam += Number(rowData[toplamCols[i].field])
+              const name= toplamCols[i].field
+              console.log(name, rowData, rowData[name])
+              toplam += Number(rowData[name])
             }
-  
             rowData['Toplam'] = toplam;
             
             if (rowNode.parent.children) {
@@ -258,8 +278,6 @@ delCols: Column[] =[];
       }
     }
 
-    
-   rowData[field] = event;
 }
 
   exportAsExcel() {

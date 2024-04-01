@@ -11,11 +11,11 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class TablodataService {
   public ornekData: any[][] = [
-    ['key', 'İş Tanımı', 'Marka', 'Birim', 'Miktar','Toplam Birim Fiyat','Toplam'],
+    ['key', 'İş Tanımı', 'Marka', 'Miktar','Birim' ,'Toplam Birim Fiyat','Toplam'],
     ['1', 'Başlık', '', '','','','']
   ];
 
-
+  birimCols = 0;
   private _datatreeSubject = new BehaviorSubject<any[]>(this.convertToTreeTable(this.ornekData));
   datatree$ = this._datatreeSubject.asObservable();
 
@@ -36,17 +36,25 @@ export class TablodataService {
     for(let i=0; i<len; i++) {
       let editable = i ===0 ? false : true;
       let nf=false;
-      const isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam')
+      let isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam')
       if(ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam ) {
           nf=true;
       }
+      editable = isToplam ? false: editable;
+      //birim toplamı diğer toplamlardan ayır
+      isToplam = ornekData[0][i]==="Toplam Birim Fiyat" ? false : isToplam;
+      //tüm toplamı diğerlerinden ayır
+      isToplam = ornekData[0][i]==="Toplam" ? false : isToplam;
+      
+      console.log(ornekData[0][i], isToplam)
+      
       cols.push({
         field: ornekData[0][i],
         header: ornekData[0][i],
         editable: editable,
         numberField: nf,
         isBirim: false,
-        isToplam: false
+        isToplam: isToplam
       })
     }
     return cols;
@@ -196,9 +204,10 @@ addOtherCol(name: string, columns: Column[]) {
 }
 
 addBirimCol(name: string = 'Diğer', columns: Column[]) {
+  const position = columns.length -2 - this.birimCols;
   let birimName = name +' Birim Fiyat'
   let toplamName = name +' Toplam Fiyat'
-  columns.splice(columns.length-1,0,{
+  columns.splice(position,0,{
     field: birimName,
     header: birimName,
     editable: true,
@@ -219,6 +228,7 @@ addBirimCol(name: string = 'Diğer', columns: Column[]) {
   })
 
   this._colsSubject.next(columns);
+  this.birimCols += 1;
   //this.dataService.addColumnToTree(this.files,toplamName,0);
 
 }
