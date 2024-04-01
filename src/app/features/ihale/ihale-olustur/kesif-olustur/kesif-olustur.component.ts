@@ -26,7 +26,7 @@ import { XlsxService } from '../../../../services/xlsx.service';
   selector: 'app-kesif-olustur',
   standalone: true,
   imports: [MessagesModule, MenuModule, ToolbarModule, MultiSelectModule, 
-    FormsModule, ButtonModule, TreeTableModule, InputNumberModule, 
+    FormsModule, ButtonModule, TreeTableModule, InputNumberModule,
    ContextMenuModule, NgClass, InputTextModule, DialogModule, RouterLink, IhaleOlusturComponent],
   templateUrl: './kesif-olustur.component.html',
   styleUrl: './kesif-olustur.component.scss'
@@ -77,8 +77,8 @@ delCols: Column[] =[];
     // menüleri oluştur
 
     this.rowContextItems = [
-      { label: 'Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowToNode(this.selectedNode) },
-      { label: 'Başlık Ekle', icon: 'pi pi-file-edit', command: (event) => this.addNewNode() },
+      { label: 'Başlığa Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowToNode(this.selectedNode) },
+      { label: 'Ana Başlık Ekle', icon: 'pi pi-file-edit', command: (event) => this.addNewNode() },
       { label: 'Satırı Sil', icon: 'pi pi-trash', command: (event) => this.deleteNode(this.selectedNode) }
     ];
 
@@ -109,7 +109,23 @@ delCols: Column[] =[];
   }
 
   deleteNode(selectedNode: TreeNode<any>): void {
+
+    //Satırı sil ve poz noları güncelle
     this.dataService.deleteRow(selectedNode,this.files);
+
+    //Toplamı güncelle
+    if(selectedNode.parent) {
+      if (selectedNode.parent.children) {
+        let allToplam = 0;
+        for(const child of selectedNode.parent.children) {
+          allToplam += child.data.Toplam
+          
+        }
+        selectedNode.parent.data.Toplam=allToplam;
+      }
+    }
+    
+
     this.updateView();
   }
  
@@ -135,6 +151,15 @@ delCols: Column[] =[];
   }
 
   addBirimCol(name: string = 'Diğer') {
+    if(this.cols.find(x=>x.header==name+' Birim Fiyat')) {
+      console.log('exist')
+      this.messages.push(    
+          { severity: 'error', summary: 'Sütun zaten mevcut', detail: 
+          'Eklemek istediğiniz sütunla aynı isimde sütun tabloda bulunduğu için değişiklik yapılmadı.' },
+      );
+      return;
+    }
+
     this.dataService.addBirimCol(name,this.cols);
     let birimName = name +' Birim Fiyat'
     let toplamName = name +' Toplam Fiyat'
@@ -160,7 +185,6 @@ delCols: Column[] =[];
   
 
   onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
-    console.log(rowNode)
     let col = this.cols.find(x=>x.field == field)
     const isMiktar: boolean = field.toLowerCase()=='miktar';
     if (col) {
@@ -190,30 +214,14 @@ delCols: Column[] =[];
             }
   
             rowData['Toplam'] = toplam;
-  
-            const currentKey = rowData.key;
-            const parentKey = rowNode.parent.data.key;
+            
             if (rowNode.parent.children) {
-              for(const child of rowNode.parent.children) {
-                console.log(child.data)
-              }
-            }
-            if(parentKey!='') {
               let allToplam = 0;
-              for (let i=0; i<this.files.length; i++) {
-                const child = this.files[i].children
+              for(const child of rowNode.parent.children) {
+                allToplam += child.data.Toplam
                 
-                if(child) {
-                  for (let j=0; j< child.length; j++) {
-                    let x = child[j].data?.Toplam;
-                    if(x) {
-                      allToplam += x;
-                    }      
-                  }
-                }
-              
-                this.files[i].data.Toplam = allToplam; 
               }
+              rowNode.parent.data.Toplam=allToplam;
             }
           
           }

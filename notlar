@@ -1,10 +1,5 @@
 sorulacak
 
-toplam ve miktar sütunlarını algılama
-Firmalar/Teklifçiler Menüsü
--Firmaları listele
--Teklifçileri listele
-
 
 
 düzeltilecek
@@ -13,3 +8,67 @@ sütun silme modal
 toplam hesaplama hataları
 satır yer değiştirme
 başlık satırları, düzenlenemez
+
+
+Kullanıcı:
+uid
+role: admin/isveren/teklifci
+email
+şifre
+created_at
+updated_at
+isim
+soyisim
+telefon
+firma ismi
+ihaleler -> ihale
+teklifler -> teklif
+
+
+Firma:
+
+Firma Adı	
+Firma No	
+Vergi No	
+Yetkili Sayısı	
+İşlem	
+Yetkililer->Yetkili
+
+
+Firma Yetkilisi/teklifçi:
+
+Yetkili No
+Firma No-> Firma
+İş Kategorisi
+Firma İsmi
+Firma Vergi Numarası
+Yetkili Adı
+Yetkili Soyadı
+E-Posta
+Telefon Numarası
+
+
+
+İhale:
+
+İhale No
+İhaleyi Oluşturan->Kullanıcı uid	
+İhale Açıklaması	
+Durum	
+Başlangıç Tarihi	
+Para Birimi	
+İhale Bedeli
+İhale dökümanları
+İstenen dökümanlar
+Teklifçiler->Yetkili 
+Teklifler->Teklif
+
+
+
+Teklif:
+
+İhale No->ihale
+Yetkili No->yetkili
+Teklif tarihi
+Teklif dökümanları
+Toplam Bedel
