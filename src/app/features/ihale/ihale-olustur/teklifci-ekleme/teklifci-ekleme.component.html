@@ -2,7 +2,53 @@
 <div class="container mt-5">
     <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
 </div>
-<div class="flex justify-content-center mt-5">
+<!-- 
+<p-table [value]="teklifciler" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Id</th>
+            <th>Firma</th>
+            <th>Yetkili Adı</th>
+            <th>Yetkili Soyadı</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>İşlemler</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-teklifci>
+        <tr>
+            <td>{{teklifci.id}}</td>
+            <td>{{teklifci.firma}}</td>
+            <td>{{teklifci.yetkili_adi}}</td>
+            <td>{{teklifci.yetkili_soyadi}}</td>
+            <td>{{teklifci.telefon_numarasi}}</td>
+            <td>{{teklifci.email}}</td>
+            <td>
+                <p-button label="Seç" icon="pi pi-plus" severity="primary" ></p-button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table> -->
+
+<div class="card">
+    <p-pickList [source]="teklifciler" [target]="secilenTeklifciler" sourceHeader="Tüm Teklifçiler" targetHeader="Seçilenler" [dragdrop]="true" [responsive]="true"
+        [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }" breakpoint="1400px">
+        <ng-template let-teklifci pTemplate="item">
+            <div class="flex flex-wrap p-2 align-items-center gap-3">
+                <div class="flex-1 flex flex-column gap-2">
+                    <span class="font-bold">{{ teklifci.yetkili_adi }}</span>
+                    <div class="flex align-items-center gap-2">
+                        <i class="pi pi-tag text-sm"></i>
+                        <span>{{ teklifci.firma }}</span>
+                    </div>
+                </div>
+                <span class="font-bold text-900">{{ teklifci.email }}</span>
+            </div>
+        </ng-template>
+    </p-pickList>
+</div>
+
+<div class="flex justify-content-end mt-5">
     <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"></p-button>
-    <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-3" [routerLink]="['/ihale/ihale-olustur/ihale-bilgileri']"></p-button>
+    <p-button pRipple label="İhale Oluştur" icon="pi pi-check" class="mx-3" severity="success" (click)="teklifciSec()"></p-button>
 </div>
