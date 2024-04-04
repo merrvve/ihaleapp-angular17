@@ -1,23 +1,30 @@
+<div class="container mb-5">
+    <h2 class="p-2">İhalelerim</h2>
+</div>
 
 <div class="card">
     <p-table [value]="ihaleler" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template pTemplate="header">
             <tr>
-                <th>No</th>
-                <th>Adı</th>
-                <th>Tarih</th>
-                <th>Diğer</th>
+                <th>Id</th>
+                <th>Açıklaması</th>
+                <th>Başlangıç Tarihi</th>
+                <th>Durum</th>
+                <th>İhale Bedeli</th>
+                <th>Para Birimi</th>
                 <th style="width: 5rem">Detay</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-ihale>
             <tr>
                 <td>{{ ihale.id }}</td>
-                <td>{{ ihale.adi }}</td>
-                <td>{{ ihale.tarih }}</td>
-                <td>{{ ihale.link }}</td>
+                <td>{{ ihale.ihale_aciklamasi }}</td>
+                <td>{{ ihale.baslangic_tarihi }}</td>
+                <td>{{ ihale.durum }}</td>
+                <td>{{ ihale.ihale_bedeli }}</td>
+                <td>{{ ihale.para_birimi }}</td>
                 <td>
-                    <button type="button" pButton pRipple icon="pi pi-arrow-right" (click)="selectIhale(ihale)"></button>
+                    <button type="button" pButton pRipple icon="pi pi-file" (click)="selectIhale(ihale)"></button>
                 </td>
             </tr>
         </ng-template>

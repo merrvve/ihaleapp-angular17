@@ -2,8 +2,8 @@
 <div class="container mt-5">
     <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
 </div>
-<div class="flex">
-    <div class="col-6 col-offset-3">
+<div class="card flex justify-content-center border-1 border-solid surface-border border-round bg-white">
+    <div class="flex-1 md:flex-none m-2 px-5 py-3">
         <div class="field">
             <label for="firstname1">Talep Edilen Bilgi /
                 Evrak</label>
@@ -18,9 +18,17 @@
         </div>
         
     
-    <div class="flex justify-content-end mt-5">
-        <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
-        <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-3" [routerLink]="['/ihale/ihale-olustur/teklifci-ekleme']"></p-button>
     </div>
+
+    <div class="flex-1 md:flex-none m-2 px-5 py-3">
+        <div class="field">
+            <label for="firstname1">Talep Edilen Bilgi /
+                Evraklar:</label>
+        </div>
     </div>
 </div>
+<div class="flex justify-content-end mt-5">
+    <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
+    <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-3" [routerLink]="['/ihale/ihale-olustur/teklifci-ekleme']"></p-button>
+</div>
+

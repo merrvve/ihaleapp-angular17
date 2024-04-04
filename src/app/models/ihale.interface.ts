@@ -1,5 +1,5 @@
 
-interface Ihale {
+export interface Ihale {
     id: string;
     olusturan: string; // assuming User ID for olusturan
     ihale_aciklamasi: string;
