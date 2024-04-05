@@ -88,8 +88,8 @@ export class NavbarComponent implements OnInit {
         {
             label: 'Çıkış Yap',
             icon: 'pi pi-fw pi-power-off',
-            command(event) {
-                this['this.auth'].logout()
+            command:(event: any) =>{
+                this.auth.logout()
             },
         }
     ];
@@ -100,7 +100,10 @@ export class NavbarComponent implements OnInit {
     },
     {
         label: 'Çıkış Yap',
-        icon: 'pi pi-fw pi-power-off'
+        icon: 'pi pi-fw pi-power-off',
+        command:(event: any) =>{
+            this.auth.logout()
+        },
     }
     ];
     }
