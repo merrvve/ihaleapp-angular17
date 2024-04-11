@@ -4,7 +4,9 @@ import {provideAnimations } from '@angular/platform-browser/animations'
 import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
-  providers: [ provideAnimations(),provideRouter(routes), MessageService]
+  providers: [ provideAnimations(),provideRouter(routes), 
+    provideHttpClient(),MessageService]
 };

@@ -10,4 +10,7 @@ export interface Ihale {
     ihale_dokumanlari: string; // file path or URL
     istenen_dokumanlar: string;
     teklifciler: string[]; // array of FirmaYetkilisi IDs
+    isCompleted: boolean;
+    isTaslak: boolean;
+    kesif: [];
 }

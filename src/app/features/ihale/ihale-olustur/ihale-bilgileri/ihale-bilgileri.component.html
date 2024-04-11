@@ -2,7 +2,26 @@
 
 <div class="card flex justify-content-center border-1 border-solid surface-border border-round bg-white">
     <div class="flex-1 md:flex-none m-2 px-5 py-3">
-        <div class="field mb-5">
+        <div class="field grid">
+            <label for="firstname4" class="col-12 mb-2 md:col-3 md:mb-0">İhale Açıklaması</label>
+            <div class="col-12 md:col-9">
+                <input id="firstname4" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+            </div>
+        </div>
+        <div class="field grid">
+            <label for="lastname4" class="col-12 mb-2 md:col-3 md:mb-0">Para Birimi</label>
+            <div class="col-12 md:col-9">
+                @for(currency of currencies; track currency) {
+                    <div  class="field-checkbox">
+                    <p-radioButton [inputId]="currency" name="category" [value]="currency" [(ngModel)]="selectedCurrency"></p-radioButton>
+                    <label [for]="currency" class="ml-2">{{ currency }}</label> 
+                </div>   
+                }
+        
+            </div>
+        </div>
+ 
+        <!-- <div class="field mb-5">
             <label >İhale Açıklaması</label>
             <input  type="text" 
             class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
@@ -19,26 +38,11 @@
                     }
                 
             </div>
-        </div>
+        </div> -->
     </div>
-    <div class="flex-1 md:flex-none m-2 px-5 py-3">
+    <!-- <div class="flex-1 md:flex-none m-2 px-5 py-3">
         <div class="field">
             <label>Dökümanlar</label>
-            <!-- <label for="file-upload" class="cursor-pointer p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" >
-                {{ selectedFiles ? selectedFiles.length + ' dosya seçildi' : 'Dosya Seçiniz' }}
-            </label>
-        <input id="file-upload" (change)="onFileChange($event)" type="file" multiple="true"/>
-        
-            @if(selectedFiles) {
-                <ul>
-                @for(file of selectedFiles; track file) {
-                    <li>
-                        {{file.name}}
-                    </li>
-                }
-                </ul>
-            }
-            -->
         
         </div>
         <div class="card flex justify-content-center">
@@ -60,16 +64,13 @@
             </p-fileUpload>
         </div>
 
-
+       
 
         
-    </div>  
+    </div>   -->
     
 </div>
 <div class="flex justify-content-end mt-5">
     <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-5" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
 </div>
 
- 
-
- 

@@ -4,6 +4,7 @@ import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/user.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -15,14 +16,29 @@ import { AuthService } from '../../services/auth.service';
 export class NavbarComponent implements OnInit {
   items: MenuItem[] | undefined;
   userMenu: MenuItem[] | undefined;
+  teklifciMenu: MenuItem[] | undefined;
   isLoggedIn: boolean = false;
+  user!: User;
 
   constructor(public auth: AuthService) {  }
   ngOnInit(): void {
     this.auth.isLoggedIn$.subscribe(
-        {next: (result)=> this.isLoggedIn=result,
+        {next: (result)=> { 
+            this.isLoggedIn=result;
+            // user bilgilerini al
+
+            this.auth.user$.subscribe(
+                {next: (result)=> { 
+                    this.user=result;                    
+                },
+                error: (error)=> console.log(error)}
+            );
+        
+        },
         error: (error)=> console.log(error)}
     );
+
+
     this.items = [
         {
             label: 'Ana Sayfa',
@@ -106,5 +122,41 @@ export class NavbarComponent implements OnInit {
         },
     }
     ];
+    this.teklifciMenu = [
+        {
+            label: 'Ana Sayfa',
+            icon: 'pi pi-fw pi-home',
+            routerLink: [('/')]
+        },
+        {
+            label: 'İhalelerim',
+            icon: 'pi pi-fw pi-file',
+            items: [
+                
+                {
+                    label: 'İhalelerim',
+                    icon: 'pi pi-fw pi-list',
+                    routerLink: [('ihale/listele')],
+                    
+                },
+                {
+                    separator: true
+                },
+                {
+                    label: 'Tekliflerim',
+                    icon: 'pi pi-fw pi-external-link',
+                }
+            ]
+        },
+        
+        {
+            label: 'Çıkış Yap',
+            icon: 'pi pi-fw pi-power-off',
+            command:(event: any) =>{
+                this.auth.logout()
+            },
+        }
+    ];
+
     }
 }

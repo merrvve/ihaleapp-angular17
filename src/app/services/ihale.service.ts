@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Ihale } from '../models/ihale.interface';
-
+import { environment } from './../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IhaleService {
-  private _ihalelerSubject = new BehaviorSubject<Ihale[]>([
-    {id:'id1',olusturan:'kullanıcı', ihale_aciklamasi:'İhale açıklaması', baslangic_tarihi:'tarih', para_birimi:'TL', durum:'Devam ediyor', ihale_bedeli:20000,ihale_dokumanlari:'',istenen_dokumanlar:'', teklifciler:[]}
-  ]);
-  ihaleler$ = this._ihalelerSubject.asObservable();
+  private _ihaleSubject = new BehaviorSubject<Ihale>(
+    {id:'',olusturan:'', 
+    ihale_aciklamasi:'', baslangic_tarihi:'', 
+    isCompleted: false, isTaslak: false, kesif: [],
+    para_birimi:'', durum:'Devam ediyor', 
+    ihale_bedeli:0,ihale_dokumanlari:'',istenen_dokumanlar:'', teklifciler:[]}
+  );
+  ihale$ = this._ihaleSubject.asObservable();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
   getIhaleler() {
-    return this.ihaleler$;
+    return this.http.get<Ihale[]>(environment.apiUrl+"/ihale/ihalelerim");
   }
 }
