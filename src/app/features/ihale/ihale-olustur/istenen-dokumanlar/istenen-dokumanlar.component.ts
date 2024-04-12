@@ -4,12 +4,9 @@ import { MessagesModule } from 'primeng/messages';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
+import { IhaleService } from '../../../../services/ihale.service';
+import { TalepEdilenEvrak } from '../../../../models/talepedilenevrak.interface';
 
-interface TalepEdilenEvrak {
-  id: number;
-  evrak: string;
-  bicim: string;
-}
 
 @Component({
   selector: 'app-istenen-dokumanlar',
@@ -22,12 +19,18 @@ export class IstenenDokumanlarComponent implements OnInit {
   messages: Message[] =[]; // bilgilendirme mesajı
   evraklar: TalepEdilenEvrak[] = [];
   id: number = 0;
+
+  constructor(private ihaleService: IhaleService){}
+
   ngOnInit(): void {
      //mesajları oluştur
      this.messages = [
       { severity: 'info', summary: 'Teklifçilerden İstenen Dökümanlar', 
       detail: 'Bu adımda teklifçilerin göndermesi gereken dökümanları belirleyebilirsiniz.' },
     ];
+
+    //evraklar varsa yükle
+    this.evraklar = this.ihaleService.evraklar;
   }
 
   evrakEkle(evrak: string, bicim: string) {
@@ -40,5 +43,14 @@ export class IstenenDokumanlarComponent implements OnInit {
     if(index>-1) {
       this.evraklar.splice(index,1);
     }
+  }
+
+  ngOnDestroy() {
+    let evraklarString = ""
+    for(const evrak of this.evraklar) {
+      evraklarString += evrak.evrak + "|" + evrak.bicim + "||"; 
+    }
+    this.ihaleService.istenenDokumanlarEkle(evraklarString);
+    this.ihaleService.evraklar = this.evraklar;
   }
 }
