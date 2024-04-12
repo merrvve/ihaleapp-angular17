@@ -5,6 +5,7 @@ export interface Ihale {
     ihale_aciklamasi: string;
     durum: string;
     baslangic_tarihi: string; // Date string
+    bitis_tarihi: string; // Date string
     para_birimi: string;
     ihale_bedeli: number;
     ihale_dokumanlari: string; // file path or URL

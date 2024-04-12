@@ -5,19 +5,19 @@
         <div class="field grid">
             <label class="col-12 mb-2 md:col-2 md:mb-0">İhale Açıklaması</label>
             <div class="col-12 md:col-4">
-                <input type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                <input type="text" [(ngModel)]="ihale.ihale_aciklamasi" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
             </div>
         </div>
         <div class="field grid">
             <label class="col-12 mb-2 md:col-2 md:mb-0">Başlangıç Tarihi</label>
             <div class="col-12 md:col-4">
-                <p-calendar [(ngModel)]="firstDate" [showIcon]="true"></p-calendar>
+                <p-calendar [(ngModel)]="ihale.baslangic_tarihi" [showIcon]="true"></p-calendar>
             </div>
         </div>
         <div class="field grid">
             <label class="col-12 mb-2 md:col-2 md:mb-0">Bitiş Tarihi</label>
             <div class="col-12 md:col-4">
-                <p-calendar [(ngModel)]="secondDate" [showIcon]="true"></p-calendar>
+                <p-calendar [(ngModel)]="ihale.bitis_tarihi" [showIcon]="true"></p-calendar>
             </div>
         </div>
         <div class="field grid">
@@ -25,7 +25,7 @@
             <div class="flex flex-row mt-3">
                 @for(currency of currencies; track currency) {
                     <div  class="field-checkbox mx-2">
-                    <p-radioButton [inputId]="currency" name="category" [value]="currency" [(ngModel)]="selectedCurrency"></p-radioButton>
+                    <p-radioButton [inputId]="currency" name="category" [value]="currency" [(ngModel)]="ihale.para_birimi"></p-radioButton>
                     <label [for]="currency" class="ml-2">{{ currency }}</label> 
                 </div>   
                 }

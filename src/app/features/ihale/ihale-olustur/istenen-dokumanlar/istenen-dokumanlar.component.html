@@ -3,27 +3,51 @@
     <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
 </div>
 <div class="card flex justify-content-center border-1 border-solid surface-border border-round bg-white">
-    <div class="flex-1 md:flex-none m-2 px-5 py-3">
-        <div class="field">
-            <label for="firstname1">Talep Edilen Bilgi /
-                Evrak</label>
-            <input id="firstname1" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-        </div>
-        <div class="field">
-            <label for="lastname1">İstenilen Biçim</label>
-            <input id="lastname1" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-        </div>
-        <div class="field">
-            <p-button pRipple label="Ekle" icon="pi pi-plus" severity="success"></p-button>
-        </div>
+    <div class="flex-1 m-2 px-5 py-3">
         
+        <div class="field">
+            <label>Talep Edilen Bilgi /
+                Evrak</label>
+            <input type="text" #evrakInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+        <div class="field">
+            <label>İstenilen Biçim</label>
+            <input type="text" #bicimInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+        </div>
+    
     
     </div>
-
-    <div class="flex-1 md:flex-none m-2 px-5 py-3">
+    <div class="flex-1 justify-content-center">
         <div class="field">
-            <label for="firstname1">Talep Edilen Bilgi /
-                Evraklar:</label>
+            <p-button icon="pi pi-plus" severity="success" (onClick)="evrakEkle(evrakInput.value,bicimInput.value); evrakInput.value=''; bicimInput.value='';" ></p-button>
+        </div>
+    </div>
+
+    <div class="flex-1 m-2 px-5 py-3">
+        <div class="field">
+            @if(evraklar.length>0) {
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Evrak Adı</th>
+                            <th>Biçim</th>
+                            <th>Sil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(evrak of evraklar; track evrak;) {
+                            <tr>
+                                <td>{{evrak.evrak}}</td>
+                                <td>{{evrak.bicim}}</td>
+                                <p-button pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="evrakSil(evrak.id)"></p-button>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            }
+                
         </div>
     </div>
 </div>
