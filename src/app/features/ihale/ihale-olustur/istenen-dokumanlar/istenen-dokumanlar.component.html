@@ -2,7 +2,7 @@
 <div class="container mt-5">
     <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
 </div>
-<div class="card flex justify-content-center border-1 border-solid surface-border border-round bg-white">
+<div class="card flex justify-content-center align-items-stretch border-1 border-solid surface-border border-round bg-white">
     <div class="flex-1 m-2 px-5 py-3">
         
         <div class="field">
@@ -17,8 +17,8 @@
     
     
     </div>
-    <div class="flex-1 justify-content-center">
-        <div class="field">
+    <div class="flex-1 justify-content-center ">
+        <div class="field" style="padding-top: 15%;">
             <p-button icon="pi pi-plus" severity="success" (onClick)="evrakEkle(evrakInput.value,bicimInput.value); evrakInput.value=''; bicimInput.value='';" ></p-button>
         </div>
     </div>

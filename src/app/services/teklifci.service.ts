@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { FirmaYetkilisi } from '../models/firmayetkilisi.interface';
 import { Firma } from '../models/firma.interface';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +21,14 @@ export class TeklifciService {
   ]);
   firmalar$ = this._firmalarSubject.asObservable();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getYetkililer() {
-    return this.yetkililer$;
+    return this.http.get<FirmaYetkilisi[]>(environment.apiUrl+"/ihale/yetkililer");
   }
 
   getFirmalar() {
-    return this.firmalar$;
+    return this.http.get<Firma[]>(environment.apiUrl+"/ihale/firmalar");
   }
 
   addYetkili(yeniTeklifci: FirmaYetkilisi) {
