@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CalendarModule } from 'primeng/calendar';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -14,7 +15,7 @@ interface UploadEvent {
 @Component({
   selector: 'app-ihale-bilgileri',
   standalone: true,
-  imports: [IhaleOlusturComponent, RadioButtonModule, FormsModule, ButtonModule, RouterLink, FileUploadModule],
+  imports: [IhaleOlusturComponent, RadioButtonModule, FormsModule, ButtonModule, RouterLink, FileUploadModule, CalendarModule],
   templateUrl: './ihale-bilgileri.component.html',
   styleUrl: './ihale-bilgileri.component.scss'
 })
@@ -24,15 +25,20 @@ export class IhaleBilgileriComponent {
   selectedFile!: File;
   selectedFiles: File[] = [];
   uploadedFiles: any[] = [];
-
+  firstDate: Date | undefined;
+  secondDate: Date | undefined;
 
   onFileChange(event: any) {
-    this.selectedFiles = event.target.files;
-    console.log(this.selectedFiles)
+    if(event.target.files) {
+      for(const file of event.target.files) {
+        this.selectedFiles.push(file)
+      }
+    }  
   }
 
 
   onUpload(event:any) {
+    console.log(event.files)
     for(let file of event.files) {
         this.uploadedFiles.push(file);
     }

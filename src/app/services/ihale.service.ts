@@ -21,4 +21,6 @@ export class IhaleService {
   getIhaleler() {
     return this.http.get<Ihale[]>(environment.apiUrl+"/ihale/ihalelerim");
   }
+
+  
 }
