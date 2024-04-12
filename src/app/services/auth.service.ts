@@ -11,7 +11,7 @@ export class AuthService {
   isLoggedIn$ = this._isLoggedInSubject.asObservable();
 
   private _userSubject = new BehaviorSubject<User>({ 
-    id:"asda", token:"sample", role:"ISVEREN",email:"",adi:"sample",soyadi:"sample",telefon:""
+    id:"asda", token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzMjk1MTY3LCJpYXQiOjE3MTI4NjMxNjcsImp0aSI6ImRkZTFkOWYwMmU1NTRhNTlhMTBjMDMxODZmYjI0NzAyIiwidXNlcl9pZCI6MX0.6p6ppWIssOhSttQ_3kMhmhprgWjROTui5qlgXkyschA", role:"ISVEREN",email:"",adi:"sample",soyadi:"sample",telefon:""
    });
   user$ = this._userSubject.asObservable();
 
@@ -31,5 +31,9 @@ export class AuthService {
 
   isUserLoggedIn() {
     return this._isLoggedInSubject.value;
+  }
+
+  getAuthorizationToken() {
+    return this._userSubject.value.token;
   }
 }
