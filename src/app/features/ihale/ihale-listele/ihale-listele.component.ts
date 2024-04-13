@@ -22,7 +22,7 @@ ngOnInit() {
 
   this.subscription1 = this.ihaleService.getIhaleler().subscribe(
     {
-      next: (result) => {this.ihaleler=result; },
+      next: (result) => {this.ihaleler=result; console.log(this.ihaleler)},
       error: (error) => console.log(error)
       //this.messages= [{severity: 'error', summary: 'Teklifçi Bilgileri Alınamadı', 
       //detail: 'Teklifçi bilgileri yüklenirken bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.'}]

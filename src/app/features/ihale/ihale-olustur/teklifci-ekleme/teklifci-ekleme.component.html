@@ -9,13 +9,13 @@
         <ng-template let-teklifci pTemplate="item">
             <div class="flex flex-wrap p-2 align-items-center gap-3">
                 <div class="flex-1 flex flex-column gap-2">
-                    <span class="font-bold">{{ teklifci.yetkili_adi }}</span>
+                    <span class="font-bold"> {{ teklifci.yetkili_adi }} {{ teklifci.yetkili_soyadi }}</span>
                     <div class="flex align-items-center gap-2">
                         <i class="pi pi-tag text-sm"></i>
-                        <span>{{ teklifci.firma }}</span>
+                        <span>{{ teklifci.email }} {{ teklifci.telefon }}</span>
                     </div>
                 </div>
-                <span class="font-bold text-900">{{ teklifci.email }}</span>
+                <span class="font-bold text-900">{{ teklifci.firma }}</span>
             </div>
         </ng-template>
     </p-pickList>
@@ -23,5 +23,5 @@
 
 <div class="flex justify-content-end mt-5">
     <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"></p-button>
-    <p-button pRipple label="İhale Oluştur" icon="pi pi-check" class="mx-3" severity="success" (click)="teklifciSec()"></p-button>
+    <p-button pRipple label="İhale Oluştur" icon="pi pi-check" class="mx-3" severity="success" (click)="onSubmit()"></p-button>
 </div>

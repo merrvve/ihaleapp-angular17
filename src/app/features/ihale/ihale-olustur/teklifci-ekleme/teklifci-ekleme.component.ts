@@ -10,6 +10,7 @@ import { TableModule } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { PickListModule } from 'primeng/picklist';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { IhaleService } from '../../../../services/ihale.service';
 
 @Component({
   selector: 'app-teklifci-ekleme',
@@ -23,12 +24,12 @@ export class TeklifciEklemeComponent implements OnInit {
   teklifciler: FirmaYetkilisi[] = [];
   secilenTeklifciler: FirmaYetkilisi[] = [];
   subscription1!: Subscription;
-  constructor(private teklifciService: TeklifciService) {}
+  constructor(private teklifciService: TeklifciService, private ihaleService: IhaleService) {}
   ngOnInit(): void {
     // Teklifçi bilgilerini al
     this.subscription1 = this.teklifciService.getYetkililer().subscribe(
       {
-        next: (result) => {this.teklifciler=result; console.log(this.teklifciler)},
+        next: (result) => {this.teklifciler=result; },
         error: (error) => this.messages= [{severity: 'error', summary: 'Teklifçi Bilgileri Alınamadı', 
         detail: 'Teklifçi bilgileri yüklenirken bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.'}]
       }
@@ -41,11 +42,25 @@ export class TeklifciEklemeComponent implements OnInit {
   }
 
 
-  teklifciSec() {
-    console.log(this.secilenTeklifciler)
-  }
   ngOnDestroy() {
+    let teklifciler: string[] = [];
+    for(const teklifci of this.secilenTeklifciler) {
+      teklifciler.push(teklifci.id)
+    }
+    this.ihaleService.teklifcilerEkle(teklifciler);
     this.subscription1.unsubscribe();
   }
+
+  onSubmit() {
+    let teklifciler: string[] = [];
+    for(const teklifci of this.secilenTeklifciler) {
+      teklifciler.push(teklifci.id)
+    }
+    this.ihaleService.teklifcilerEkle(teklifciler);
+    this.ihaleService.createIhale().subscribe({
+      next:(result)=>console.log(result),
+      error:(error)=> console.log(error)
+  });
+  }  
 
 }
