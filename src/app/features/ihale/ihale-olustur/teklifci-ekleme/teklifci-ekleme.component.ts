@@ -11,19 +11,27 @@ import { Subscription } from 'rxjs';
 import { PickListModule } from 'primeng/picklist';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IhaleService } from '../../../../services/ihale.service';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-teklifci-ekleme',
   standalone: true,
-  imports: [MessagesModule, ButtonModule,RouterLink, IhaleOlusturComponent, TableModule, PickListModule, DragDropModule],
+  imports: [MessagesModule, ButtonModule,RouterLink, IhaleOlusturComponent, TableModule, PickListModule,
+     DragDropModule, DialogModule, ProgressSpinnerModule],
   templateUrl: './teklifci-ekleme.component.html',
   styleUrl: './teklifci-ekleme.component.scss'
 })
 export class TeklifciEklemeComponent implements OnInit {
   messages: Message[] =[]; // bilgilendirme mesajı
+  messages2: Message[] =[]; // bilgilendirme mesajı
   teklifciler: FirmaYetkilisi[] = [];
   secilenTeklifciler: FirmaYetkilisi[] = [];
   subscription1!: Subscription;
+  isModalVisible: boolean = false;
+  isLoading: boolean = false;
+
+    
   constructor(private teklifciService: TeklifciService, private ihaleService: IhaleService) {}
   ngOnInit(): void {
     // Teklifçi bilgilerini al
@@ -52,15 +60,46 @@ export class TeklifciEklemeComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading=true;
+    this.isModalVisible=true;
     let teklifciler: number[] = [];
     for(const teklifci of this.secilenTeklifciler) {
       teklifciler.push(teklifci.id)
     }
     this.ihaleService.teklifcilerEkle(teklifciler);
-    this.ihaleService.createIhale().subscribe({
-      next:(result)=>console.log(result),
-      error:(error)=> console.log(error)
-  });
+   
+     this.ihaleService.createIhale().subscribe({
+       next:(result)=>{
+        this.messages2= [{severity: 'success', summary: 'İhale Oluşturuldu', 
+        detail: 'İhale başarıyla oluşturuldu. '}
+      ];
+        const id = result.ihale_id;
+        const formData = this.ihaleService.getFileFormData();
+        this.ihaleService.uploadFile(formData,id).subscribe(
+          {
+            next:(result)=>{
+               this.isLoading=false;
+               this.messages2.push({severity: 'success', summary: 'İhale Dökümanları Yüklendi', 
+        detail: 'İhale dökümanları yüklendi '});
+            },
+            error: (error)=>{
+              this.isLoading=false;
+              this.messages2.push({severity: 'error', summary: 'İhale Dökümanları Yüklenemedi', 
+       detail: 'İhale dökümanları yüklenirken bir hata oluştu. '+ error.message});
+           }
+
+          }
+        );
+       },
+       error:(error)=> {this.isLoading=false;
+        this.messages2= [{severity: 'error', summary: 'İhale Oluşturulamadı', 
+        detail: 'İhale oluşturulurken bir hata ile karşılaşıldı. '+error.message}]
+       },
+       
+   });
   }  
+  showDialog() {
+    this.isModalVisible = true;
+}
 
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Ihale } from '../models/ihale.interface';
 import { environment } from './../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TalepEdilenEvrak } from '../models/talepedilenevrak.interface';
 import { DatePipe } from '@angular/common';
 
@@ -43,4 +43,19 @@ export class IhaleService {
     this._ihaleSubject.value.teklifciler = teklifciler;
   }
   
+  getFileFormData() {
+    const formData = new FormData();
+    for(const file of this.files) {
+      formData.append(file.name,file)
+    }
+    return formData;
+  }
+
+  uploadFile(formData: FormData, ihale_id: number) {
+    // const headers = new HttpHeaders();
+    // headers.append('Content-Type', 'multipart/form-data');
+    // headers.append('Accept', 'application/json');
+
+    return this.http.post<any>(environment.apiUrl+"/ihale/dosya-yukle/"+ihale_id, formData);
+  }
 }

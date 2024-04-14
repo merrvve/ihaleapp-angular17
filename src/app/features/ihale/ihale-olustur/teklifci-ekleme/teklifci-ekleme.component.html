@@ -25,3 +25,15 @@
     <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"></p-button>
     <p-button pRipple label="İhale Oluştur" icon="pi pi-check" class="mx-3" severity="success" (click)="onSubmit()"></p-button>
 </div>
+<p-dialog header="Header" [(visible)]="isModalVisible" [modal]="true"  [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+    <div class="card flex justify-content-center" >
+        <p-progressSpinner [(hidden)]="!isLoading"  styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+        <p-messages [(hidden)]="isLoading" [(value)]="messages2" [enableService]="false" class="mb-3"></p-messages>
+
+    </div>
+    <p>
+        
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+</p-dialog>
