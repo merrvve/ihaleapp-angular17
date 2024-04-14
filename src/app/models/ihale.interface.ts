@@ -10,5 +10,5 @@ export interface Ihale {
     teklifciler: number[]; // array of FirmaYetkilisi IDs
     isCompleted: boolean;
     isTaslak: boolean;
-    kesif: [];
+    kesif: any[][];
 }

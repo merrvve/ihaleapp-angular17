@@ -67,7 +67,6 @@ export class TeklifciEklemeComponent implements OnInit {
       teklifciler.push(teklifci.id)
     }
     this.ihaleService.teklifcilerEkle(teklifciler);
-   
      this.ihaleService.createIhale().subscribe({
        next:(result)=>{
         this.messages2= [{severity: 'success', summary: 'İhale Oluşturuldu', 
@@ -79,13 +78,14 @@ export class TeklifciEklemeComponent implements OnInit {
           {
             next:(result)=>{
                this.isLoading=false;
-               this.messages2.push({severity: 'success', summary: 'İhale Dökümanları Yüklendi', 
-        detail: 'İhale dökümanları yüklendi '});
+               this.messages2=[{severity: 'success', summary: 'İhale Dökümanları Yüklendi', 
+        detail: 'İhale oluşturuldu ve ihale dökümanları başarıyla yüklendi '}];
             },
             error: (error)=>{
               this.isLoading=false;
-              this.messages2.push({severity: 'error', summary: 'İhale Dökümanları Yüklenemedi', 
-       detail: 'İhale dökümanları yüklenirken bir hata oluştu. '+ error.message});
+              this.messages2=[{severity: 'error', summary: 'İhale Dökümanları Yüklenemedi', 
+       detail: 'İhale oluşturuldu ancak İhale dökümanları yüklenirken bir hata oluştu. '+ error.message}];
+              console.log(error)
            }
 
           }

@@ -19,6 +19,7 @@ import { ToastModule } from 'primeng/toast';
 
 import { Subscription } from 'rxjs';
 import { XlsxService } from '../../../../services/xlsx.service';
+import { IhaleService } from '../../../../services/ihale.service';
 
 
 
@@ -59,7 +60,8 @@ delCols: Column[] =[];
         this.visible = true;
     }
 
-  constructor(private dataService: TablodataService, private excelService: XlsxService, private messageService: MessageService) {}
+  constructor(private dataService: TablodataService, private excelService: XlsxService, 
+    private messageService: MessageService, private ihaleService: IhaleService) {}
 
   ngOnInit(): void {
     // verileri yükle
@@ -309,6 +311,8 @@ delCols: Column[] =[];
   }
   
   ngOnDestroy(): void {
+    const tabloData=this.dataService.convertTreeToDatalist(this.files,this.cols)
+    this.ihaleService.tabloData=tabloData;
     this.subscription.unsubscribe(); // Unsubscribe to prevent memory leaks
     this.subscription2.unsubscribe();
   }
