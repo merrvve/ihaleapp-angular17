@@ -43,7 +43,7 @@ export class TeklifciEklemeComponent implements OnInit {
 
 
   ngOnDestroy() {
-    let teklifciler: string[] = [];
+    let teklifciler: number[] = [];
     for(const teklifci of this.secilenTeklifciler) {
       teklifciler.push(teklifci.id)
     }
@@ -52,7 +52,7 @@ export class TeklifciEklemeComponent implements OnInit {
   }
 
   onSubmit() {
-    let teklifciler: string[] = [];
+    let teklifciler: number[] = [];
     for(const teklifci of this.secilenTeklifciler) {
       teklifciler.push(teklifci.id)
     }

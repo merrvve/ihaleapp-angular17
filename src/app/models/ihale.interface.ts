@@ -7,7 +7,7 @@ export interface Ihale {
     para_birimi: string;
     ihale_bedeli: number;
     istenen_dokumanlar: string;
-    teklifciler: string[]; // array of FirmaYetkilisi IDs
+    teklifciler: number[]; // array of FirmaYetkilisi IDs
     isCompleted: boolean;
     isTaslak: boolean;
     kesif: [];

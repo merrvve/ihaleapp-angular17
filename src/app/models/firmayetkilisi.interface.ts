@@ -1,7 +1,7 @@
 
 export interface FirmaYetkilisi {
-    id: string;
-    firma: string; 
+    id: number;
+    firma: number; 
     yetkili_adi: string;
     yetkili_soyadi: string;
     email: string;

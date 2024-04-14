@@ -39,7 +39,7 @@ export class IhaleService {
     this._ihaleSubject.value.istenen_dokumanlar=docs;
   }
 
-  teklifcilerEkle(teklifciler: string[]) {
+  teklifcilerEkle(teklifciler: number[]) {
     this._ihaleSubject.value.teklifciler = teklifciler;
   }
   
