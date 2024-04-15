@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { User } from '../models/user.interface';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root'
@@ -11,21 +14,53 @@ export class AuthService {
   isLoggedIn$ = this._isLoggedInSubject.asObservable();
 
   private _userSubject = new BehaviorSubject<User>({ 
-    id:"asda", token:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzEzNDEwOTI1LCJpYXQiOjE3MTI5Nzg5MjUsImp0aSI6IjdiZTA5NjkwMGE3YjQ5MDhhMWQ2NjBjN2VlOTdkZjFkIiwidXNlcl9pZCI6MX0.BfyBTitY0D30BVRKCh6-oxxK4H3LBQg4XTpTPGsxC_U", role:"ISVEREN",email:"",adi:"sample",soyadi:"sample",telefon:""
+    id:"", token:"", role:"",email:"",adi:"",soyadi:"",telefon:""
    });
   user$ = this._userSubject.asObservable();
 
-  token! : string | null;
-  constructor(private router: Router) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
-  login() {
-    this._isLoggedInSubject.next(true);
-     this.token="sampletoken"
-    this.router.navigate(['/'])
+  login(email: string, password: string) {
+    this.http.post(environment.apiUrl+"/token/pair",{username:email, password: password}).subscribe(
+      {
+        next:(result:any)=> {
+          this._userSubject.value.token=result.access;
+          this.http.get(environment.apiUrl+'/ihale/login').subscribe(
+            {
+              next:(result:any)=>{
+                this._isLoggedInSubject.next(true);
+                this._userSubject.value.email=result.email;
+                this._userSubject.value.id=result.id;
+                this._userSubject.value.role =result.role;
+                this._userSubject.value.adi =result.adi;
+                this._userSubject.value.soyadi =result.soyadi;
+                this._userSubject.value.telefon =result.telefon;
+                this._userSubject.value.firmaYetkilisi =result.firmaYetkilisi;
+                if(result.role==="ISVEREN") {
+                  this.router.navigate(['/isveren']);
+                }
+                else if(result.role==="TEKLIFCI") {
+                  this.router.navigate(['/teklifci']);
+                }
+
+              },
+              error:(error)=>console.log(error)
+            }
+          );
+
+        },
+        error:(error)=> {
+          console.log(error);
+        }
+      }
+    );
   }
 
   logout() {
     this._isLoggedInSubject.next(false);
+    this._userSubject.next({ 
+      id:"", token:"", role:"",email:"",adi:"",soyadi:"",telefon:""
+     });
     this.router.navigate(['/login'])
   }
 
@@ -35,5 +70,9 @@ export class AuthService {
 
   getAuthorizationToken() {
     return this._userSubject.value.token;
+  }
+
+  getUserRole() {
+    return this._userSubject.value.role;
   }
 }
