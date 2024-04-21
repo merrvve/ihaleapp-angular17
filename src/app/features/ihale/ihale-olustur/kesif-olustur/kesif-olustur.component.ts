@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem, Message, MessageService, TreeNode } from 'primeng/api';
+import { MenuItem, Message, MessageService, TreeNode} from 'primeng/api';
 import { TablodataService } from '../../../../services/tablodata.service';
 import { Column } from '../../../../models/column.interface';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -16,18 +16,18 @@ import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
 import { ToastModule } from 'primeng/toast';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { Subscription } from 'rxjs';
 import { XlsxService } from '../../../../services/xlsx.service';
 import { IhaleService } from '../../../../services/ihale.service';
 
 
-
 @Component({
   selector: 'app-kesif-olustur',
   standalone: true,
-  imports: [ MenuModule, ToolbarModule, MultiSelectModule, 
-    FormsModule, ButtonModule, TreeTableModule, InputNumberModule, ToastModule,
+  imports: [ MenuModule, ToolbarModule, MultiSelectModule,
+    FormsModule, ButtonModule, TreeTableModule, InputNumberModule, ToastModule, DropdownModule,
    ContextMenuModule, NgClass, InputTextModule, DialogModule, RouterLink, IhaleOlusturComponent],
   templateUrl: './kesif-olustur.component.html',
   styleUrl: './kesif-olustur.component.scss'
@@ -39,8 +39,9 @@ export class KesifOlusturComponent implements OnInit {
   cols!: Column[]; // tüm sütun nesneleri
   
   selectedColumns!: Column[]; // görüntülenecek sütunlar
-
+  selectionKeys :any = {};
   selectedNode!: TreeNode; // sağ tuşla seçilen node
+  selectedNodes!: TreeNode[]; // sağ tuşla seçilen node
 
   rowContextItems!: MenuItem[]; //Tablo üzerinde sağ tuşla gelen menü
   addColItems!: MenuItem[]; //Sütun Ekle Menüsü
@@ -50,11 +51,13 @@ export class KesifOlusturComponent implements OnInit {
   subscription!: Subscription;
   visible: boolean = false;
   visibleExcelDialog: boolean = false;
+  visibleRowDialog: boolean = false;
   visibleBirimDialog: boolean = false;
 visibleDeleteColDialog: boolean = false;
 delCols: Column[] =[];
   subscription2!: Subscription;
   selectedFile!: File;
+  rowNum: number = 1;
 
     showDialog() {
         this.visible = true;
@@ -135,8 +138,6 @@ delCols: Column[] =[];
             selectedNode.parent.data.Toplam=allToplam;
           }
         }
-        this.messageService.add({ severity: 'success', summary: 'Satır Silindi', detail: 
-        'Satır silinmesi işlemi başarıyla gerçekleştirildi.' });
         this.updateView();
         return;
       }
@@ -315,5 +316,23 @@ delCols: Column[] =[];
     this.ihaleService.tabloData=tabloData;
     this.subscription.unsubscribe(); // Unsubscribe to prevent memory leaks
     this.subscription2.unsubscribe();
+  }
+
+  onCheck(key: string, node: TreeNode, rowData: any) {
+    console.log(key,node,rowData, this.selectedNodes)
+  }
+
+  deleteSelectedRows() {
+    for (const node of this.selectedNodes) {
+      this.deleteNode(node);
+    }
+    this.selectedNodes=[]
+  }
+
+  addMultipleRows(node: TreeNode) {
+    for(let i =0; i<this.rowNum; i++) {
+      this.dataService.addRowToNode(node);
+    }
+    this.updateView()
   }
 }

@@ -9,5 +9,7 @@ export const routes: Routes = [
     {path:'ihale', loadChildren: () => import('./features/ihale/ihale.routes').then(mod => mod.IHALE_ROUTES)},
     {path:'teklif', loadChildren: () => import('./features/teklif/teklif.routes').then(mod => mod.TEKLIF_ROUTES)},
     {path:'isveren', component: DashboardComponent, data:{role:"ISVEREN"}, canActivate: [authGuard]},
-    {path:'teklifci', component: TeklifciComponent, data:{role:"TEKLIFCI"},canActivate: [authGuard]}
+    {path:'teklifci', component: TeklifciComponent, data:{role:"TEKLIFCI"},canActivate: [authGuard]},
+    {path:'', component: LoginComponent},
+
 ];
