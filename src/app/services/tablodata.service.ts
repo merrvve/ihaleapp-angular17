@@ -12,7 +12,8 @@ import { BehaviorSubject } from 'rxjs';
 export class TablodataService {
   public ornekData: any[][] = [
     ['key', 'İş Tanımı', 'Marka', 'Miktar','Birim' ,'Toplam Birim Fiyat','Toplam'],
-    ['1', 'Başlık', '', '','','','']
+    ['1', 'Başlık', '', '','','',''],
+    ['1.1', '', '', '','','',''],
   ];
 
   birimCols = 0;
@@ -272,17 +273,43 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     return null;
   }
 
-  addRowToNode(node: any) {
-    const key = node.data.key;
-    const len = node.children.length;
-    const newNode : TreeNode = {
-      data: {
-        key: key+'.'+String(len+1)
-      },
-      children: [],
-      expanded: true
+  addRowToNode(node: any, positionSpecified:boolean = false) {
+    if (!positionSpecified) {
+      const key = node.data.key;
+    
+      const len = node.children.length;
+      const newNode : TreeNode = {
+        data: {
+          key: key+'.'+String(len+1)
+        },
+        children: [],
+        expanded: true
+      }
+      node.children.push(newNode);
+      return;
     }
-    node.children.push(newNode);
+    else {
+      const key = node.parent.data.key;
+    
+      const position = node.parent.children.indexOf(node)
+      const newNode : TreeNode = {
+        data: {
+          key: key+'.'+(position+2)
+        },
+        children: [],
+        expanded: true
+      }
+      console.log(position,newNode)
+      node.parent.children.splice(position+1,0,newNode);
+      
+          for (let i = position+2; i<node.parent.children.length; i++){
+            node.parent.children[i].data.key =node.parent.data.key + '.'+ (i+1);
+          }
+      
+  
+      return;
+    }
+    
   }
 
   pasteRowsToNode(node: any,rows:TreeNode[]) {
@@ -316,5 +343,6 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     this._datatreeSubject.next(datatree);
   }
 
+  
  
 }

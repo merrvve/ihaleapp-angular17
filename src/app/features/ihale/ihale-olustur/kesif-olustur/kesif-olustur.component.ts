@@ -82,10 +82,11 @@ delCols: Column[] =[];
     // menüleri oluştur
 
     this.rowContextItems = [
-      { label: 'Başlık Olarak İşaretle', icon: 'pi pi-edit', command: (event) => this.addRowToNode(this.selectedNode) },
+      { label: 'Başlık Olarak İşaretle', icon: 'pi pi-edit', command: (event) => this.addRowToNode(this.selectedNode,false) },
+      { label: 'Alta Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowToNode(this.selectedNode, true) },
       { label: 'Satırı Sil', icon: 'pi pi-trash', command: (event) => this.deleteNode(this.selectedNode) },
       { label: 'Seçili Satırları Sil', icon: 'pi pi-trash', command: (event) => this.deleteSelectedRows() },
-      { label: 'Seçili Satırları Kes', icon: 'pi pi-cut', command: (event) => this.deleteSelectedRows() },
+      { label: 'Seçili Satırları Kes', icon: 'pi pi-cut', command: (event) => this.cutSelectedRows() },
       { label: 'Yapıştır', icon: 'pi pi-paste', command: (event) => this.pasteSelectedRows(this.selectedNode) }
       
     ];
@@ -100,8 +101,8 @@ delCols: Column[] =[];
    
   }
 
-  addRowToNode(node: TreeNode) {
-    this.dataService.addRowToNode(node);
+  addRowToNode(node: TreeNode, positionSpecified:boolean) {
+    this.dataService.addRowToNode(node,positionSpecified);
     this.updateView();
     this.expandAllNodes(this.files);
   }
@@ -348,5 +349,9 @@ delCols: Column[] =[];
     }
     this.deleteSelectedRows();
     this.updateView()
+  }
+
+  cutSelectedRows() {
+    
   }
 }
