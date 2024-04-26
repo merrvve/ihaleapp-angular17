@@ -285,6 +285,25 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     node.children.push(newNode);
   }
 
+  pasteRowsToNode(node: any,rows:TreeNode[]) {
+    const key = node.data.key;
+    let len = node.children.length;
+    for (const row of rows) {
+      const { key: _, ...dataWithoutKey } = row.data;
+      dataWithoutKey.key = key+'.'+(len+1)
+      const newNode : TreeNode = {
+        data: {...dataWithoutKey},
+        children: [],
+        expanded: true
+      }
+      //key: key+'.'+String(len+1),
+      node.children.push(newNode);
+      len+=1;
+    }
+    
+  }
+
+
   addNewNode(datatree: any[]) {
     const len = datatree.length;
     const newNode : TreeNode = {

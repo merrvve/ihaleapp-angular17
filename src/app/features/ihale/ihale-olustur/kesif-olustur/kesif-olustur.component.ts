@@ -82,9 +82,12 @@ delCols: Column[] =[];
     // menüleri oluştur
 
     this.rowContextItems = [
-      { label: 'Başlığa Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowToNode(this.selectedNode) },
-      { label: 'Ana Başlık Ekle', icon: 'pi pi-file-edit', command: (event) => this.addNewNode() },
-      { label: 'Satırı Sil', icon: 'pi pi-trash', command: (event) => this.deleteNode(this.selectedNode) }
+      { label: 'Başlık Olarak İşaretle', icon: 'pi pi-edit', command: (event) => this.addRowToNode(this.selectedNode) },
+      { label: 'Satırı Sil', icon: 'pi pi-trash', command: (event) => this.deleteNode(this.selectedNode) },
+      { label: 'Seçili Satırları Sil', icon: 'pi pi-trash', command: (event) => this.deleteSelectedRows() },
+      { label: 'Seçili Satırları Kes', icon: 'pi pi-cut', command: (event) => this.deleteSelectedRows() },
+      { label: 'Yapıştır', icon: 'pi pi-paste', command: (event) => this.pasteSelectedRows(this.selectedNode) }
+      
     ];
 
     this.addColItems = [
@@ -333,6 +336,17 @@ delCols: Column[] =[];
     for(let i =0; i<this.rowNum; i++) {
       this.dataService.addRowToNode(node);
     }
+    this.updateView()
+  }
+
+  pasteSelectedRows(node: TreeNode) {
+    if(node.parent) {
+      this.dataService.pasteRowsToNode(node.parent,this.selectedNodes);
+    }
+    else {
+      this.dataService.pasteRowsToNode(node,this.selectedNodes);
+    }
+    this.deleteSelectedRows();
     this.updateView()
   }
 }
