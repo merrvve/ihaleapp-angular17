@@ -135,6 +135,11 @@ export class TablodataService {
         datatree.splice(foundIndexTitle,1);
         for (let i = foundIndexTitle; i<(len-1); i++){
           datatree[i].data.key=i+1;
+          if(datatree[i].children.length>0) {
+            for (let j = 0; j<datatree[i].children.length; j++){
+              datatree[i].children[j].data.key = datatree[i].data.key +'.'+(j+1)
+            }
+          }
         }
         return true;
       }
@@ -343,6 +348,28 @@ addColumnToTree(dataTree: any[], columnName: string, value: any): void {
     this._datatreeSubject.next(datatree);
   }
 
-  
+  moveRowUp(node: any) {
+    if(node.parent) {
+      const index = node.parent.children.indexOf(node);
+      if(index>0) {
+        node.parent.children.splice(index,1);
+        node.parent.children.splice(index-1,0,node)
+        node.data.key = node.parent.data.key + '.' + index;
+        node.parent.children[index].data.key = node.parent.data.key + '.' + (index+1);
+      }
+    }
+  }
+ 
+  moveRowDown(node: any) {
+    if(node.parent) {
+      const index = node.parent.children.indexOf(node);
+      if(index>-1 && index+1<node.parent.children.length) {      
+        node.parent.children.splice(index,1);
+        node.parent.children.splice(index+1,0,node)
+        node.data.key = node.parent.data.key + '.' + (index+2);
+        node.parent.children[index].data.key = node.parent.data.key + '.' + (index+1);
+      }
+    }
+  }
  
 }

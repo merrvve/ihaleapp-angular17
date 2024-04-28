@@ -41,7 +41,7 @@ export class KesifOlusturComponent implements OnInit {
   selectedColumns!: Column[]; // görüntülenecek sütunlar
   selectionKeys :any = {};
   selectedNode!: TreeNode; // sağ tuşla seçilen node
-  selectedNodes!: TreeNode[]; // sağ tuşla seçilen node
+  selectedNodes: TreeNode[] = []; // sağ tuşla seçilen node
 
   rowContextItems!: MenuItem[]; //Tablo üzerinde sağ tuşla gelen menü
   addColItems!: MenuItem[]; //Sütun Ekle Menüsü
@@ -82,12 +82,14 @@ delCols: Column[] =[];
     // menüleri oluştur
 
     this.rowContextItems = [
-      { label: 'Başlık Olarak İşaretle', icon: 'pi pi-edit', command: (event) => this.addRowToNode(this.selectedNode,false) },
-      { label: 'Alta Satır Ekle', icon: 'pi pi-arrow-down', command: (event) => this.addRowToNode(this.selectedNode, true) },
-      { label: 'Satırı Sil', icon: 'pi pi-trash', command: (event) => this.deleteNode(this.selectedNode) },
-      { label: 'Seçili Satırları Sil', icon: 'pi pi-trash', command: (event) => this.deleteSelectedRows() },
-      { label: 'Seçili Satırları Kes', icon: 'pi pi-cut', command: (event) => this.cutSelectedRows() },
-      { label: 'Yapıştır', icon: 'pi pi-paste', command: (event) => this.pasteSelectedRows(this.selectedNode) }
+      { label: 'Başlık Olarak İşaretle', icon: 'pi pi-file-edit', command: (event) => this.addRowToNode(this.selectedNode,false) },
+      { label: 'Alta Satır Ekle', icon: 'pi pi-plus', command: (event) => this.addRowToNode(this.selectedNode, true) },
+      { label: 'Satırı yukarı taşı', icon: 'pi pi-arrow-up', command: (event) => this.moveRowUp(this.selectedNode) },
+      { label: 'Satırı aşağı taşı', icon: 'pi pi-arrow-down', command: (event) => this.moveRowDown(this.selectedNode) },
+      { label: 'Satırı Sil', icon: 'pi pi-eraser', command: (event) => this.deleteNode(this.selectedNode) },
+      { label: 'Seçili Satırları Sil', icon: 'pi pi-trash', command: (event) => this.deleteSelectedRows()  },
+      { label: 'Seçili Satırları Kes', icon: 'pi pi-copy', command: (event) => this.cutSelectedRows()},
+      { label: 'Yapıştır', icon: 'pi pi-clone', command: (event) => this.pasteSelectedRows(this.selectedNode) }
       
     ];
 
@@ -351,7 +353,17 @@ delCols: Column[] =[];
     this.updateView()
   }
 
+  moveRowUp (node:TreeNode) {
+    this.dataService.moveRowUp(node);
+    this.updateView();
+  }
+
+  moveRowDown (node:TreeNode) {
+    this.dataService.moveRowDown(node);
+    this.updateView();
+  }
+
   cutSelectedRows() {
-    
+
   }
 }
