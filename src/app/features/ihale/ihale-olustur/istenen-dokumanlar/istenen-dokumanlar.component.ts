@@ -7,15 +7,18 @@ import { IhaleOlusturComponent } from '../ihale-olustur.component';
 import { IhaleService } from '../../../../services/ihale.service';
 import { TalepEdilenEvrak } from '../../../../models/talepedilenevrak.interface';
 
-
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { FormsModule, NgModel } from '@angular/forms';
 @Component({
   selector: 'app-istenen-dokumanlar',
   standalone: true,
-  imports: [MessagesModule, ButtonModule,RouterLink, IhaleOlusturComponent],
+  imports: [MessagesModule, ButtonModule,RouterLink, IhaleOlusturComponent, RadioButtonModule, FormsModule],
   templateUrl: './istenen-dokumanlar.component.html',
   styleUrl: './istenen-dokumanlar.component.scss'
 })
 export class IstenenDokumanlarComponent implements OnInit {
+
+  radioChoice!: string;
   messages: Message[] =[]; // bilgilendirme mesajı
   evraklar: TalepEdilenEvrak[] = [];
   id: number = 0;

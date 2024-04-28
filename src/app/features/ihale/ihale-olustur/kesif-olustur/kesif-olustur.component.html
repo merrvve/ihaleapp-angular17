@@ -85,8 +85,7 @@
     selectionMode="checkbox" [(selection)]="selectedNodes" dataKey="key"
     [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" 
     
-    [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines p-treetable-sm" 
-    [tableStyle]="{'min-width':'50rem'}">
+    [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines p-treetable-sm" >
     
 
         <ng-template pTemplate="header" let-columns>
@@ -114,8 +113,7 @@
                         <div class="input-container">
                             @if (col.numberField== true) {
                                 <p-inputNumber [(ngModel)]="rowData[col.field]"
-                                  (ngModelChange)="onCellEdit($event, rowData, col.field, rowNode)"
-                                inputId="locale-german" mode="decimal" locale="de-DE" [minFractionDigits]="2"> </p-inputNumber>
+                                  (ngModelChange)="onCellEdit($event, rowData, col.field, rowNode)"> </p-inputNumber>
                               }
                               @else {
                                 <input pInputText type="text"

@@ -24,7 +24,9 @@ export class TablodataService {
   cols$ = this._colsSubject.asObservable();
 
 
-  constructor() { }
+  constructor() { 
+    this.loadData(this.ornekData)
+  }
 
   loadData(datalist:any[]) {
     this._colsSubject.next(this.columns(datalist));
@@ -97,7 +99,7 @@ export class TablodataService {
     // Iterate through each row in the input data
     for (let i = 1; i < data.length; i++) {
         const row = data[i];
-        const key = row[0];
+        const key = String(row[0]);
         const parentNodeKey = key.includes('.') ? key.substring(0, key.lastIndexOf('.')) : null;
         const node = createNode(key, parentNodeKey);
 

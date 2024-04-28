@@ -10,16 +10,37 @@
                 Evrak</label>
             <input type="text" #evrakInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
         </div>
+        <div class="field mb-5">
+            <label class="mb-3">İstenilen Biçim</label>
+            <div class="flex flex-wrap gap-3">
+                <div class="flex align-items-center">
+                    <p-radioButton name="file" value="dosya" [(ngModel)]="radioChoice" inputId="c1"></p-radioButton>
+                    <label for="c1" class="ml-2">Dosya</label>
+                </div>
+                
+                <div class="flex align-items-center">
+                    <p-radioButton name="note" value="not" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
+                    <label for="c2" class="ml-2">Not</label>
+                </div>
+                
+            </div>
+    
+        </div>
         <div class="field">
-            <label>İstenilen Biçim</label>
-            <input type="text" #bicimInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+            @if(radioChoice ==="not") {
+                <label class="mb-3">Not</label>
+
+                <textarea type="text" rows="10"
+                #bicimInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                   </textarea>
+             }
         </div>
     
     
     </div>
     <div class="flex-1 justify-content-center ">
-        <div class="field" style="padding-top: 15%;">
-            <p-button icon="pi pi-plus" severity="success" (onClick)="evrakEkle(evrakInput.value,bicimInput.value); evrakInput.value=''; bicimInput.value='';" ></p-button>
+        <div class="field" style="padding-top: 20%;">
+            <p-button icon="pi pi-plus" severity="success" (onClick)="evrakEkle(evrakInput.value,radioChoice); evrakInput.value='';" ></p-button>
         </div>
     </div>
 
@@ -39,7 +60,7 @@
                             <tr>
                                 <td>{{evrak.evrak}}</td>
                                 <td>{{evrak.bicim}}</td>
-                                <p-button pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="evrakSil(evrak.id)"></p-button>
+                                <p-button size="small" pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="evrakSil(evrak.id)"></p-button>
 
                             </tr>
                         }
