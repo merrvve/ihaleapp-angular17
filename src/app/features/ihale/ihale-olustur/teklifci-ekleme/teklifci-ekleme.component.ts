@@ -13,23 +13,25 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IhaleService } from '../../../../services/ihale.service';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TeklifciEkleComponent } from "../../../teklif/teklifci-ekle/teklifci-ekle.component";
 
 @Component({
-  selector: 'app-teklifci-ekleme',
-  standalone: true,
-  imports: [
-    MessagesModule,
-    ButtonModule,
-    RouterLink,
-    IhaleOlusturComponent,
-    TableModule,
-    PickListModule,
-    DragDropModule,
-    DialogModule,
-    ProgressSpinnerModule,
-  ],
-  templateUrl: './teklifci-ekleme.component.html',
-  styleUrl: './teklifci-ekleme.component.scss',
+    selector: 'app-teklifci-ekleme',
+    standalone: true,
+    templateUrl: './teklifci-ekleme.component.html',
+    styleUrl: './teklifci-ekleme.component.scss',
+    imports: [
+        MessagesModule,
+        ButtonModule,
+        RouterLink,
+        IhaleOlusturComponent,
+        TableModule,
+        PickListModule,
+        DragDropModule,
+        DialogModule,
+        ProgressSpinnerModule,
+        TeklifciEkleComponent
+    ]
 })
 export class TeklifciEklemeComponent implements OnInit {
   messages: Message[] = []; // bilgilendirme mesajı
@@ -39,6 +41,7 @@ export class TeklifciEklemeComponent implements OnInit {
   subscription1!: Subscription;
   isModalVisible: boolean = false;
   isLoading: boolean = false;
+isTeklifciModalVisible: boolean = false;
 
   constructor(
     private teklifciService: TeklifciService,
