@@ -9,6 +9,7 @@ import { TalepEdilenEvrak } from '../../../../models/talepedilenevrak.interface'
 
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule, NgModel } from '@angular/forms';
+
 @Component({
   selector: 'app-istenen-dokumanlar',
   standalone: true,

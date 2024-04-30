@@ -165,29 +165,46 @@ export class TablodataService {
       colNames.push(col.field);
     }
     datalist.push(colNames);
-    for (let i = 0; i < datatree.length; i++) {
+    const addRowsToDataList = (node: any) => {
       let row = [];
       for (const value of colNames) {
-        if (datatree[i].data[value]) {
-          row.push(datatree[i].data[value]);
+        if (node.data[value]) {
+          row.push(node.data[value]);
         } else {
           row.push('');
         }
       }
       datalist.push(row);
-      if (datatree[i].children.length > 0) {
-        for (let j = 0; j < datatree[i].children.length; j++) {
-          let row = [];
-          for (const value of colNames) {
-            if (datatree[i].children[j].data[value]) {
-              row.push(datatree[i].children[j].data[value]);
-            } else {
-              row.push('');
-            }
-          }
-          datalist.push(row);
-        }
+      if (node.children.length > 0) {
+        for( const child of node.children) {
+        addRowsToDataList(child)
       }
+      }
+    };
+    for (let i = 0; i < datatree.length; i++) {
+      addRowsToDataList(datatree[i]);
+      // let row = [];
+      // for (const value of colNames) {
+      //   if (datatree[i].data[value]) {
+      //     row.push(datatree[i].data[value]);
+      //   } else {
+      //     row.push('');
+      //   }
+      // }
+      // datalist.push(row);
+      // if (datatree[i].children.length > 0) {
+      //   for (let j = 0; j < datatree[i].children.length; j++) {
+      //     let row = [];
+      //     for (const value of colNames) {
+      //       if (datatree[i].children[j].data[value]) {
+      //         row.push(datatree[i].children[j].data[value]);
+      //       } else {
+      //         row.push('');
+      //       }
+      //     }
+      //     datalist.push(row);
+      //   }
+      // }
     }
     return datalist;
   }
