@@ -7,11 +7,9 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
   constructor() {}
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void {}
 }

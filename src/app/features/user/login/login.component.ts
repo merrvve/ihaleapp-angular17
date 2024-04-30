@@ -9,19 +9,20 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CheckboxModule, InputTextModule, ButtonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent implements OnInit {
-  constructor(public auth: AuthService,private router: Router) {}
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+  ) {}
   ngOnInit(): void {
-    if(this.auth.isUserLoggedIn()) {
-      if(this.auth.getUserRole()=="ISVEREN") {
+    if (this.auth.isUserLoggedIn()) {
+      if (this.auth.getUserRole() == 'ISVEREN') {
+        this.router.navigate(['/isveren']);
+      } else if (this.auth.getUserRole() == 'TEKLIFCI') {
         this.router.navigate(['/isveren']);
       }
-      else if(this.auth.getUserRole()=="TEKLIFCI") {
-        this.router.navigate(['/isveren']);
-      }
-      
     }
   }
   login(email: string, password: string) {

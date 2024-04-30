@@ -1,6 +1,6 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import {provideAnimations } from '@angular/platform-browser/animations'
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 
 import { routes } from './app.routes';
@@ -9,7 +9,11 @@ import { authInterceptor } from './interceptors/auth.interceptor';
 import { DatePipe } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
-  providers: [ provideAnimations(),provideRouter(routes), 
+  providers: [
+    provideAnimations(),
+    provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    MessageService, DatePipe]
+    MessageService,
+    DatePipe,
+  ],
 };

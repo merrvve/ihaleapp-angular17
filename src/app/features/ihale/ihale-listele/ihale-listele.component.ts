@@ -10,27 +10,27 @@ import { Ihale } from '../../../models/ihale.interface';
   standalone: true,
   imports: [TableModule, ButtonModule],
   templateUrl: './ihale-listele.component.html',
-  styleUrl: './ihale-listele.component.scss'
+  styleUrl: './ihale-listele.component.scss',
 })
-export class IhaleListeleComponent implements OnInit{
-ihaleler: Ihale[] = [];
-subscription1!: Subscription;
-selectIhale(ihale: any) {}
-constructor(private ihaleService: IhaleService) {}
+export class IhaleListeleComponent implements OnInit {
+  ihaleler: Ihale[] = [];
+  subscription1!: Subscription;
+  selectIhale(ihale: any) {}
+  constructor(private ihaleService: IhaleService) {}
 
-ngOnInit() {
-
-  this.subscription1 = this.ihaleService.getIhaleler().subscribe(
-    {
-      next: (result) => {this.ihaleler=result; console.log(this.ihaleler)},
-      error: (error) => console.log(error)
-      //this.messages= [{severity: 'error', summary: 'Teklifçi Bilgileri Alınamadı', 
+  ngOnInit() {
+    this.subscription1 = this.ihaleService.getIhaleler().subscribe({
+      next: (result) => {
+        this.ihaleler = result;
+        console.log(this.ihaleler);
+      },
+      error: (error) => console.log(error),
+      //this.messages= [{severity: 'error', summary: 'Teklifçi Bilgileri Alınamadı',
       //detail: 'Teklifçi bilgileri yüklenirken bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.'}]
-    }
-  );
-}
+    });
+  }
 
-ngOnDestroy() {
-  this.subscription1.unsubscribe();
-}
+  ngOnDestroy() {
+    this.subscription1.unsubscribe();
+  }
 }

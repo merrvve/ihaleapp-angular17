@@ -8,10 +8,9 @@ describe('IhaleOlusturComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IhaleOlusturComponent]
-    })
-    .compileComponents();
-    
+      imports: [IhaleOlusturComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(IhaleOlusturComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

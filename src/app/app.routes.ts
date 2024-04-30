@@ -5,11 +5,30 @@ import { authGuard } from './guards/auth.guard';
 import { TeklifciComponent } from './features/dashboard/teklifci/teklifci.component';
 
 export const routes: Routes = [
-    {path:'login', component: LoginComponent},
-    {path:'ihale', loadChildren: () => import('./features/ihale/ihale.routes').then(mod => mod.IHALE_ROUTES)},
-    {path:'teklif', loadChildren: () => import('./features/teklif/teklif.routes').then(mod => mod.TEKLIF_ROUTES)},
-    {path:'isveren', component: DashboardComponent, data:{role:"ISVEREN"}, canActivate: [authGuard]},
-    {path:'teklifci', component: TeklifciComponent, data:{role:"TEKLIFCI"},canActivate: [authGuard]},
-    {path:'', component: LoginComponent},
-
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'ihale',
+    loadChildren: () =>
+      import('./features/ihale/ihale.routes').then((mod) => mod.IHALE_ROUTES),
+  },
+  {
+    path: 'teklif',
+    loadChildren: () =>
+      import('./features/teklif/teklif.routes').then(
+        (mod) => mod.TEKLIF_ROUTES,
+      ),
+  },
+  {
+    path: 'isveren',
+    component: DashboardComponent,
+    data: { role: 'ISVEREN' },
+    canActivate: [authGuard],
+  },
+  {
+    path: 'teklifci',
+    component: TeklifciComponent,
+    data: { role: 'TEKLIFCI' },
+    canActivate: [authGuard],
+  },
+  { path: '', component: LoginComponent },
 ];

@@ -2,77 +2,87 @@ import { Injectable } from '@angular/core';
 import { Column } from '../models/column.interface';
 import { TreeNode } from 'primeng/api';
 
-
 import { BehaviorSubject } from 'rxjs';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TablodataService {
   public ornekData: any[][] = [
-    ['key', 'İş Tanımı', 'Marka', 'Miktar','Birim' ,'Toplam Birim Fiyat','Toplam'],
-    ['1', 'Başlık', '', '','','',''],
-    ['1.1', '', '', '','','',''],
+    [
+      'key',
+      'İş Tanımı',
+      'Marka',
+      'Miktar',
+      'Birim',
+      'Toplam Birim Fiyat',
+      'Toplam',
+    ],
+    ['1', 'Başlık', '', '', '', '', ''],
+    ['1.1', '', '', '', '', '', ''],
   ];
 
   birimCols = 0;
-  private _datatreeSubject = new BehaviorSubject<any[]>(this.convertToTreeTable(this.ornekData));
+  private _datatreeSubject = new BehaviorSubject<any[]>(
+    this.convertToTreeTable(this.ornekData),
+  );
   datatree$ = this._datatreeSubject.asObservable();
 
-  private _colsSubject = new BehaviorSubject<Column[]>(this.columns(this.ornekData));
+  private _colsSubject = new BehaviorSubject<Column[]>(
+    this.columns(this.ornekData),
+  );
   cols$ = this._colsSubject.asObservable();
 
-
-  constructor() { 
-    this.loadData(this.ornekData)
+  constructor() {
+    this.loadData(this.ornekData);
   }
 
-  loadData(datalist:any[]) {
+  loadData(datalist: any[]) {
     this._colsSubject.next(this.columns(datalist));
     this._datatreeSubject.next(this.convertToTreeTable(datalist));
   }
 
   columns(ornekData: any[][]) {
-    let cols : Column[] =[]
+    let cols: Column[] = [];
     let len = ornekData[0].length;
-    for(let i=0; i<len; i++) {
-      let editable = i ===0 ? false : true;
-      let nf=false;
-      let isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam')
-      if(ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam ) {
-          nf=true;
+    for (let i = 0; i < len; i++) {
+      let editable = i === 0 ? false : true;
+      let nf = false;
+      let isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam');
+      if (ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam) {
+        nf = true;
       }
-      editable = isToplam ? false: editable;
+      editable = isToplam ? false : editable;
       //birim toplamı diğer toplamlardan ayır
-      isToplam = ornekData[0][i]==="Toplam Birim Fiyat" ? false : isToplam;
+      isToplam = ornekData[0][i] === 'Toplam Birim Fiyat' ? false : isToplam;
       //tüm toplamı diğerlerinden ayır
-      isToplam = ornekData[0][i]==="Toplam" ? false : isToplam;
-      
-      console.log(ornekData[0][i], isToplam)
-      
+      isToplam = ornekData[0][i] === 'Toplam' ? false : isToplam;
+
+      console.log(ornekData[0][i], isToplam);
+
       cols.push({
         field: ornekData[0][i],
         header: ornekData[0][i],
         editable: editable,
         numberField: nf,
         isBirim: false,
-        isToplam: isToplam
-      })
+        isToplam: isToplam,
+      });
     }
     return cols;
   }
 
   convertToTreeTable(data: string[][], cols?: string[]): TreeNode[] {
     if (data.length < 2) {
-        throw new Error('Input data should have at least two lists: column names and row data.');
+      throw new Error(
+        'Input data should have at least two lists: column names and row data.',
+      );
     }
     let columns = [];
-    
+
     if (cols) {
       columns = cols;
-    }
-    else {
+    } else {
       columns = data[0];
     }
     const result: TreeNode[] = [];
@@ -83,295 +93,281 @@ export class TablodataService {
     // Function to create a new node if it doesn't exist
     const createNode = (key: string, parentKey: string | null = null) => {
       if (!nodesMap[key]) {
-          const newNode: TreeNode = { data: { key }, children: [] };
-          if (parentKey) {
-              const parentNode = nodesMap[parentKey];
-              parentNode.children.push(newNode);
-          } else {
-              result.push(newNode);
-          }
-          nodesMap[key] = newNode;
+        const newNode: TreeNode = { data: { key }, children: [] };
+        if (parentKey) {
+          const parentNode = nodesMap[parentKey];
+          parentNode.children.push(newNode);
+        } else {
+          result.push(newNode);
+        }
+        nodesMap[key] = newNode;
       }
       return nodesMap[key];
-  };
-  
+    };
 
     // Iterate through each row in the input data
     for (let i = 1; i < data.length; i++) {
-        const row = data[i];
-        const key = String(row[0]);
-        const parentNodeKey = key.includes('.') ? key.substring(0, key.lastIndexOf('.')) : null;
-        const node = createNode(key, parentNodeKey);
+      const row = data[i];
+      const key = String(row[0]);
+      const parentNodeKey = key.includes('.')
+        ? key.substring(0, key.lastIndexOf('.'))
+        : null;
+      const node = createNode(key, parentNodeKey);
 
-        // Assign data to the node
-        for (let j = 1; j < columns.length; j++) {
-            node.data[columns[j]] = row[j];
-            node.expanded = true;
-        }
+      // Assign data to the node
+      for (let j = 1; j < columns.length; j++) {
+        node.data[columns[j]] = row[j];
+        node.expanded = true;
+      }
     }
 
     return result;
-}
+  }
 
-  deleteRow(node: any,datatree: any[]) {
+  deleteRow(node: any, datatree: any[]) {
     // Ara başlık ya da satır sil
-    if(node.parent?.children) {
+    if (node.parent?.children) {
       let foundIndex = node.parent.children.indexOf(node);
-      node.parent.children.splice(foundIndex,1);
-      
-        for (let i = foundIndex; i<node.parent.children.length; i++){
-          node.parent.children[i].data.key =node.parent.data.key + '.'+ (i+1);
-        }
+      node.parent.children.splice(foundIndex, 1);
+
+      for (let i = foundIndex; i < node.parent.children.length; i++) {
+        node.parent.children[i].data.key = node.parent.data.key + '.' + (i + 1);
+      }
       return true;
-      
     }
 
     //Parentı olmayan ana başlık sil
     else {
       let foundIndexTitle = datatree.indexOf(node);
-      const len =datatree.length;
-      if(len==1) {
+      const len = datatree.length;
+      if (len == 1) {
         return false; // tek bir ana başlık varsa silme false dön
-      }
-      else {
-        datatree.splice(foundIndexTitle,1);
-        for (let i = foundIndexTitle; i<(len-1); i++){
-          datatree[i].data.key=i+1;
-          if(datatree[i].children.length>0) {
-            for (let j = 0; j<datatree[i].children.length; j++){
-              datatree[i].children[j].data.key = datatree[i].data.key +'.'+(j+1)
+      } else {
+        datatree.splice(foundIndexTitle, 1);
+        for (let i = foundIndexTitle; i < len - 1; i++) {
+          datatree[i].data.key = i + 1;
+          if (datatree[i].children.length > 0) {
+            for (let j = 0; j < datatree[i].children.length; j++) {
+              datatree[i].children[j].data.key =
+                datatree[i].data.key + '.' + (j + 1);
             }
           }
         }
         return true;
       }
-      
     }
   }
 
   convertTreeToDatalist(datatree: any[], cols: Column[]) {
     let datalist = [];
     let colNames = [];
-    for (const col of cols ) {
+    for (const col of cols) {
       colNames.push(col.field);
     }
     datalist.push(colNames);
-    for (let i=0; i<datatree.length; i++) {
-      let row=[]
+    for (let i = 0; i < datatree.length; i++) {
+      let row = [];
       for (const value of colNames) {
-        if(datatree[i].data[value]) {
-          row.push(datatree[i].data[value])
-        }
-        else {
+        if (datatree[i].data[value]) {
+          row.push(datatree[i].data[value]);
+        } else {
           row.push('');
         }
       }
-     datalist.push(row);
-     if(datatree[i].children.length>0) {
-      
-      for (let j=0; j<datatree[i].children.length; j++) {
-
-        let row=[]
-        for (const value of colNames) {
-          if(datatree[i].children[j].data[value]) {
-            row.push(datatree[i].children[j].data[value])
+      datalist.push(row);
+      if (datatree[i].children.length > 0) {
+        for (let j = 0; j < datatree[i].children.length; j++) {
+          let row = [];
+          for (const value of colNames) {
+            if (datatree[i].children[j].data[value]) {
+              row.push(datatree[i].children[j].data[value]);
+            } else {
+              row.push('');
+            }
           }
-          else {
-            row.push('');
-          }
+          datalist.push(row);
         }
-        datalist.push(row);
       }
-     }
     }
     return datalist;
   }
 
-deleteCol(columns: Column[],delcols: Column[]) {
-  for (let i=0; i<delcols.length; i++){
-    const index = columns.indexOf(delcols[i]);
-    if(i>-1){
-      columns.splice(index,1)
+  deleteCol(columns: Column[], delcols: Column[]) {
+    for (let i = 0; i < delcols.length; i++) {
+      const index = columns.indexOf(delcols[i]);
+      if (i > -1) {
+        columns.splice(index, 1);
+      }
     }
+    this._colsSubject.next(columns);
   }
-  this._colsSubject.next(columns);  
-}
 
+  addOtherCol(name: string, columns: Column[]) {
+    //Sütunları Güncelle
+    columns.splice(2, 0, {
+      field: name,
+      header: name,
+      editable: true,
+      numberField: false,
+      isBirim: false,
+      isToplam: false,
+    });
+    this._colsSubject.next(columns);
+  }
 
-addOtherCol(name: string, columns: Column[]) {
-  //Sütunları Güncelle
-  columns.splice(2,0,{
-    field: name,
-    header: name,
-    editable: true,
-    numberField: false,
-    isBirim: false,
-    isToplam: false
-  })
-  this._colsSubject.next(columns);
-}
+  addBirimCol(name: string = 'Diğer', columns: Column[]) {
+    const position = columns.length - 2 - this.birimCols;
+    let birimName = name + ' Birim Fiyat';
+    let toplamName = name + ' Toplam Fiyat';
+    columns.splice(position, 0, {
+      field: birimName,
+      header: birimName,
+      editable: true,
+      numberField: true,
+      relatedField: toplamName,
+      isBirim: true,
+      isToplam: false,
+    });
 
-addBirimCol(name: string = 'Diğer', columns: Column[]) {
-  const position = columns.length -2 - this.birimCols;
-  let birimName = name +' Birim Fiyat'
-  let toplamName = name +' Toplam Fiyat'
-  columns.splice(position,0,{
-    field: birimName,
-    header: birimName,
-    editable: true,
-    numberField: true,
-    relatedField: toplamName,
-    isBirim:true,
-    isToplam: false
-  });
-  
- 
-  columns.splice(columns.length-1,0,{
-    field: toplamName,
-    header: toplamName,
-    editable: false,
-    numberField: true,
-    isBirim: false,
-    isToplam: true
-  })
+    columns.splice(columns.length - 1, 0, {
+      field: toplamName,
+      header: toplamName,
+      editable: false,
+      numberField: true,
+      isBirim: false,
+      isToplam: true,
+    });
 
-  this._colsSubject.next(columns);
-  this.birimCols += 1;
-  //this.dataService.addColumnToTree(this.files,toplamName,0);
+    this._colsSubject.next(columns);
+    this.birimCols += 1;
+    //this.dataService.addColumnToTree(this.files,toplamName,0);
+  }
 
-}
-
-
-addColumnToTree(dataTree: any[], columnName: string, value: any): void {
-  // Iterate through each node in the dataTree
+  addColumnToTree(dataTree: any[], columnName: string, value: any): void {
+    // Iterate through each node in the dataTree
     const traverseTree = (node: any) => {
-        // Add the new column with empty values to the node
-        node.data[columnName] = value;
+      // Add the new column with empty values to the node
+      node.data[columnName] = value;
 
-        // Recursively traverse through children
-        for (const child of node.children) {
-            traverseTree(child);
-        }
+      // Recursively traverse through children
+      for (const child of node.children) {
+        traverseTree(child);
+      }
     };
 
     // Traverse the tree starting from each root node
     for (const rootNode of dataTree) {
-        traverseTree(rootNode);
+      traverseTree(rootNode);
     }
-   this._datatreeSubject.next(dataTree);  
+    this._datatreeSubject.next(dataTree);
   }
 
   findNodeByKey(node: TreeNode, key: string): TreeNode | null {
     // Check if the current node has the given key
     if (node.data.key === key) {
-        return node;
+      return node;
     }
-    if(node.children) {
-  // Traverse children nodes recursively
+    if (node.children) {
+      // Traverse children nodes recursively
       for (const child of node.children) {
         const foundNode = this.findNodeByKey(child, key);
         if (foundNode !== null) {
-            return foundNode;
+          return foundNode;
         }
       }
-
-    }    
+    }
     // Key not found in this branch
     return null;
   }
 
-  addRowToNode(node: any, positionSpecified:boolean = false) {
+  addRowToNode(node: any, positionSpecified: boolean = false) {
     if (!positionSpecified) {
       const key = node.data.key;
-    
+
       const len = node.children.length;
-      const newNode : TreeNode = {
+      const newNode: TreeNode = {
         data: {
-          key: key+'.'+String(len+1)
+          key: key + '.' + String(len + 1),
         },
         children: [],
-        expanded: true
-      }
+        expanded: true,
+      };
       node.children.push(newNode);
       return;
-    }
-    else {
+    } else {
       const key = node.parent.data.key;
-    
-      const position = node.parent.children.indexOf(node)
-      const newNode : TreeNode = {
+
+      const position = node.parent.children.indexOf(node);
+      const newNode: TreeNode = {
         data: {
-          key: key+'.'+(position+2)
+          key: key + '.' + (position + 2),
         },
         children: [],
-        expanded: true
+        expanded: true,
+      };
+      console.log(position, newNode);
+      node.parent.children.splice(position + 1, 0, newNode);
+
+      for (let i = position + 2; i < node.parent.children.length; i++) {
+        node.parent.children[i].data.key = node.parent.data.key + '.' + (i + 1);
       }
-      console.log(position,newNode)
-      node.parent.children.splice(position+1,0,newNode);
-      
-          for (let i = position+2; i<node.parent.children.length; i++){
-            node.parent.children[i].data.key =node.parent.data.key + '.'+ (i+1);
-          }
-      
-  
+
       return;
     }
-    
   }
 
-  pasteRowsToNode(node: any,rows:TreeNode[]) {
+  pasteRowsToNode(node: any, rows: TreeNode[]) {
     const key = node.data.key;
     let len = node.children.length;
     for (const row of rows) {
       const { key: _, ...dataWithoutKey } = row.data;
-      dataWithoutKey.key = key+'.'+(len+1)
-      const newNode : TreeNode = {
-        data: {...dataWithoutKey},
+      dataWithoutKey.key = key + '.' + (len + 1);
+      const newNode: TreeNode = {
+        data: { ...dataWithoutKey },
         children: [],
-        expanded: true
-      }
+        expanded: true,
+      };
       //key: key+'.'+String(len+1),
       node.children.push(newNode);
-      len+=1;
+      len += 1;
     }
-    
   }
-
 
   addNewNode(datatree: any[]) {
     const len = datatree.length;
-    const newNode : TreeNode = {
+    const newNode: TreeNode = {
       data: {
-        key: String(len+1)
+        key: String(len + 1),
       },
-      children: []
-    }
+      children: [],
+    };
     datatree.push(newNode);
     this._datatreeSubject.next(datatree);
   }
 
   moveRowUp(node: any) {
-    if(node.parent) {
+    if (node.parent) {
       const index = node.parent.children.indexOf(node);
-      if(index>0) {
-        node.parent.children.splice(index,1);
-        node.parent.children.splice(index-1,0,node)
+      if (index > 0) {
+        node.parent.children.splice(index, 1);
+        node.parent.children.splice(index - 1, 0, node);
         node.data.key = node.parent.data.key + '.' + index;
-        node.parent.children[index].data.key = node.parent.data.key + '.' + (index+1);
+        node.parent.children[index].data.key =
+          node.parent.data.key + '.' + (index + 1);
       }
     }
   }
- 
+
   moveRowDown(node: any) {
-    if(node.parent) {
+    if (node.parent) {
       const index = node.parent.children.indexOf(node);
-      if(index>-1 && index+1<node.parent.children.length) {      
-        node.parent.children.splice(index,1);
-        node.parent.children.splice(index+1,0,node)
-        node.data.key = node.parent.data.key + '.' + (index+2);
-        node.parent.children[index].data.key = node.parent.data.key + '.' + (index+1);
+      if (index > -1 && index + 1 < node.parent.children.length) {
+        node.parent.children.splice(index, 1);
+        node.parent.children.splice(index + 1, 0, node);
+        node.data.key = node.parent.data.key + '.' + (index + 2);
+        node.parent.children[index].data.key =
+          node.parent.data.key + '.' + (index + 1);
       }
     }
   }
- 
 }

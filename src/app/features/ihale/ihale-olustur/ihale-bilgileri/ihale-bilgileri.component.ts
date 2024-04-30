@@ -18,42 +18,47 @@ interface UploadEvent {
 @Component({
   selector: 'app-ihale-bilgileri',
   standalone: true,
-  imports: [IhaleOlusturComponent, RadioButtonModule, FormsModule, ButtonModule, RouterLink, FileUploadModule, CalendarModule],
+  imports: [
+    IhaleOlusturComponent,
+    RadioButtonModule,
+    FormsModule,
+    ButtonModule,
+    RouterLink,
+    FileUploadModule,
+    CalendarModule,
+  ],
   templateUrl: './ihale-bilgileri.component.html',
-  styleUrl: './ihale-bilgileri.component.scss'
+  styleUrl: './ihale-bilgileri.component.scss',
 })
 export class IhaleBilgileriComponent implements OnInit {
-  selectedCurrency: string=''
-  currencies= ['TL','Dolar','Euro']
+  selectedCurrency: string = '';
+  currencies = ['TL', 'Dolar', 'Euro'];
   selectedFile!: File;
   selectedFiles: File[] = [];
   firstDate: string | undefined;
   secondDate: Date | undefined;
   ihale!: Ihale;
-  subscription1! :Subscription
+  subscription1!: Subscription;
 
   constructor(private ihaleService: IhaleService) {}
   ngOnInit(): void {
     this.selectedFiles = this.ihaleService.files;
-    this.subscription1= this.ihaleService.ihale$.subscribe(
-      {
-        next:(result) => this.ihale=result,
-        error:(error) => console.log(error)
-      }
-    )
+    this.subscription1 = this.ihaleService.ihale$.subscribe({
+      next: (result) => (this.ihale = result),
+      error: (error) => console.log(error),
+    });
   }
- 
- 
+
   onFileChange(event: any) {
-    if(event.target.files) {
-      for(const file of event.target.files) {
-        this.selectedFiles.push(file)
+    if (event.target.files) {
+      for (const file of event.target.files) {
+        this.selectedFiles.push(file);
       }
-    }  
+    }
   }
 
   ngOnDestroy() {
-    this.ihaleService.files= this.selectedFiles;
-    this.subscription1.unsubscribe()
+    this.ihaleService.files = this.selectedFiles;
+    this.subscription1.unsubscribe();
   }
 }

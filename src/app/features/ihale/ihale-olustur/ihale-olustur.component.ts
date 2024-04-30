@@ -6,33 +6,29 @@ import { StepsModule } from 'primeng/steps';
   standalone: true,
   imports: [StepsModule],
   templateUrl: './ihale-olustur.component.html',
-  styleUrl: './ihale-olustur.component.scss'
+  styleUrl: './ihale-olustur.component.scss',
 })
 export class IhaleOlusturComponent implements OnInit {
-  steps:any[] =[];
-  constructor() {
-  }
+  steps: any[] = [];
+  constructor() {}
   ngOnInit(): void {
     this.steps = [
       {
         label: 'İhale Bilgileri',
-        routerLink: [('/ihale/ihale-olustur/ihale-bilgileri')]
-    },
-    {
-          label: 'Keşif Oluşturma',
-          routerLink: [('/ihale/ihale-olustur/kesif-olustur')]
+        routerLink: ['/ihale/ihale-olustur/ihale-bilgileri'],
       },
       {
-          label: 'İstenen Dökümanlar',
-          routerLink: [('/ihale/ihale-olustur/istenen-dokumanlar')]
+        label: 'Keşif Oluşturma',
+        routerLink: ['/ihale/ihale-olustur/kesif-olustur'],
       },
       {
-          label: 'Teklifçi Ekleme',
-          routerLink: [('/ihale/ihale-olustur/teklifci-ekleme')]
-      }
-     
+        label: 'İstenen Dökümanlar',
+        routerLink: ['/ihale/ihale-olustur/istenen-dokumanlar'],
+      },
+      {
+        label: 'Teklifçi Ekleme',
+        routerLink: ['/ihale/ihale-olustur/teklifci-ekleme'],
+      },
     ];
   }
-
-
 }

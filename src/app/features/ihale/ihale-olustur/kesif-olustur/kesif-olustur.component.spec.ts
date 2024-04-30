@@ -8,10 +8,9 @@ describe('KesifOlusturComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KesifOlusturComponent]
-    })
-    .compileComponents();
-    
+      imports: [KesifOlusturComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(KesifOlusturComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -2,20 +2,24 @@ import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class XlsxService {
-
-  constructor() { }
+  constructor() {}
 
   public exportAsExcelFile(rows: any[], excelFileName: string): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(rows);
-    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const workbook: XLSX.WorkBook = {
+      Sheets: { data: worksheet },
+      SheetNames: ['data'],
+    };
+    const excelBuffer: any = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
     this.saveAsExcelFile(excelBuffer, excelFileName);
   }
-  
- 
+
   // public importExcelFile(file: File): Promise<any[]> {
   //   return new Promise<any[]>((resolve, reject) => {
   //     const fileReader = new FileReader();
@@ -34,7 +38,6 @@ export class XlsxService {
   //   });
   // }
 
-
   public importExcelFile(file: File): Promise<string[][]> {
     return new Promise<string[][]>((resolve, reject) => {
       const fileReader = new FileReader();
@@ -44,15 +47,15 @@ export class XlsxService {
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const excelData: string[][] = [];
-        
+
         // Check if worksheet range is defined
         if (!worksheet['!ref']) {
-          reject("Worksheet range is not defined.");
+          reject('Worksheet range is not defined.');
           return;
         }
-        
+
         const range = XLSX.utils.decode_range(worksheet['!ref']);
-        
+
         for (let row = range.s.r; row <= range.e.r; row++) {
           const rowData: string[] = [];
           for (let col = range.s.c; col <= range.e.c; col++) {
@@ -71,10 +74,11 @@ export class XlsxService {
       fileReader.readAsArrayBuffer(file); // Use readAsArrayBuffer to read the file
     });
   }
-  
-  
+
   private saveAsExcelFile(buffer: any, fileName: string): void {
-    const data: Blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+    const data: Blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
+    });
     const downloadLink: HTMLAnchorElement = document.createElement('a');
     const url: string = window.URL.createObjectURL(data);
     downloadLink.href = url;

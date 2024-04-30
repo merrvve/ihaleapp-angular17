@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './teklifci.component.html',
-  styleUrl: './teklifci.component.scss'
+  styleUrl: './teklifci.component.scss',
 })
-export class TeklifciComponent {
-
-}
+export class TeklifciComponent {}

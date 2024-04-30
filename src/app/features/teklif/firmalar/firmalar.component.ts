@@ -8,26 +8,26 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'app-firmalar',
   standalone: true,
-  imports: [TableModule,ButtonModule],
+  imports: [TableModule, ButtonModule],
   templateUrl: './firmalar.component.html',
-  styleUrl: './firmalar.component.scss'
+  styleUrl: './firmalar.component.scss',
 })
-export class FirmalarComponent implements OnInit{
+export class FirmalarComponent implements OnInit {
   subscription1!: Subscription;
   firmalar: Firma[] = [];
   constructor(private teklifciService: TeklifciService) {}
-    // Teklifçi bilgilerini al
-  
-  ngOnInit() {
+  // Teklifçi bilgilerini al
 
-    this.subscription1 = this.teklifciService.getFirmalar().subscribe(
-      {
-        next: (result) => {this.firmalar=result; console.log(this.firmalar)},
-        error: (error) => console.log(error)
-        //this.messages= [{severity: 'error', summary: 'Teklifçi Bilgileri Alınamadı', 
-        //detail: 'Teklifçi bilgileri yüklenirken bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.'}]
-      }
-    );
+  ngOnInit() {
+    this.subscription1 = this.teklifciService.getFirmalar().subscribe({
+      next: (result) => {
+        this.firmalar = result;
+        console.log(this.firmalar);
+      },
+      error: (error) => console.log(error),
+      //this.messages= [{severity: 'error', summary: 'Teklifçi Bilgileri Alınamadı',
+      //detail: 'Teklifçi bilgileri yüklenirken bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyiniz.'}]
+    });
   }
 
   ngOnDestroy() {

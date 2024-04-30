@@ -1,6 +1,5 @@
 export interface TalepEdilenEvrak {
-    id: number;
-    evrak: string;
-    bicim: string;
-  }
-  
+  id: number;
+  evrak: string;
+  bicim: string;
+}
