@@ -19,21 +19,12 @@
                 </div>
                 
                 <div class="flex align-items-center">
-                    <p-radioButton name="note" value="not" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
-                    <label for="c2" class="ml-2">Not</label>
+                    <p-radioButton name="note" value="Bilgi" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
+                    <label for="c2" class="ml-2">Bilgi</label>
                 </div>
                 
             </div>
     
-        </div>
-        <div class="field">
-            @if(radioChoice ==="not") {
-                <label class="mb-3">Not</label>
-
-                <textarea type="text" rows="10"
-                #bicimInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-                   </textarea>
-             }
         </div>
     
     

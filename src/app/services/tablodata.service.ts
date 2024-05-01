@@ -366,4 +366,20 @@ export class TablodataService {
       }
     }
   }
+
+  getAllKeys(files: any) {
+    let keys : string[] = [];
+    
+    for ( const node of files ) {
+      keys.push(node.data.key)
+      if(node.children?.length>0) {
+        for (const child of node.children) {
+          keys = keys.concat(this.getAllKeys(node.children));
+        } 
+      }
+    }
+    return keys;
+  }
+
+  
 }

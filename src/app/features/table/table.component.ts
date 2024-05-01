@@ -68,6 +68,8 @@ export class TableComponent implements OnInit {
   subscription2!: Subscription;
   selectedFile!: File;
   rowNum: number = 1;
+  allKeys: string[] = [];
+  selectedKey: string = '';
 
   showDialog() {
     this.visible = true;
@@ -287,9 +289,9 @@ export class TableComponent implements OnInit {
     let birimName = name + ' Birim Fiyat';
     let toplamName = name + ' Toplam Fiyat';
 
-    this.dataService.addColumnToTree(this.files, birimName, 0);
+    this.dataService.addColumnToTree(this.files, birimName, null);
 
-    this.dataService.addColumnToTree(this.files, toplamName, 0);
+    this.dataService.addColumnToTree(this.files, toplamName, null);
   }
 
   expandAllNodes(nodes: TreeNode[]) {
@@ -304,7 +306,12 @@ export class TableComponent implements OnInit {
   onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
     let col = this.cols.find((x) => x.field == field);
     const isMiktar: boolean = field.toLowerCase() == 'miktar';
-
+    if(rowNode.children) {
+      if(rowNode.children.length>0) {
+        return;
+      }  
+    }
+    
     rowData[field] = event;
 
     if (col) {
@@ -352,7 +359,9 @@ export class TableComponent implements OnInit {
           if (rowNode.parent.children) {
             let allToplam = 0;
             for (const child of rowNode.parent.children) {
-              allToplam += child.data.Toplam;
+              if(child.data.Toplam) {
+                allToplam += child.data.Toplam;
+              }
             }
             rowNode.parent.data.Toplam = allToplam;
           }
@@ -410,11 +419,18 @@ export class TableComponent implements OnInit {
     this.selectedNodes = [];
   }
 
-  addMultipleRows(node: TreeNode) {
-    for (let i = 0; i < this.rowNum; i++) {
-      this.dataService.addRowToNode(node);
+  addMultipleRows(key: string) {
+    let foundNode : any;
+    for (const node of this.files) {
+      foundNode = this.dataService.findNodeByKey(node,key)
     }
-    this.updateView();
+    if(foundNode) {
+      for (let i = 0; i < this.rowNum; i++) {
+        this.dataService.addRowToNode(foundNode);
+      }
+      this.updateView();
+    }
+    
   }
 
   pasteSelectedRows(node: TreeNode) {
@@ -442,4 +458,9 @@ export class TableComponent implements OnInit {
   cutSelectedRows(keep: boolean) {
     this.keepOriginal = keep;
   }
+
+  getAllKeys() {
+    this.allKeys = this.dataService.getAllKeys(this.files)
+  }
+
 }

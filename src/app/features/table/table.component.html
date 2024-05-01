@@ -71,11 +71,11 @@
 <div class="card flex justify-content-center">
   <p-dialog header="Başlığa Satır Ekle" [(visible)]="visibleRowDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
       
-  <p-dropdown appendTo="body" [options]="files" [(ngModel)]="selectedNode" optionLabel="data.key" [showClear]="true" placeholder="Bir Başlık Seçin"></p-dropdown>
+  <p-dropdown appendTo="body" [options]="allKeys" [(ngModel)]="selectedKey"  [showClear]="true" placeholder="Bir Başlık Seçin"></p-dropdown>
   <p-inputNumber [(ngModel)]="rowNum" [showButtons]="true"  buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1" 
   decrementButtonClass="p-button-secondary"
     incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" ></p-inputNumber> 
-  <p-button (click)="addMultipleRows(selectedNode); visibleRowDialog=false;" label="Ekle" class="m-3"></p-button>
+  <p-button (click)="addMultipleRows(selectedKey); visibleRowDialog=false;" label="Ekle" class="m-3"></p-button>
   </p-dialog>
 </div>
 
@@ -136,7 +136,7 @@
         <div  class="flex mt-5">
           <div class="justify-content-start">
             <p-button label="Ana Başlık Ekle" icon="pi pi-plus" severity="success" (click)="addNewNode()" class="mx-2"></p-button>
-            <p-button label="Satır Ekle" icon="pi pi-plus" severity="success" (click)="visibleRowDialog=true" class="mx-2"></p-button>
+            <p-button label="Satır Ekle" icon="pi pi-plus" severity="success" (click)="getAllKeys(); visibleRowDialog=true;" class="mx-2"></p-button>
             <p-button label="Seçilen Satırları Sil" icon="pi pi-trash" severity="danger" (click)="deleteSelectedRows()" class="mx-2"></p-button>
             
           </div>
