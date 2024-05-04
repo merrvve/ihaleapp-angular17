@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 export class IhaleService {
   private _ihaleSubject = new BehaviorSubject<Ihale>({
     id: '',
+    ihale_adi: '',
     ihale_aciklamasi: '',
     baslangic_tarihi: '',
     bitis_tarihi: '',
