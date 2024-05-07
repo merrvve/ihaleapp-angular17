@@ -27,10 +27,11 @@ export class AuthService {
   constructor(
     private router: Router,
     private http: HttpClient,
+    private messageService: MessageService
   ) {}
 
   login(email: string, password: string) {
-    this.http
+    return this.http
       .post(environment.apiUrl + '/token/pair', {
         username: email,
         password: password,
@@ -47,19 +48,37 @@ export class AuthService {
               this._userSubject.value.adi = result.adi;
               this._userSubject.value.soyadi = result.soyadi;
               this._userSubject.value.telefon = result.telefon;
-              this._userSubject.value.firmaYetkilisi = result.firmaYetkilisi;
+              this._userSubject.value.firma_id = result.firma_id;
+              console.log(result.firmaYetkilisi, result)
               if (result.role === 'ISVEREN') {
                 this.router.navigate(['/isveren']);
               } else if (result.role === 'TEKLIFCI') {
                 this.router.navigate(['/teklifci']);
               }
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Tebrikler',
+                detail:
+                  'Giriş Başarılı. ',
+              });
             },
-            error: (error) => console.log(error),
+            error: () => {
+              this.messageService.add({
+              severity: 'error',
+              summary: 'Hata',
+              detail:
+                'Giriş Yapılamadı. '
+            });} 
           });
         },
-        error: (error) => {
-          console.log(error);
-        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Hata',
+            detail:
+              'Giriş Yapılamadı. '
+          });
+        } 
       });
   }
 
@@ -88,4 +107,6 @@ export class AuthService {
   getUserRole() {
     return this._userSubject.value.role;
   }
+
+  
 }

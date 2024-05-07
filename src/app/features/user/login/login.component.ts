@@ -21,11 +21,12 @@ export class LoginComponent implements OnInit {
       if (this.auth.getUserRole() == 'ISVEREN') {
         this.router.navigate(['/isveren']);
       } else if (this.auth.getUserRole() == 'TEKLIFCI') {
-        this.router.navigate(['/isveren']);
+        this.router.navigate(['/teklifci']);
       }
     }
   }
   login(email: string, password: string) {
-    this.auth.login(email, password);
+   this.auth.login(email, password);
+    
   }
 }

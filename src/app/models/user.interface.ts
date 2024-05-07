@@ -6,5 +6,5 @@ export interface User {
   adi: string;
   soyadi: string;
   telefon: string;
-  firmaYetkilisi?: string;
+  firma_id?: number | null;
 }

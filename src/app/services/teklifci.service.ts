@@ -4,6 +4,8 @@ import { FirmaYetkilisi } from '../models/firmayetkilisi.interface';
 import { Firma } from '../models/firma.interface';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
+import { Ihale } from '../models/ihale.interface';
+import { Teklif } from '../models/teklif.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -77,9 +79,17 @@ export class TeklifciService {
     );
   }
 
-  addYetkili(yeniTeklifci: FirmaYetkilisi) {
-    const currentList = this._yetkililerSubject.value;
-    const updatedList = [...currentList, yeniTeklifci];
-    this._yetkililerSubject.next(updatedList);
+  
+  getTeklifciIhaleleri() {
+    return this.http.get<Ihale[]>(
+      environment.apiUrl + '/ihale/teklif-verebilecegim-ihaleler'
+    ); 
   }
+
+  getTeklifciTeklifleri() {
+    return this.http.get<Teklif[]>(
+      environment.apiUrl + '/ihale/tekliflerim'
+    ); 
+  }
+
 }
