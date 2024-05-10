@@ -129,7 +129,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'İhalelerim',
             icon: 'pi pi-fw pi-list',
-            routerLink: ['ihale/listele'],
+            routerLink: ['teklifci-ihaleleri']
           },
           {
             separator: true,
@@ -137,6 +137,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'Tekliflerim',
             icon: 'pi pi-fw pi-external-link',
+           
           },
         ],
       },

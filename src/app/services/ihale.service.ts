@@ -5,11 +5,12 @@ import { environment } from './../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TalepEdilenEvrak } from '../models/talepedilenevrak.interface';
 import { DatePipe } from '@angular/common';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class IhaleService {
+export class IhaleService{
   private _ihaleSubject = new BehaviorSubject<Ihale>({
     id: '',
     ihale_adi: '',
@@ -35,7 +36,9 @@ export class IhaleService {
     private datePipe: DatePipe,
   ) {}
   getIhaleler() {
+    
     return this.http.get<Ihale[]>(environment.apiUrl + '/ihale/ihalelerim');
+    
   }
 
   createIhale() {

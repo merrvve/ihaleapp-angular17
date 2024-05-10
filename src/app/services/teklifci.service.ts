@@ -11,42 +11,7 @@ import { Teklif } from '../models/teklif.interface';
   providedIn: 'root',
 })
 export class TeklifciService {
-  private _yetkililerSubject = new BehaviorSubject<FirmaYetkilisi[]>([
-    {
-      id: 1,
-      firma: 1,
-      yetkili_adi: 'John',
-      yetkili_soyadi: 'Doe',
-      telefon_numarasi: '123456789',
-      email: 'mail@mail.com',
-    },
-    {
-      id: 2,
-      firma: 2,
-      yetkili_adi: 'Jane',
-      yetkili_soyadi: 'Birkin',
-      telefon_numarasi: '123456789',
-      email: 'mail@mail.com',
-    },
-  ]);
-  yetkililer$ = this._yetkililerSubject.asObservable();
-
-  private _firmalarSubject = new BehaviorSubject<Firma[]>([
-    {
-      id: 1,
-      firma_adi: 'firma 1',
-      vergi_no: 'örnek vergi no',
-      islem_kategorisi: 'örnek kategori',
-    },
-    {
-      id: 2,
-      firma_adi: 'firma 2',
-      vergi_no: 'örnek vergi no',
-      islem_kategorisi: 'örnek kategori',
-    },
-  ]);
-  firmalar$ = this._firmalarSubject.asObservable();
-
+ 
   constructor(private http: HttpClient) {}
 
   getYetkililer() {

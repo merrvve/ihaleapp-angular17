@@ -3,6 +3,7 @@ import { LoginComponent } from './features/user/login/login.component';
 import { DashboardComponent } from './features/home/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
 import { TeklifciComponent } from './features/dashboard/teklifci/teklifci.component';
+import { TeklifciIhaleleriComponent } from './features/teklifci-ihaleleri/teklifci-ihaleleri.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -22,6 +23,12 @@ export const routes: Routes = [
     path: 'isveren',
     component: DashboardComponent,
     data: { role: 'ISVEREN' },
+    canActivate: [authGuard],
+  },
+  {
+    path: 'teklifci-ihaleleri',
+    component: TeklifciIhaleleriComponent,
+    data: { role: 'TEKLIFCI' },
     canActivate: [authGuard],
   },
   {
