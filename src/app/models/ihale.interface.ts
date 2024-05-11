@@ -1,5 +1,5 @@
 export interface Ihale {
-  id?: string;
+  id?: number;
   ihale_adi: string;
   ihale_aciklamasi: string;
   baslangic_tarihi: string; // Date string

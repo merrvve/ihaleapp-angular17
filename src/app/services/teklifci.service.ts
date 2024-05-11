@@ -11,7 +11,16 @@ import { Teklif } from '../models/teklif.interface';
   providedIn: 'root',
 })
 export class TeklifciService {
- 
+  
+  teklif : Teklif = {
+    ihale: -1,
+    yetkili: 0,
+    teklif_tarihi: '',
+    teklif_dokumanlari: '',
+    kesif: [],
+    toplam_bedel: 0
+  }
+
   constructor(private http: HttpClient) {}
 
   getYetkililer() {
@@ -56,5 +65,12 @@ export class TeklifciService {
       environment.apiUrl + '/ihale/tekliflerim'
     ); 
   }
+
+  getIhaleDetail(id: number) {
+    return this.http.get<Ihale>(
+      environment.apiUrl + '/ihale/ihale/' + id
+    );    
+  }
+
 
 }

@@ -1,9 +1,9 @@
 export interface Teklif {
-  id: number;
-  ihale: number; // assuming this is the foreign key reference
-  yetkili: number; // assuming this is the foreign key reference
-  teklif_tarihi: string; // Date string
-  teklif_dokumanlari: string; // file path or URL
+  id?: number;
+  ihale: number;
+  yetkili: number; 
+  teklif_tarihi: string; 
+  teklif_dokumanlari: string;
   kesif: any[][]
   toplam_bedel: number;
 }

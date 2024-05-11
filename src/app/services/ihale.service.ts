@@ -5,14 +5,13 @@ import { environment } from './../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TalepEdilenEvrak } from '../models/talepedilenevrak.interface';
 import { DatePipe } from '@angular/common';
-import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IhaleService{
   private _ihaleSubject = new BehaviorSubject<Ihale>({
-    id: '',
+    id: -1,
     ihale_adi: '',
     ihale_aciklamasi: '',
     baslangic_tarihi: '',
@@ -31,14 +30,20 @@ export class IhaleService{
 
   files: File[] = [];
   tabloData: any[][] = [];
+
   constructor(
     private http: HttpClient,
     private datePipe: DatePipe,
   ) {}
+
+  getIhaleDetail(id: number) {
+    return this.http.get<Ihale>(
+      environment.apiUrl + '/ihale/ihale/' + id
+    );    
+  }
+  
   getIhaleler() {
-    
     return this.http.get<Ihale[]>(environment.apiUrl + '/ihale/ihalelerim');
-    
   }
 
   createIhale() {
