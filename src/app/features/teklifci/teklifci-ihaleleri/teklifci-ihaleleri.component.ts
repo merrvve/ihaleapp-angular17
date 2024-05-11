@@ -40,6 +40,7 @@ export class TeklifciIhaleleriComponent implements OnInit {
           this.tableService.loadData(result.kesif);
           this.teklifciService.teklif.ihale = result.id ? result.id : -1
           this.teklifciService.teklif.kesif = result.kesif
+          this.teklifciService.ihale = result
           this.router.navigate(['/teklifci/teklif-olustur'])
         },
         error: (error) => console.log(error)

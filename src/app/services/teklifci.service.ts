@@ -21,6 +21,8 @@ export class TeklifciService {
     toplam_bedel: 0
   }
 
+  ihale! : Ihale;
+  
   constructor(private http: HttpClient) {}
 
   getYetkililer() {
