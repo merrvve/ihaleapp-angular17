@@ -14,9 +14,7 @@ export class TeklifciService {
   
   teklif : Teklif = {
     ihale: -1,
-    yetkili: 0,
-    teklif_tarihi: '',
-    teklif_dokumanlari: '',
+    teklif_dokumanlari_listesi: '',
     kesif: [],
     toplam_bedel: 0
   }
@@ -74,5 +72,12 @@ export class TeklifciService {
     );    
   }
 
-
+  createTeklif() {
+    if(this.ihale.id) {
+      this.teklif.ihale = this.ihale.id
+    }
+    return this.http.post<Teklif>(
+      environment.apiUrl + '/ihale/teklif', this.teklif
+    );  
+  }
 }

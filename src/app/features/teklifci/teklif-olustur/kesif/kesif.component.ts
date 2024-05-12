@@ -1,17 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 import { TableComponent } from '../../../table/table.component';
 import { TeklifOlusturComponent } from "../teklif-olustur.component";
+import { ButtonModule } from 'primeng/button';
+import { Router, RouterLink } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessagesModule } from 'primeng/messages';
+import { Message } from 'primeng/api';
+import { TeklifciService } from '../../../../services/teklifci.service';
 
 @Component({
     selector: 'app-kesif',
     standalone: true,
     templateUrl: './kesif.component.html',
     styleUrl: './kesif.component.scss',
-    imports: [TableComponent, TeklifOlusturComponent]
+    imports: [TableComponent, TeklifOlusturComponent, ButtonModule, RouterLink, DialogModule, ProgressSpinnerModule, MessagesModule]
 })
 export class KesifComponent implements OnInit{
-  constructor(){}
+
+  isLoading: boolean = false;
+  isTeklifModalVisible: boolean = false;
+  messages!: Message[];
+  error: boolean = false;
+
+  constructor(private teklifciService: TeklifciService, private router: Router){}
   ngOnInit(): void {
     
+  }
+
+  teklifVer(){
+    this.isLoading=true;
+    this.isTeklifModalVisible=true;
+    this.teklifciService.createTeklif().subscribe({
+      next:(result)=> {console.log(result),
+        this.isLoading=false;
+         this.messages= [{severity: 'success', summary: 'Teklif Oluşturuldu',
+          detail: 'Verdiğiniz teklif başarıyla kaydedildi.'}];
+        this.error = false;
+      },
+      error:(error)=> {console.log(error),
+        this.isLoading=false;
+        this.messages= [{severity: 'error', summary: 'Teklif Oluşturulamadı',
+        detail: 'Teklif oluşturulurken bir hata ile karşılaşıldı. '+ error.message}];
+        this.error = true;
+      }
+    })
+  }
+
+  completed() {
+    this.isTeklifModalVisible=false;
+    if(!this.error){
+      this.router.navigate(['/teklifci'])
+    }
   }
 }
