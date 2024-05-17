@@ -37,6 +37,17 @@ export class KesifComponent implements OnInit{
         this.isLoading=false;
          this.messages= [{severity: 'success', summary: 'Teklif Oluşturuldu',
           detail: 'Verdiğiniz teklif başarıyla kaydedildi.'}];
+          const formData = this.teklifciService.getFileFormData();
+          if(result.id) {
+            this.teklifciService.uploadFile(formData,result.id).subscribe({
+              next:(result)=> { 
+                this.messages= [{severity: 'success', summary: 'Teklif Oluşturuldu',
+              detail: 'Verdiğiniz teklif başarıyla kaydedildi ve ilişkili dosyalar yüklendi'}];},
+              error:(error)=>{ 
+                this.messages= [{severity: 'error', summary: 'Dosyalar yüklenemedi',
+              detail: 'Verdiğiniz teklif başarıyla kaydedildi ve ancak ilişkili dosyalar sunucuya yüklenemedi.'}];}
+            })
+          }
         this.error = false;
       },
       error:(error)=> {console.log(error),

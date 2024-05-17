@@ -22,6 +22,8 @@ export class TablodataService {
     ['1.1', '', '', '', '', '', ''],
   ];
 
+  public currentData: any[][] = [];
+
   birimCols = 0;
   private _datatreeSubject = new BehaviorSubject<any[]>(
     this.convertToTreeTable(this.ornekData),

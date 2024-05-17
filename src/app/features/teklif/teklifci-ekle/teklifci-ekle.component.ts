@@ -19,10 +19,10 @@ export class TeklifciEkleComponent implements OnInit {
   teklifci: FirmaYetkilisi = {
     id: 0,
     firma: 0,
-    yetkili_adi: '',
-    yetkili_soyadi: '',
+    adi: '',
+    soyadi: '',
     email: '',
-    telefon_numarasi: '',
+    telefon: '',
   };
   firma: Firma = {
     id: 0,
@@ -63,10 +63,10 @@ export class TeklifciEkleComponent implements OnInit {
           this.teklifci = {
             id: 0,
             firma: 0,
-            yetkili_adi: '',
-            yetkili_soyadi: '',
+            adi: '',
+            soyadi: '',
             email: '',
-            telefon_numarasi: '',
+            telefon: '',
           };
         },
 

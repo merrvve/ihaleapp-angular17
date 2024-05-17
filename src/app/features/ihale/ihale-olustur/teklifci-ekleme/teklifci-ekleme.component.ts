@@ -52,6 +52,7 @@ isTeklifciModalVisible: boolean = false;
     this.subscription1 = this.teklifciService.getYetkililer().subscribe({
       next: (result) => {
         this.teklifciler = result;
+        console.log(result)
       },
       error: (error) =>
         (this.messages = [

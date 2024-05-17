@@ -34,15 +34,47 @@
                 @for(doc of documents; track doc.id) {
                     <div class="field grid">
                         <label class="col-12 mb-2 md:col-3 md:mb-0">{{doc.name}}</label>
-                        @if(doc.type==='note') {
-                            <textarea></textarea>
+                        @if(doc.type==='Bilgi') {
+                            <textarea type="text" rows="8"
+                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                    </textarea>
                         }
                         @else {
-                            <input type="file">
+                            <input type="file" id="teklif-file-upload" (change)="onFileChange($event)" multiple="true">
+                <label for="teklif-file-upload" class="custom-file-upload bg-primary border-round p-2">Dosya Seç
+                </label>
+                
                         }
                     </div>
                 }
             </div>
+            <div>
+                @if(selectedFiles.length>0) {
+                    <table class="m-3">
+                        <thead>
+                            <tr>
+                                <th>Dosya Adı</th>
+                                <th>Boyut</th>
+                                <th>Sil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (file of selectedFiles; track file) {
+                                <tr>
+                                    <td>{{ file.name }}</td>
+                                    <td>{{ file.size }} bytes</td>
+                                    <td>    
+                                        <p-button icon="pi pi-trash" severity="danger" class="mx-3"></p-button>
+                                    </td>
+                                </tr>
+                            }
+                              
+                        </tbody>
+                    </table>
+              
+                }
+        </div>
+
         </div>
  
     </div>

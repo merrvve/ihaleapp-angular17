@@ -26,6 +26,7 @@ interface Dokuman {
 export class TeklifBilgileriComponent implements OnInit {
     ihale! :Ihale;
     documents : Dokuman[] = [];
+    selectedFiles : File[] = [];
     constructor(private teklifciService: TeklifciService) {}
     ngOnInit(): void {
         this.ihale=this.teklifciService.ihale;
@@ -47,6 +48,18 @@ export class TeklifBilgileriComponent implements OnInit {
                 }             
             }
         }
+    }
+
+    onFileChange(event: any) {
+        if (event.target.files) {
+          for (const file of event.target.files) {
+            this.selectedFiles.push(file);
+          }
+        }
+      }
+    
+    ngOnDestroy() {
+        this.teklifciService.files = this.selectedFiles;
     }
 
 }

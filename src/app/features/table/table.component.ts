@@ -403,7 +403,7 @@ export class TableComponent implements OnInit {
       this.files,
       this.cols,
     );
-    this.ihaleService.tabloData = tabloData;
+    this.dataService.currentData = tabloData;
     this.subscription.unsubscribe(); // Unsubscribe to prevent memory leaks
     this.subscription2.unsubscribe();
   }

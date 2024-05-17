@@ -5,6 +5,7 @@ import { environment } from './../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TalepEdilenEvrak } from '../models/talepedilenevrak.interface';
 import { DatePipe } from '@angular/common';
+import { TablodataService } from './tablodata.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +15,6 @@ export class IhaleService{
     id: -1,
     ihale_adi: '',
     ihale_aciklamasi: '',
-    baslangic_tarihi: '',
-    bitis_tarihi: '',
     isCompleted: false,
     isTaslak: false,
     kesif: [],
@@ -29,11 +28,11 @@ export class IhaleService{
   ihale$ = this._ihaleSubject.asObservable();
 
   files: File[] = [];
-  tabloData: any[][] = [];
-
+  
   constructor(
     private http: HttpClient,
-    private datePipe: DatePipe,
+    //private datePipe: DatePipe,
+    private tableService: TablodataService
   ) {}
 
   getIhaleDetail(id: number) {
@@ -47,13 +46,13 @@ export class IhaleService{
   }
 
   createIhale() {
-    this._ihaleSubject.value.kesif = this.tabloData;
+    this._ihaleSubject.value.kesif = this.tableService.currentData;
     const ihale: Ihale = this._ihaleSubject.value;
     console.log(ihale);
-    ihale.baslangic_tarihi =
-      this.datePipe.transform(ihale.baslangic_tarihi, 'yyyy-MM-dd') || '';
-    ihale.bitis_tarihi =
-      this.datePipe.transform(ihale.bitis_tarihi, 'yyyy-MM-dd') || '';
+    // ihale.baslangic_tarihi =
+    //   this.datePipe.transform(ihale.baslangic_tarihi, 'yyyy-MM-dd') || '';
+    // ihale.bitis_tarihi =
+    //   this.datePipe.transform(ihale.bitis_tarihi, 'yyyy-MM-dd') || '';
     return this.http.post<any>(environment.apiUrl + '/ihale/ihale', ihale);
   }
 

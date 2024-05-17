@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { FirmaYetkilisi } from '../models/firmayetkilisi.interface';
 import { Firma } from '../models/firma.interface';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { Ihale } from '../models/ihale.interface';
 import { Teklif } from '../models/teklif.interface';
+import { TablodataService } from './tablodata.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +17,17 @@ export class TeklifciService {
     ihale: -1,
     teklif_dokumanlari_listesi: '',
     kesif: [],
-    toplam_bedel: 0
+    toplam_bedel: 0,
+    teklif_notlari: ''
   }
+  files: File[] = [];
+  tabloData: any[][] = [];
 
   ihale! : Ihale;
   
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private tableService: TablodataService
+  ) {}
 
   getYetkililer() {
     return this.http.get<FirmaYetkilisi[]>(
@@ -76,8 +82,37 @@ export class TeklifciService {
     if(this.ihale.id) {
       this.teklif.ihale = this.ihale.id
     }
+    this.teklif.kesif = this.tableService.currentData;
     return this.http.post<Teklif>(
       environment.apiUrl + '/ihale/teklif', this.teklif
     );  
   }
+
+
+  getFileFormData() {
+    const formData = new FormData();
+    for (let i = 0; i < this.files.length; i++) {
+      formData.append(String(i), this.files[i], this.files[i].name);
+    }
+
+    return formData;
+  }
+
+  uploadFile(formData: FormData, teklif_id: number) {
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+
+    return this.http.post<any>(
+      environment.apiUrl +
+        '/ihale/teklif/dosya-yukle/' +
+        teklif_id +
+        '/' +
+        this.files.length,
+      formData,
+      { headers: headers },
+    );
+  }
+
+
 }
