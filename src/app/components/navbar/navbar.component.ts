@@ -41,29 +41,26 @@ export class NavbarComponent implements OnInit {
     this.items = [
       {
         label: 'Ana Sayfa',
-        icon: 'pi pi-fw pi-home',
+        icon: 'pi pi-fw pi-home mr-2',
         routerLink: ['/'],
       },
       {
         label: 'İhalelerim',
-        icon: 'pi pi-fw pi-file',
+        icon: 'pi pi-fw pi-file mr-2',
         items: [
           {
             label: 'Yeni İhale',
-            icon: 'pi pi-fw pi-plus',
+            icon: 'pi pi-fw pi-plus mr-2',
             routerLink: ['ihale/ihale-olustur'],
           },
           {
             label: 'İhalelerim',
-            icon: 'pi pi-fw pi-list',
+            icon: 'pi pi-fw pi-list mr-2',
             routerLink: ['ihale/listele'],
           },
           {
-            separator: true,
-          },
-          {
             label: 'Taslaklar',
-            icon: 'pi pi-fw pi-external-link',
+            icon: 'pi pi-fw pi-external-link  mr-2',
             routerLink: ['ihale/taslaklar'],
           },
         ],
@@ -74,21 +71,21 @@ export class NavbarComponent implements OnInit {
         items: [
           {
             label: 'Yeni Teklifçi',
-            icon: 'pi pi-fw pi-user-plus',
+            icon: 'pi pi-fw pi-user-plus mr-2',
             routerLink: ['teklif/teklifci/ekle'],
           },
           {
             label: 'Listele',
-            icon: 'pi pi-fw pi-list',
+            icon: 'pi pi-fw pi-list mr-2',
             items: [
               {
                 label: 'Tüm Teklifçiler',
-                icon: 'pi pi-fw pi-users',
+                icon: 'pi pi-fw pi-users mr-2',
                 routerLink: ['teklif/teklifci/listele'],
               },
               {
                 label: 'Tüm Firmalar',
-                icon: 'pi pi-fw pi-verified',
+                icon: 'pi pi-fw pi-verified mr-2',
                 routerLink: ['teklif/firmalar'],
               },
             ],
@@ -129,7 +126,7 @@ export class NavbarComponent implements OnInit {
         items: [
           {
             label: 'İhalelerim',
-            icon: 'pi pi-fw pi-list',
+            icon: 'pi pi-fw pi-list mr-2',
             routerLink: ['/teklifci/ihalelerim']
           },
           {
@@ -137,7 +134,7 @@ export class NavbarComponent implements OnInit {
           },
           {
             label: 'Tekliflerim',
-            icon: 'pi pi-fw pi-external-link',
+            icon: 'pi pi-fw pi-external-link mr-2',
             routerLink: ['/teklifci/tekliflerim']
            
           },
