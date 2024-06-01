@@ -5,13 +5,14 @@ import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.interface';
+import { MenuTemplateComponent } from "../../features/home/menu-template/menu-template.component";
 
 @Component({
-  selector: 'app-navbar',
-  standalone: true,
-  imports: [MenuModule, ButtonModule, MenubarModule],
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss',
+    selector: 'app-navbar',
+    standalone: true,
+    templateUrl: './navbar.component.html',
+    styleUrl: './navbar.component.scss',
+    imports: [MenuModule, ButtonModule, MenubarModule, MenuTemplateComponent]
 })
 export class NavbarComponent implements OnInit {
   items: MenuItem[] | undefined;

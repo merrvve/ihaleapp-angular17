@@ -10,13 +10,13 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root',
 })
 export class AuthService {
-  private _isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private _isLoggedInSubject = new BehaviorSubject<boolean>(true);
   isLoggedIn$ = this._isLoggedInSubject.asObservable();
 
   private _userSubject = new BehaviorSubject<User>({
     id: '',
     token: '',
-    role: '',
+    role: 'ISVEREN',
     email: '',
     adi: '',
     soyadi: '',
@@ -98,6 +98,7 @@ export class AuthService {
 
   isUserLoggedIn() {
     return this._isLoggedInSubject.value;
+  
   }
 
   getAuthorizationToken() {
@@ -105,7 +106,8 @@ export class AuthService {
   }
 
   getUserRole() {
-    return this._userSubject.value.role;
+    //return this._userSubject.value.role;
+    return "ISVEREN"
   }
 
   

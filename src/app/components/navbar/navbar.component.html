@@ -2,35 +2,19 @@
 <div class="card mb-5">
     @if(isLoggedIn) {
         @if(user.role==="ISVEREN") {
-            <p-menubar [model]="items" styleClass="surface-100">
-                <ng-template pTemplate="start">
-                    <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
-                </ng-template>
-                <ng-template pTemplate="end">
-                        <p-menu #menu [model]="userMenu" [popup]="true"></p-menu>
-                        <p-button icon="pi pi-user" styleClass="mr-2 rounded"  (click)="menu.toggle($event)" [style]="{'background-color':'#2196F3', 'color': '#ffffff','cursor': 'pointer'}" ></p-button>
-                    
-                </ng-template>
-            </p-menubar>
+            <app-menu-template [items]="items" [userMenu]="userMenu"></app-menu-template>
         }
         @else if(user.role==="TEKLIFCI") {
-            <p-menubar [model]="teklifciMenu" styleClass="surface-100">
-                <ng-template pTemplate="start">
-                    <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
-                </ng-template>
-                <ng-template pTemplate="end">
-                        <p-menu #menu [model]="userMenu" [popup]="true"></p-menu>
-                        <p-button icon="pi pi-user" styleClass="mr-2 rounded"  (click)="menu.toggle($event)" [style]="{'background-color':'#2196F3', 'color': '#ffffff','cursor': 'pointer'}" ></p-button>
-                    
-                </ng-template>
-            </p-menubar>
+            <app-menu-template [items]="teklifciMenu" [userMenu]="userMenu"></app-menu-template>
         }
         
     }
     @else {
         <p-menubar>
             <ng-template pTemplate="start">
-                <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mr-2" />
+                <a [routerLink]="['/']">            
+                    <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mx-2" />
+                </a>
             </ng-template>
             <ng-template pTemplate="end">
             </ng-template>
