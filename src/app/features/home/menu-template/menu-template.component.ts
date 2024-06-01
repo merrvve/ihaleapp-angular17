@@ -8,6 +8,7 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
+import { ThemeService } from '../../../services/theme.service';
 @Component({
   selector: 'app-menu-template',
   standalone: true,
@@ -20,13 +21,17 @@ import { BadgeModule } from 'primeng/badge';
 export class MenuTemplateComponent {
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
-  checked=true;
+  themeToggle=false;
   sidebarVisible: boolean = false;
   @Input() items!: MenuItem[] |undefined;
   @Input() userMenu!: MenuItem[] |undefined;
 
+  constructor(private themeService: ThemeService) {}
   
-  
+  switchTheme(): void {
+    this.themeToggle=!this.themeToggle;
+    this.themeService.switchTheme();
+  }
 
   closeCallback(e:any): void {
       this.sidebarRef.close(e);
