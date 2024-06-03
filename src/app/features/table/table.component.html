@@ -1,18 +1,22 @@
 <div class="container mt-5">
-  <div class="card mb-5">
+  <div class="surface-card shadow-2 p-3 border-round mb-5">
     <p-toast></p-toast>
-    
+   
     <!-- Araçlar -->
-    <p-toolbar>
-      <div class="p-toolbar-group-start">
-        <button pButton icon="pi pi-download" label="Excel Dosyası Yükle" (click)="visibleExcelDialog=true" class="mr-2"></button>
-        <button pButton icon="pi pi-upload" label="Excel'e Aktar" (click)="exportAsExcel()" class="mr-2"></button>
+    <p-toolbar styleClass="mb-3">
+      <div class="p-toolbar-group-start ">
+      
+        <p-button severity="secondary" [outlined]="true"  type="button" class="mx-2"  (click)="fileMenu.toggle($event)" icon="pi pi-folder-open" label="Dosya"></p-button>
+        
+        <p-button severity="secondary" [outlined]="true"  type="button" class="mx-2"  (click)="colAddMenu.toggle($event)" icon="pi pi-plus" label="Sütun Ekle"></p-button>
+        <p-button severity="secondary" [outlined]="true" type="button" class=" mx-2"  icon="pi pi-trash" label="Sütun Sil"(click)="visibleDeleteColDialog=true"></p-button>
 
-
-        <button pButton type="button" class="p-button-success mx-2"  (click)="menu.toggle($event)" icon="pi pi-plus" label="Sütun Ekle"></button>
-        <button pButton type="button" class="p-button-danger mx-2"  icon="pi pi-trash" label="Sütun Sil"(click)="visibleDeleteColDialog=true"></button>
-
-        <p-menu #menu [model]="addColItems" [popup]="true"></p-menu>
+        <p-button label="Ana Başlık Ekle" icon="pi pi-plus" severity="secondary" [outlined]="true" (click)="addNewNode()" class="mx-2"></p-button>
+        <p-button label="Satır Ekle" icon="pi pi-plus" severity="secondary" [outlined]="true" (click)="getAllKeys(); visibleRowDialog=true;" class="mx-2"></p-button>
+        <p-button label="Seçilen Satırları Sil" icon="pi pi-trash" severity="secondary" [outlined]="true" (click)="deleteSelectedRows()" class="mx-2"></p-button>
+        
+        <p-menu #colAddMenu [model]="addColItems" [popup]="true"></p-menu>
+        <p-menu #fileMenu [model]="fileMenuItems" [popup]="true"></p-menu>
 
       </div>
       <div class="p-toolbar-group-end">
@@ -135,10 +139,6 @@
       
         <div  class="flex mt-5">
           <div class="justify-content-start">
-            <p-button label="Ana Başlık Ekle" icon="pi pi-plus" severity="success" (click)="addNewNode()" class="mx-2"></p-button>
-            <p-button label="Satır Ekle" icon="pi pi-plus" severity="success" (click)="getAllKeys(); visibleRowDialog=true;" class="mx-2"></p-button>
-            <p-button label="Seçilen Satırları Sil" icon="pi pi-trash" severity="danger" (click)="deleteSelectedRows()" class="mx-2"></p-button>
-            <p-button label="Taslak Olarak Kaydet" icon="pi pi-save" severity="help" (click)="saveDraft()" class="mx-3"></p-button>
            
           </div>
          

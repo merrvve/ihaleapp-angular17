@@ -16,7 +16,7 @@ import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
-
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { Subscription } from 'rxjs';
 import { XlsxService } from '../../services/xlsx.service';
 import { IhaleService } from '../../services/ihale.service';
@@ -29,7 +29,6 @@ import { IhaleService } from '../../services/ihale.service';
     ToolbarModule,
     MultiSelectModule,
     FormsModule,
-    ButtonModule,
     TreeTableModule,
     InputNumberModule,
     ToastModule,
@@ -39,6 +38,8 @@ import { IhaleService } from '../../services/ihale.service';
     InputTextModule,
     DialogModule,
     RouterLink,
+    ButtonModule,
+    SplitButtonModule
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -55,6 +56,7 @@ export class TableComponent implements OnInit {
 
   rowContextItems!: MenuItem[]; //Tablo üzerinde sağ tuşla gelen menü
   addColItems!: MenuItem[]; //Sütun Ekle Menüsü
+  fileMenuItems!: MenuItem[]; //Dosya İşlemleri Menüsü
 
   messages: Message[] = []; // bilgilendirme mesajı
 
@@ -144,7 +146,23 @@ export class TableComponent implements OnInit {
         command: (event) => this.pasteSelectedRows(this.selectedNode),
       },
     ];
-
+    this.fileMenuItems = [
+      {
+        label: 'Excel Dosyası Yükle',
+        icon: 'pi pi-file-import',
+        command: (event) => this.visibleExcelDialog=true,
+      },
+      {
+        label: 'Excel Olarak Kaydet',
+        icon: 'pi pi-file-export',
+        command: (event) => this.exportAsExcel(),
+      },
+      {
+        label: 'Taslaklarıma Kaydet',
+        icon: 'pi pi-calculator',
+        command: (event) => (this.saveDraft()),
+      },
+    ];
     this.addColItems = [
       {
         label: 'Malzeme Birim Fiyat',

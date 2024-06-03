@@ -2,66 +2,76 @@
 <div class="container mt-5">
     <p-messages [(value)]="messages" [enableService]="false" class="mb-3"></p-messages>
 </div>
-<div class="card flex justify-content-center align-items-stretch border-1 border-solid surface-border border-round">
-    <div class="flex-1 m-2 px-5 py-3">
-        
-        <div class="field">
-            <label>Talep Edilen Bilgi /
-                Evrak</label>
-            <input type="text" #evrakInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+<div class="container p-3">
+    <div class="grid justify-content-center align-items-stretch surface-card shadow-2 p-3 border-round">
+        <div class="col-12">
+            <h3>İstenen Dökümanlar</h3>
         </div>
-        <div class="field mb-5">
-            <label class="mb-3">İstenilen Biçim</label>
-            <div class="flex flex-wrap gap-3">
-                <div class="flex align-items-center">
-                    <p-radioButton name="file" value="dosya" [(ngModel)]="radioChoice" inputId="c1"></p-radioButton>
-                    <label for="c1" class="ml-2">Dosya</label>
-                </div>
-                
-                <div class="flex align-items-center">
-                    <p-radioButton name="note" value="Bilgi" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
-                    <label for="c2" class="ml-2">Bilgi</label>
-                </div>
-                
+        <div class="col-12 md:col-4 m-2 px-5 py-3">
+            
+            <div class="field">
+                <label>Talep Edilen Bilgi /
+                    Evrak</label>
+                <input type="text" #evrakInput class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
             </div>
-    
-        </div>
-    
-    
-    </div>
-    <div class="flex-1 justify-content-center ">
-        <div class="field" style="padding-top: 20%;">
-            <p-button icon="pi pi-plus" severity="success" (onClick)="evrakEkle(evrakInput.value,radioChoice); evrakInput.value='';" ></p-button>
-        </div>
-    </div>
+            <div class="field">
+                <label class="mb-3">İstenilen Biçim</label>
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex align-items-center">
+                        <p-radioButton name="file" value="dosya" [(ngModel)]="radioChoice" inputId="c1"></p-radioButton>
+                        <label for="c1" class="ml-2">Dosya</label>
+                    </div>
+                    
+                    <div class="flex align-items-center">
+                        <p-radioButton name="note" value="Bilgi" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
+                        <label for="c2" class="ml-2">Bilgi</label>
+                    </div>
+                    
+                </div>
+        
+            </div>
+            <div class="flex justify-content-end">
+                <p-button icon="pi pi-plus" label="Ekle" (onClick)="evrakEkle(evrakInput.value,radioChoice); evrakInput.value='';" ></p-button>
 
-    <div class="flex-1 m-2 px-5 py-3">
-        <div class="field">
-            @if(evraklar.length>0) {
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Evrak Adı</th>
-                            <th>Biçim</th>
-                            <th>Sil</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for(evrak of evraklar; track evrak;) {
+            </div>
+            
+        
+        
+        </div>
+        <div class="col-12 md:col-1 ">
+            
+    
+        </div>
+    
+        <div class="col-12 md:col-4 m-2 px-5 py-3">
+            <div class="field">
+                @if(evraklar.length>0) {
+                    <table>
+                        <thead>
                             <tr>
-                                <td>{{evrak.evrak}}</td>
-                                <td>{{evrak.bicim}}</td>
-                                <p-button size="small" pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="evrakSil(evrak.id)"></p-button>
-
+                                <th>Evrak Adı</th>
+                                <th>Biçim</th>
+                                <th>Sil</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-
-            }
-                
+                        </thead>
+                        <tbody>
+                            @for(evrak of evraklar; track evrak;) {
+                                <tr>
+                                    <td>{{evrak.evrak}}</td>
+                                    <td>{{evrak.bicim}}</td>
+                                    <p-button size="small" pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="evrakSil(evrak.id)"></p-button>
+    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+    
+                }
+                    
+            </div>
         </div>
     </div>
+    
 </div>
 <div class="flex justify-content-end mt-5">
     <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
