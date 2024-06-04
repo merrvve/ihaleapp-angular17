@@ -5,15 +5,17 @@ import { Ihale } from '../../../models/ihale.interface';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-ihale-detay',
   standalone: true,
-  imports: [AsyncPipe, LoadingSpinnerComponent],
+  imports: [AsyncPipe, LoadingSpinnerComponent, TableModule],
   templateUrl: './ihale-detay.component.html',
   styleUrl: './ihale-detay.component.scss'
 })
 export class IhaleDetayComponent implements OnInit {
+  ihale: any = {}
   ihale$!: Observable<Ihale>;
   constructor(
     private route: ActivatedRoute,

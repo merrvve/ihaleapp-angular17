@@ -2,5 +2,48 @@
     <ng-container></ng-container>    
 }
 @else {
-    <app-loading-spinner></app-loading-spinner>
+    <!-- <app-loading-spinner></app-loading-spinner> -->
+
+   
+        <div class="col-12 xl:col-4">
+            <div class="surface-card shadow-2 p-3 border-round mb-3">
+                <span class="block text-500 font-medium mb-3">İhale Durumu</span>
+                <p-table [tableStyle]="{ 'min-width': '50rem' }">
+        
+                    <ng-template pTemplate="body" let-product>
+                        <tr>
+                            <td>İhale Türü </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Davet Edilen Firma </td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Katılan Firma </td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Kalan Firma </td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Eklenen Firma </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>İhale Türü: </td>
+                            <td></td>
+                        </tr>
+            
+                    </ng-template>
+                </p-table>
+            
+            </div>
+        </div> 
+        
+ 
 }
