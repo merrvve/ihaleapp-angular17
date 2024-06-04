@@ -5,8 +5,8 @@ import { IstenenDokumanlarComponent } from './ihale-olustur/istenen-dokumanlar/i
 import { TeklifciEklemeComponent } from './ihale-olustur/teklifci-ekleme/teklifci-ekleme.component';
 import { IhaleBilgileriComponent } from './ihale-olustur/ihale-bilgileri/ihale-bilgileri.component';
 import { IhaleListeleComponent } from './ihale-listele/ihale-listele.component';
+import { IhaleDetayComponent } from './ihale-detay/ihale-detay.component';
 
-// In admin/routes.ts:
 export const IHALE_ROUTES: Route[] = [
   {
     path: 'ihale-olustur',
@@ -19,6 +19,8 @@ export const IHALE_ROUTES: Route[] = [
       { path: '', redirectTo: 'ihale-bilgileri', pathMatch: 'full' },
     ],
   },
+  { path: 'ihale/:id', component: IhaleDetayComponent },
   { path: 'listele', component: IhaleListeleComponent },
   { path: '', redirectTo: 'listele', pathMatch: 'full' },
+      
 ];

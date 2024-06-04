@@ -1,32 +1,45 @@
 <div class="container mb-5">
     <h2 class="p-2">İhalelerim</h2>
 </div>
-
-<div class="card">
-    <p-table [value]="ihaleler" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Id</th>
-                <th>Açıklaması</th>
-                <th>Başlangıç Tarihi</th>
-                <th>Durum</th>
-                <th>İhale Bedeli</th>
-                <th>Para Birimi</th>
-                <th style="width: 5rem">Detay</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-ihale>
-            <tr>
-                <td>{{ ihale.id }}</td>
-                <td>{{ ihale.ihale_aciklamasi }}</td>
-                <td>{{ ihale.baslangic_tarihi }}</td>
-                <td>{{ ihale.durum }}</td>
-                <td>{{ ihale.ihale_bedeli }}</td>
-                <td>{{ ihale.para_birimi }}</td>
-                <td>
-                    <button type="button" pButton pRipple icon="pi pi-file" (click)="selectIhale(ihale)"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</div>
+@if(ihaleler$|async; as ihaleler) {
+    <div class="card">
+        <p-table [value]="ihaleler" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>İhale No</th>
+                    <th>İhale Adı</th>
+                    <th>Açıklama</th>
+                    <th>Durum</th>
+                    <th>Firma</th>
+                    <th>Yetkili Kişi</th>
+                    <th>Başlangıç Tarihi</th>
+                    <th>Bitiş Tarihi</th>
+                    
+                    <th>İhale Bedeli</th>
+                    <th>Para Birimi</th>
+                    <th style="width: 5rem">Detay</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-ihale>
+                <tr>
+                    <td>{{ ihale.id }}</td>
+                    <td>{{ ihale.ihale_adi }}</td>
+                    <td>{{ ihale.ihale_aciklamasi }}</td>
+                    <td>{{ ihale.durum }}</td>
+                    <td>firma</td>
+                    <td>yetkili kişi</td>
+                    <td>{{ ihale.baslangic_tarihi }}</td>
+                    <td>bitiş tarihi</td>
+                    <td>{{ ihale.ihale_bedeli }}</td>
+                    <td>{{ ihale.para_birimi }}</td>
+                    <td>
+                        <button type="button" pButton pRipple icon="pi pi-file" (click)="selectIhale(ihale.id)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+}
+@else {
+    <app-loading-spinner></app-loading-spinner>
+}

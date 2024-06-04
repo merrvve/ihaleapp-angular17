@@ -1,9 +1,8 @@
 <div class="container mt-5">
-  <div class="surface-card shadow-2 p-3 border-round mb-5">
     <p-toast></p-toast>
    
     <!-- Araçlar -->
-    <p-toolbar styleClass="mb-3">
+    <p-toolbar styleClass="flex mb-3 shadow-2 mb-5">
       <div class="p-toolbar-group-start ">
       
         <p-button severity="secondary" [outlined]="true"  type="button" class="mx-2"  (click)="fileMenu.toggle($event)" icon="pi pi-folder-open" label="Dosya"></p-button>
@@ -25,70 +24,70 @@
 
     </p-toolbar>
 
- <!-- Modal Dialoglar -->
- <!-- Excel Yükle -->
- <div class="card flex justify-content-center">
-  <p-dialog header="Excel Dosyası Yükle" [(visible)]="visibleExcelDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-      <label for="file-upload" class="custom-file-upload">
-        {{ selectedFile ? selectedFile.name : 'Dosya Seçiniz' }}
-    </label>
-<input id="file-upload" (change)="onFileChange($event)" type="file" />
-      <p-button (click)="importExcel(); visibleExcelDialog=false;" label="Yükle" class="m-3"></p-button>
-  </p-dialog>
-</div>
+          <!-- Modal Dialoglar -->
+          <!-- Excel Yükle -->
+          <div class="card flex justify-content-center">
+            <p-dialog header="Excel Dosyası Yükle" [(visible)]="visibleExcelDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+                <label for="file-upload" class="custom-file-upload">
+                  {{ selectedFile ? selectedFile.name : 'Dosya Seçiniz' }}
+              </label>
+          <input id="file-upload" (change)="onFileChange($event)" type="file" />
+                <p-button (click)="importExcel(); visibleExcelDialog=false;" label="Yükle" class="m-3"></p-button>
+            </p-dialog>
+          </div>
 
- 
+          
 
- <!-- Diğer Sütun Ekle -->
-<div class="card flex justify-content-center">
-  <p-dialog header="Sütun Ekle" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-      <p>
-      Sütun Adı:     
-      </p>
-      <input type="text" pInputText #colName placeholder="Sütun Adı Giriniz"/>
-      <p-button (click)="addOtherCol(colName.value)" label="Sütun Ekle" class="m-3"></p-button>
-  </p-dialog>
-</div>
+          <!-- Diğer Sütun Ekle -->
+          <div class="card flex justify-content-center">
+            <p-dialog header="Sütun Ekle" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+                <p>
+                Sütun Adı:     
+                </p>
+                <input type="text" pInputText #colName placeholder="Sütun Adı Giriniz"/>
+                <p-button (click)="addOtherCol(colName.value)" label="Sütun Ekle" class="m-3"></p-button>
+            </p-dialog>
+          </div>
 
-<!-- Diğer Birim Fiyat Ekle -->
-<div class="card flex justify-content-center">
-  <p-dialog header="Birim Fiyat Sütunu Ekle" [(visible)]="visibleBirimDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false">
-      <p>
-      Sütun Adı:     
-      </p>
-      <input type="text" pInputText #colNameBirim placeholder="Sütun Adı Giriniz"/>
-      <p-button (click)="addBirimCol(colNameBirim.value); visibleBirimDialog=false;" label="Birim Fiyat Ekle" class="m-3"></p-button>
-  </p-dialog>
-</div>
+          <!-- Diğer Birim Fiyat Ekle -->
+          <div class="card flex justify-content-center">
+            <p-dialog header="Birim Fiyat Sütunu Ekle" [(visible)]="visibleBirimDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false">
+                <p>
+                Sütun Adı:     
+                </p>
+                <input type="text" pInputText #colNameBirim placeholder="Sütun Adı Giriniz"/>
+                <p-button (click)="addBirimCol(colNameBirim.value); visibleBirimDialog=false;" label="Birim Fiyat Ekle" class="m-3"></p-button>
+            </p-dialog>
+          </div>
 
-<!-- Sütun Sil -->
- 
-<div class="card flex justify-content-center">
-  <p-dialog header="Sütun Sil" [(visible)]="visibleDeleteColDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw', height:'75vh' }" [draggable]="true" [resizable]="true">
-    <p-multiSelect [options]="cols" optionLabel="header" [(ngModel)]="delCols" placeholder="Silinecek Sütunları seçiniz"  display="chip" [showClear]="true"></p-multiSelect>
-    
-    <p-button (click)="deleteCol(delCols); visibleDeleteColDialog=false;" severity="danger" label="Seçili Sütunları Sil" class="m-3"></p-button>
-  </p-dialog>
-</div>
+          <!-- Sütun Sil -->
+          
+          <div class="card flex justify-content-center">
+            <p-dialog header="Sütun Sil" [(visible)]="visibleDeleteColDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw', height:'75vh' }" [draggable]="true" [resizable]="true">
+              <p-multiSelect [options]="cols" optionLabel="header" [(ngModel)]="delCols" placeholder="Silinecek Sütunları seçiniz"  display="chip" [showClear]="true"></p-multiSelect>
+              
+              <p-button (click)="deleteCol(delCols); visibleDeleteColDialog=false;" severity="danger" label="Seçili Sütunları Sil" class="m-3"></p-button>
+            </p-dialog>
+          </div>
 
-<!-- Başlığa Satır Ekle -->
-<div class="card flex justify-content-center">
-  <p-dialog header="Başlığa Satır Ekle" [(visible)]="visibleRowDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-      
-  <p-dropdown appendTo="body" [options]="allKeys" [(ngModel)]="selectedKey"  [showClear]="true" placeholder="Bir Başlık Seçin"></p-dropdown>
-  <p-inputNumber [(ngModel)]="rowNum" [showButtons]="true"  buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1" 
-  decrementButtonClass="p-button-secondary"
-    incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" ></p-inputNumber> 
-  <p-button (click)="addMultipleRows(selectedKey); visibleRowDialog=false;" label="Ekle" class="m-3"></p-button>
-  </p-dialog>
-</div>
-
+          <!-- Başlığa Satır Ekle -->
+          <div class="card flex justify-content-center">
+            <p-dialog header="Başlığa Satır Ekle" [(visible)]="visibleRowDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+                
+            <p-dropdown appendTo="body" [options]="allKeys" [(ngModel)]="selectedKey"  [showClear]="true" placeholder="Bir Başlık Seçin"></p-dropdown>
+            <p-inputNumber [(ngModel)]="rowNum" [showButtons]="true"  buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1" 
+            decrementButtonClass="p-button-secondary"
+              incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" ></p-inputNumber> 
+            <p-button (click)="addMultipleRows(selectedKey); visibleRowDialog=false;" label="Ekle" class="m-3"></p-button>
+            </p-dialog>
+          </div>
+        </div>
     <!-- Tablo -->
     <p-treeTable [reorderableColumns]="true"  [value]="files" 
     selectionMode="checkbox" [(selection)]="selectedNodes" dataKey="key"
     [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" 
     
-    [columns]="selectedColumns" [scrollable]="true" styleClass="p-treetable-gridlines p-treetable-sm" >
+    [columns]="selectedColumns"  styleClass="p-treetable-gridlines p-treetable-sm mb-3" >
     
 
         <ng-template pTemplate="header" let-columns>
@@ -135,17 +134,11 @@
    
         </p-treeTable>
         <p-contextMenu #cm [model]="rowContextItems"></p-contextMenu>
-      </div>
-      
-        <div  class="flex mt-5">
-          <div class="justify-content-start">
-           
-          </div>
-         
-      </div>
-      
-    </div>
 
+      
+       
+      
+    
 
 
 
