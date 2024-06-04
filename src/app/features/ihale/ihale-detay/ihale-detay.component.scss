@@ -1,0 +1,20 @@
+.ihale-card-table {
+    td, th{
+        padding: 0.5rem;
+    }
+    
+}
+.table-grid {
+    width: 100%;
+    td, th {
+        padding: 0.75rem;
+        border-bottom: 1px solid var(--surface-300);
+    }
+    tr:hover {
+        background-color: var(--surface-50);
+    }
+}
+
+.min-h-30 {
+    min-height: 40vh;
+}
