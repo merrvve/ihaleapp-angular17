@@ -20,8 +20,10 @@ export class NavbarComponent implements OnInit {
   teklifciMenu: MenuItem[] | undefined;
   isLoggedIn: boolean = false;
   user!: User;
-
-  constructor(public auth: AuthService) {}
+  
+  constructor(public auth: AuthService,
+  ) {}
+  
   ngOnInit(): void {
     this.auth.isLoggedIn$.subscribe({
       next: (result) => {
