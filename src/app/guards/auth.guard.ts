@@ -1,19 +1,27 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { Injectable, inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { inject } from '@angular/core';
+import { FirebaseAuthService } from '../services/firebaseauth.service';
+import { map } from 'rxjs/internal/operators/map';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
+  const authService = inject(FirebaseAuthService);
   const router = inject(Router);
-  const role = authService.getUserRole();
+  
 
   if (!authService.isUserLoggedIn()) {
     router.navigate(['/login']);
     return false;
   }
-  if (route.data['role'] && route.data['role'] == role) {
-    console.log(role);
-    return true;
-  }
-  return false;
+  return  authService.userDetails$.pipe(
+    map(user => {
+      const role= user?.role;
+      if (route.data['role'] && route.data['role'] == role) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    )
+  )  
 };

@@ -6,6 +6,7 @@ import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.interface';
 import { MenuTemplateComponent } from "../../features/home/menu-template/menu-template.component";
+import { FirebaseAuthService } from '../../services/firebaseauth.service';
 
 @Component({
     selector: 'app-navbar',
@@ -19,26 +20,18 @@ export class NavbarComponent implements OnInit {
   userMenu: MenuItem[] | undefined;
   teklifciMenu: MenuItem[] | undefined;
   isLoggedIn: boolean = false;
-  user!: User;
+  user!: any;
   
-  constructor(public auth: AuthService,
+  constructor(public auth: FirebaseAuthService,
   ) {}
   
   ngOnInit(): void {
-    this.auth.isLoggedIn$.subscribe({
+    this.auth.userDetails$.subscribe({
       next: (result) => {
-        this.isLoggedIn = result;
-        // user bilgilerini al
-
-        this.auth.user$.subscribe({
-          next: (result) => {
-            this.user = result;
-          },
-          error: (error) => console.log(error),
-        });
-      },
-      error: (error) => console.log(error),
-    });
+        this.user=result;
+        console.log(result)
+      
+    }});
 
     this.items = [
       {

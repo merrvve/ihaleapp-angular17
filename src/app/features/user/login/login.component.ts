@@ -4,6 +4,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { FirebaseAuthService } from '../../../services/firebaseauth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -13,17 +14,22 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   constructor(
-    public auth: AuthService,
+    public auth: FirebaseAuthService,
     private router: Router,
   ) {}
   ngOnInit(): void {
-    if (this.auth.isUserLoggedIn()) {
-      if (this.auth.getUserRole() == 'ISVEREN') {
-        this.router.navigate(['/isveren']);
-      } else if (this.auth.getUserRole() == 'TEKLIFCI') {
-        this.router.navigate(['/teklifci']);
+    this.auth.userDetails$.subscribe({
+      next: (value)=> {
+        if(value) {
+          if(value.role==="ISVEREN") {
+            this.router.navigate(['/isveren'])
+          }
+          else{
+            this.router.navigate(['/teklifci'])
+          }
+        }
       }
-    }
+    })
   }
   login(email: string, password: string) {
    this.auth.login(email, password);

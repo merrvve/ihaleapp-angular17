@@ -1,13 +1,13 @@
 
-    @if(isLoggedIn) {
-        @if(user.role==="ISVEREN") {
+    
+        @if(user?.role==="ISVEREN") {
             <app-menu-template [items]="items" [userMenu]="userMenu"></app-menu-template>
         }
-        @else if(user.role==="TEKLIFCI") {
+        @else if(user?.role==="TEKLIFCI") {
             <app-menu-template [items]="teklifciMenu" [userMenu]="userMenu"></app-menu-template>
         }
         
-    }
+    
     @else {
         <p-menubar>
             <ng-template pTemplate="start">
