@@ -18,7 +18,6 @@ export class TeklifciEkleComponent implements OnInit {
   messages: Message[] = []; // bilgilendirme mesajı
   teklifci: FirmaYetkilisi = {
     id: 0,
-    firma: 0,
     adi: '',
     soyadi: '',
     email: '',
@@ -62,7 +61,6 @@ export class TeklifciEkleComponent implements OnInit {
           };
           this.teklifci = {
             id: 0,
-            firma: 0,
             adi: '',
             soyadi: '',
             email: '',

@@ -1,9 +1,9 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
+import { FirebaseAuthService } from '../services/firebaseauth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const authService = inject(FirebaseAuthService);
   const authToken = authService.getAuthorizationToken();
 
   // Clone the request and add the authorization header

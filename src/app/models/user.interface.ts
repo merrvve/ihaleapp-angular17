@@ -1,10 +1,12 @@
 export interface User {
-  id: string;
-  token: string;
+  uid: string;
+  accessToken: string;
+  displayName: string;
   email: string;
+  emailVerified: boolean;
   role: string;
-  adi: string;
-  soyadi: string;
-  telefon: string;
-  firma_id?: number | null;
+  phoneNumber: string;
+  photoUrl: string;
+  creationTime: string;
+  lastSignInTime: string;
 }

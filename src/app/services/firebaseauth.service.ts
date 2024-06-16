@@ -1,18 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
-import { User, user } from '@angular/fire/auth';
-import { doc, getDoc, collection } from "firebase/firestore";
+import { user } from '@angular/fire/auth';
+import { doc, getDoc } from "firebase/firestore";
 import { Firestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
-// import {
-//   Firestore,
-// } from '@angular/fire/firestore';
+import { UserDetail } from '../models/user-detail.interface';
 
-interface UserDetails {
-  role: string;
-  // Add other properties for additional user information (e.g., name, profilePicture)
-}
 
 @Injectable({
   providedIn: 'root'
@@ -27,42 +21,23 @@ export class FirebaseAuthService {
   isLoggedIn$ = this._isLoggedInSubject.asObservable();
 
   //user$!: Observable<UserDetails | null>;
-  _userDetails = new BehaviorSubject<UserDetails | null>({role:""});
+  _userDetails = new BehaviorSubject<UserDetail | null>(null);
   userDetails$ = this._userDetails.asObservable();
   
   constructor(private router: Router) {
-//     this.userSubscription = this.user$.subscribe((aUser: User | null) => {
-//       if(aUser) {
-// //        this._userDetails.next({role:"ISVEREN"});
-//         this.fetchUserDetails(aUser.uid)
-//         this._isLoggedInSubject.next(true);
-//       }
-//       else {
-//         this._isLoggedInSubject.next(false);
-//       }
-//       //handle user state changes here. Note, that user will be null if there is no currently logged in user.
-//    console.log(aUser);
-//   })
-    // this.user$ = this.auth.authState.pipe(
-    //   switchMap(user => {
-    //     if (user) {
-    //       // Check if userDetails is already fetched from Firestore
-    //       if (!this.userDetails) {
-    //         // Fetch user details from Firestore based on user.uid (implementation details omitted)
-    //         this.fetchUserDetails(user.uid).subscribe(details => this.userDetails = details);
-    //       }
-    //       return of(this.userDetails);
-    //     }
-    //     return of(null);
-    //   })
-    // );
   }
 
   private fetchUserDetails(uid: string) {
     const userProfileDocRef = doc(this.firestore, 'users', uid);
     getDoc(userProfileDocRef).then((documentSnapshot) => {
       if (documentSnapshot) {
-        this._userDetails.next(documentSnapshot.data() as UserDetails) ;
+        const roleData = documentSnapshot.data();
+        let currentDetail = this._userDetails.getValue();
+        if(currentDetail && roleData) {
+          currentDetail.role = roleData['role'];
+        
+        }
+        this._userDetails.next(currentDetail);
         console.log(this._userDetails.value)
       } else {
         // Document not found
@@ -71,28 +46,33 @@ export class FirebaseAuthService {
     }).catch((error) => {
     });
    
-    
-    // return collection<UserDetails>('users').doc(uid).valueChanges()
-    //   .pipe(
-    //     map(userData => {
-    //       if (userData) {
-    //         return userData; // Return user data if exists
-    //       } else {
-    //         return null; // Return null if user document not found
-    //       }
-    //     })
-    //   );
   }
   
 
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password).then(
       (aUser)=> {
+        this.getUserDetails(aUser.user);
         this._isLoggedInSubject.next(true);      
         this.fetchUserDetails(aUser.user.uid)}
     ).catch(error=>console.log(error));
   }
 
+  getUserDetails(firebaseResult: any) {
+    let userDetails : UserDetail = {
+      role: undefined,
+      uid: firebaseResult.uid,
+      accessToken: firebaseResult.accessToken,
+      displayName: firebaseResult.displayName,
+      email: firebaseResult.email,
+      emailVerified: firebaseResult.emailVerified,
+      phoneNumber: firebaseResult.phoneNumber,
+      photoUrl: firebaseResult.photoUrl,
+      creationTime: firebaseResult.metadata.creationTime,
+      lastSignInTime: firebaseResult.metadata.lastSignInTime
+    }
+    this._userDetails.next(userDetails);
+  }
   signup(email: string, password: string) {
     return createUserWithEmailAndPassword(this.auth, email, password)
       .then(userCredential => {
@@ -121,6 +101,9 @@ export class FirebaseAuthService {
     return this._userDetails.value?.role;
   }
 
+  getAuthorizationToken() {
+    return this._userDetails.value?.accessToken;
+  }
   // ngOnDestroy() {
   //   this.userSubscription.unsubscribe();
   // }

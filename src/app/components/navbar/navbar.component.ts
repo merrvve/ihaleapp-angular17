@@ -3,8 +3,6 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
-import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/user.interface';
 import { MenuTemplateComponent } from "../../features/home/menu-template/menu-template.component";
 import { FirebaseAuthService } from '../../services/firebaseauth.service';
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { FirebaseAuthService } from '../../../services/firebaseauth.service';
 @Component({

@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
 import { CurrencyPipe, NgStyle } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { MenuModule } from 'primeng/menu';
-import { ChartModule } from 'primeng/chart';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard',
