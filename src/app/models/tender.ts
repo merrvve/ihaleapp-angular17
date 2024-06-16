@@ -6,8 +6,8 @@ export interface Tender {
     owner_id: string;
     name: string;
     description: string;
-    created_at: Date; // Use appropriate Firebase import
-    completed_at?: Date; // Optional
+    created_at: string; // Use appropriate Firebase import
+    completed_at?: string; // Optional
     currency: string;
     cost: number;
     requestedDocuments: RequestedDocument[];

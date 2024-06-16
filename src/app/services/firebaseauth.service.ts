@@ -4,7 +4,7 @@ import { user } from '@angular/fire/auth';
 import { doc, getDoc } from "firebase/firestore";
 import { Firestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription, of } from 'rxjs';
+import { BehaviorSubject} from 'rxjs';
 import { UserDetail } from '../models/user-detail.interface';
 
 
@@ -103,6 +103,10 @@ export class FirebaseAuthService {
 
   getAuthorizationToken() {
     return this._userDetails.value?.accessToken;
+  }
+
+  getUser() {
+    return this._userDetails.value;
   }
   // ngOnDestroy() {
   //   this.userSubscription.unsubscribe();

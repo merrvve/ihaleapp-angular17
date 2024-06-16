@@ -14,6 +14,7 @@ import { IhaleService } from '../../../../services/ihale.service';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TeklifciEkleComponent } from "../../../teklif/teklifci-ekle/teklifci-ekle.component";
+import { TenderService } from '../../../../services/tender.service';
 
 @Component({
     selector: 'app-teklifci-ekleme',
@@ -46,6 +47,7 @@ isTeklifciModalVisible: boolean = false;
   constructor(
     private teklifciService: TeklifciService,
     private ihaleService: IhaleService,
+    private tenderService: TenderService
   ) {}
   ngOnInit(): void {
     // Teklifçi bilgilerini al
@@ -146,5 +148,9 @@ isTeklifciModalVisible: boolean = false;
   }
   showDialog() {
     this.isModalVisible = true;
+  }
+
+  createTender() {
+    this.tenderService.createTender();
   }
 }

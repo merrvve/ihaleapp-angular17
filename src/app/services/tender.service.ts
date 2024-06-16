@@ -1,19 +1,62 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Injectable, inject } from '@angular/core';
 import { Tender } from '../models/tender';
+import { CollectionReference, DocumentReference, Firestore, addDoc, collection, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
+import { FirebaseAuthService } from './firebaseauth.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { Subject } from 'rxjs/internal/Subject';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TenderService {
 
-  constructor(private afs: AngularFirestore) { }
-
-  createTender(tender: Tender): Promise<unknown> {
-    // Set additional properties if needed (e.g., created_at timestamp)
-    //tender.created_at = Date.now();
-
-    // Save tender to Firestore
-    return this.afs.collection('tenders').add(tender);
+  private tendersSubject = new Subject<Tender[]>();
+  sampleTender: Tender = {
+    owner_id: '',
+    name: '',
+    description: '',
+    created_at: Date.now().toString(),
+    currency: '',
+    cost: 0,
+    requestedDocuments: [],
+    tenderFiles: [],
+    bidders: [],
+    isCompleted: false,
+    isDraft: false,
+    discovery_data: []
   }
+  private firestore = inject(Firestore); 
+  tendersCollection!: CollectionReference;
+  constructor(private authService: FirebaseAuthService) {
+    this.tendersCollection = collection(this.firestore, 'tenders')
+  
+  }
+
+  
+  createTender() {
+    let tender = this.sampleTender;
+    tender.owner_id = this.authService.getUser()?.uid || '';
+    addDoc(this.tendersCollection, tender ).then((documentReference: DocumentReference) => {
+      console.log(documentReference);
+  });
+
+  }
+
+  getTendersByOwnerId() {
+    const userId = this.authService.getUser()?.uid || '';
+    const tendersQuery = query(this.tendersCollection, where('owner_id', '==', userId));
+
+    onSnapshot(tendersQuery, (querySnapshot) => {
+      const tenders: Tender[] = [];
+      querySnapshot.forEach((doc) => {
+        let tenderData = doc.data() as Tender;
+        tenderData.id = doc.id;
+        tenders.push(tenderData);
+        this.tendersSubject.next(tenders);
+      });
+     
+    });
+    return this.tendersSubject.asObservable();
+  }
+
 }

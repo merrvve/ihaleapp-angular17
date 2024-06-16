@@ -1,9 +1,9 @@
 <div class="container mb-5">
     <h2 class="p-2">İhalelerim</h2>
 </div>
-@if(ihaleler$|async; as ihaleler) {
+@if(tenders$|async; as tenders) {
     <div class="card">
-        <p-table [value]="ihaleler" [tableStyle]="{ 'min-width': '50rem' }">
+        <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th>İhale No</th>
@@ -20,25 +20,26 @@
                     <th style="width: 5rem">Detay</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-ihale>
+            <ng-template pTemplate="body" let-tender>
                 <tr>
-                    <td>{{ ihale.id }}</td>
-                    <td>{{ ihale.ihale_adi }}</td>
-                    <td>{{ ihale.ihale_aciklamasi }}</td>
-                    <td>{{ ihale.durum }}</td>
-                    <td>firma</td>
+                    <td>{{ tender.id }}</td>
+                    <td>{{ tender.name }}</td>
+                    <td>{{ tender.description }}</td>
+                    <td>{{ tender.isCompleted }}</td>
+                    <td>{{ tender?.company }}</td>
                     <td>yetkili kişi</td>
-                    <td>{{ ihale.baslangic_tarihi }}</td>
-                    <td>bitiş tarihi</td>
-                    <td>{{ ihale.ihale_bedeli }}</td>
-                    <td>{{ ihale.para_birimi }}</td>
+                    <td>{{ tender.created_at |date }}</td>
+                    <td>{{ tender.completed_at }}</td>
+                    <td>{{ tender.cost }}</td>
+                    <td>{{ tender.currency }}</td>
                     <td>
-                        <button type="button" pButton pRipple icon="pi pi-file" (click)="selectIhale(ihale.id)"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file" (click)="selectIhale(tender.id)"></button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
+    {{tenders | json}}
 }
 @else {
     <app-loading-spinner></app-loading-spinner>
