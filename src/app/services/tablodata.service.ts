@@ -44,6 +44,19 @@ export class TablodataService {
     this._datatreeSubject.next(this.convertToTreeTable(datalist));
   }
 
+  loadDataByColandDataTree(cols:Column[], datatree: TreeNode[]) {
+    this._colsSubject.next(cols);
+    this._datatreeSubject.next(datatree);
+  }
+
+  getDataTree() {
+    return this._datatreeSubject.value;
+  }
+
+  getCols() {
+    return this._colsSubject.value;
+  }
+
   columns(ornekData: any[][]) {
     let cols: Column[] = [];
     let len = ornekData[0].length;

@@ -25,7 +25,6 @@ export class TenderService {
     bidders: [],
     isCompleted: false,
     isDraft: false,
-    discovery_data: []
   });
   currentTender$ = this._currentTender.asObservable(); 
 
@@ -41,7 +40,12 @@ export class TenderService {
   
   createTender() {
     let tender = this._currentTender.getValue();
-    tender.discovery_data=this.tableData.currentData;
+    let currentTableData = this.tableData.currentData;
+    let data: { [key: number]: any } = {};
+    for (let i = 0; i < currentTableData.length; i++) {
+      data[i] = currentTableData[i];
+    }
+    tender.discoveryData = data;
     tender.owner_id = this.authService.getUser()?.uid || '';
     console.log(tender)
     addDoc(this.tendersCollection, tender ).then((documentReference: DocumentReference) => {

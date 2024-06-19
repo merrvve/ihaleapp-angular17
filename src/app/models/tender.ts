@@ -1,3 +1,5 @@
+import { TreeNode } from "primeng/api";
+import { Column } from "./column.interface";
 import { RequestedDocument } from "./requested-document";
 import { TenderBid } from "./tender-bid";
 
@@ -15,7 +17,7 @@ export interface Tender {
     bidders: string[];
     isCompleted: boolean;
     isDraft: boolean;
-    discovery_data: any[][];
+    discoveryData?: any;
     revisions?: TenderRevision[]; // Optional
     bids?: TenderBid[]; // Optional (can be populated later)
     messages?: TenderMessage[]; // Optional (can be populated later)
