@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Auth,  createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { user } from '@angular/fire/auth';
 import { doc, getDoc } from "firebase/firestore";
 import { Firestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject} from 'rxjs';
 import { UserDetail } from '../models/user-detail.interface';
+import { User } from '../models/user.interface';
 
 
 @Injectable({
@@ -14,6 +15,7 @@ import { UserDetail } from '../models/user-detail.interface';
 export class FirebaseAuthService {
   private auth: Auth = inject(Auth);
   user$ = user(this.auth);
+  currentUser!: User;
  // userSubscription: Subscription;
   private firestore = inject(Firestore);
 
@@ -31,14 +33,14 @@ export class FirebaseAuthService {
     const userProfileDocRef = doc(this.firestore, 'users', uid);
     getDoc(userProfileDocRef).then((documentSnapshot) => {
       if (documentSnapshot) {
-        const roleData = documentSnapshot.data();
-        let currentDetail = this._userDetails.getValue();
-        if(currentDetail && roleData) {
-          currentDetail.role = roleData['role'];
+        // const roleData = documentSnapshot.data();
+        // let currentDetail = this._userDetails.getValue();
+        // if(currentDetail && roleData) {
+        //   currentDetail.role = roleData['role'];
         
-        }
-        this._userDetails.next(currentDetail);
-        console.log(this._userDetails.value)
+        // }
+        this._userDetails.next(documentSnapshot.data() as UserDetail);
+        console.log(this._userDetails.value, this.currentUser)
       } else {
         // Document not found
         console.log('No such document!');
@@ -52,15 +54,15 @@ export class FirebaseAuthService {
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password).then(
       (aUser)=> {
-        this.getUserDetails(aUser.user);
+        //this.currentUser=aUser.user as User;
+        this.getUserInfo(aUser.user);
         this._isLoggedInSubject.next(true);      
         this.fetchUserDetails(aUser.user.uid)}
     ).catch(error=>console.log(error));
   }
 
-  getUserDetails(firebaseResult: any) {
-    let userDetails : UserDetail = {
-      role: undefined,
+  getUserInfo(firebaseResult: any) {
+    let user : User = {
       uid: firebaseResult.uid,
       accessToken: firebaseResult.accessToken,
       displayName: firebaseResult.displayName,
@@ -71,7 +73,7 @@ export class FirebaseAuthService {
       creationTime: firebaseResult.metadata.creationTime,
       lastSignInTime: firebaseResult.metadata.lastSignInTime
     }
-    this._userDetails.next(userDetails);
+    this.currentUser=user;
   }
   signup(email: string, password: string) {
     return createUserWithEmailAndPassword(this.auth, email, password)
@@ -102,7 +104,7 @@ export class FirebaseAuthService {
   }
 
   getAuthorizationToken() {
-    return this._userDetails.value?.accessToken;
+    return this.currentUser.accessToken;
   }
 
   getUser() {

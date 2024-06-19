@@ -1,14 +1,10 @@
 export interface UserDetail {
-    role: "ISVEREN" | "TEKLIFCI" | "ADMIN" |undefined;
+    role: "TENDERER" | "BIDDER" | "ADMIN" |undefined;
     uid: string;
-    accessToken: string;
     displayName: string;
     email: string;
-    emailVerified: boolean;
     phoneNumber: string;
     photoUrl: string;
-    creationTime: string;
-    lastSignInTime: string;
     company?: Company;
 }
 

@@ -1,9 +1,9 @@
 
     
-        @if(user?.role==="ISVEREN") {
+        @if(user?.role==="TENDERER") {
             <app-menu-template [items]="items" [userMenu]="userMenu"></app-menu-template>
         }
-        @else if(user?.role==="TEKLIFCI") {
+        @else if(user?.role==="BIDDER") {
             <app-menu-template [items]="teklifciMenu" [userMenu]="userMenu"></app-menu-template>
         }
         

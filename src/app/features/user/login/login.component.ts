@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
     this.auth.userDetails$.subscribe({
       next: (value)=> {
         if(value) {
-          if(value.role==="ISVEREN") {
+          if(value.role==="TENDERER") {
+            console.log(value.role)
             this.router.navigate(['/isveren'])
           }
           else{

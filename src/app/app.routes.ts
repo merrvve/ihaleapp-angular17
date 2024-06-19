@@ -9,7 +9,7 @@ export const routes: Routes = [
     path: 'ihale',
     loadChildren: () =>
       import('./features/ihale/ihale.routes').then((mod) => mod.IHALE_ROUTES),
-    data: { role: 'ISVEREN' },
+    data: { role: 'TENDERER' },
     canActivate: [authGuard],
   },
   {
@@ -25,13 +25,13 @@ export const routes: Routes = [
       import('./features/teklifci/teklifci.routes').then(
         (mod) => mod.TEKLIFCI_ROUTES,
       ),
-    data: { role: 'TEKLIFCI' },
+    data: { role: 'BIDDER' },
     canActivate: [authGuard],
   },
   {
     path: 'isveren',
     component: DashboardComponent,
-    data: { role: 'ISVEREN' },
+    data: { role: 'TENDERER' },
     canActivate: [authGuard],
   },
   { path: '', component: LoginComponent },

@@ -4,24 +4,26 @@
 </div>
 
 <div class="card">
-
-    <p-pickList [source]="teklifciler" [target]="secilenTeklifciler" sourceHeader="Tüm Teklifçiler" targetHeader="Seçilenler" [dragdrop]="true" [responsive]="true"
+    @if(bidders$|async; as bidders) {
+        <p-pickList [source]="bidders" [target]="selectedBidders" sourceHeader="Tüm Teklifçiler" targetHeader="Seçilenler" [dragdrop]="true" [responsive]="true"
         [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }" breakpoint="1400px">
 
-        <ng-template let-teklifci pTemplate="item">
+        <ng-template let-bidder pTemplate="item">
             <div class="flex flex-wrap p-2 align-items-center gap-3">
                 <div class="flex-1 flex flex-column gap-2">
-                    <span class="font-bold"> {{ teklifci.adi }} {{ teklifci.soyadi }}</span>
+                    <span class="font-bold"> {{ bidder.name }} {{ bidder.surname }}</span>
                     <div class="flex align-items-center gap-2">
                         <i class="pi pi-tag text-sm"></i>
-                        <span>{{ teklifci.email }} {{ teklifci.telefon }}</span>
+                        <span>{{ bidder.email }} {{ bidder.phoneNumber }}</span>
                     </div>
                 </div>
-                <span class="font-bold text-900">{{ teklifci.firma }}</span>
+                <span class="font-bold text-900">{{ bidder?.company?.name }}</span>
             </div>
 
         </ng-template>
     </p-pickList>
+
+    }
 </div>
 
 <div class="flex justify-content-end mt-5">

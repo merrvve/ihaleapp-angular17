@@ -8,7 +8,10 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { CalendarModule } from 'primeng/calendar';
 import { Ihale } from '../../../../models/ihale.interface';
 import { IhaleService } from '../../../../services/ihale.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { TenderService } from '../../../../services/tender.service';
+import { Tender } from '../../../../models/tender';
+import { AsyncPipe } from '@angular/common';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -26,6 +29,7 @@ interface UploadEvent {
     RouterLink,
     FileUploadModule,
     CalendarModule,
+    AsyncPipe
   ],
   templateUrl: './ihale-bilgileri.component.html',
   styleUrl: './ihale-bilgileri.component.scss',
@@ -39,14 +43,18 @@ export class IhaleBilgileriComponent implements OnInit {
   secondDate: Date | undefined;
   ihale!: Ihale;
   subscription1!: Subscription;
+  tender$!: Observable<Tender>;
 
-  constructor(private ihaleService: IhaleService) {}
+  constructor(private ihaleService: IhaleService,
+    private tenderService: TenderService
+  ) {}
   ngOnInit(): void {
     this.selectedFiles = this.ihaleService.files;
     this.subscription1 = this.ihaleService.ihale$.subscribe({
       next: (result) => (this.ihale = result),
       error: (error) => console.log(error),
     });
+    this.tender$ = this.tenderService.currentTender$;
   }
 
   onFileChange(event: any) {
