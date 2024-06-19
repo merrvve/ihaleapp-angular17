@@ -18,12 +18,12 @@
                 <label class="mb-3">İstenilen Biçim</label>
                 <div class="flex flex-wrap gap-3">
                     <div class="flex align-items-center">
-                        <p-radioButton name="file" value="dosya" [(ngModel)]="radioChoice" inputId="c1"></p-radioButton>
+                        <p-radioButton name="file" value="file" [(ngModel)]="radioChoice" inputId="c1"></p-radioButton>
                         <label for="c1" class="ml-2">Dosya</label>
                     </div>
                     
                     <div class="flex align-items-center">
-                        <p-radioButton name="note" value="Bilgi" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
+                        <p-radioButton name="note" value="note" [(ngModel)]="radioChoice" inputId="c2"></p-radioButton>
                         <label for="c2" class="ml-2">Bilgi</label>
                     </div>
                     
@@ -31,7 +31,7 @@
         
             </div>
             <div class="flex justify-content-end">
-                <p-button icon="pi pi-plus" label="Ekle" (onClick)="evrakEkle(evrakInput.value,radioChoice); evrakInput.value='';" ></p-button>
+                <p-button icon="pi pi-plus" label="Ekle" (onClick)="addDoc(evrakInput.value,radioChoice); evrakInput.value='';" ></p-button>
 
             </div>
             
@@ -45,7 +45,7 @@
     
         <div class="col-12 md:col-4 m-2 px-5 py-3">
             <div class="field">
-                @if(evraklar.length>0) {
+                @if(requestedDocs.length>0) {
                     <table>
                         <thead>
                             <tr>
@@ -55,11 +55,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for(evrak of evraklar; track evrak;) {
+                            @for(evrak of requestedDocs; track evrak;) {
                                 <tr>
-                                    <td>{{evrak.evrak}}</td>
-                                    <td>{{evrak.bicim}}</td>
-                                    <p-button size="small" pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="evrakSil(evrak.id)"></p-button>
+                                    <td>{{evrak.name}}</td>
+                                    <td>{{evrak.format}}</td>
+                                    <p-button size="small" pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="deleteDoc(evrak.id)"></p-button>
     
                                 </tr>
                             }

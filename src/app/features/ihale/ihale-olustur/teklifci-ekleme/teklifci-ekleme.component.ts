@@ -41,18 +41,13 @@ import { AsyncPipe } from '@angular/common';
 export class TeklifciEklemeComponent implements OnInit {
   messages: Message[] = []; // bilgilendirme mesajı
   messages2: Message[] = []; // bilgilendirme mesajı
-  teklifciler: FirmaYetkilisi[] = [];
-  secilenTeklifciler: FirmaYetkilisi[] = [];
-  subscription1!: Subscription;
   isModalVisible: boolean = false;
   isLoading: boolean = false;
-isTeklifciModalVisible: boolean = false;
+  isTeklifciModalVisible: boolean = false;
   bidders$!: Observable<UserDetail[]>;
   selectedBidders: UserDetail[] = [];
 
   constructor(
-    private teklifciService: TeklifciService,
-    private ihaleService: IhaleService,
     private tenderService: TenderService,
     private bidderService: BidderService
   ) {}
@@ -77,10 +72,12 @@ isTeklifciModalVisible: boolean = false;
   onSubmit() {
     this.isLoading = true;
     this.isModalVisible = true;
-    let bidders: string[] = [];
-    for (const bidder of this.selectedBidders) {
-      bidders.push(bidder.uid);
-    }
+     let bidders: string[] = [];
+     for (const bidder of this.selectedBidders) {
+       bidders.push(bidder.uid);
+     }
+     this.tenderService._currentTender.value.bidders=bidders;
+    
     this.createTender();
     //this.ihaleService.teklifcilerEkle(teklifciler);
     // this.ihaleService.createIhale().subscribe({

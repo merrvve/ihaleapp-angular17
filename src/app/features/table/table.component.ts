@@ -81,7 +81,6 @@ export class TableComponent implements OnInit {
     private dataService: TablodataService,
     private excelService: XlsxService,
     private messageService: MessageService,
-    private ihaleService: IhaleService,
   ) {}
 
   ngOnInit(): void {

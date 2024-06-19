@@ -5,6 +5,7 @@ import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
 import { BehaviorSubject } from 'rxjs';
+import { TablodataService } from './tablodata.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 export class TenderService {
 
   private tendersSubject = new Subject<Tender[]>();
-  private _currentTender = new BehaviorSubject<Tender>({
+  _currentTender = new BehaviorSubject<Tender>({
     owner_id: '',
     name: '',
     description: '',
@@ -32,7 +33,7 @@ export class TenderService {
   tendersCollection!: CollectionReference;
 
   
-  constructor(private authService: FirebaseAuthService) {
+  constructor(private authService: FirebaseAuthService, private tableData: TablodataService ) {
     this.tendersCollection = collection(this.firestore, 'tenders')
   
   }
@@ -40,7 +41,9 @@ export class TenderService {
   
   createTender() {
     let tender = this._currentTender.getValue();
+    tender.discovery_data=this.tableData.currentData;
     tender.owner_id = this.authService.getUser()?.uid || '';
+    console.log(tender)
     addDoc(this.tendersCollection, tender ).then((documentReference: DocumentReference) => {
       console.log(documentReference);
   });
@@ -64,5 +67,6 @@ export class TenderService {
     return this.tendersSubject.asObservable();
   }
 
+  
 
 }

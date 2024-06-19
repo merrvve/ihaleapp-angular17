@@ -9,6 +9,8 @@ import { TalepEdilenEvrak } from '../../../../models/talepedilenevrak.interface'
 
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { FormsModule, NgModel } from '@angular/forms';
+import { RequestedDocument } from '../../../../models/requested-document';
+import { TenderService } from '../../../../services/tender.service';
 
 @Component({
   selector: 'app-istenen-dokumanlar',
@@ -27,10 +29,12 @@ import { FormsModule, NgModel } from '@angular/forms';
 export class IstenenDokumanlarComponent implements OnInit {
   radioChoice!: string;
   messages: Message[] = []; // bilgilendirme mesajı
-  evraklar: TalepEdilenEvrak[] = [];
+  requestedDocs: RequestedDocument[] = [];
   id: number = 0;
 
-  constructor(private ihaleService: IhaleService) {}
+  constructor(private ihaleService: IhaleService,
+    private tenderService: TenderService
+  ) {}
 
   ngOnInit(): void {
     //mesajları oluştur
@@ -44,27 +48,28 @@ export class IstenenDokumanlarComponent implements OnInit {
     ];
 
     //evraklar varsa yükle
-    this.evraklar = this.ihaleService.evraklar;
+    this.requestedDocs = this.tenderService._currentTender.value.requestedDocuments;
   }
 
-  evrakEkle(evrak: string, bicim: string) {
-    this.evraklar.push({ evrak: evrak, bicim: bicim, id: this.id });
-    this.id += 1;
+  addDoc (name: string, format: string) {
+    const id = Date.now();
+    this.requestedDocs.push({name:name,format:format,id:id})
   }
 
-  evrakSil(id: number) {
-    const index = this.evraklar.findIndex((x) => x.id == id);
+  deleteDoc(id:number) {
+    const index = this.requestedDocs.findIndex((x) => x.id == id);
     if (index > -1) {
-      this.evraklar.splice(index, 1);
+      this.requestedDocs.splice(index, 1);
     }
   }
-
+  
   ngOnDestroy() {
-    let evraklarString = '';
-    for (const evrak of this.evraklar) {
-      evraklarString += evrak.evrak + '|' + evrak.bicim + '||';
-    }
-    this.ihaleService.istenenDokumanlarEkle(evraklarString);
-    this.ihaleService.evraklar = this.evraklar;
+    this.tenderService._currentTender.value.requestedDocuments = this.requestedDocs;
+    // let evraklarString = '';
+    // for (const evrak of this.evraklar) {
+    //   evraklarString += evrak.evrak + '|' + evrak.bicim + '||';
+    // }
+    // this.ihaleService.istenenDokumanlarEkle(evraklarString);
+    // this.ihaleService.evraklar = this.evraklar;
   }
 }
