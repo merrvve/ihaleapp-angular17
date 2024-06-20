@@ -25,7 +25,7 @@ export class TeklifciComponent implements OnInit {
     private tenderService: TenderService
   ) {}
   ngOnInit(): void {
-      this.tenders$ = this.tenderService.getTendersByOwnerId();
+      this.tenders$ = this.tenderService.getTendersByBidderId();
       this.teklifler$ = this.teklifciService.getTeklifciTeklifleri();
       
   }

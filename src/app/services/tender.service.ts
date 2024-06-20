@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { Tender } from '../models/tender';
-import { CollectionReference, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
+import { CollectionReference, DocumentReference, Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
 import { BehaviorSubject, from, map } from 'rxjs';
 import { TablodataService } from './tablodata.service';
+import { combineLatest } from 'rxjs/internal/operators/combineLatest';
 
 @Injectable({
   providedIn: 'root'
@@ -81,6 +82,26 @@ export class TenderService {
         } else {
           return null;
         }
+      })
+    );
+  }
+
+  getTendersByBidderId(bidderId?: string): Observable<Tender[]> {
+    if (!bidderId) {
+      bidderId = this.authService.getUser()?.uid || ''; 
+    }
+  
+    // Use `getDocs` instead of `collectionData`
+    return from(getDocs(this.tendersCollection)).pipe(
+      map((querySnapshot) => {
+        const tenders: Tender[] = [];
+        querySnapshot.forEach((doc) => {
+          const tender = doc.data() as Tender;
+          if (tender.bidders?.includes(bidderId)) {
+            tenders.push(tender);
+          }
+        });
+        return tenders;
       })
     );
   }
