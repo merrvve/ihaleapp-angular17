@@ -8,6 +8,8 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { TableModule } from 'primeng/table';
 import { MenuItem } from 'primeng/api/menuitem';
 import { MenuService } from '../../../services/menu.service';
+import { TenderService } from '../../../services/tender.service';
+import { Tender } from '../../../models/tender';
 
 @Component({
   selector: 'app-ihale-detay',
@@ -19,6 +21,7 @@ import { MenuService } from '../../../services/menu.service';
 export class IhaleDetayComponent implements OnInit {
   ihale: any = {}
   ihale$!: Observable<Ihale>;
+  tender$!: Observable<Tender|null>;
   menuItems: MenuItem[] =  [
     
     {
@@ -94,14 +97,15 @@ export class IhaleDetayComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private ihaleService: IhaleService,
-    private menuService: MenuService 
+    private menuService: MenuService, 
+    private tenderService: TenderService
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id'); 
       if(id) {
-        this.ihale$ = this.ihaleService.getIhaleDetail(+id);
+        this.tender$ = this.tenderService.getTenderById(id);
       }
   });
     this.menuService.setItems(this.menuItems);

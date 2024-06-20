@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Tender } from '../models/tender';
-import { CollectionReference, DocumentReference, Firestore, addDoc, collection, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
+import { CollectionReference, DocumentReference, Firestore, addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, from, map } from 'rxjs';
 import { TablodataService } from './tablodata.service';
 
 @Injectable({
@@ -26,6 +26,7 @@ export class TenderService {
     isCompleted: false,
     isDraft: false,
   });
+  tenders$ = this.tendersSubject.asObservable();
   currentTender$ = this._currentTender.asObservable(); 
 
   private firestore = inject(Firestore); 
@@ -69,6 +70,19 @@ export class TenderService {
      
     });
     return this.tendersSubject.asObservable();
+  }
+
+  getTenderById(tenderId: string): Observable<Tender | null> {
+    const tenderDocRef = doc(this.tendersCollection, tenderId);
+    return from(getDoc(tenderDocRef)).pipe(
+      map((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          return docSnapshot.data() as Tender;
+        } else {
+          return null;
+        }
+      })
+    );
   }
 
   

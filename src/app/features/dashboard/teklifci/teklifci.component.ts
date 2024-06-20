@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/internal/Observable';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { Teklif } from '../../../models/teklif.interface';
 import { RouterLink } from '@angular/router';
+import { Tender } from '../../../models/tender';
+import { TenderService } from '../../../services/tender.service';
 
 @Component({
   selector: 'app-teklifci',
@@ -16,13 +18,16 @@ import { RouterLink } from '@angular/router';
 export class TeklifciComponent implements OnInit {
 
   ihaleler$! : Observable<Ihale[]>;
+  tenders$! : Observable<Tender[]>;
   teklifler$! : Observable<Teklif[]>;
   
   ihaleler! : Ihale[];
   constructor(private teklifciService: TeklifciService,
+    private tenderService: TenderService
   ) {}
   ngOnInit(): void {
       this.ihaleler$ = this.teklifciService.getTeklifciIhaleleri();
+      this.tenders$ = this.tenderService.getTendersByOwnerId();
       this.teklifler$ = this.teklifciService.getTeklifciTeklifleri();
       
   }
