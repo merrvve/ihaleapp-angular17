@@ -29,6 +29,10 @@ export class IhaleOlusturComponent implements OnInit {
         label: 'Teklifçi Ekleme',
         routerLink: ['/ihale/ihale-olustur/teklifci-ekleme'],
       },
+      {
+        label: 'Tamamla',
+        routerLink: ['/ihale/ihale-olustur/tamamla'],
+      },
     ];
   }
 }

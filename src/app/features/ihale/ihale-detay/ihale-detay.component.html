@@ -4,128 +4,134 @@
             <h1 class="px-3">{{ tender.name }} İhalesi</h1>
     
         </div>
-       <div class="grid p-3">
-        <div class="col-12 xl:col-4">
-            <div class="surface-card shadow-2 p-3 border-round mb-3">
-                <span class="block text-500 font-medium mb-3">İhale Durumu</span>
-            
-                <table class="ihale-card-table">
-                    <tr>
-                        <td>İhale Türü </td>
-                        <td>:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Davet Edilen Firma </td>
-                        <td>:</td>
-                        
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Katılan Firma </td>
-                        <td>:</td>
-                        
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Kalan Firma </td>
-                        <td>:</td>
-                        
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Eklenen Firma </td>
-                        <td>:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>İhale Türü: </td>
-                        <td>:</td>
-                        <td></td>
-                    </tr>
-                    
-                </table>
-            </div>
-        </div> 
         
-        <!-- Son Teklifler -->
-        <div class="col-12 xl:col-4">
-            <div class="surface-card shadow-2 p-3 border-round mb-3 min-h-30">
-                <span class="block text-500 font-medium mb-3">Son Teklifler</span>       
-                <table class="table-grid">
-                    <tr>
-                        <th>Firma</th>
-                        <th>Son Teklif</th>
-                        <th>Uyarılmış Fiyat</th>
-                        <th>%</th>
-                    </tr>
-                    <tr>
-                        <td>Firma A</td>
-                        <td>10.000</td>
-                        <td>20.0000</td>
-                        <td>20</td>
-                    </tr>
-                </table>
-            </div>
-        </div> 
-    
-        <!-- Cevap Bekleyen Sorular -->
-        <div class="col-12 xl:col-4">
-            <div class="surface-card shadow-2 p-3 border-round mb-3 min-h-30">
-                <span class="block text-500 font-medium mb-3">Cevap Bekleyen Sorular</span>       
-                <table class="table-grid">
-                    <tr>
-                        <th>Soru No</th>
-                        <th>Firma</th>
-                        <th>Tarih</th>
-                        <th>Detay</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Firma A</td>
-                        <td>11.11.2024</td>
-                        <td></td>
-                    </tr>
-    
-                </table>
-            </div>
-        </div> 
-    
-        <!--İstatistikler-->
-        <div class="col-12 xl:col-4">
-            <div class="surface-card shadow-2 p-3 border-round mb-3">
-                <span class="block text-500 font-medium mb-3">İstatistikler</span>
+        <div class="grid p-3">
             
-                <table class="ihale-card-table">
-                    <tr>
-                        <td>Toplam Zeyilname </td>
-                        <td>:</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Toplam Soru </td>
-                        <td>:</td>
+            <app-ihale-ozet [tender]="tender"></app-ihale-ozet>
+
+
+            <div class="col-12 xl:col-4">
+                <div class="surface-card shadow-2 p-3 border-round mb-3">
+                    <span class="block text-500 font-medium mb-3">İhale Durumu</span>
+                
+                    <table class="ihale-card-table">
+                        <tr>
+                            <td>İhale Türü </td>
+                            <td>:</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Davet Edilen Firma </td>
+                            <td>:</td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Katılan Firma </td>
+                            <td>:</td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Kalan Firma </td>
+                            <td>:</td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Eklenen Firma </td>
+                            <td>:</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>İhale Türü: </td>
+                            <td>:</td>
+                            <td></td>
+                        </tr>
                         
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>Toplam Teklif </td>
-                        <td>:</td>
-                        
-                        <td></td>
-                    </tr>
-                    
-                </table>
-            </div>
-        </div> 
-    
-        <!-- Grafik-->    
-        <div class="col-12 xl:col-8">
-            <div class="surface-card shadow-2 p-3 border-round mb-3 min-h-30">
-                <span class="block text-500 font-medium mb-3">İhale Fiyat / Tur İlerleme</span>
+                    </table>
+                </div>
+            </div> 
             
-            </div>
-        </div> 
+            
+            <!-- Son Teklifler -->
+            <div class="col-12 xl:col-4">
+                <div class="surface-card shadow-2 p-3 border-round mb-3 min-h-30">
+                    <span class="block text-500 font-medium mb-3">Son Teklifler</span>       
+                    <table class="table-grid">
+                        <tr>
+                            <th>Firma</th>
+                            <th>Son Teklif</th>
+                            <th>Uyarılmış Fiyat</th>
+                            <th>%</th>
+                        </tr>
+                        <tr>
+                            <td>Firma A</td>
+                            <td>10.000</td>
+                            <td>20.0000</td>
+                            <td>20</td>
+                        </tr>
+                    </table>
+                </div>
+            </div> 
+        
+            <!-- Cevap Bekleyen Sorular -->
+            <div class="col-12 xl:col-4">
+                <div class="surface-card shadow-2 p-3 border-round mb-3 min-h-30">
+                    <span class="block text-500 font-medium mb-3">Cevap Bekleyen Sorular</span>       
+                    <table class="table-grid">
+                        <tr>
+                            <th>Soru No</th>
+                            <th>Firma</th>
+                            <th>Tarih</th>
+                            <th>Detay</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Firma A</td>
+                            <td>11.11.2024</td>
+                            <td></td>
+                        </tr>
+        
+                    </table>
+                </div>
+            </div> 
+        
+            <!--İstatistikler-->
+            <div class="col-12 xl:col-4">
+                <div class="surface-card shadow-2 p-3 border-round mb-3">
+                    <span class="block text-500 font-medium mb-3">İstatistikler</span>
+                
+                    <table class="ihale-card-table">
+                        <tr>
+                            <td>Toplam Zeyilname </td>
+                            <td>:</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Toplam Soru </td>
+                            <td>:</td>
+                            
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Toplam Teklif </td>
+                            <td>:</td>
+                            
+                            <td></td>
+                        </tr>
+                        
+                    </table>
+                </div>
+            </div> 
+        
+            <!-- Grafik-->    
+            <div class="col-12 xl:col-8">
+                <div class="surface-card shadow-2 p-3 border-round mb-3 min-h-30">
+                    <span class="block text-500 font-medium mb-3">İhale Fiyat / Tur İlerleme</span>
+                
+                </div>
+            </div> 
     
        </div>
         

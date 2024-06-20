@@ -10,13 +10,14 @@ import { MenuItem } from 'primeng/api/menuitem';
 import { MenuService } from '../../../services/menu.service';
 import { TenderService } from '../../../services/tender.service';
 import { Tender } from '../../../models/tender';
+import { IhaleOzetComponent } from "../ihale-ozet/ihale-ozet.component";
 
 @Component({
-  selector: 'app-ihale-detay',
-  standalone: true,
-  imports: [AsyncPipe, LoadingSpinnerComponent, TableModule],
-  templateUrl: './ihale-detay.component.html',
-  styleUrl: './ihale-detay.component.scss'
+    selector: 'app-ihale-detay',
+    standalone: true,
+    templateUrl: './ihale-detay.component.html',
+    styleUrl: './ihale-detay.component.scss',
+    imports: [AsyncPipe, LoadingSpinnerComponent, TableModule, IhaleOzetComponent]
 })
 export class IhaleDetayComponent implements OnInit {
   ihale: any = {}

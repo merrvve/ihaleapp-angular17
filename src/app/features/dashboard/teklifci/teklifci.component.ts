@@ -17,7 +17,6 @@ import { TenderService } from '../../../services/tender.service';
 })
 export class TeklifciComponent implements OnInit {
 
-  ihaleler$! : Observable<Ihale[]>;
   tenders$! : Observable<Tender[]>;
   teklifler$! : Observable<Teklif[]>;
   
@@ -26,7 +25,6 @@ export class TeklifciComponent implements OnInit {
     private tenderService: TenderService
   ) {}
   ngOnInit(): void {
-      this.ihaleler$ = this.teklifciService.getTeklifciIhaleleri();
       this.tenders$ = this.tenderService.getTendersByOwnerId();
       this.teklifler$ = this.teklifciService.getTeklifciTeklifleri();
       
