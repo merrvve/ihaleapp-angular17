@@ -9,6 +9,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessagesModule } from 'primeng/messages';
 import { Message } from 'primeng/api';
 import { TeklifciService } from '../../../../services/teklifci.service';
+import { BidService } from '../../../../services/bid.service';
 
 @Component({
     selector: 'app-kesif',
@@ -24,11 +25,15 @@ export class KesifComponent implements OnInit{
   messages!: Message[];
   error: boolean = false;
 
-  constructor(private teklifciService: TeklifciService, private router: Router){}
+  constructor(private teklifciService: TeklifciService, private router: Router,
+    private bidService:BidService
+  ){}
   ngOnInit(): void {
     
   }
-
+  createBid() {
+    this.bidService.createBid()
+  }
   teklifVer(){
     this.isLoading=true;
     this.isTeklifModalVisible=true;

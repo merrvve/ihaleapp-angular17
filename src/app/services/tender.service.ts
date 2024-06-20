@@ -3,17 +3,15 @@ import { Tender } from '../models/tender';
 import { CollectionReference, DocumentReference, Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
-import { Subject } from 'rxjs/internal/Subject';
 import { BehaviorSubject, from, map } from 'rxjs';
 import { TablodataService } from './tablodata.service';
-import { combineLatest } from 'rxjs/internal/operators/combineLatest';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TenderService {
 
-  private tendersSubject = new Subject<Tender[]>();
+  private tendersSubject = new BehaviorSubject<Tender[]>([]);
   _currentTender = new BehaviorSubject<Tender>({
     owner_id: '',
     name: '',
@@ -97,10 +95,12 @@ export class TenderService {
         const tenders: Tender[] = [];
         querySnapshot.forEach((doc) => {
           const tender = doc.data() as Tender;
+          tender.id = doc.id;
           if (tender.bidders?.includes(bidderId)) {
             tenders.push(tender);
           }
         });
+        this.tendersSubject.next(tenders)
         return tenders;
       })
     );

@@ -108,7 +108,7 @@ export class FirebaseAuthService {
   }
 
   getUser() {
-    return this._userDetails.value;
+    return this.currentUser;
   }
   // ngOnDestroy() {
   //   this.userSubscription.unsubscribe();

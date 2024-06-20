@@ -1,84 +1,87 @@
 <app-teklif-olustur></app-teklif-olustur>
-<div class="card flex justify-content-center border-1 border-solid surface-border border-round bg-white">
-    <div class="flex-1 m-2 px-5 py-3">
-        <div class="field grid">
-            <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Adı</label>
-            <div class="col-12 md:col-9">
-                <input type="text" [(ngModel)]="ihale.ihale_adi" disabled  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-            </div>
-        </div>
-
-        <div class="field grid">
-            <label class="col-12 mb-2 md:col-3 md:mb-0">Para Birimi</label>
-            <div class="flex flex-row mt-3">
-                <input type="text" [(ngModel)]="ihale.para_birimi" disabled  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-        
-            </div>
-        </div>
-
-        <div class="field grid">
-            <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Açıklaması</label>
-            <div class="col-12 md:col-9">
-                <textarea type="text" rows="8"
-                 [(ngModel)]="ihale.ihale_aciklamasi" disabled class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-                    </textarea>
+@if(tender$ |async; as tender) {
+    <div class="card flex justify-content-center border-1 border-solid surface-border border-round bg-white">
+        <div class="flex-1 m-2 px-5 py-3">
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Adı</label>
+                <div class="col-12 md:col-9">
+                    <input type="text" [(ngModel)]="tender.name" disabled  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
                 </div>
-        </div>
-
-    </div>
-    <div class="flex-1 m-2 px-5 py-3">
-        <label class="col-12 mb-2 md:col-3 md:mb-0">İstenen Dökümanlar</label>
-            
-        <div class="field grid">
-            <div class="col-12 md:col-8">
-                @for(doc of documents; track doc.id) {
-                    <div class="field grid">
-                        <label class="col-12 mb-2 md:col-3 md:mb-0">{{doc.name}}</label>
-                        @if(doc.type==='Bilgi') {
-                            <textarea type="text" rows="8"
-                     class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-                    </textarea>
-                        }
-                        @else {
-                            <input type="file" id="teklif-file-upload" (change)="onFileChange($event)" multiple="true">
-                <label for="teklif-file-upload" class="custom-file-upload bg-primary border-round p-2">Dosya Seç
-                </label>
-                
-                        }
-                    </div>
-                }
             </div>
-            <div>
-                @if(selectedFiles.length>0) {
-                    <table class="m-3">
-                        <thead>
-                            <tr>
-                                <th>Dosya Adı</th>
-                                <th>Boyut</th>
-                                <th>Sil</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (file of selectedFiles; track file) {
-                                <tr>
-                                    <td>{{ file.name }}</td>
-                                    <td>{{ file.size }} bytes</td>
-                                    <td>    
-                                        <p-button icon="pi pi-trash" severity="danger" class="mx-3"></p-button>
-                                    </td>
-                                </tr>
+    
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-3 md:mb-0">Para Birimi</label>
+                <div class="flex flex-row mt-3">
+                    <input type="text" [(ngModel)]="tender.currency" disabled  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+            
+                </div>
+            </div>
+    
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Açıklaması</label>
+                <div class="col-12 md:col-9">
+                    <textarea type="text" rows="8"
+                     [(ngModel)]="tender.description" disabled class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                        </textarea>
+                    </div>
+            </div>
+    
+        </div>
+        <div class="flex-1 m-2 px-5 py-3">
+            <label class="col-12 mb-2 md:col-3 md:mb-0">İstenen Dökümanlar</label>
+                
+            <div class="field grid">
+                <div class="col-12 md:col-8">
+                    @for(doc of tender.requestedDocuments; track doc) {
+                        <div class="field grid">
+                            <label class="col-12 mb-2 md:col-3 md:mb-0">{{doc.name}}</label>
+                            @if(doc.format==='note') {
+                                <textarea type="text" rows="8"
+                         class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+                        </textarea>
                             }
-                              
-                        </tbody>
-                    </table>
-              
-                }
+                            @else {
+                                <input type="file" id="teklif-file-upload" (change)="onFileChange($event)" multiple="true">
+                    <label for="teklif-file-upload" class="custom-file-upload bg-primary border-round p-2">Dosya Seç
+                    </label>
+                    
+                            }
+                        </div>
+                    }
+                </div>
+                <div>
+                    @if(selectedFiles.length>0) {
+                        <table class="m-3">
+                            <thead>
+                                <tr>
+                                    <th>Dosya Adı</th>
+                                    <th>Boyut</th>
+                                    <th>Sil</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (file of selectedFiles; track file) {
+                                    <tr>
+                                        <td>{{ file.name }}</td>
+                                        <td>{{ file.size }} bytes</td>
+                                        <td>    
+                                            <p-button icon="pi pi-trash" severity="danger" class="mx-3"></p-button>
+                                        </td>
+                                    </tr>
+                                }
+                                  
+                            </tbody>
+                        </table>
+                  
+                    }
+            </div>
+    
+            </div>
+     
         </div>
-
-        </div>
- 
     </div>
-</div>
+    
+}
 <div class="flex justify-content-end mt-5">
     <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-5" [routerLink]="['/teklifci/teklif-olustur/kesif']"></p-button>
 </div>

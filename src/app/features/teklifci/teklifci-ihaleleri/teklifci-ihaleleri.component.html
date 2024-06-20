@@ -24,11 +24,11 @@
                     <td>{{ tender.owner_id }}</td>
                     <td>{{ tender.description }}</td>
                     <td>{{ tender.created_at }}</td>
-                    <td>{{ tender.isCompleted }}</td>
+                    <td>{{ tender.isCompleted ? 'Tamamlandı': 'Devam Ediyor' }}</td>
                     <td>{{ tender.cost }}</td>
                     <td>{{ tender.currency }}</td>
                     <td>
-                        <button type="button" pButton pRipple icon="pi pi-edit" (click)="teklifVer(tender.id)">Teklif Ver</button>
+                        <button type="button" pButton pRipple icon="pi pi-edit" (click)="createBid(tender.id)">Teklif Ver</button>
                     </td>
                 </tr>
             </ng-template>
