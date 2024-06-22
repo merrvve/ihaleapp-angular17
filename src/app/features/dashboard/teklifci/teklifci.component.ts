@@ -7,6 +7,8 @@ import { Teklif } from '../../../models/teklif.interface';
 import { RouterLink } from '@angular/router';
 import { Tender } from '../../../models/tender';
 import { TenderService } from '../../../services/tender.service';
+import { TenderBid } from '../../../models/tender-bid';
+import { BidService } from '../../../services/bid.service';
 
 @Component({
   selector: 'app-teklifci',
@@ -18,15 +20,16 @@ import { TenderService } from '../../../services/tender.service';
 export class TeklifciComponent implements OnInit {
 
   tenders$! : Observable<Tender[]>;
-  teklifler$! : Observable<Teklif[]>;
+  tenderBids$!: Observable<TenderBid[]>;
   
   ihaleler! : Ihale[];
   constructor(private teklifciService: TeklifciService,
-    private tenderService: TenderService
+    private tenderService: TenderService,
+    private bidService: BidService
   ) {}
   ngOnInit(): void {
       this.tenders$ = this.tenderService.getTendersByBidderId();
-      this.teklifler$ = this.teklifciService.getTeklifciTeklifleri();
+      this.tenderBids$ = this.bidService.getBidsByBidderId();
       
   }
 

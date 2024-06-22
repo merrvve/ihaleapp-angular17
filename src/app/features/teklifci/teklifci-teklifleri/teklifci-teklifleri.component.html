@@ -1,10 +1,10 @@
-@if(teklifler$ | async; as teklifler) {
+@if(bids$ | async; as bids) {
     <div class="container mb-5">
         <h2 class="p-2">İhalelerim</h2>
     </div>
     
     <div class="card">
-        <p-table [value]="teklifler" [tableStyle]="{ 'min-width': '50rem' }">
+        <p-table [value]="bids" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Id</th>
@@ -14,14 +14,14 @@
                     <th style="width: 5rem">Detay</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-teklif>
+            <ng-template pTemplate="body" let-bid>
                 <tr>
-                    <td>{{ teklif.id }}</td>
-                    <td>{{ teklif.ihale }}</td>
-                    <td>{{ teklif.teklif_tarihi }}</td>
-                    <td>{{ teklif.toplam_bedel }}</td>
+                    <td>{{ bid.id }}</td>
+                    <td>{{ bid.bidder_id }}</td>
+                    <td>{{ bid.created_at }}</td>
+                    <td>{{ bid.total_price }}</td>
                     <td>
-                        <button type="button" pButton pRipple icon="pi pi-file" (click)="selectTeklif(teklif)"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file" (click)="selectTeklif(bid)"></button>
                     </td>
                 </tr>
             </ng-template>

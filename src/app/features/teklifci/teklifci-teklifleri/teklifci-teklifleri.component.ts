@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Teklif } from '../../../models/teklif.interface';
-import { TeklifciService } from '../../../services/teklifci.service';
 import { AsyncPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { TenderBid } from '../../../models/tender-bid';
+import { BidService } from '../../../services/bid.service';
 
 @Component({
   selector: 'app-teklifci-teklifleri',
@@ -14,12 +14,12 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './teklifci-teklifleri.component.scss'
 })
 export class TeklifciTeklifleriComponent implements OnInit{
-  teklifler$!: Observable<Teklif[]>
-  constructor(private teklifciService: TeklifciService) {}
+  bids$!: Observable<TenderBid[]|null>
+  constructor(private bidService: BidService) {}
   ngOnInit(): void {
-    this.teklifler$ = this.teklifciService.getTeklifciTeklifleri();
+    this.bids$ = this.bidService.bids$;
   }
-  selectTeklif(teklif: Teklif) {
+  selectTeklif(teklif: TenderBid) {
     console.log(teklif)
   }
 }
