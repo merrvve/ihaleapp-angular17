@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MenuItem, Message, MessageService, TreeNode } from 'primeng/api';
 import { TablodataService } from '../../services/tablodata.service';
 import { Column } from '../../models/column.interface';
@@ -45,6 +45,9 @@ import { IhaleService } from '../../services/ihale.service';
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit {
+
+  @Input() currency!:string;
+
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
 
@@ -321,6 +324,9 @@ export class TableComponent implements OnInit {
   }
 
   onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
+    if(!event) {
+      return;
+    }
     let col = this.cols.find((x) => x.field == field);
     const isMiktar: boolean = field.toLowerCase() == 'miktar';
     if(rowNode.children) {
@@ -333,7 +339,7 @@ export class TableComponent implements OnInit {
 
     if (col) {
       if (col.relatedField || isMiktar) {
-        if (col.relatedField) {
+        if (col.relatedField && rowData['Miktar']) {
           rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
           const birimCols = this.cols.filter((x) => x.isBirim == true);
           let birimToplam = 0;
@@ -341,9 +347,12 @@ export class TableComponent implements OnInit {
             for (let i = 0; i < birimCols.length; i++) {
               // birimToplam+= Number(rowData[birimCols[i].field])
               const name = birimCols[i].field;
+              
               birimToplam += rowData[name];
             }
-            rowData['Toplam Birim Fiyat'] = birimToplam;
+            if(birimToplam) {
+              rowData['Toplam Birim Fiyat'] = birimToplam;
+            }
           }
         } else if (isMiktar) {
           const birimCols = this.cols.filter((x) => x.isBirim == true);
@@ -354,24 +363,29 @@ export class TableComponent implements OnInit {
               const name = birimCols[i].field;
               birimToplam += rowData[name];
               const rf = birimCols[i].relatedField;
-              if (rf) {
+              if (rf && rowData[birimCols[i].field] && event) {
                 rowData[rf] =
                   Number(rowData[birimCols[i].field]) * Number(event);
               }
             }
-            rowData['Toplam Birim Fiyat'] = birimToplam;
+            if(birimToplam) {
+              rowData['Toplam Birim Fiyat'] = birimToplam;
+            }
           }
         }
         // Bu satırdaki toplamı hesapla
-        const toplamCols = this.cols.filter((x) => x.isToplam == true);
+        let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.field!=='Toplam'));
         let toplam = 0;
+        console.log(toplamCols,"here")
         if (toplamCols) {
           for (let i = 0; i < toplamCols.length; i++) {
             const name = toplamCols[i].field;
             console.log(name, rowData, rowData[name]);
             toplam += Number(rowData[name]);
           }
-          rowData['Toplam'] = toplam;
+          if(toplam) {
+            rowData['Toplam'] = toplam;
+          }
 
           if (rowNode.parent.children) {
             let allToplam = 0;

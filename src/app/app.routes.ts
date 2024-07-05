@@ -10,7 +10,7 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/ihale/ihale.routes').then((mod) => mod.IHALE_ROUTES),
     data: { role: 'TENDERER' },
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
   },
   {
     path: 'teklif',
@@ -26,7 +26,7 @@ export const routes: Routes = [
         (mod) => mod.TEKLIFCI_ROUTES,
       ),
     data: { role: 'BIDDER' },
-    canActivate: [authGuard],
+    //canActivate: [authGuard],
   },
   {
     path: 'isveren',

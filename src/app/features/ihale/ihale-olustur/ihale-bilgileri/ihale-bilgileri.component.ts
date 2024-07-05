@@ -42,7 +42,7 @@ export class IhaleBilgileriComponent implements OnInit {
   firstDate: string | undefined;
   secondDate: Date | undefined;
   ihale!: Ihale;
-  subscription1!: Subscription;
+  
   tender$!: Observable<Tender>;
 
   constructor(private ihaleService: IhaleService,
@@ -50,10 +50,7 @@ export class IhaleBilgileriComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.selectedFiles = this.ihaleService.files;
-    this.subscription1 = this.ihaleService.ihale$.subscribe({
-      next: (result) => (this.ihale = result),
-      error: (error) => console.log(error),
-    });
+    
     this.tender$ = this.tenderService.currentTender$;
   }
 
@@ -67,6 +64,5 @@ export class IhaleBilgileriComponent implements OnInit {
 
   ngOnDestroy() {
     this.ihaleService.files = this.selectedFiles;
-    this.subscription1.unsubscribe();
   }
 }

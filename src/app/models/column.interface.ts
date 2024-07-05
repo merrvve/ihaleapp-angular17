@@ -6,4 +6,5 @@ export interface Column {
   relatedField?: string;
   isBirim: boolean;
   isToplam: boolean;
+  isBirimToplam: boolean;
 }

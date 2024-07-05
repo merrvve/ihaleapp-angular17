@@ -6,3 +6,11 @@
  .p-steps .p-steps-item .p-menuitem-link {
      background-color: var(--surface-ground);
  }
+
+ .sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000; 
+  }
+  

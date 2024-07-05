@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 export class TablodataService {
   public ornekData: any[][] = [
     [
-      'key',
+      'Poz No',
       'İş Tanımı',
       'Marka',
       'Miktar',
@@ -64,23 +64,25 @@ export class TablodataService {
       let editable = i === 0 ? false : true;
       let nf = false;
       let isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam');
+      let isBirimToplam = ornekData[0][i].toLocaleLowerCase().includes('birim') && isToplam;
       if (ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam) {
         nf = true;
       }
       editable = isToplam ? false : editable;
       //birim toplamı diğer toplamlardan ayır
-      isToplam = ornekData[0][i] === 'Toplam Birim Fiyat' ? false : isToplam;
+      //isToplam = ornekData[0][i] === 'Toplam Birim Fiyat' ? false : isToplam;
       //tüm toplamı diğerlerinden ayır
-      isToplam = ornekData[0][i] === 'Toplam' ? false : isToplam;
+      //isToplam = ornekData[0][i] === 'Toplam' ? false : isToplam;
 
       console.log(ornekData[0][i], isToplam);
 
       cols.push({
-        field: ornekData[0][i],
+        field: i===0 ? 'key' : ornekData[0][i],
         header: ornekData[0][i],
         editable: editable,
         numberField: nf,
         isBirim: false,
+        isBirimToplam: isBirimToplam,
         isToplam: isToplam,
       });
     }
@@ -222,6 +224,7 @@ export class TablodataService {
       numberField: false,
       isBirim: false,
       isToplam: false,
+      isBirimToplam: false
     });
     this._colsSubject.next(columns);
   }
@@ -238,6 +241,7 @@ export class TablodataService {
       relatedField: toplamName,
       isBirim: true,
       isToplam: false,
+      isBirimToplam: false
     });
 
     columns.splice(columns.length - 1, 0, {
@@ -247,6 +251,7 @@ export class TablodataService {
       numberField: true,
       isBirim: false,
       isToplam: true,
+      isBirimToplam: false
     });
 
     this._colsSubject.next(columns);
@@ -316,7 +321,6 @@ export class TablodataService {
         children: [],
         expanded: true,
       };
-      console.log(position, newNode);
       node.parent.children.splice(position + 1, 0, newNode);
 
       for (let i = position + 2; i < node.parent.children.length; i++) {

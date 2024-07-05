@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="container mt-5 sticky">
     <p-toast></p-toast>
    
     <!-- Araçlar -->
@@ -95,6 +95,9 @@
             @for (col of columns; track col) {
               <th ttReorderableColumn [ttSortableColumn]="col.field">
                 {{ col.header }}
+                @if(col.isToplam || col.isBirim) {
+                    {{currency}} 
+                  }
                 <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
               </th>
             }
