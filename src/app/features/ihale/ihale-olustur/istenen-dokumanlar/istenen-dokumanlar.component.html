@@ -47,18 +47,10 @@
             <div class="field">
                 @if(requestedDocs.length>0) {
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Evrak Adı</th>
-                                <th>Biçim</th>
-                                <th>Sil</th>
-                            </tr>
-                        </thead>
                         <tbody>
                             @for(evrak of requestedDocs; track evrak;) {
                                 <tr>
                                     <td>{{evrak.name}}</td>
-                                    <td>{{evrak.format}}</td>
                                     <p-button size="small" pRipple icon="pi pi-trash" severity="danger" class="m-1" (click)="deleteDoc(evrak.id)"></p-button>
     
                                 </tr>

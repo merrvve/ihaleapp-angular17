@@ -69,12 +69,7 @@ export class TablodataService {
         nf = true;
       }
       editable = isToplam ? false : editable;
-      //birim toplamı diğer toplamlardan ayır
-      //isToplam = ornekData[0][i] === 'Toplam Birim Fiyat' ? false : isToplam;
-      //tüm toplamı diğerlerinden ayır
-      //isToplam = ornekData[0][i] === 'Toplam' ? false : isToplam;
-
-      console.log(ornekData[0][i], isToplam);
+      
 
       cols.push({
         field: i===0 ? 'key' : ornekData[0][i],

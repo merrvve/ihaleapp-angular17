@@ -6,7 +6,11 @@
 <div class="card">
     @if(bidders$|async; as bidders) {
         <p-pickList [source]="bidders" [target]="selectedBidders" sourceHeader="Tüm Teklifçiler" targetHeader="Seçilenler" [dragdrop]="true" [responsive]="true"
-        [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }" breakpoint="1400px">
+        [sourceStyle]="{ height: '30rem' }" [targetStyle]="{ height: '30rem' }"
+        filterBy="name" 
+    sourceFilterPlaceholder="İsimle Arayın" 
+    targetFilterPlaceholder="İsimle Arayın" 
+        breakpoint="1400px">
 
         <ng-template let-bidder pTemplate="item">
             <div class="flex flex-wrap p-2 align-items-center gap-3">

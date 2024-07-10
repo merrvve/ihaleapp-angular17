@@ -416,10 +416,11 @@ export class TableComponent implements OnInit {
     console.log(this.selectedFile);
   }
 
-  importExcel() {
-    let excelData;
+  importExcel() {   
     this.excelService.importExcelFile(this.selectedFile).then((data) => {
-      (excelData = data), this.dataService.loadData(excelData);
+      console.log(data)
+      this.dataService.loadData(data);
+      this.selectedColumns = this.cols;
     });
   }
 
