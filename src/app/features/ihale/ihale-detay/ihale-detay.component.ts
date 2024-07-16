@@ -20,84 +20,14 @@ import { IhaleOzetComponent } from "../ihale-ozet/ihale-ozet.component";
     imports: [AsyncPipe, LoadingSpinnerComponent, TableModule, IhaleOzetComponent]
 })
 export class IhaleDetayComponent implements OnInit {
-  ihale: any = {}
-  ihale$!: Observable<Ihale>;
+  tenderId!: string;
   tender$!: Observable<Tender|null>;
-  menuItems: MenuItem[] =  [
-    
-    {
-      label: 'İhale Dosyası',
-      icon: 'pi pi-fw pi-file mr-2',
-      items: [
-        {
-          label: 'Zeyilname (Revizyonlar)',
-          icon: 'pi pi-fw pi-plus mr-2',
-          
-            
-          items: [
-                {
-                  label: 'Zeyilname 1',
-                  icon: 'pi pi-fw pi-users mr-2',
-                  routerLink: ['teklif/teklifci/listele'],
-                },
-                {
-                  label: 'Zeyilname 2',
-                  icon: 'pi pi-fw pi-verified mr-2',
-                  routerLink: ['teklif/firmalar'],
-                },
-              ],
-            
-    
-          
-        },
-      ],
-    },
-    {
-      label: 'Fiyat Karşılaştırma',
-      icon: 'pi pi-fw pi-user',
-      items: [
-        {
-          label: 'Bütçe Fiyatı',
-          icon: 'pi pi-fw pi-user-plus mr-2',
-          routerLink: ['teklif/teklifci/ekle'],
-        },
-        {
-          label: 'Yeni Tablo',
-          icon: 'pi pi-fw pi-user-plus mr-2',
-          routerLink: ['teklif/teklifci/ekle'],
-        },
-        {
-          label: 'Tablolar',
-          icon: 'pi pi-fw pi-user-plus mr-2',
-          routerLink: ['teklif/teklifci/ekle'],
-        },
-      ],
-    },
-
-    {
-      label: 'Firma Raporları',
-      icon: 'pi pi-fw pi-power-off',
-      // command: (event: any) => {
-      //   this.auth.logout();
-      // },
-    },
-    {
-      label: 'Soru Cevap',
-      icon: 'pi pi-fw pi-user-plus mr-2',
-      routerLink: ['teklif/teklifci/ekle'],
-    },
-    {
-      label: 'Toplantılar',
-      icon: 'pi pi-fw pi-user-plus mr-2',
-      routerLink: ['teklif/teklifci/ekle'],
-    },
-  ];
+  menuItems: MenuItem[] =[];
  
 
 
   constructor(
     private route: ActivatedRoute,
-    private ihaleService: IhaleService,
     private menuService: MenuService, 
     private tenderService: TenderService
   ) {}
@@ -106,9 +36,92 @@ export class IhaleDetayComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id'); 
       if(id) {
+        this.tenderId=id;
         this.tender$ = this.tenderService.getTenderById(id);
+
+        this.menuItems =  [
+    
+          {
+            label: 'İhale Dosyası',
+            icon: 'pi pi-fw pi-file mr-2',
+            items: [
+              {
+                label: 'Zeyilname (Revizyonlar)',
+                icon: 'pi pi-fw pi-plus mr-2',
+                
+                  
+                items: [
+                      {
+                        label: 'Zeyilname 1',
+                        icon: 'pi pi-fw pi-users mr-2',
+                        routerLink: ['teklif/teklifci/listele'],
+                      },
+                      {
+                        label: 'Zeyilname 2',
+                        icon: 'pi pi-fw pi-verified mr-2',
+                        routerLink: ['teklif/firmalar'],
+                      },
+                    ],
+                  
+          
+                
+              },
+            ],
+          },
+          {
+            label: 'Teklifler',
+            icon: 'pi pi-fw pi-file mr-2',
+            items: [{
+              label: 'Listele',
+              icon: 'pi pi-fw pi-file mr-2',
+              routerLink: [`ihale/ihale/${this.tenderId || '1'}/teklifler`],
+            }]
+            
+          },
+          {
+            label: 'Fiyat Karşılaştırma',
+            icon: 'pi pi-fw pi-user',
+            items: [
+              {
+                label: 'Bütçe Fiyatı',
+                icon: 'pi pi-fw pi-user-plus mr-2',
+                routerLink: ['teklif/teklifci/ekle'],
+              },
+              {
+                label: 'Yeni Tablo',
+                icon: 'pi pi-fw pi-user-plus mr-2',
+                routerLink: ['teklif/teklifci/ekle'],
+              },
+              {
+                label: 'Tablolar',
+                icon: 'pi pi-fw pi-user-plus mr-2',
+                routerLink: ['teklif/teklifci/ekle'],
+              },
+            ],
+          },
+      
+          {
+            label: 'Firma Raporları',
+            icon: 'pi pi-fw pi-power-off',
+            
+          },
+          {
+            label: 'Soru Cevap',
+            icon: 'pi pi-fw pi-user-plus mr-2',
+            routerLink: ['teklif/teklifci/ekle'],
+          },
+          {
+            label: 'Toplantılar',
+            icon: 'pi pi-fw pi-user-plus mr-2',
+            routerLink: ['teklif/teklifci/ekle'],
+          },
+        ];
       }
   });
     this.menuService.setItems(this.menuItems);
+  }
+
+  ngOnDestroy() {
+    this.menuService.setItems([]);
   }
 }

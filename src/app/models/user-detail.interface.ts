@@ -1,3 +1,5 @@
+import { Company } from "./company.interface";
+
 export interface UserDetail {
     role: "TENDERER" | "BIDDER" | "ADMIN" |undefined;
     uid: string;
@@ -8,9 +10,4 @@ export interface UserDetail {
     company?: Company;
 }
 
-export interface Company {
-    id?: string;
-    name: string;
-    taxNo: string; 
-    category: string;
-}
+

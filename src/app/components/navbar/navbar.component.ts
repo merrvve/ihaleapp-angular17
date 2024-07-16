@@ -27,8 +27,6 @@ export class NavbarComponent implements OnInit {
     this.auth.userDetails$.subscribe({
       next: (result) => {
         this.user=result;
-        console.log(result)
-      
     }});
 
     this.items = [
@@ -62,17 +60,9 @@ export class NavbarComponent implements OnInit {
         label: 'Firmalar / Teklifçiler',
         icon: 'pi pi-fw pi-user',
         items: [
-          {
-            label: 'Yeni Teklifçi',
-            icon: 'pi pi-fw pi-user-plus mr-2',
-            routerLink: ['teklif/teklifci/ekle'],
-          },
-          {
-            label: 'Listele',
-            icon: 'pi pi-fw pi-list mr-2',
-            items: [
+      
               {
-                label: 'Tüm Teklifçiler',
+                label: 'Firma Yetkilileri',
                 icon: 'pi pi-fw pi-users mr-2',
                 routerLink: ['teklif/teklifci/listele'],
               },
@@ -80,9 +70,9 @@ export class NavbarComponent implements OnInit {
                 label: 'Tüm Firmalar',
                 icon: 'pi pi-fw pi-verified mr-2',
                 routerLink: ['teklif/firmalar'],
-              },
-            ],
-          },
+              }
+            
+         
         ],
       },
 

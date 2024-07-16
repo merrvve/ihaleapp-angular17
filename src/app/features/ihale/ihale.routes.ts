@@ -6,6 +6,7 @@ import { IhaleBilgileriComponent } from './ihale-olustur/ihale-bilgileri/ihale-b
 import { IhaleListeleComponent } from './ihale-listele/ihale-listele.component';
 import { IhaleDetayComponent } from './ihale-detay/ihale-detay.component';
 import { TamamlaComponent } from './ihale-olustur/tamamla/tamamla.component';
+import { IhaleTeklifleriComponent } from './ihale-detay/ihale-teklifleri/ihale-teklifleri.component';
 
 export const IHALE_ROUTES: Route[] = [
   {
@@ -20,6 +21,7 @@ export const IHALE_ROUTES: Route[] = [
     ],
   },
   { path: 'ihale/:id', component: IhaleDetayComponent },
+  { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },
   { path: 'listele', component: IhaleListeleComponent },
   { path: '', redirectTo: 'listele', pathMatch: 'full' },
       

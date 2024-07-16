@@ -2,34 +2,35 @@
     <h2 class="p-2">Tüm Teklifçiler (Firma Yetkilileri)</h2>
 </div>
 
-
-<div class="card">
+@if(bidders$ | async; as bidders) {
+    <div class="card">
     
-<p-table [value]="teklifciler" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Id</th>
-            <th>Firma</th>
-            <th>Yetkili Adı</th>
-            <th>Yetkili Soyadı</th>
-            <th>Telefon</th>
-            <th>Email</th>
-            <th>İşlemler</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-teklifci>
-        <tr>
-            <td>{{teklifci.id}}</td>
-            <td>{{teklifci.firma}}</td>
-            <td>{{teklifci.yetkili_adi}}</td>
-            <td>{{teklifci.yetkili_soyadi}}</td>
-            <td>{{teklifci.telefon_numarasi}}</td>
-            <td>{{teklifci.email}}</td>
-            <td>
-                <p-button label="Detay" icon="pi pi-file" severity="primary" ></p-button>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
-
-</div>
+        <p-table [value]="bidders" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Id</th>
+                    <th>Firma</th>
+                    <th>Yetkili Adı</th>
+                    
+                    <th>Telefon</th>
+                    <th>Email</th>
+                    <th>Detaylar</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-teklifci>
+                <tr>
+                    <td>{{teklifci.uid}}</td>
+                    <td>{{teklifci?.companyId}}</td>
+                    <td>{{teklifci.displayName}}</td>
+                   
+                    <td>{{teklifci.phoneNumber}}</td>
+                    <td>{{teklifci.email}}</td>
+                    <td>
+                        <p-button label="Detay" icon="pi pi-file" severity="primary" ></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        
+        </div>
+}
