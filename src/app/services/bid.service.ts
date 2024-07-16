@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { TenderBid } from '../models/tender-bid';
-import { CollectionReference, Firestore, addDoc, collection, doc, getDoc, getDocs, query, runTransaction, where } from '@angular/fire/firestore';
+import { CollectionReference, Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, query, runTransaction, where } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, map } from 'rxjs';
 import { Tender } from '../models/tender';
 import { TablodataService } from './tablodata.service';
@@ -34,12 +34,11 @@ export class BidService {
     let bidData: TenderBid = {
       bidder_id: this.authService.currentUser.uid,
       created_at: new Date().toDateString(),
+      company_id: this.authService._userDetails.value?.companyId,
       total_price: 0,
       discovery_data: data
     }
-    console.log(tenderId)
       const tenderRef = doc(this.firestore, "tenders", tenderId);
-      console.log(tenderRef)
       const colRef = collection(tenderRef, 'bids');
      // const tenderDoc = await transaction.get(tenderRef); // Get tender document
    
@@ -84,5 +83,9 @@ export class BidService {
     );
   }
   
-  
+  getBidsByTenderId(tenderId: string): Observable<TenderBid[]> {
+    const bidsRef = collection(this.firestore, "tenders", tenderId, 'bids');
+    const bidsQuery = query(bidsRef);
+    return collectionData(bidsQuery, { idField: 'id' }) as Observable<TenderBid[]>;
+  }
 }

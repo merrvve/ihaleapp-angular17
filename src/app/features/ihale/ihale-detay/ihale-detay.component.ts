@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IhaleService } from '../../../services/ihale.service';
 import { Ihale } from '../../../models/ihale.interface';
 import { Observable } from 'rxjs';
@@ -11,25 +11,28 @@ import { MenuService } from '../../../services/menu.service';
 import { TenderService } from '../../../services/tender.service';
 import { Tender } from '../../../models/tender';
 import { IhaleOzetComponent } from "../ihale-ozet/ihale-ozet.component";
+import { BidService } from '../../../services/bid.service';
+import { TenderBid } from '../../../models/tender-bid';
 
 @Component({
     selector: 'app-ihale-detay',
     standalone: true,
     templateUrl: './ihale-detay.component.html',
     styleUrl: './ihale-detay.component.scss',
-    imports: [AsyncPipe, LoadingSpinnerComponent, TableModule, IhaleOzetComponent]
+    imports: [AsyncPipe, LoadingSpinnerComponent, TableModule, IhaleOzetComponent, RouterLink]
 })
 export class IhaleDetayComponent implements OnInit {
   tenderId!: string;
   tender$!: Observable<Tender|null>;
   menuItems: MenuItem[] =[];
- 
+  bids$!: Observable<TenderBid[]>;
 
 
   constructor(
     private route: ActivatedRoute,
     private menuService: MenuService, 
-    private tenderService: TenderService
+    private tenderService: TenderService,
+    private bidService: BidService
   ) {}
 
   ngOnInit() {
@@ -38,7 +41,7 @@ export class IhaleDetayComponent implements OnInit {
       if(id) {
         this.tenderId=id;
         this.tender$ = this.tenderService.getTenderById(id);
-
+        this.bids$ = this.bidService.getBidsByTenderId(id);
         this.menuItems =  [
     
           {

@@ -76,7 +76,9 @@ export class TenderService {
     return from(getDoc(tenderDocRef)).pipe(
       map((docSnapshot) => {
         if (docSnapshot.exists()) {
-          return docSnapshot.data() as Tender;
+          let tenderData =docSnapshot.data() as Tender;
+          tenderData.id=docSnapshot.id;
+          return tenderData;
         } else {
           return null;
         }

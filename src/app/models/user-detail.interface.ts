@@ -7,7 +7,7 @@ export interface UserDetail {
     email: string;
     phoneNumber: string;
     photoUrl: string;
-    company?: Company;
+    companyId?: string;
 }
 
 
