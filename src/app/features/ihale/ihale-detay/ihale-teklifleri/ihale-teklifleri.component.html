@@ -27,7 +27,7 @@
                     <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
                     <th>Id</th>
                     <th pSortableColumn="created_at">Tarih <p-sortIcon field="created_at" /></th>
-                    <th pSortableColumn="company_id">Firma <p-sortIcon field="company_id" /></th>                
+                    <th pSortableColumn="company_name">Firma <p-sortIcon field="company_name" /></th>                
                     <th pSortableColumn="bidder_id">Firma Yetkilisi <p-sortIcon field="bidder_id" /></th>
                     <th pSortableColumn="total_price">Toplam Bedel <p-sortIcon field="total_price" /></th>
                     <th>Detay</th>
@@ -51,7 +51,7 @@
                     <th>
                         <p-columnFilter 
                             type="text"
-                            field="company_id" 
+                            field="company_name" 
                             placeholder="Filtrele" 
                             ariaLabel="Filter Name" />
                     </th>
@@ -79,7 +79,7 @@
                     </td>
                     <td>{{bid.id}}</td>
                     <td>{{bid.created_at}}</td>
-                    <td>{{bid?.company_id}}</td>
+                    <td>{{bid?.company_name}}</td>
                     <td>{{bid.bidder_id}}</td>
                     <td>{{bid.total_price}}</td>
                     

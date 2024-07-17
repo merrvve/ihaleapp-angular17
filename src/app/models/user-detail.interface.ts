@@ -8,6 +8,7 @@ export interface UserDetail {
     phoneNumber: string;
     photoUrl: string;
     companyId?: string;
+    companyName?: string;
 }
 
 

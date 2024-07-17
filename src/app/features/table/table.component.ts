@@ -19,7 +19,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { Subscription } from 'rxjs';
 import { XlsxService } from '../../services/xlsx.service';
-import { IhaleService } from '../../services/ihale.service';
 
 @Component({
   selector: 'app-table',
@@ -89,11 +88,13 @@ export class TableComponent implements OnInit {
   ngOnInit(): void {
     // verileri yükle
     this.subscription = this.dataService.cols$.subscribe({
-      next: (v) => (this.cols = v),
+      next: (v) => {(this.cols = v);
+        this.selectedColumns = this.cols;
+      },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
     });
-    this.selectedColumns = this.cols;
+   
     this.subscription2 = this.dataService.datatree$.subscribe({
       next: (v) => (this.files = v),
       error: (e) => console.error(e),
@@ -235,9 +236,12 @@ export class TableComponent implements OnInit {
         if (selectedNode.parent.children) {
           let allToplam = 0;
           for (const child of selectedNode.parent.children) {
-            allToplam += child.data.Toplam;
+            if(child.data['Toplam']) {
+              allToplam += child.data['Toplam'];
+            }
+            
           }
-          selectedNode.parent.data.Toplam = allToplam;
+          selectedNode.parent.data['Toplam'] = allToplam;
         }
       }
       this.updateView();
@@ -324,70 +328,40 @@ export class TableComponent implements OnInit {
   }
 
   onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
-    if(!event) {
+    if(event===undefined) {
+      return;
+    }
+    
+    if(rowNode.node?.children.length>0) {
+      console.log("başlık")
+      if(field!=="İş Tanımı") {
+        rowData[field]=undefined;
+      }
+      
       return;
     }
     let col = this.cols.find((x) => x.field == field);
     const isMiktar: boolean = field.toLowerCase() == 'miktar';
-    if(rowNode.children) {
-      if(rowNode.children.length>0) {
-        return;
-      }  
-    }
+    
     
     rowData[field] = event;
 
     if (col) {
-      if (col.relatedField || isMiktar) {
-        if (col.relatedField && rowData['Miktar']) {
-          rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
-          const birimCols = this.cols.filter((x) => x.isBirim == true);
-          let birimToplam = 0;
-          if (birimCols) {
-            for (let i = 0; i < birimCols.length; i++) {
-              // birimToplam+= Number(rowData[birimCols[i].field])
-              const name = birimCols[i].field;
-              
-              birimToplam += rowData[name];
-            }
-            if(birimToplam) {
-              rowData['Toplam Birim Fiyat'] = birimToplam;
-            }
-          }
-        } else if (isMiktar) {
-          const birimCols = this.cols.filter((x) => x.isBirim == true);
-          let birimToplam = 0;
-          if (birimCols) {
-            for (let i = 0; i < birimCols.length; i++) {
-              // birimToplam+= Number(rowData[birimCols[i].field])
-              const name = birimCols[i].field;
-              birimToplam += rowData[name];
-              const rf = birimCols[i].relatedField;
-              if (rf && rowData[birimCols[i].field] && event) {
-                rowData[rf] =
-                  Number(rowData[birimCols[i].field]) * Number(event);
-              }
-            }
-            if(birimToplam) {
-              rowData['Toplam Birim Fiyat'] = birimToplam;
-            }
-          }
-        }
+      const updateTotal = ()=> {
         // Bu satırdaki toplamı hesapla
         let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.field!=='Toplam'));
         let toplam = 0;
-        console.log(toplamCols,"here")
         if (toplamCols) {
           for (let i = 0; i < toplamCols.length; i++) {
             const name = toplamCols[i].field;
-            console.log(name, rowData, rowData[name]);
+            
             toplam += Number(rowData[name]);
           }
-          if(toplam) {
+          if(toplam!==undefined) {
             rowData['Toplam'] = toplam;
           }
 
-          if (rowNode.parent.children) {
+          if (rowNode.parent?.children) {
             let allToplam = 0;
             for (const child of rowNode.parent.children) {
               if(child.data.Toplam) {
@@ -397,6 +371,52 @@ export class TableComponent implements OnInit {
             rowNode.parent.data.Toplam = allToplam;
           }
         }
+      }
+      if (isMiktar) {
+        const birimCols = this.cols.filter((x) => x.isBirim == true);
+        let birimToplam = 0;
+        if (birimCols) {
+          for (let i = 0; i < birimCols.length; i++) {
+            const rf = birimCols[i].relatedField;
+            console.log(rf,rowData[birimCols[i].field],rowData,event, "log")
+            if (rf!==undefined && rowData[birimCols[i].field]!==undefined && event!==undefined) {
+              rowData[rf] =
+                Number(rowData[birimCols[i].field]) * Number(event);
+            }
+            const name = birimCols[i].field;
+            birimToplam += rowData[name];
+            
+          }
+          if(birimToplam) {
+            rowData['Toplam Birim Fiyat'] = birimToplam;
+          }
+          updateTotal();
+        }
+      }
+      else {
+        if (col.relatedField!==undefined && rowData['Miktar']!==null) {
+          rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
+          const birimCols = this.cols.filter((x) => x.isBirim == true);
+          let birimToplam = 0;
+          if (birimCols) {
+            for (let i = 0; i < birimCols.length; i++) {
+              const name = birimCols[i].field;
+              
+              birimToplam += rowData[name];
+            }
+            if(birimToplam!==undefined) {
+              rowData['Toplam Birim Fiyat'] = birimToplam;
+            }
+            updateTotal();
+          }
+        } 
+        
+        
+        
+        
+        
+        
+        
       }
     }
   }

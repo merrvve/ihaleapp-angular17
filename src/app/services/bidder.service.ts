@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, onSnapshot, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, doc, getDoc, onSnapshot, query, where } from '@angular/fire/firestore';
 import { UserDetail } from '../models/user-detail.interface';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
@@ -25,6 +25,21 @@ export class BidderService {
     })
     return this.biddersSubject.asObservable();
     
+  }
+
+  public getBidderDetails(uid: string) {
+    const userProfileDocRef = doc(this.firestore, 'users', uid);
+    getDoc(userProfileDocRef).then((documentSnapshot) => {
+      if (documentSnapshot) {
+        const bidderDetail = documentSnapshot.data() as UserDetail;
+        return bidderDetail;
+      } else {
+        return null;
+      }
+    }).catch((error) => {
+      console.log(error);
+    });
+   
   }
 
   

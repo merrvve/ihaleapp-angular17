@@ -4,6 +4,7 @@ export interface TenderBid {
     id?: string;
     bidder_id: string;
     company_id?: string;
+    company_name?: string;
     created_at: string;
     requestedDocuments?: RequestedDocument[]; // Optional
     discovery_data?: any;

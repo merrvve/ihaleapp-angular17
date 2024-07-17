@@ -16,13 +16,13 @@ export class FirebaseAuthService {
   private auth: Auth = inject(Auth);
   user$ = user(this.auth);
   currentUser!: User;
- // userSubscription: Subscription;
+ 
   private firestore = inject(Firestore);
 
   private _isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this._isLoggedInSubject.asObservable();
 
-  //user$!: Observable<UserDetails | null>;
+  
   _userDetails = new BehaviorSubject<UserDetail | null>(null);
   userDetails$ = this._userDetails.asObservable();
   
@@ -33,12 +33,6 @@ export class FirebaseAuthService {
     const userProfileDocRef = doc(this.firestore, 'users', uid);
     getDoc(userProfileDocRef).then((documentSnapshot) => {
       if (documentSnapshot) {
-        // const roleData = documentSnapshot.data();
-        // let currentDetail = this._userDetails.getValue();
-        // if(currentDetail && roleData) {
-        //   currentDetail.role = roleData['role'];
-        
-        // }
         this._userDetails.next(documentSnapshot.data() as UserDetail);
         console.log(this._userDetails.value, this.currentUser)
       } else {
@@ -54,7 +48,6 @@ export class FirebaseAuthService {
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password).then(
       (aUser)=> {
-        //this.currentUser=aUser.user as User;
         this.getUserInfo(aUser.user);
         this._isLoggedInSubject.next(true);      
         this.fetchUserDetails(aUser.user.uid)}
@@ -80,7 +73,7 @@ export class FirebaseAuthService {
       .then(userCredential => {
         const uid = userCredential.user?.uid;
         if (uid) {
-          // Set user role in Firestore document (optional, based on your logic)
+          // Set user role in Firestore document 
           // ...
         }
       });
@@ -99,7 +92,6 @@ export class FirebaseAuthService {
   }
 
   getUserRole(): string | undefined{
-    console.log(this._userDetails.value?.role)
     return this._userDetails.value?.role;
   }
 
@@ -110,9 +102,7 @@ export class FirebaseAuthService {
   getUser() {
     return this.currentUser;
   }
-  // ngOnDestroy() {
-  //   this.userSubscription.unsubscribe();
-  // }
+ 
 }
 
 

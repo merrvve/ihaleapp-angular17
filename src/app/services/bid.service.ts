@@ -35,6 +35,7 @@ export class BidService {
       bidder_id: this.authService.currentUser.uid,
       created_at: new Date().toDateString(),
       company_id: this.authService._userDetails.value?.companyId,
+      company_name: this.authService._userDetails.value?.companyName,
       total_price: 0,
       discovery_data: data
     }

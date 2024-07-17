@@ -65,7 +65,13 @@ export class TablodataService {
       let nf = false;
       let isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam');
       let isBirimToplam = ornekData[0][i].toLocaleLowerCase().includes('birim') && isToplam;
-      if (ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam) {
+      let isBirim = ornekData[0][i].toLocaleLowerCase().includes('birim fiyat') && !isToplam;
+      let relatedField=undefined;
+      if (isBirim) {
+        relatedField = ornekData[0][i].slice(0,-11) + "Toplam Fiyat";
+        console.log("log",relatedField)
+      }
+      if (ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam || isBirim) {
         nf = true;
       }
       editable = isToplam ? false : editable;
@@ -76,12 +82,15 @@ export class TablodataService {
         header: ornekData[0][i],
         editable: editable,
         numberField: nf,
-        isBirim: false,
+        isBirim: isBirim,
+        relatedField: relatedField,
         isBirimToplam: isBirimToplam,
         isToplam: isToplam,
       });
     }
+    console.log(cols);
     return cols;
+    
   }
 
   convertToTreeTable(data: string[][], cols?: string[]): TreeNode[] {

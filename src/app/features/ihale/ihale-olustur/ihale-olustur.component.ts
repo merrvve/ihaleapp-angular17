@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StepsModule } from 'primeng/steps';
+import { TablodataService } from '../../../services/tablodata.service';
 
 @Component({
   selector: 'app-ihale-olustur',
@@ -10,8 +11,9 @@ import { StepsModule } from 'primeng/steps';
 })
 export class IhaleOlusturComponent implements OnInit {
   steps: any[] = [];
-  constructor() {}
+  constructor(private tableService: TablodataService) {}
   ngOnInit(): void {
+    this.tableService.loadData(this.tableService.ornekData);
     this.steps = [
       {
         label: 'İhale Bilgileri',
