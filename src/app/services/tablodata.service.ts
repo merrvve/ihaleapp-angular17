@@ -22,6 +22,7 @@ export class TablodataService {
     ['1.1', '', '', '', '', '', ''],
   ];
 
+  public allTreeTotal!: number;
   public currentData: any[][] = [];
 
   birimCols = 0;
@@ -37,6 +38,7 @@ export class TablodataService {
 
   constructor() {
     this.loadData(this.ornekData);
+    this.allTreeTotal=0;
   }
 
   loadData(datalist: any[]) {

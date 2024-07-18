@@ -19,7 +19,7 @@ import { BidService } from '../../../../services/bid.service';
     imports: [TableComponent, TeklifOlusturComponent, ButtonModule, RouterLink, DialogModule, ProgressSpinnerModule, MessagesModule]
 })
 export class KesifComponent implements OnInit{
-
+  
   isLoading: boolean = false;
   isTeklifModalVisible: boolean = false;
   messages!: Message[];
@@ -70,4 +70,6 @@ export class KesifComponent implements OnInit{
       this.router.navigate(['/teklifci'])
     }
   }
+
+  
 }

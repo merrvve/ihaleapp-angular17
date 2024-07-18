@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MenuItem, Message, MessageService, TreeNode } from 'primeng/api';
 import { TablodataService } from '../../services/tablodata.service';
 import { Column } from '../../models/column.interface';
@@ -46,6 +46,8 @@ import { XlsxService } from '../../services/xlsx.service';
 export class TableComponent implements OnInit {
 
   @Input() currency!:string;
+  
+
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
 
@@ -532,7 +534,8 @@ export class TableComponent implements OnInit {
         total += node.data["Toplam Fiyat"];
       }
   }
-  this.allTreeTotal=total;
+  this.allTreeTotal = total;
+  this.dataService.allTreeTotal=total;
 
   }
 

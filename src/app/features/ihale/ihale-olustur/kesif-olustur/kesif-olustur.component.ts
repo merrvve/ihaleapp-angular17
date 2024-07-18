@@ -19,8 +19,10 @@ import { TenderService } from '../../../../services/tender.service';
 })
 export class KesifOlusturComponent implements OnInit {
   currency! :string;
+  
   constructor(private tenderService: TenderService){}
   ngOnInit(): void {
     this.currency = this.tenderService._currentTender.value.currency;
   }
+  
 }

@@ -36,7 +36,7 @@ export class BidService {
       created_at: new Date().toDateString(),
       company_id: this.authService._userDetails.value?.companyId,
       company_name: this.authService._userDetails.value?.companyName,
-      total_price: 0,
+      total_price: this.tableService.allTreeTotal,
       discovery_data: data
     }
       const tenderRef = doc(this.firestore, "tenders", tenderId);
