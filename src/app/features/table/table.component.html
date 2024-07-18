@@ -87,7 +87,7 @@
           </div>
         </div>
     <!-- Tablo -->
-    <p-treeTable [reorderableColumns]="true"  [value]="files" 
+    <p-treeTable #dataTreeTable [autoLayout]="true"  [resizableColumns]="true"  [reorderableColumns]="true"  [value]="files" columnResizeMode="expand" 
     selectionMode="checkbox" [(selection)]="selectedNodes" dataKey="key"
     [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" 
     

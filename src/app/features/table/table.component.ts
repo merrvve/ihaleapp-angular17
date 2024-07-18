@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MenuItem, Message, MessageService, TreeNode } from 'primeng/api';
 import { TablodataService } from '../../services/tablodata.service';
 import { Column } from '../../models/column.interface';
@@ -7,7 +7,7 @@ import { MenuModule } from 'primeng/menu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { TreeTableModule } from 'primeng/treetable';
+import { TreeTable, TreeTableModule } from 'primeng/treetable';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -46,7 +46,6 @@ import { XlsxService } from '../../services/xlsx.service';
 export class TableComponent implements OnInit {
 
   @Input() currency!:string;
-
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
 
@@ -193,6 +192,7 @@ export class TableComponent implements OnInit {
   addRowToNode(node: TreeNode, positionSpecified: boolean) {
     this.dataService.addRowToNode(node, positionSpecified);
     this.updateView();
+    
     this.expandAllNodes(this.files);
   }
 
@@ -360,16 +360,23 @@ export class TableComponent implements OnInit {
           if(toplam!==undefined) {
             rowData['Toplam'] = toplam;
           }
-
-          if (rowNode.parent?.children) {
-            let allToplam = 0;
-            for (const child of rowNode.parent.children) {
-              if(child.data.Toplam) {
-                allToplam += child.data.Toplam;
+          // Ana toplamı güncelle
+          const updateAllTotal = (rowNode:any)=> {
+            if (rowNode.parent?.children) {
+              let allToplam = 0;
+              for (const child of rowNode.parent.children) {
+                if(child.data.Toplam) {
+                  allToplam += child.data.Toplam;
+                }
+              }
+              rowNode.parent.data.Toplam = allToplam;
+              console.log(rowNode.parent)
+              if(rowNode.parent?.parent){
+                updateAllTotal(rowNode.parent);
               }
             }
-            rowNode.parent.data.Toplam = allToplam;
           }
+          updateAllTotal(rowNode);
         }
       }
       if (isMiktar) {
