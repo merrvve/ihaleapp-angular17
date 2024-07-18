@@ -73,6 +73,7 @@ export class TableComponent implements OnInit {
   rowNum: number = 1;
   allKeys: string[] = [];
   selectedKey: string = '';
+  allTreeTotal!: number; 
 
   showDialog() {
     this.visible = true;
@@ -133,7 +134,7 @@ export class TableComponent implements OnInit {
         command: (event) => this.deleteSelectedRows(),
       },
       {
-        label: 'Seçili Satırları Koopyala',
+        label: 'Seçili Satırları Kopyala',
         icon: 'pi pi-copy',
         command: (event) => this.cutSelectedRows(true),
       },
@@ -232,18 +233,8 @@ export class TableComponent implements OnInit {
     const result = this.dataService.deleteRow(selectedNode, this.files);
     if (result) {
       //Toplamı güncelle
-      if (selectedNode.parent) {
-        if (selectedNode.parent.children) {
-          let allToplam = 0;
-          for (const child of selectedNode.parent.children) {
-            if(child.data['Toplam']) {
-              allToplam += child.data['Toplam'];
-            }
-            
-          }
-          selectedNode.parent.data['Toplam'] = allToplam;
-        }
-      }
+      this.updateRowTotal(selectedNode);
+      this.updateAllTreeTotal();
       this.updateView();
       return;
     } else {
@@ -349,7 +340,7 @@ export class TableComponent implements OnInit {
     if (col) {
       const updateTotal = ()=> {
         // Bu satırdaki toplamı hesapla
-        let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.field!=='Toplam'));
+        let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.field!=='Toplam Fiyat'));
         let toplam = 0;
         if (toplamCols) {
           for (let i = 0; i < toplamCols.length; i++) {
@@ -358,18 +349,18 @@ export class TableComponent implements OnInit {
             toplam += Number(rowData[name]);
           }
           if(toplam!==undefined) {
-            rowData['Toplam'] = toplam;
+            rowData["Toplam Fiyat"] = toplam;
           }
           // Ana toplamı güncelle
           const updateAllTotal = (rowNode:any)=> {
             if (rowNode.parent?.children) {
               let allToplam = 0;
               for (const child of rowNode.parent.children) {
-                if(child.data.Toplam) {
-                  allToplam += child.data.Toplam;
+                if(child.data["Toplam Fiyat"]) {
+                  allToplam += child.data["Toplam Fiyat"];
                 }
               }
-              rowNode.parent.data.Toplam = allToplam;
+              rowNode.parent.data["Toplam Fiyat"] = allToplam;
               console.log(rowNode.parent)
               if(rowNode.parent?.parent){
                 updateAllTotal(rowNode.parent);
@@ -377,6 +368,7 @@ export class TableComponent implements OnInit {
             }
           }
           updateAllTotal(rowNode);
+          this.updateAllTreeTotal();
         }
       }
       if (isMiktar) {
@@ -482,8 +474,13 @@ export class TableComponent implements OnInit {
     let foundNode : any;
     for (const node of this.files) {
       foundNode = this.dataService.findNodeByKey(node,key)
+      if(foundNode) {
+        break;
+      }
     }
+    console.log(foundNode,this.rowNum)
     if(foundNode) {
+      
       for (let i = 0; i < this.rowNum; i++) {
         this.dataService.addRowToNode(foundNode);
       }
@@ -501,6 +498,12 @@ export class TableComponent implements OnInit {
     if (!this.keepOriginal) {
       this.deleteSelectedRows();
     }
+    for(const selectedNode of this.selectedNodes) {
+      this.updateRowTotal(selectedNode);
+    }
+    console.log(node);
+    this.updateNodeTotal(node);
+    this.updateAllTreeTotal();
     this.updateView();
   }
 
@@ -520,6 +523,42 @@ export class TableComponent implements OnInit {
 
   getAllKeys() {
     this.allKeys = this.dataService.getAllKeys(this.files)
+  }
+
+  updateAllTreeTotal() {
+    let total = 0;
+    for(const node of this.files) {
+      if(node.data["Toplam Fiyat"]) {
+        total += node.data["Toplam Fiyat"];
+      }
+  }
+  this.allTreeTotal=total;
+
+  }
+
+  updateRowTotal (selectedNode:any) {
+    if (selectedNode.parent) {
+      if (selectedNode.parent.children) {
+        let allToplam = 0;
+        for (const child of selectedNode.parent.children) {
+          if(child.data["Toplam Fiyat"]) {
+            allToplam += child.data["Toplam Fiyat"];
+          }
+          
+        }
+        selectedNode.parent.data["Toplam Fiyat"] = allToplam;
+      }
+    }
+  }
+
+  updateNodeTotal(node: any) {
+    let total =0;
+    if(node.children?.length>0) {
+      for (const child of node.children) {
+        total += child.data["Toplam Fiyat"];
+      }
+    }
+    node.data["Toplam Fiyat"] = total;
   }
 
 }

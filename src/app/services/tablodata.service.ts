@@ -16,7 +16,7 @@ export class TablodataService {
       'Miktar',
       'Birim',
       'Toplam Birim Fiyat',
-      'Toplam',
+      'Toplam Fiyat',
     ],
     ['1', 'Başlık', '', '', '', '', ''],
     ['1.1', '', '', '', '', '', ''],
@@ -283,11 +283,13 @@ export class TablodataService {
   }
 
   findNodeByKey(node: TreeNode, key: string): TreeNode | null {
+    
     // Check if the current node has the given key
     if (node.data.key === key) {
+      console.log(node,"found");
       return node;
     }
-    if (node.children) {
+    else if (node.children) {
       // Traverse children nodes recursively
       for (const child of node.children) {
         const foundNode = this.findNodeByKey(child, key);
@@ -301,6 +303,7 @@ export class TablodataService {
   }
 
   addRowToNode(node: any, positionSpecified: boolean = false) {
+    
     if (!positionSpecified) {
       const key = node.data.key;
 
@@ -313,6 +316,7 @@ export class TablodataService {
         expanded: true,
       };
       node.children.push(newNode);
+      
       return;
     } else {
       const key = node.parent.data.key;
