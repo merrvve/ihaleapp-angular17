@@ -26,7 +26,10 @@ export class BidService {
 
   createBid() {
     const tenderId = this.tenderSubject.value?.id  || ''
+    
     const currentTableData = this.tableService.currentData;
+    
+    console.log(currentTableData)
     let data: { [key: number]: any } = {};
     for (let i = 0; i < currentTableData.length; i++) {
       data[i] = currentTableData[i];
@@ -73,7 +76,10 @@ export class BidService {
                 bidsSnapshot.forEach((bidDoc) => {
                   const bid = bidDoc.data() as TenderBid;
                   bid.id=bidDoc.id;
-                  bids.push(bid);
+                  if (bid.bidder_id===bidderId) {
+                    bids.push(bid);
+                  }
+                  
                 });
               });
           

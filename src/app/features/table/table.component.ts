@@ -103,7 +103,7 @@ export class TableComponent implements OnInit {
       complete: () => console.info('complete'),
     });
     // menüleri oluştur
-
+    console.log(this.files)
     this.rowContextItems = [
       {
         label: 'Başlık Olarak İşaretle',
@@ -457,7 +457,7 @@ export class TableComponent implements OnInit {
       this.cols,
     );
     this.dataService.currentData = tabloData;
-    this.subscription.unsubscribe(); // Unsubscribe to prevent memory leaks
+    this.subscription.unsubscribe(); 
     this.subscription2.unsubscribe();
   }
 

@@ -81,7 +81,7 @@ export class TablodataService {
 
       cols.push({
         field: i===0 ? 'key' : ornekData[0][i],
-        header: ornekData[0][i],
+        header: i===0 ? 'Poz No' : ornekData[0][i],
         editable: editable,
         numberField: nf,
         isBirim: isBirim,
@@ -90,7 +90,6 @@ export class TablodataService {
         isToplam: isToplam,
       });
     }
-    console.log(cols);
     return cols;
     
   }

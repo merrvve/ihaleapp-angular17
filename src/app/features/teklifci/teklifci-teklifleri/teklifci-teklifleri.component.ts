@@ -17,7 +17,7 @@ export class TeklifciTeklifleriComponent implements OnInit{
   bids$!: Observable<TenderBid[]|null>
   constructor(private bidService: BidService) {}
   ngOnInit(): void {
-    this.bids$ = this.bidService.bids$;
+    this.bids$ = this.bidService.getBidsByBidderId();
   }
   selectTeklif(teklif: TenderBid) {
     console.log(teklif)

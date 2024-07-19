@@ -25,44 +25,21 @@ export class KesifComponent implements OnInit{
   messages!: Message[];
   error: boolean = false;
 
-  constructor(private teklifciService: TeklifciService, private router: Router,
+  constructor(private router: Router,
     private bidService:BidService
   ){}
   ngOnInit(): void {
     
   }
   createBid() {
-    this.bidService.createBid()
+    this.bidService.createBid().subscribe(
+     {
+      next: (result)=> console.log(result),
+      error: (error)=>console.log(error)
+     }
+    )
   }
-  teklifVer(){
-    this.isLoading=true;
-    this.isTeklifModalVisible=true;
-    this.teklifciService.createTeklif().subscribe({
-      next:(result)=> {console.log(result),
-        this.isLoading=false;
-         this.messages= [{severity: 'success', summary: 'Teklif Oluşturuldu',
-          detail: 'Verdiğiniz teklif başarıyla kaydedildi.'}];
-          const formData = this.teklifciService.getFileFormData();
-          if(result.id) {
-            this.teklifciService.uploadFile(formData,result.id).subscribe({
-              next:(result)=> { 
-                this.messages= [{severity: 'success', summary: 'Teklif Oluşturuldu',
-              detail: 'Verdiğiniz teklif başarıyla kaydedildi ve ilişkili dosyalar yüklendi'}];},
-              error:(error)=>{ 
-                this.messages= [{severity: 'error', summary: 'Dosyalar yüklenemedi',
-              detail: 'Verdiğiniz teklif başarıyla kaydedildi ve ancak ilişkili dosyalar sunucuya yüklenemedi.'}];}
-            })
-          }
-        this.error = false;
-      },
-      error:(error)=> {console.log(error),
-        this.isLoading=false;
-        this.messages= [{severity: 'error', summary: 'Teklif Oluşturulamadı',
-        detail: 'Teklif oluşturulurken bir hata ile karşılaşıldı. '+ error.message}];
-        this.error = true;
-      }
-    })
-  }
+  
 
   completed() {
     this.isTeklifModalVisible=false;

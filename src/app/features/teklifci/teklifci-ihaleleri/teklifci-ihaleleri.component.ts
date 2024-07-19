@@ -37,7 +37,6 @@ export class TeklifciIhaleleriComponent implements OnInit {
       {
         next:(result)=> {
           if(result) {
-            console.log(result)
             result.id = tenderId;
             this.bidService.tenderSubject.next(result);
             let tableData =[];

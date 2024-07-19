@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TenderService } from '../../../../services/tender.service';
 import { Tender } from '../../../../models/tender';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BidService } from '../../../../services/bid.service';
 import { TenderBid } from '../../../../models/tender-bid';
 import { Observable } from 'rxjs';
@@ -12,11 +12,12 @@ import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { TablodataService } from '../../../../services/tablodata.service';
 
 @Component({
   selector: 'app-ihale-teklifleri',
   standalone: true,
-  imports: [AsyncPipe,LoadingSpinnerComponent, TableModule, ButtonModule,IconFieldModule,InputIconModule,InputTextModule],
+  imports: [AsyncPipe,LoadingSpinnerComponent, TableModule, ButtonModule,IconFieldModule,InputIconModule,InputTextModule, RouterLink],
   templateUrl: './ihale-teklifleri.component.html',
   styleUrl: './ihale-teklifleri.component.scss'
 })
@@ -27,6 +28,8 @@ export class IhaleTeklifleriComponent {
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
+    private tableService: TablodataService,
+    private router: Router,
   private bidService: BidService) {}
   ngOnInit() {
     this.currentTender = this.tenderService._currentTender.value;
@@ -53,7 +56,26 @@ export class IhaleTeklifleriComponent {
 
   }
 
+  seeTenderDetails(bid: TenderBid) {
+    console.log(bid)
+    let tableData =[];
+    if(bid.discovery_data) {
+              for(const key in bid.discovery_data) {
+                tableData.push(bid.discovery_data[key])
+              }
+              console.log(tableData,bid)
+              this.tableService.loadData(tableData);
+              this.router.navigate(['/ihale/kesif-detay']);
+            }
+            else {
+              console.log("no discovery data")
+            }
+            
+           
+  }
   getEventValue($event:any) :string {
     return $event.target.value;
   } 
+
+  
 }

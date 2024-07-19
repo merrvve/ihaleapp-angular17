@@ -20,6 +20,10 @@ export class TeklifOlusturComponent implements OnInit {
       {
         label: 'Keşif Tablosu',
         routerLink: ['/teklifci/teklif-olustur/kesif'],
+      },
+      {
+        label: 'Teklif Özet',
+        routerLink: ['/teklifci/teklif-olustur/teklif-ozet']
       }
     ];
   }
