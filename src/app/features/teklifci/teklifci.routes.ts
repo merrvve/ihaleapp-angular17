@@ -5,6 +5,7 @@ import { TeklifBilgileriComponent } from './teklif-olustur/teklif-bilgileri/tekl
 import { KesifComponent } from './teklif-olustur/kesif/kesif.component';
 import { TeklifciComponent } from '../dashboard/teklifci/teklifci.component';
 import { TeklifOzetComponent } from './teklif-olustur/teklif-ozet/teklif-ozet.component';
+import { TableComponent } from '../table/table.component';
 
 export const TEKLIFCI_ROUTES: Route[] = [
   {
@@ -19,5 +20,6 @@ export const TEKLIFCI_ROUTES: Route[] = [
   { path: 'ihalelerim', component: TeklifciIhaleleriComponent },
   { path: 'tekliflerim', component: TeklifciTeklifleriComponent },
   { path: 'dashboard', component: TeklifciComponent },
+  { path: 'kesif-detay', component: TableComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];

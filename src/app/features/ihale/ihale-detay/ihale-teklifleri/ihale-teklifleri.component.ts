@@ -13,6 +13,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TablodataService } from '../../../../services/tablodata.service';
+import { CompareBidsService } from '../../../../services/compare-bids.service';
 
 @Component({
   selector: 'app-ihale-teklifleri',
@@ -30,7 +31,8 @@ export class IhaleTeklifleriComponent {
     private tenderService: TenderService,
     private tableService: TablodataService,
     private router: Router,
-  private bidService: BidService) {}
+  private bidService: BidService,
+private compareService: CompareBidsService) {}
   ngOnInit() {
     this.currentTender = this.tenderService._currentTender.value;
     this.route.paramMap.subscribe(params => {
@@ -56,14 +58,13 @@ export class IhaleTeklifleriComponent {
 
   }
 
-  seeTenderDetails(bid: TenderBid) {
-    console.log(bid)
+  seeTenderBidDetails(bid: TenderBid) {
+   
     let tableData =[];
     if(bid.discovery_data) {
               for(const key in bid.discovery_data) {
                 tableData.push(bid.discovery_data[key])
               }
-              console.log(tableData,bid)
               this.tableService.loadData(tableData);
               this.router.navigate(['/ihale/kesif-detay']);
             }
@@ -77,5 +78,11 @@ export class IhaleTeklifleriComponent {
     return $event.target.value;
   } 
 
-  
+  compareBids() {
+    if(this.selectedBids) {
+      this.compareService.compareBids=this.selectedBids;
+      this.router.navigate(['/ihale/karsilastir'])
+    }
+    
+  }
 }

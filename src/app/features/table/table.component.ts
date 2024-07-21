@@ -19,6 +19,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { Subscription } from 'rxjs';
 import { XlsxService } from '../../services/xlsx.service';
+import { TenderService } from '../../services/tender.service';
 
 @Component({
   selector: 'app-table',
@@ -85,6 +86,7 @@ export class TableComponent implements OnInit {
     private dataService: TablodataService,
     private excelService: XlsxService,
     private messageService: MessageService,
+    private tenderService: TenderService
   ) {}
 
   ngOnInit(): void {
@@ -445,7 +447,14 @@ export class TableComponent implements OnInit {
     });
   }
 
-  saveDraft() {}
+  saveDraft() {
+    const tabloData = this.dataService.convertTreeToDatalist(
+      this.files,
+      this.cols,
+    );
+    this.dataService.currentData = tabloData;
+    this.tenderService.createTender(true);
+  }
 
   updateView() {
     this.files = [...this.files];

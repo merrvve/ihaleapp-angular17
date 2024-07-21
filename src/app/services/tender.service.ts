@@ -38,7 +38,7 @@ export class TenderService {
   }
 
   
-  createTender() {
+  createTender(isDraft=false) {
     let tender = this._currentTender.getValue();
     let currentTableData = this.tableData.currentData;
     let data: { [key: number]: any } = {};
@@ -47,6 +47,7 @@ export class TenderService {
     }
     tender.discoveryData = data;
     tender.owner_id = this.authService.getUser()?.uid || '';
+    tender.isDraft = isDraft;
     console.log(tender)
     addDoc(this.tendersCollection, tender ).then((documentReference: DocumentReference) => {
       console.log(documentReference);
