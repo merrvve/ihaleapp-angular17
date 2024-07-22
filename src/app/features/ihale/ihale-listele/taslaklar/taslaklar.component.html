@@ -1,5 +1,5 @@
 <div class="container mb-5">
-    <h2 class="p-2">İhalelerim</h2>
+    <h2 class="p-2">Taslaklar</h2>
 </div>
 @if(tenders$|async; as tenders) {
     <div class="card">
@@ -17,7 +17,7 @@
                     
                     <th>İhale Bedeli</th>
                     <th>Para Birimi</th>
-                    <th style="width: 5rem">Düzenle</th>
+                    <th style="width: 10rem">Düzenle</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-tender>
@@ -34,7 +34,10 @@
                         <td>{{ tender.cost }}</td>
                         <td>{{ tender.currency }}</td>
                         <td>
-                            <button type="button" pButton pRipple icon="pi pi-file-edit" (click)="selectTender(tender)"></button>
+                           
+                                <p-button type="button" severity="danger"  icon="pi pi-trash" (click)="deleteTender(tender.id)" class="mr-1"></p-button>
+                                <p-button type="button" severity="info"  icon="pi pi-file-edit" (click)="editTender(tender)" class="mr-1"></p-button>
+                                
                         </td>
                     </tr>
     

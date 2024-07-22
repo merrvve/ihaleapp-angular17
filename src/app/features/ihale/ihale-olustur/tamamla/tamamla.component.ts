@@ -28,15 +28,31 @@ export class TamamlaComponent implements OnInit {
   onSubmit(isDraft=false,currentTenderIsDraft=false, isEditMode=false) {
     this.isLoading = true;
     this.isModalVisible = true;
-    if(currentTenderIsDraft ||isEditMode) {
-      //update tender
-      this.tenderService.updateTender(isDraft);
+
+      //Save as draft
+    if(isDraft) {
+      //if current tender is draft, update it
+      if(isDraft===currentTenderIsDraft) {
+        this.tenderService.updateTender(isDraft);
+      }
+      //else create new draft tender
+      else {
+        this.tenderService.createTender(isDraft);
+      }
     }
+    // save as tender
     else {
-      this.tenderService.createTender(isDraft);
-    }
-    
+      //if it is a draft, update it as a tender
+      if(currentTenderIsDraft) {
+        this.tenderService.updateTender(isDraft);
+      }
+      //else, create new tender
+      else {
+        this.tenderService.createTender(isDraft);
+      }
+    }  
   }
+  
   showDialog() {
     this.isModalVisible = true;
   }

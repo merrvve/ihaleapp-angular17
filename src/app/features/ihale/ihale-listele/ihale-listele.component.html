@@ -17,7 +17,7 @@
                     
                     <th>İhale Bedeli</th>
                     <th>Para Birimi</th>
-                    <th style="width: 10rem">Detay</th>
+                    <th style="width: 12rem">Detay</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-tender>
@@ -34,7 +34,8 @@
                         <td>{{ tender.cost }}</td>
                         <td>{{ tender.currency }}</td>
                         <td>
-                            <p-button type="button" severity="info"  icon="pi pi-file-edit" (click)="editTender(tender)" class="mx-2"></p-button>
+                            <p-button type="button" severity="danger"  icon="pi pi-trash" (click)="deleteTender(tender.id)" class="mr-1"></p-button>
+                            <p-button type="button" severity="info"  icon="pi pi-file-edit" (click)="editTender(tender)" class="mr-1"></p-button>
                             <p-button type="button"  icon="pi pi-eye" (click)="selectTender(tender.id)"></p-button>
                         </td>
                     </tr>

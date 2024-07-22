@@ -38,5 +38,8 @@ export class IhaleListeleComponent implements OnInit {
     this.tenderService.setTender(tender);
     this.router.navigate(['ihale/ihale-olustur'])
   }
+  deleteTender(tenderId: string) {
+    this.tenderService.deleteTender(tenderId);
+  }
   
 }

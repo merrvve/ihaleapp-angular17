@@ -100,7 +100,7 @@
               <th ttReorderableColumn [ttSortableColumn]="col.field">
                 {{ col.header }}
                 @if(col.isToplam || col.isBirim) {
-                    {{currency}} 
+                    {{currency === 'TL' ? '(TL)' : currency==='Euro' ? '(€)': currency==='Dolar' ? '($)': ''}} 
                   }
                 <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
               </th>

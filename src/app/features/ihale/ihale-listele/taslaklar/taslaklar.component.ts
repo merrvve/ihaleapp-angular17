@@ -29,10 +29,14 @@ export class TaslaklarComponent implements OnInit {
   }
 
   
-  selectTender(tender: Tender) {
+  editTender(tender: Tender) {
     tender.isEditMode=true;
     this.tenderService.setTender(tender);
     this.router.navigate(['ihale/ihale-olustur'])
+  }
+
+  deleteTender(tenderId: string) {
+    this.tenderService.deleteTender(tenderId);
   }
   
 }

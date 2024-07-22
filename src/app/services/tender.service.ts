@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Tender } from '../models/tender';
-import { CollectionReference, DocumentReference, Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from '@angular/fire/firestore';
+import { CollectionReference, DocumentReference, Firestore, addDoc, collection, collectionData, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject, from, map } from 'rxjs';
@@ -136,6 +136,23 @@ export class TenderService {
       })
     );
   }
+
+  deleteTender(tenderId: string) {
+    // Obtain a reference to the specific tender document
+    const tenderRef = doc(this.tendersCollection, tenderId);
+  
+    // Delete the tender document
+    deleteDoc(tenderRef)
+      .then(() => {
+        console.log('Tender deleted successfully!');
+        // Optional: Handle success scenarios (e.g., emit an event, show a success message)
+      })
+      .catch((error) => {
+        console.error('Error deleting tender:', error);
+        // Handle error scenarios (e.g., display an error message to the user)
+      });
+  }
+  
 
   setTender(tender:Tender) {
     this._currentTender.next(tender);
