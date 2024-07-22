@@ -12,6 +12,7 @@ import { Observable, Subscription } from 'rxjs';
 import { TenderService } from '../../../../services/tender.service';
 import { Tender } from '../../../../models/tender';
 import { AsyncPipe } from '@angular/common';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -29,7 +30,8 @@ interface UploadEvent {
     RouterLink,
     FileUploadModule,
     CalendarModule,
-    AsyncPipe
+    AsyncPipe,
+    LoadingSpinnerComponent
   ],
   templateUrl: './ihale-bilgileri.component.html',
   styleUrl: './ihale-bilgileri.component.scss',

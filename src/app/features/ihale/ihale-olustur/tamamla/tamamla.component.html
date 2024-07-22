@@ -10,9 +10,27 @@
     </div>
     <div class="flex justify-content-end">
         <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" class="mx-2" [routerLink]="['/ihale/ihale-olustur/teklifci-ekleme']"></p-button>
-        <p-button pRipple label="Taslak Olarak Kaydet" severity="info" icon="pi pi-file" class="mx-3"  (click)="onSubmit(true)"></p-button>
-        <p-button pRipple label="İhale Oluştur" icon="pi pi-check" class="mx-3"  (click)="onSubmit()"></p-button>
-  
+        <p-button pRipple [label]="tender.isEditMode ? 'Taslağı Güncelle' : 'Taslak Olarak Kaydet'"  label="Taslak Olarak Kaydet" severity="info" icon="pi pi-file" class="mx-3"  (click)="onSubmit(true,tender.isDraft,tender.isEditMode)"></p-button>
+        @if(!tender.isDraft && tender.isEditMode) {
+            <p-button 
+            pRipple 
+            label="Revizyon olarak Kaydet"
+            severity="info"
+            icon="pi pi-file-edit"
+            class="mx-3"  
+            (click)="saveRevision()"
+            [disabled]="true">
+          </p-button>
+        }
+        
+        <p-button 
+        pRipple 
+        [label]="tender.isEditMode && !tender.isDraft ? 'Güncelle' : 'İhale Oluştur'" 
+        icon="pi pi-check" 
+        class="mx-3"  
+        (click)="onSubmit(false, tender.isDraft, tender.isEditMode)">
+      </p-button>
+      
       </div>
     
     

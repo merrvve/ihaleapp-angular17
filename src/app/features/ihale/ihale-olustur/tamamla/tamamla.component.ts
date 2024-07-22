@@ -25,17 +25,25 @@ export class TamamlaComponent implements OnInit {
     this.tender$ = this.tenderService.currentTender$;
   }
 
-  onSubmit(isDraft=false) {
+  onSubmit(isDraft=false,currentTenderIsDraft=false, isEditMode=false) {
     this.isLoading = true;
     this.isModalVisible = true;
-    
-    this.tenderService.createTender(isDraft);
+    if(currentTenderIsDraft ||isEditMode) {
+      //update tender
+      this.tenderService.updateTender(isDraft);
+    }
+    else {
+      this.tenderService.createTender(isDraft);
+    }
     
   }
   showDialog() {
     this.isModalVisible = true;
   }
 
+    saveRevision() {
+      
+    }
   
    
   

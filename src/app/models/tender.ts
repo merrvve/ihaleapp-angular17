@@ -17,6 +17,7 @@ export interface Tender {
     bidders: string[];
     isCompleted: boolean;
     isDraft: boolean;
+    isEditMode?: boolean;
     discoveryData?: any;
     revisions?: TenderRevision[]; // Optional
     bids?: TenderBid[]; // Optional (can be populated later)

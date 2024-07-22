@@ -137,21 +137,21 @@ export class TableComponent implements OnInit {
         icon: 'pi pi-trash',
         command: (event) => this.deleteSelectedRows(),
       },
-      {
-        label: 'Seçili Satırları Kopyala',
-        icon: 'pi pi-copy',
-        command: (event) => this.cutSelectedRows(true),
-      },
-      {
-        label: 'Seçili Satırları Kes',
-        icon: 'pi pi-copy',
-        command: (event) => this.cutSelectedRows(false),
-      },
-      {
-        label: 'Yapıştır',
-        icon: 'pi pi-clone',
-        command: (event) => this.pasteSelectedRows(this.selectedNode),
-      },
+      // {
+      //   label: 'Seçili Satırları Kopyala',
+      //   icon: 'pi pi-copy',
+      //   command: (event) => this.cutSelectedRows(true),
+      // },
+      // {
+      //   label: 'Seçili Satırları Kes',
+      //   icon: 'pi pi-copy',
+      //   command: (event) => this.cutSelectedRows(false),
+      // },
+      // {
+      //   label: 'Yapıştır',
+      //   icon: 'pi pi-clone',
+      //   command: (event) => this.pasteSelectedRows(this.selectedNode),
+      // },
     ];
     this.fileMenuItems = [
       {

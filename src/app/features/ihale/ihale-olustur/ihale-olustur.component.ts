@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { StepsModule } from 'primeng/steps';
 import { TablodataService } from '../../../services/tablodata.service';
 
@@ -11,6 +11,7 @@ import { TablodataService } from '../../../services/tablodata.service';
 })
 export class IhaleOlusturComponent implements OnInit {
   steps: any[] = [];
+  @Input() isDraft: boolean = false; 
   constructor(private tableService: TablodataService) {}
   ngOnInit(): void {
     this.tableService.loadData(this.tableService.ornekData);

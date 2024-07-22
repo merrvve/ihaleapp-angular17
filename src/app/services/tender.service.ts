@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Tender } from '../models/tender';
-import { CollectionReference, DocumentReference, Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, onSnapshot, query, where } from '@angular/fire/firestore';
+import { CollectionReference, DocumentReference, Firestore, addDoc, collection, collectionData, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject, from, map } from 'rxjs';
@@ -48,14 +48,39 @@ export class TenderService {
     tender.discoveryData = data;
     tender.owner_id = this.authService.getUser()?.uid || '';
     tender.isDraft = isDraft;
-    console.log(tender)
     addDoc(this.tendersCollection, tender ).then((documentReference: DocumentReference) => {
       console.log(documentReference);
   });
 
   }
 
-  getTendersByOwnerId() {
+  updateTender(isDraft=false) {
+    let tender = this._currentTender.getValue();
+    let currentTableData = this.tableData.currentData;
+    let data: { [key: number]: any } = {};
+    for (let i = 0; i < currentTableData.length; i++) {
+      data[i] = currentTableData[i];
+    }
+    tender.discoveryData = data;
+    tender.owner_id = this.authService.getUser()?.uid || '';
+    tender.isDraft = isDraft;
+    // Obtain a reference to the specific tender document
+    const tenderRef = doc(this.tendersCollection, tender.id);
+  
+    // Perform an update on the tender document with the provided data
+    updateDoc(tenderRef, tender as object)
+      .then(() => {
+        console.log('Tender updated successfully!');
+        // Optional: Handle success scenarios (e.g., emit an event, show a success message)
+      })
+      .catch((error) => {
+        console.error('Error updating tender:', error);
+        // Handle error scenarios (e.g., display an error message to the user)
+      });
+  }
+  
+
+  getTendersByOwnerId(isDraft=false) {
     const userId = this.authService.getUser()?.uid || '';
     const tendersQuery = query(this.tendersCollection, where('owner_id', '==', userId));
 
@@ -64,7 +89,9 @@ export class TenderService {
       querySnapshot.forEach((doc) => {
         let tenderData = doc.data() as Tender;
         tenderData.id = doc.id;
-        tenders.push(tenderData);
+        if(tenderData.isDraft===isDraft) {
+          tenders.push(tenderData);
+        }
         this.tendersSubject.next(tenders);
       });
      
@@ -79,6 +106,7 @@ export class TenderService {
         if (docSnapshot.exists()) {
           let tenderData =docSnapshot.data() as Tender;
           tenderData.id=docSnapshot.id;
+          this._currentTender.next(tenderData);
           return tenderData;
         } else {
           return null;
@@ -109,6 +137,9 @@ export class TenderService {
     );
   }
 
+  setTender(tender:Tender) {
+    this._currentTender.next(tender);
+  }
   
 
 }
