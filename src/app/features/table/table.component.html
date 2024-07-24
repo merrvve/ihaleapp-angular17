@@ -1,33 +1,14 @@
+<p-toast></p-toast>
+<!-- Menubar -->
+<p-menubar [model]="tableMenuItems" styleClass="sticky">
+  <ng-template pTemplate="end">
+    <div class="flex align-items-center gap-2">
+      <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="{0} sütun seçildi" [style]="{ width: '20em' }" defaultLabel="Gösterilecek Sütunları Seç" display="chip"></p-multiSelect>
+    </div>
+</ng-template>
+</p-menubar>
 <div class="container mt-5 ">
-    <p-toast></p-toast>
-   
-    <!-- Araçlar -->
-    
-      <p-toolbar styleClass="flex mb-3 shadow-2 mb-5">
-        <div class="p-toolbar-group-start ">
-        
-          <p-button severity="secondary" [outlined]="true"  type="button" class="mx-2"  (click)="fileMenu.toggle($event)" icon="pi pi-folder-open" label="Dosya"></p-button>
-          
-          <p-button severity="secondary" [outlined]="true"  type="button" class="mx-2"  (click)="colAddMenu.toggle($event)" icon="pi pi-plus" label="Sütun Ekle"></p-button>
-          <p-menu #colAddMenu [model]="addColItems" [popup]="true"></p-menu>
-          
-          <p-button severity="secondary" [outlined]="true" type="button" class=" mx-2"  icon="pi pi-trash" label="Sütun Sil"(click)="visibleDeleteColDialog=true"></p-button>
-  
-          <p-button label="Ana Başlık Ekle" icon="pi pi-plus" severity="secondary" [outlined]="true" (click)="addNewNode()" class="mx-2"></p-button>
-          <p-button label="Satır Ekle" icon="pi pi-plus" severity="secondary" [outlined]="true" (click)="getAllKeys(); visibleRowDialog=true;" class="mx-2"></p-button>
-          <p-button label="Seçilen Satırları Sil" icon="pi pi-trash" severity="secondary" [outlined]="true" (click)="deleteSelectedRows()" class="mx-2"></p-button>
-          
-          <p-menu #fileMenu [model]="fileMenuItems" [popup]="true"></p-menu>
-  
-        </div>
-        <div class="p-toolbar-group-end">
-          <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="{0} sütun seçildi" [style]="{ width: '20em' }" defaultLabel="Gösterilecek Sütunları Seç" display="chip"></p-multiSelect>
-        </div>
-  
-      </p-toolbar>
-    
-    
-
+ 
           <!-- Modal Dialoglar -->
           <!-- Excel Yükle -->
           <div class="card flex justify-content-center">

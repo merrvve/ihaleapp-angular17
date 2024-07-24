@@ -7,7 +7,7 @@ import { MenuModule } from 'primeng/menu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { TreeTable, TreeTableModule } from 'primeng/treetable';
+import { TreeTableModule } from 'primeng/treetable';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -20,6 +20,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { Subscription } from 'rxjs';
 import { XlsxService } from '../../services/xlsx.service';
 import { TenderService } from '../../services/tender.service';
+import { MenubarModule } from 'primeng/menubar';
 
 @Component({
   selector: 'app-table',
@@ -39,7 +40,8 @@ import { TenderService } from '../../services/tender.service';
     DialogModule,
     RouterLink,
     ButtonModule,
-    SplitButtonModule
+    SplitButtonModule,
+    MenubarModule
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -60,8 +62,7 @@ export class TableComponent implements OnInit {
 
 
   rowContextItems!: MenuItem[]; //Tablo üzerinde sağ tuşla gelen menü
-  addColItems!: MenuItem[]; //Sütun Ekle Menüsü
-  fileMenuItems!: MenuItem[]; //Dosya İşlemleri Menüsü
+  tableMenuItems!: MenuItem[]; //Dosya İşlemleri Menüsü
 
   messages: Message[] = []; // bilgilendirme mesajı
 
@@ -81,6 +82,10 @@ export class TableComponent implements OnInit {
 
   currentWidth: number =100;
   tableStyle = {'width': this.currentWidth+'%', 'padding':'5rem'}
+
+
+
+
   showDialog() {
     this.visible = true;
   }
@@ -108,7 +113,87 @@ export class TableComponent implements OnInit {
       complete: () => console.info('complete'),
     });
     // menüleri oluştur
-    console.log(this.files)
+    this.tableMenuItems = [
+      {
+          label: 'Dosya',
+          icon: 'pi pi-file',
+          items: [
+            {
+              label: 'Excel Dosyası Yükle',
+              icon: 'pi pi-file-import',
+              command: () => this.visibleExcelDialog=true,
+            },
+            {
+              label: 'Excel Olarak Kaydet',
+              icon: 'pi pi-file-export',
+              command: () => this.exportAsExcel(),
+            },
+            {
+              label: 'Taslaklarıma Kaydet',
+              icon: 'pi pi-calculator',
+              command: () => (this.saveDraft()),
+            }
+          ]
+      },
+      {
+        label: 'Sütun Ekle',
+        icon: 'pi pi-plus',
+        items: [
+          {
+            label: 'Malzeme Birim Fiyat',
+            icon: 'pi pi-shopping-bag',
+            command: () => this.addBirimCol('Malzeme'),
+          },
+          {
+            label: 'İşçilik Birim Fiyat',
+            icon: 'pi pi-id-card',
+            command: () => this.addBirimCol('İşçilik'),
+          },
+          {
+            label: 'Diğer Birim Fiyat',
+            icon: 'pi pi-calculator',
+            command: () => (this.visibleBirimDialog = true),
+          },
+          {
+            label: 'Diğer Sütun',
+            icon: 'pi pi-server',
+            command: () => this.showDialog(),
+          },
+        ]
+      },
+      {
+        label: 'Sütun Sil',
+        icon: 'pi pi-trash',
+        command: () => {
+          this.visibleDeleteColDialog=true
+         }
+      },
+      {
+        label: 'Ana Başlık Ekle',
+        icon: 'pi pi-plus',
+        command: () => {
+          this.addNewNode();
+         }
+        },
+      {
+          label: 'Satır Ekle',
+          icon: 'pi pi-plus',
+          command: () => {
+            this.getAllKeys(); 
+            this.visibleRowDialog=true;
+           }
+      },
+      {
+          separator: true
+      },
+      {
+        label: 'Seçilen Satırları Sil',
+        icon: 'pi pi-trash',
+        command: () => {
+          this.deleteSelectedRows();
+         }
+    },
+  ];
     this.rowContextItems = [
       {
         label: 'Başlık Olarak İşaretle',
@@ -156,45 +241,7 @@ export class TableComponent implements OnInit {
         command: (event) => this.pasteSelectedRows(this.selectedNode),
       },
     ];
-    this.fileMenuItems = [
-      {
-        label: 'Excel Dosyası Yükle',
-        icon: 'pi pi-file-import',
-        command: (event) => this.visibleExcelDialog=true,
-      },
-      {
-        label: 'Excel Olarak Kaydet',
-        icon: 'pi pi-file-export',
-        command: (event) => this.exportAsExcel(),
-      },
-      {
-        label: 'Taslaklarıma Kaydet',
-        icon: 'pi pi-calculator',
-        command: (event) => (this.saveDraft()),
-      },
-    ];
-    this.addColItems = [
-      {
-        label: 'Malzeme Birim Fiyat',
-        icon: 'pi pi-shopping-bag',
-        command: (event) => this.addBirimCol('Malzeme'),
-      },
-      {
-        label: 'İşçilik Birim Fiyat',
-        icon: 'pi pi-id-card',
-        command: (event) => this.addBirimCol('İşçilik'),
-      },
-      {
-        label: 'Diğer Birim Fiyat',
-        icon: 'pi pi-calculator',
-        command: (event) => (this.visibleBirimDialog = true),
-      },
-      {
-        label: 'Diğer Sütun',
-        icon: 'pi pi-server',
-        command: (event) => this.showDialog(),
-      },
-    ];
+    
   }
 
   addRowToNode(node: TreeNode, positionSpecified: boolean) {

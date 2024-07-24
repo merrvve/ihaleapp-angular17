@@ -8,9 +8,16 @@
  }
 
  .sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000; 
+  position: -webkit-sticky; /* For Safari */
+  position: sticky !important;
+  top: 0;
+  z-index: 1000; 
+  }
+  .relative {
+    position:relative
+  }
+  .abs {
+    position: absolute;
+    top:0;
   }
   
