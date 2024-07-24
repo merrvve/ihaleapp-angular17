@@ -58,6 +58,7 @@ export class TableComponent implements OnInit {
   selectedNode!: TreeNode; // sağ tuşla seçilen node
   selectedNodes: TreeNode[] = []; // sağ tuşla seçilen node
 
+
   rowContextItems!: MenuItem[]; //Tablo üzerinde sağ tuşla gelen menü
   addColItems!: MenuItem[]; //Sütun Ekle Menüsü
   fileMenuItems!: MenuItem[]; //Dosya İşlemleri Menüsü
@@ -137,21 +138,21 @@ export class TableComponent implements OnInit {
         icon: 'pi pi-trash',
         command: (event) => this.deleteSelectedRows(),
       },
-      // {
-      //   label: 'Seçili Satırları Kopyala',
-      //   icon: 'pi pi-copy',
-      //   command: (event) => this.cutSelectedRows(true),
-      // },
+       {
+         label: 'Seçili Satırları Kopyala',
+         icon: 'pi pi-copy',
+         command: (event) => this.cutSelectedRows(true),
+       },
       // {
       //   label: 'Seçili Satırları Kes',
       //   icon: 'pi pi-copy',
       //   command: (event) => this.cutSelectedRows(false),
       // },
-      // {
-      //   label: 'Yapıştır',
-      //   icon: 'pi pi-clone',
-      //   command: (event) => this.pasteSelectedRows(this.selectedNode),
-      // },
+      {
+        label: 'Yapıştır',
+        icon: 'pi pi-clone',
+        command: (event) => this.pasteSelectedRows(this.selectedNode),
+      },
     ];
     this.fileMenuItems = [
       {
@@ -500,20 +501,36 @@ export class TableComponent implements OnInit {
     
   }
 
-  pasteSelectedRows(node: TreeNode) {
-    if (node.parent) {
-      this.dataService.pasteRowsToNode(node.parent, this.selectedNodes);
-    } else {
-      this.dataService.pasteRowsToNode(node, this.selectedNodes);
+  pasteSelectedRows(targetNode: TreeNode) {
+    console.log(this.selectedNodes)
+    //if selected node has children, copy all
+    for (const node of this.selectedNodes) {
+      if(node.children && node.children.length>0) {
+          this.dataService.pasteNodeToNode(targetNode,node);
+      }
+      else {
+        if(node.parent && node.parent.partialSelected) {
+          this.dataService.pasteNodeToNode(targetNode,node);
+        }
+      }
+      this.updateRowTotal(node);
     }
-    if (!this.keepOriginal) {
-      this.deleteSelectedRows();
-    }
-    for(const selectedNode of this.selectedNodes) {
-      this.updateRowTotal(selectedNode);
-    }
-    console.log(node);
-    this.updateNodeTotal(node);
+    //else the selected node has no children
+      //if the parentnode is partially selected, take action
+      //else ignore this node
+    // if (targetNode.parent) {
+    //   this.dataService.pasteRowsToNode(targetNode.parent, this.selectedNodes);
+    // } else {
+    //   this.dataService.pasteRowsToNode(targetNode, this.selectedNodes);
+    // }
+    // if (!this.keepOriginal) {
+    //   this.deleteSelectedRows();
+    // }
+    // for(const selectedNode of this.selectedNodes) {
+    //   this.updateRowTotal(selectedNode);
+    // }
+    
+    this.updateNodeTotal(targetNode);
     this.updateAllTreeTotal();
     this.updateView();
   }

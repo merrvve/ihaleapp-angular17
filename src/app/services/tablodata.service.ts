@@ -339,20 +339,43 @@ export class TablodataService {
       return;
     }
   }
+  pasteNodeToNode (targetNode: any, copiedNode: TreeNode) {
+  
+    
+    targetNode.children.push(structuredClone(copiedNode));
+    //update keys
+    this.updateKeys(targetNode);
+  }
 
-  pasteRowsToNode(node: any, rows: TreeNode[]) {
+  updateKeys(node: TreeNode) {
+    //recursively update keys of a given node.
     const key = node.data.key;
-    let len = node.children.length;
-    for (const row of rows) {
-      const { key: _, ...dataWithoutKey } = row.data;
-      dataWithoutKey.key = key + '.' + (len + 1);
-      const newNode: TreeNode = {
-        data: { ...dataWithoutKey },
-        children: [],
-        expanded: true,
-      };
-      //key: key+'.'+String(len+1),
-      node.children.push(newNode);
+    if(node.children) {
+      let i = 0;
+      for(const child of node.children) {
+        child.data.key= key + '.' + (i + 1)
+        if(child.children && child.children.length>0) {
+          this.updateKeys(child);
+        }
+        i+=1;
+      }
+    }
+  }
+  pasteRowsToNode(targetNode: any, nodes: TreeNode[]) {
+    const key = targetNode.data.key;
+    let len = targetNode.children.length;
+    for (const node of nodes) {
+      // add the node with its children
+      // const { key: _, ...dataWithoutKey } = node.data;
+      // dataWithoutKey.key = key + '.' + (len + 1);
+      // const newNode: TreeNode = {
+      //   data: { ...dataWithoutKey },
+      //   children: [],
+      //   expanded: true,
+      // };
+
+      targetNode.children.push(node);
+      // update keys
       len += 1;
     }
   }
