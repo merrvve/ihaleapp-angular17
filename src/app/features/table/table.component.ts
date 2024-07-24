@@ -237,9 +237,14 @@ export class TableComponent implements OnInit {
         command: (event) => this.cutSelectedRows(false),
       },
       {
-        label: 'Yapıştır',
+        label: 'Bu Satırın Altına Yapıştır',
         icon: 'pi pi-clone',
-        command: (event) => this.pasteSelectedRows(this.selectedNode),
+        command: (event) => this.pasteSelectedRows(this.selectedNode,true),
+      },
+      {
+        label: 'Bu Başlığa Yapıştır',
+        icon: 'pi pi-clone',
+        command: (event) => this.pasteSelectedRows(this.selectedNode,false),
       },
     ];
     
@@ -547,15 +552,15 @@ export class TableComponent implements OnInit {
     
   }
 
-  pasteSelectedRows(targetNode: TreeNode) {
+  pasteSelectedRows(targetNode: TreeNode, positionSpecified=false) {
     //if selected node has children, copy all
     for (const node of this.selectedNodes) {
       if(node.children && node.children.length>0) {
-          this.dataService.pasteNodeToNode(targetNode,node);
+          this.dataService.pasteNodeToNode(targetNode,node,positionSpecified);
       }
       else {
         if(node.parent && node.parent.partialSelected) {
-          this.dataService.pasteNodeToNode(targetNode,node);
+          this.dataService.pasteNodeToNode(targetNode,node,positionSpecified);
         }
       }
       this.updateRowTotal(node);
@@ -563,17 +568,11 @@ export class TableComponent implements OnInit {
     //else the selected node has no children
       //if the parentnode is partially selected, take action
       //else ignore this node
-    // if (targetNode.parent) {
-    //   this.dataService.pasteRowsToNode(targetNode.parent, this.selectedNodes);
-    // } else {
-    //   this.dataService.pasteRowsToNode(targetNode, this.selectedNodes);
-    // }
+    
      if (!this.keepOriginal) {
        this.deleteSelectedRows();
      }
-    // for(const selectedNode of this.selectedNodes) {
-    //   this.updateRowTotal(selectedNode);
-    // }
+    
     
     this.updateNodeTotal(targetNode);
     
@@ -616,12 +615,15 @@ export class TableComponent implements OnInit {
       if (selectedNode.parent.children) {
         let allToplam = 0;
         for (const child of selectedNode.parent.children) {
-          if(child.data["Toplam Fiyat"]) {
+          if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
             allToplam += child.data["Toplam Fiyat"];
           }
           
         }
-        selectedNode.parent.data["Toplam Fiyat"] = allToplam;
+        if(allToplam){
+          selectedNode.parent.data["Toplam Fiyat"] = allToplam;
+        }
+        
       }
     }
   }
@@ -630,7 +632,10 @@ export class TableComponent implements OnInit {
     let total =0;
     if(node.children?.length>0) {
       for (const child of node.children) {
-        total += child.data["Toplam Fiyat"];
+        if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
+          total += child.data["Toplam Fiyat"];
+        }
+       
       }
     }
     node.data["Toplam Fiyat"] = total;

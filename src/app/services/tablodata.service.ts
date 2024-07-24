@@ -349,19 +349,25 @@ export class TablodataService {
       newNode.data.key=newKey;
       node.parent.children.splice(position + 1, 0, newNode);
 
-      for (let i = position + 2; i < node.parent.children.length; i++) {
-        node.parent.children[i].data.key = node.parent.data.key + '.' + (i + 1);
-      }
+      
+      this.updateKeys(node.parent);
 
       return;
     }
   }
-  pasteNodeToNode (targetNode: any, copiedNode: TreeNode) {
-  
+  pasteNodeToNode (targetNode: any, copiedNode: TreeNode, positionSpecified:boolean=false) {
+    if(positionSpecified) {
+      if(targetNode.parent) {
+        const position = targetNode.parent.children.indexOf(targetNode);
+        targetNode.parent.children.splice(position+1, 0, structuredClone(copiedNode));
+      }     
+    }
+    else {
+      targetNode.children.push(structuredClone(copiedNode));
+    }
     
-    targetNode.children.push(structuredClone(copiedNode));
     //update keys
-    this.updateKeys(targetNode);
+    this.updateKeys(targetNode.parent);
   }
 
   updateKeys(node: TreeNode) {
@@ -378,25 +384,7 @@ export class TablodataService {
       }
     }
   }
-  pasteRowsToNode(targetNode: any, nodes: TreeNode[]) {
-    const key = targetNode.data.key;
-    let len = targetNode.children.length;
-    for (const node of nodes) {
-      // add the node with its children
-      // const { key: _, ...dataWithoutKey } = node.data;
-      // dataWithoutKey.key = key + '.' + (len + 1);
-      // const newNode: TreeNode = {
-      //   data: { ...dataWithoutKey },
-      //   children: [],
-      //   expanded: true,
-      // };
-
-      targetNode.children.push(node);
-      // update keys
-      len += 1;
-    }
-  }
-
+ 
   addNewNode(datatree: any[]) {
     const len = datatree.length;
     const newNode: TreeNode = {
@@ -415,9 +403,7 @@ export class TablodataService {
       if (index > 0) {
         node.parent.children.splice(index, 1);
         node.parent.children.splice(index - 1, 0, node);
-        node.data.key = node.parent.data.key + '.' + index;
-        node.parent.children[index].data.key =
-          node.parent.data.key + '.' + (index + 1);
+        this.updateKeys(node.parent);
       }
     }
   }
@@ -428,9 +414,7 @@ export class TablodataService {
       if (index > -1 && index + 1 < node.parent.children.length) {
         node.parent.children.splice(index, 1);
         node.parent.children.splice(index + 1, 0, node);
-        node.data.key = node.parent.data.key + '.' + (index + 2);
-        node.parent.children[index].data.key =
-          node.parent.data.key + '.' + (index + 1);
+        this.updateKeys(node.parent);
       }
     }
   }
