@@ -72,6 +72,7 @@ export class TableComponent implements OnInit {
   visibleRowDialog: boolean = false;
   visibleBirimDialog: boolean = false;
   visibleDeleteColDialog: boolean = false;
+  visibleAnaBaslikDialog: boolean = false;
   delCols: Column[] = [];
   subscription2!: Subscription;
   selectedFile!: File;
@@ -172,7 +173,7 @@ export class TableComponent implements OnInit {
         label: 'Ana Başlık Ekle',
         icon: 'pi pi-plus',
         command: () => {
-          this.addNewNode();
+          this.visibleAnaBaslikDialog=true;
          }
         },
       {
@@ -251,8 +252,12 @@ export class TableComponent implements OnInit {
     this.expandAllNodes(this.files);
   }
 
-  addNewNode() {
-    this.dataService.addNewNode(this.files);
+  addNewNode(count:number=1) {
+    let i=0
+    while (i<count) {
+      this.dataService.addNewNode(this.files);
+      i+=1;
+    }
     this.updateView();
     this.expandAllNodes(this.files);
   }
