@@ -143,11 +143,11 @@ export class TableComponent implements OnInit {
          icon: 'pi pi-copy',
          command: (event) => this.cutSelectedRows(true),
        },
-      // {
-      //   label: 'Seçili Satırları Kes',
-      //   icon: 'pi pi-copy',
-      //   command: (event) => this.cutSelectedRows(false),
-      // },
+      {
+        label: 'Seçili Satırları Kes',
+        icon: 'pi pi-copy',
+        command: (event) => this.cutSelectedRows(false),
+      },
       {
         label: 'Yapıştır',
         icon: 'pi pi-clone',
@@ -217,23 +217,7 @@ export class TableComponent implements OnInit {
     });
   }
   deleteNode(selectedNode: TreeNode<any>): void {
-    if (selectedNode.children) {
-      if (selectedNode.children.length > 0) {
-        if (
-          !window.confirm(
-            'Seçtiğiniz başlığın tüm alt kırılımlarıyla birlikte silinmesini onaylıyor musunuz?',
-          )
-        ) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'İptal',
-            detail: 'Satır silinmesi işlemi kullanıcı tarafından iptal edildi.',
-          });
-
-          return;
-        }
-      }
-    }
+    
     //Satırı sil ve poz noları güncelle
     const result = this.dataService.deleteRow(selectedNode, this.files);
     if (result) {
@@ -350,10 +334,10 @@ export class TableComponent implements OnInit {
         if (toplamCols) {
           for (let i = 0; i < toplamCols.length; i++) {
             const name = toplamCols[i].field;
-            
+            if(rowData[name]!==null && rowData[name]!==undefined)
             toplam += Number(rowData[name]);
           }
-          if(toplam!==undefined) {
+          if(toplam!==undefined && toplam!==null) {
             rowData["Toplam Fiyat"] = toplam;
           }
           // Ana toplamı güncelle
@@ -361,7 +345,7 @@ export class TableComponent implements OnInit {
             if (rowNode.parent?.children) {
               let allToplam = 0;
               for (const child of rowNode.parent.children) {
-                if(child.data["Toplam Fiyat"]) {
+                if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
                   allToplam += child.data["Toplam Fiyat"];
                 }
               }
@@ -382,16 +366,18 @@ export class TableComponent implements OnInit {
         if (birimCols) {
           for (let i = 0; i < birimCols.length; i++) {
             const rf = birimCols[i].relatedField;
-            console.log(rf,rowData[birimCols[i].field],rowData,event, "log")
-            if (rf!==undefined && rowData[birimCols[i].field]!==undefined && event!==undefined) {
+            if (rf!==undefined && rf!==null && rowData[birimCols[i].field]!==undefined && rowData[birimCols[i].field]!==null && event!==undefined && event!==null) {
               rowData[rf] =
                 Number(rowData[birimCols[i].field]) * Number(event);
             }
             const name = birimCols[i].field;
-            birimToplam += rowData[name];
+            if(rowData[name]!==undefined && rowData[name]!==null) {
+              birimToplam += rowData[name];
+            
+            }
             
           }
-          if(birimToplam) {
+          if(birimToplam!==undefined && birimToplam!==null) {
             rowData['Toplam Birim Fiyat'] = birimToplam;
           }
           updateTotal();
@@ -405,10 +391,12 @@ export class TableComponent implements OnInit {
           if (birimCols) {
             for (let i = 0; i < birimCols.length; i++) {
               const name = birimCols[i].field;
+              if(rowData[name]!==null && rowData[name]!==undefined) {
+                birimToplam += rowData[name];
+              }
               
-              birimToplam += rowData[name];
             }
-            if(birimToplam!==undefined) {
+            if(birimToplam!==undefined && birimToplam!==null) {
               rowData['Toplam Birim Fiyat'] = birimToplam;
             }
             updateTotal();
@@ -502,7 +490,6 @@ export class TableComponent implements OnInit {
   }
 
   pasteSelectedRows(targetNode: TreeNode) {
-    console.log(this.selectedNodes)
     //if selected node has children, copy all
     for (const node of this.selectedNodes) {
       if(node.children && node.children.length>0) {
@@ -523,14 +510,15 @@ export class TableComponent implements OnInit {
     // } else {
     //   this.dataService.pasteRowsToNode(targetNode, this.selectedNodes);
     // }
-    // if (!this.keepOriginal) {
-    //   this.deleteSelectedRows();
-    // }
+     if (!this.keepOriginal) {
+       this.deleteSelectedRows();
+     }
     // for(const selectedNode of this.selectedNodes) {
     //   this.updateRowTotal(selectedNode);
     // }
     
     this.updateNodeTotal(targetNode);
+    
     this.updateAllTreeTotal();
     this.updateView();
   }
@@ -588,6 +576,10 @@ export class TableComponent implements OnInit {
       }
     }
     node.data["Toplam Fiyat"] = total;
-  }
 
+    if(node.parent) {
+      this.updateNodeTotal(node.parent);
+    }
+  }
+  
 }

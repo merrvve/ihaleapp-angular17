@@ -89,7 +89,7 @@
     <!-- Tablo -->
     <p-treeTable #dataTreeTable [autoLayout]="true"  [resizableColumns]="true"  [reorderableColumns]="true"  [value]="files" columnResizeMode="expand" 
     selectionMode="checkbox" [(selection)]="selectedNodes" dataKey="key"
-    [(contextMenuSelection)]="selectedNode" [contextMenu]="cm" 
+    [(contextMenuSelection)]="selectedNode" [contextMenu]="cm"  [tableStyle]="{'min-width':'80rem', 'padding':'1rem'}"
     
     [columns]="selectedColumns"  styleClass="p-treetable-gridlines p-treetable-sm mb-3 text-xs" >
     

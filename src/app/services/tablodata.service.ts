@@ -15,7 +15,11 @@ export class TablodataService {
       'Marka',
       'Miktar',
       'Birim',
+      'Malzeme Birim Fiyat',
+      'İşçilik Birim Fiyat',
       'Toplam Birim Fiyat',
+      'Malzeme Toplam Fiyat',
+      'İşçilik Toplam Fiyat',
       'Toplam Fiyat',
     ],
     ['1', 'Başlık', '', '', '', '', ''],
@@ -61,27 +65,30 @@ export class TablodataService {
 
   columns(ornekData: any[][]) {
     let cols: Column[] = [];
-    let len = ornekData[0].length;
+    const columnNames = ornekData[0];
+    let len = columnNames.length;
     for (let i = 0; i < len; i++) {
       let editable = i === 0 ? false : true;
       let nf = false;
-      let isToplam = ornekData[0][i].toLocaleLowerCase().includes('toplam');
-      let isBirimToplam = ornekData[0][i].toLocaleLowerCase().includes('birim') && isToplam;
-      let isBirim = ornekData[0][i].toLocaleLowerCase().includes('birim fiyat') && !isToplam;
+      let isToplam = columnNames[i].toLocaleLowerCase().includes('toplam');
+      let isBirimToplam = columnNames[i].toLocaleLowerCase().includes('birim') && isToplam;
+      let isBirim = columnNames[i].toLocaleLowerCase().includes('birim fiyat') && !isToplam;
       let relatedField=undefined;
       if (isBirim) {
-        relatedField = ornekData[0][i].slice(0,-11) + "Toplam Fiyat";
-        console.log("log",relatedField)
+        relatedField = columnNames[i].slice(0,-11) + "Toplam Fiyat";
+        if(!columnNames.includes(relatedField)) {
+          columnNames.push(relatedField);
+        }
       }
-      if (ornekData[0][i].toLocaleLowerCase().includes('miktar') || isToplam || isBirim) {
+      if (columnNames[i].toLocaleLowerCase().includes('miktar') || isToplam || isBirim) {
         nf = true;
       }
       editable = isToplam ? false : editable;
       
 
       cols.push({
-        field: i===0 ? 'key' : ornekData[0][i],
-        header: i===0 ? 'Poz No' : ornekData[0][i],
+        field: i===0 ? 'key' : columnNames[i],
+        header: i===0 ? 'Poz No' : columnNames[i],
         editable: editable,
         numberField: nf,
         isBirim: isBirim,
@@ -309,27 +316,37 @@ export class TablodataService {
       const key = node.data.key;
 
       const len = node.children.length;
-      const newNode: TreeNode = {
+      const newKey =  key + '.' + String(len + 1);
+      let newNode: TreeNode = {
         data: {
-          key: key + '.' + String(len + 1),
+          
         },
         children: [],
         expanded: true,
       };
+      for(const column of this.getCols()) {
+        newNode.data[column.header]=''
+      }
+      newNode.data.key=newKey;
       node.children.push(newNode);
       
       return;
     } else {
       const key = node.parent.data.key;
-
+      
       const position = node.parent.children.indexOf(node);
+      const newKey = key + '.' + (position + 2);
       const newNode: TreeNode = {
         data: {
-          key: key + '.' + (position + 2),
+          
         },
         children: [],
         expanded: true,
       };
+      for(const column of this.getCols()) {
+        newNode.data[column.header]=''
+      }
+      newNode.data.key=newKey;
       node.parent.children.splice(position + 1, 0, newNode);
 
       for (let i = position + 2; i < node.parent.children.length; i++) {
