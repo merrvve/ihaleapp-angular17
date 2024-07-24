@@ -79,6 +79,8 @@ export class TableComponent implements OnInit {
   selectedKey: string = '';
   allTreeTotal!: number; 
 
+  currentWidth: number =100;
+  tableStyle = {'width': this.currentWidth+'%', 'padding':'5rem'}
   showDialog() {
     this.visible = true;
   }
@@ -275,6 +277,8 @@ export class TableComponent implements OnInit {
 
     //Satırları Güncelle
     this.dataService.addColumnToTree(this.files, name, '');
+    this.currentWidth = this.currentWidth * 1.1;
+    this.tableStyle={'width':this.currentWidth+'%', 'padding':'5rem'}
   }
 
   addBirimCol(name: string = 'Diğer') {
@@ -296,6 +300,8 @@ export class TableComponent implements OnInit {
     this.dataService.addColumnToTree(this.files, birimName, null);
 
     this.dataService.addColumnToTree(this.files, toplamName, null);
+    this.currentWidth = this.currentWidth * 1.15;
+    this.tableStyle={'width':this.currentWidth+'%', 'padding':'5rem'}
   }
 
   expandAllNodes(nodes: TreeNode[]) {
