@@ -105,8 +105,7 @@ export class TableComponent implements OnInit {
     this.subscription = this.dataService.cols$.subscribe({
       next: (v) => {(this.cols = v);
         this.selectedColumns = this.cols;
-        this.updateNodeTotal(this.files);
-        this.updateAllTreeTotal();
+       
       },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
@@ -115,7 +114,10 @@ export class TableComponent implements OnInit {
     this.subscription2 = this.dataService.datatree$.subscribe({
       next: (v) => {(
         this.files = v); 
-        //this.updateChildCalculations(this.files);
+        for(const node of this.files) {
+          this.updateNodeTotal(node);
+        }
+        
         this.updateAllTreeTotal();
       },
       error: (e) => console.error(e),

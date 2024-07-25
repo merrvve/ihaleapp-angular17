@@ -143,23 +143,29 @@ export class TablodataService {
 
       // Assign data to the node
       const miktarIndex = cols.findIndex(x=>x.isMiktar===true);
+      const totalName = cols.find(x=>x.isAllTotal==true)?.field || 'Toplam Fiyat';
       node.data['Toplam Birim Fiyat']=0;
+      node.data[totalName] = 0;
       cols.forEach((col, index) => {
         
         if(col.isBirim) {
           node.data[col.field] = row[index];
           
           if(col.relatedField && col.relatedField!=='') {
-            node.data[col.relatedField] = +row[index] * +row[miktarIndex];
+            const value = +row[index] * +row[miktarIndex]
+          
+            node.data[col.relatedField] = +value
              node.data['Toplam Birim Fiyat'] += +row[index];
+             node.data[totalName] += +node.data[col.relatedField];
           }
         }
         else if(col.isBirimToplam) {
-
+          
         }
         else if(col.isToplam) {
 
         }
+        else if(col.isAllTotal) {}
         else {
           node.data[col.field] = row[index];
         }
