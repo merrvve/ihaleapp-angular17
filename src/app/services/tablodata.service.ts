@@ -28,17 +28,17 @@ export class TablodataService {
 
   public allTreeTotal!: number;
   public currentData: any[][] = [];
-
-  birimCols = 0;
-  private _datatreeSubject = new BehaviorSubject<any[]>(
-    this.convertToTreeTable(this.ornekData),
-  );
-  datatree$ = this._datatreeSubject.asObservable();
-
   private _colsSubject = new BehaviorSubject<Column[]>(
     this.columns(this.ornekData),
   );
   cols$ = this._colsSubject.asObservable();
+  birimCols = 0;
+  private _datatreeSubject = new BehaviorSubject<any[]>(
+    this.convertToTreeTable(this.ornekData,this._colsSubject.getValue()),
+  );
+  datatree$ = this._datatreeSubject.asObservable();
+
+  
 
   constructor() {
     this.loadData(this.ornekData);
@@ -47,7 +47,7 @@ export class TablodataService {
 
   loadData(datalist: any[]) {
     this._colsSubject.next(this.columns(datalist));
-    this._datatreeSubject.next(this.convertToTreeTable(datalist));
+    this._datatreeSubject.next(this.convertToTreeTable(datalist,this._colsSubject.getValue()));
   }
 
   loadDataByColandDataTree(cols:Column[], datatree: TreeNode[]) {
@@ -105,19 +105,13 @@ export class TablodataService {
     
   }
 
-  convertToTreeTable(data: string[][], cols?: string[]): TreeNode[] {
+  convertToTreeTable(data: string[][], cols: Column[]): TreeNode[] {
     if (data.length < 2) {
       throw new Error(
         'Input data should have at least two lists: column names and row data.',
       );
     }
-    let columns = [];
-
-    if (cols) {
-      columns = cols;
-    } else {
-      columns = data[0];
-    }
+    
     const result: TreeNode[] = [];
 
     // Create a map to store nodes by their keys for easy access
@@ -148,10 +142,31 @@ export class TablodataService {
       const node = createNode(key, parentNodeKey);
 
       // Assign data to the node
-      for (let j = 1; j < columns.length; j++) {
-        node.data[columns[j]] = row[j];
+      const miktarIndex = cols.findIndex(x=>x.isMiktar===true);
+      node.data['Toplam Birim Fiyat']=0;
+      cols.forEach((col, index) => {
+        
+        if(col.isBirim) {
+          node.data[col.field] = row[index];
+          
+          if(col.relatedField && col.relatedField!=='') {
+            node.data[col.relatedField] = +row[index] * +row[miktarIndex];
+             node.data['Toplam Birim Fiyat'] += +row[index];
+          }
+        }
+        else if(col.isBirimToplam) {
+
+        }
+        else if(col.isToplam) {
+
+        }
+        else {
+          node.data[col.field] = row[index];
+        }
+        
+        console.log(node.data)
         node.expanded = true;
-      }
+      })
     }
 
     return result;

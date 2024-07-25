@@ -105,6 +105,8 @@ export class TableComponent implements OnInit {
     this.subscription = this.dataService.cols$.subscribe({
       next: (v) => {(this.cols = v);
         this.selectedColumns = this.cols;
+        this.updateNodeTotal(this.files);
+        this.updateAllTreeTotal();
       },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
@@ -390,30 +392,32 @@ export class TableComponent implements OnInit {
       return;
     }
     
+    //Başlıksa sadece iş tanımına izin ver
     if(rowNode.node?.children.length>0) {
       console.log("başlık")
       if(field!=="İş Tanımı") {
         rowData[field]=undefined;
       }
-      
       return;
     }
-    let col = this.cols.find((x) => x.field == field);
-    const isMiktar: boolean = field.toLowerCase() == 'miktar';
-    
-    
+    // Başlık değilse girilen değeri ata
     rowData[field] = event;
 
+    let col = this.cols.find((x) => x.field == field);
+
+    // Eğer hesaplama sütunuysa hesaplamaları yap
+
     if (col) {
+      const isMiktar = col.isMiktar;
       const updateTotal = ()=> {
         // Bu satırdaki toplamı hesapla
-        let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.field!=='Toplam Fiyat'));
+        let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.isAllTotal==false));
         let toplam = 0;
         if (toplamCols) {
           for (let i = 0; i < toplamCols.length; i++) {
             const name = toplamCols[i].field;
             if(rowData[name]!==null && rowData[name]!==undefined)
-            toplam += Number(rowData[name]);
+            toplam += +(rowData[name]);
           }
           if(toplam!==undefined && toplam!==null) {
             rowData["Toplam Fiyat"] = toplam;
@@ -424,7 +428,7 @@ export class TableComponent implements OnInit {
               let allToplam = 0;
               for (const child of rowNode.parent.children) {
                 if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
-                  allToplam += child.data["Toplam Fiyat"];
+                  allToplam += +(child.data["Toplam Fiyat"]);
                 }
               }
               rowNode.parent.data["Toplam Fiyat"] = allToplam;
@@ -446,7 +450,7 @@ export class TableComponent implements OnInit {
             const rf = birimCols[i].relatedField;
             if (rf!==undefined && rf!==null && rowData[birimCols[i].field]!==undefined && rowData[birimCols[i].field]!==null && event!==undefined && event!==null) {
               rowData[rf] =
-                Number(rowData[birimCols[i].field]) * Number(event);
+                +(rowData[birimCols[i].field]) * +(event);
             }
             const name = birimCols[i].field;
             if(rowData[name]!==undefined && rowData[name]!==null) {
@@ -461,9 +465,8 @@ export class TableComponent implements OnInit {
           updateTotal();
         }
       }
-      else {
-        if (col.relatedField!==undefined && rowData['Miktar']!==null) {
-          rowData[col.relatedField] = Number(event) * Number(rowData['Miktar']);
+      else if (col.relatedField!==undefined && rowData['Miktar']!==null) {
+          rowData[col.relatedField] = +(event) * +(rowData['Miktar']);
           const birimCols = this.cols.filter((x) => x.isBirim == true);
           let birimToplam = 0;
           if (birimCols) {
@@ -480,14 +483,8 @@ export class TableComponent implements OnInit {
             updateTotal();
           }
         } 
-        
-        
-        
-        
-        
-        
-        
-      }
+  
+  
     }
   }
 
@@ -613,21 +610,103 @@ export class TableComponent implements OnInit {
     this.allKeys = this.dataService.getAllKeys(this.files)
   }
 
-  updateChildCalculations(nodes: any[]) {
-    for (const node of nodes) {
-      if(node.children && node.children.length>0) {
-        this.updateChildCalculations(node.children);
-      }
-      else {
-        this.updateRowTotal(node);
-        console.log(node, "updated")
-        if(node.parent) {
-          this.updateNodeTotal(node.parent);
-        }
+  // calculateRowForField(col: Column, rowData: any, rowNode: TreeNode, field: string) {
+  //   if (col) {
+  //     const isMiktar = col.isMiktar;
+  //     const updateTotal = ()=> {
+  //       // Bu satırdaki toplamı hesapla
+  //       let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.isAllTotal==false));
+  //       let toplam = 0;
+  //       if (toplamCols) {
+  //         for (let i = 0; i < toplamCols.length; i++) {
+  //           const name = toplamCols[i].field;
+  //           if(rowData[name]!==null && rowData[name]!==undefined)
+  //           toplam += +(rowData[name]);
+  //         }
+  //         if(toplam!==undefined && toplam!==null) {
+  //           rowData["Toplam Fiyat"] = toplam;
+  //         }
+  //         // Ana toplamı güncelle
+  //         const updateAllTotal = (rowNode:any)=> {
+  //           if (rowNode.parent?.children) {
+  //             let allToplam = 0;
+  //             for (const child of rowNode.parent.children) {
+  //               if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
+  //                 allToplam += +(child.data["Toplam Fiyat"]);
+  //               }
+  //             }
+  //             rowNode.parent.data["Toplam Fiyat"] = allToplam;
+  //             console.log(rowNode.parent)
+  //             if(rowNode.parent?.parent){
+  //               updateAllTotal(rowNode.parent);
+  //             }
+  //           }
+  //         }
+  //         updateAllTotal(rowNode);
+  //         this.updateAllTreeTotal();
+  //       }
+  //     }
+  //     if (isMiktar) {
+  //       const birimCols = this.cols.filter((x) => x.isBirim == true);
+  //       let birimToplam = 0;
+  //       if (birimCols) {
+  //         for (let i = 0; i < birimCols.length; i++) {
+  //           const rf = birimCols[i].relatedField;
+  //           if (rf!==undefined && rf!==null && rowData[birimCols[i].field]!==undefined && rowData[birimCols[i].field]!==null && event!==undefined && event!==null) {
+  //             rowData[rf] =
+  //               +(rowData[birimCols[i].field]) * +(event);
+  //           }
+  //           const name = birimCols[i].field;
+  //           if(rowData[name]!==undefined && rowData[name]!==null) {
+  //             birimToplam += +(rowData[name]);
+            
+  //           }
+            
+  //         }
+  //         if(birimToplam!==undefined && birimToplam!==null) {
+  //           rowData['Toplam Birim Fiyat'] = birimToplam;
+  //         }
+  //         updateTotal();
+  //       }
+  //     }
+  //     else if (col.relatedField!==undefined && rowData['Miktar']!==null) {
+  //         rowData[col.relatedField] = +rowData[field] * +(rowData['Miktar']);
+  //         const birimCols = this.cols.filter((x) => x.isBirim == true);
+  //         let birimToplam = 0;
+  //         if (birimCols) {
+  //           for (let i = 0; i < birimCols.length; i++) {
+  //             const name = birimCols[i].field;
+  //             if(rowData[name]!==null && rowData[name]!==undefined) {
+  //               birimToplam += +(rowData[name]);
+  //             }
+              
+  //           }
+  //           if(birimToplam!==undefined && birimToplam!==null) {
+  //             rowData['Toplam Birim Fiyat'] = birimToplam;
+  //           }
+  //           updateTotal();
+  //         }
+  //       } 
+  
+  
+  //   }
+  // }
+
+  // updateChildCalculations(nodes: any[]) {
+  //   for (const node of nodes) {
+  //     if(node.children && node.children.length>0) {
+  //       this.updateChildCalculations(node.children);
+  //     }
+  //     else {
+  //       this.updateRowTotal(node);
+  //       console.log(node, "updated")
+  //       if(node.parent) {
+  //         this.updateNodeTotal(node.parent);
+  //       }
         
-      }
-    }
-  }
+  //     }
+  //   }
+  // }
 
   updateAllTreeTotal() {
     let total = 0;
