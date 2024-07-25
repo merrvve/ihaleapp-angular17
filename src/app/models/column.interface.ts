@@ -7,4 +7,6 @@ export interface Column {
   isBirim: boolean;
   isToplam: boolean;
   isBirimToplam: boolean;
+  isMiktar: boolean;
+  isAllTotal: boolean;
 }

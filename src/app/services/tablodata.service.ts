@@ -73,6 +73,8 @@ export class TablodataService {
       let isToplam = columnNames[i].toLocaleLowerCase().includes('toplam');
       let isBirimToplam = columnNames[i].toLocaleLowerCase().includes('birim') && isToplam;
       let isBirim = columnNames[i].toLocaleLowerCase().includes('birim fiyat') && !isToplam;
+      const isMiktar = columnNames[i].toLocaleLowerCase().includes('miktar');
+      const isAllTotal = i===len-1 ? true : false;
       let relatedField=undefined;
       if (isBirim) {
         relatedField = columnNames[i].slice(0,-11) + "Toplam Fiyat";
@@ -80,7 +82,7 @@ export class TablodataService {
           columnNames.push(relatedField);
         }
       }
-      if (columnNames[i].toLocaleLowerCase().includes('miktar') || isToplam || isBirim) {
+      if (isMiktar || isToplam || isBirim) {
         nf = true;
       }
       editable = isToplam ? false : editable;
@@ -95,6 +97,8 @@ export class TablodataService {
         relatedField: relatedField,
         isBirimToplam: isBirimToplam,
         isToplam: isToplam,
+        isMiktar: isMiktar,
+        isAllTotal: isAllTotal
       });
     }
     return cols;
@@ -236,7 +240,9 @@ export class TablodataService {
       numberField: false,
       isBirim: false,
       isToplam: false,
-      isBirimToplam: false
+      isBirimToplam: false,
+      isMiktar: false,
+      isAllTotal:false
     });
     this._colsSubject.next(columns);
   }
@@ -253,7 +259,9 @@ export class TablodataService {
       relatedField: toplamName,
       isBirim: true,
       isToplam: false,
-      isBirimToplam: false
+      isBirimToplam: false,
+      isMiktar:false,
+      isAllTotal:false
     });
 
     columns.splice(columns.length - 1, 0, {
@@ -263,7 +271,9 @@ export class TablodataService {
       numberField: true,
       isBirim: false,
       isToplam: true,
-      isBirimToplam: false
+      isBirimToplam: false,
+      isMiktar: false,
+      isAllTotal: false
     });
 
     this._colsSubject.next(columns);
@@ -425,9 +435,9 @@ export class TablodataService {
     for ( const node of files ) {
       keys.push(node.data.key)
       if(node.children?.length>0) {
-        for (const child of node.children) {
+        
           keys = keys.concat(this.getAllKeys(node.children));
-        } 
+        
       }
     }
     return keys;

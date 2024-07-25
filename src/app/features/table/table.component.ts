@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 import { XlsxService } from '../../services/xlsx.service';
 import { TenderService } from '../../services/tender.service';
 import { MenubarModule } from 'primeng/menubar';
+import { ExcludeColsPipe } from '../../utils/exclude-cols.pipe';
 
 @Component({
   selector: 'app-table',
@@ -41,7 +42,8 @@ import { MenubarModule } from 'primeng/menubar';
     RouterLink,
     ButtonModule,
     SplitButtonModule,
-    MenubarModule
+    MenubarModule,
+    ExcludeColsPipe
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -109,7 +111,11 @@ export class TableComponent implements OnInit {
     });
    
     this.subscription2 = this.dataService.datatree$.subscribe({
-      next: (v) => (this.files = v),
+      next: (v) => {(
+        this.files = v); 
+        //this.updateChildCalculations(this.files);
+        this.updateAllTreeTotal();
+      },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
     });
@@ -253,7 +259,8 @@ export class TableComponent implements OnInit {
   addRowToNode(node: TreeNode, positionSpecified: boolean) {
     this.dataService.addRowToNode(node, positionSpecified);
     this.updateView();
-    
+    this.currentWidth =this.currentWidth *1.05;
+    this.tableStyle.width= (this.currentWidth *1.05) +'%';
     this.expandAllNodes(this.files);
   }
 
@@ -300,6 +307,15 @@ export class TableComponent implements OnInit {
     for (let i = 0; i < columns.length; i++) {
       const index = this.cols.indexOf(columns[i]);
       if (i > -1) {
+        
+        this.cols.splice(index, 1);
+        const related = columns[i].relatedField;
+        if(related && related!=='') {
+          const relatedIndex = this.cols.findIndex(x=>x.field==related);
+          this.cols.splice(relatedIndex, 1);
+        }
+        this.currentWidth =this.currentWidth*0.9;
+        this.tableStyle.width = this.currentWidth*0.9 +'%';
         this.messageService.add({
           severity: 'success',
           summary: 'Sütunlar Silindi',
@@ -308,7 +324,6 @@ export class TableComponent implements OnInit {
             this.cols[index].header +
             '" başarıyla silindi.',
         });
-        this.cols.splice(index, 1);
       }
     }
 
@@ -435,7 +450,7 @@ export class TableComponent implements OnInit {
             }
             const name = birimCols[i].field;
             if(rowData[name]!==undefined && rowData[name]!==null) {
-              birimToplam += rowData[name];
+              birimToplam += +(rowData[name]);
             
             }
             
@@ -455,7 +470,7 @@ export class TableComponent implements OnInit {
             for (let i = 0; i < birimCols.length; i++) {
               const name = birimCols[i].field;
               if(rowData[name]!==null && rowData[name]!==undefined) {
-                birimToplam += rowData[name];
+                birimToplam += +(rowData[name]);
               }
               
             }
@@ -555,7 +570,7 @@ export class TableComponent implements OnInit {
   pasteSelectedRows(targetNode: TreeNode, positionSpecified=false) {
     //if selected node has children, copy all
     for (const node of this.selectedNodes) {
-      if(node.children && node.children.length>0) {
+      if((node.children && node.children.length>0) || !node.parent) {
           this.dataService.pasteNodeToNode(targetNode,node,positionSpecified);
       }
       else {
@@ -598,11 +613,27 @@ export class TableComponent implements OnInit {
     this.allKeys = this.dataService.getAllKeys(this.files)
   }
 
+  updateChildCalculations(nodes: any[]) {
+    for (const node of nodes) {
+      if(node.children && node.children.length>0) {
+        this.updateChildCalculations(node.children);
+      }
+      else {
+        this.updateRowTotal(node);
+        console.log(node, "updated")
+        if(node.parent) {
+          this.updateNodeTotal(node.parent);
+        }
+        
+      }
+    }
+  }
+
   updateAllTreeTotal() {
     let total = 0;
     for(const node of this.files) {
       if(node.data["Toplam Fiyat"]) {
-        total += node.data["Toplam Fiyat"];
+        total += +(node.data["Toplam Fiyat"]);
       }
   }
   this.allTreeTotal = total;
@@ -633,7 +664,7 @@ export class TableComponent implements OnInit {
     if(node.children?.length>0) {
       for (const child of node.children) {
         if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
-          total += child.data["Toplam Fiyat"];
+          total += +(child.data["Toplam Fiyat"]);
         }
        
       }
