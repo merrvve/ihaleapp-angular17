@@ -100,8 +100,10 @@
           </tr>
         </ng-template>
 
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-            <tr [ttRow]="rowNode" [ttContextMenuRow]="rowNode">
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns" >
+            <tr [ttRow]="rowNode" [ttContextMenuRow]="rowNode" pDraggable pDroppable (onDrop)="dragEnd(rowNode)"
+            (onDragStart)="dragStart(rowNode)" 
+           >
               @for (col of columns; track col; let i = $index) {
                 <td ttEditableColumn [ttEditableColumnDisabled]="col.editable == false" [ngClass]="{ 'p-toggler-column': i === 0 }">
                   @if (i === 0) {

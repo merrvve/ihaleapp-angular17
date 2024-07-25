@@ -22,6 +22,7 @@ import { XlsxService } from '../../services/xlsx.service';
 import { TenderService } from '../../services/tender.service';
 import { MenubarModule } from 'primeng/menubar';
 import { ExcludeColsPipe } from '../../utils/exclude-cols.pipe';
+import { DragDropModule } from 'primeng/dragdrop';
 
 @Component({
   selector: 'app-table',
@@ -43,7 +44,8 @@ import { ExcludeColsPipe } from '../../utils/exclude-cols.pipe';
     ButtonModule,
     SplitButtonModule,
     MenubarModule,
-    ExcludeColsPipe
+    ExcludeColsPipe,
+    DragDropModule
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -335,7 +337,7 @@ export class TableComponent implements OnInit {
   }
   addOtherCol(name: string) {
     if (this.cols.find((x) => x.header == name)) {
-      console.log('exist');
+      
       this.messageService.add({
         severity: 'error',
         summary: 'Sütun Mevcut',
@@ -359,7 +361,7 @@ export class TableComponent implements OnInit {
 
   addBirimCol(name: string = 'Diğer') {
     if (this.cols.find((x) => x.header == name + ' Birim Fiyat')) {
-      console.log('exist');
+      
       this.messageService.add({
         severity: 'error',
         summary: 'Sütun Mevcut',
@@ -396,7 +398,7 @@ export class TableComponent implements OnInit {
     
     //Başlıksa sadece iş tanımına izin ver
     if(rowNode.node?.children.length>0) {
-      console.log("başlık")
+      
       if(field!=="İş Tanımı") {
         rowData[field]=undefined;
       }
@@ -434,7 +436,7 @@ export class TableComponent implements OnInit {
                 }
               }
               rowNode.parent.data["Toplam Fiyat"] = allToplam;
-              console.log(rowNode.parent)
+              
               if(rowNode.parent?.parent){
                 updateAllTotal(rowNode.parent);
               }
@@ -491,23 +493,23 @@ export class TableComponent implements OnInit {
   }
 
   exportAsExcel() {
-    console.log(this.files, this.cols);
+   
     let datalist = this.dataService.convertTreeToDatalist(
       this.files,
       this.cols,
     );
-    console.log(datalist);
+   
     this.excelService.exportAsExcelFile(datalist, 'deneme.xlsx');
   }
 
   onFileChange(event: any) {
     this.selectedFile = event.target.files[0];
-    console.log(this.selectedFile);
+    
   }
 
   importExcel() {   
     this.excelService.importExcelFile(this.selectedFile).then((data) => {
-      console.log(data)
+    
       this.dataService.loadData(data);
       this.selectedColumns = this.cols;
     });
@@ -555,7 +557,7 @@ export class TableComponent implements OnInit {
         break;
       }
     }
-    console.log(foundNode,this.rowNum)
+    
     if(foundNode) {
       
       for (let i = 0; i < this.rowNum; i++) {
@@ -612,6 +614,17 @@ export class TableComponent implements OnInit {
     this.allKeys = this.dataService.getAllKeys(this.files)
   }
 
+  dragStart(node: any) {
+    this.keepOriginal=false;
+    node.node.data['Poz No'] = node.node.data.key;
+    this.selectedNodes = [node.node];
+  }
+  dragEnd(node: any) {
+    node.node.data['Poz No'] = node.node.data.key;
+    console.log('drag end target:', node.node,'selected', this.selectedNodes);
+    
+    this.pasteSelectedRows(node.node);
+  }
   // calculateRowForField(col: Column, rowData: any, rowNode: TreeNode, field: string) {
   //   if (col) {
   //     const isMiktar = col.isMiktar;

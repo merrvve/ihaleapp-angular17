@@ -394,15 +394,22 @@ export class TablodataService {
       }     
     }
     else {
+      console.log(targetNode)
       targetNode.children.push(structuredClone(copiedNode));
     }
-    
     //update keys
-    this.updateKeys(targetNode.parent);
+    if(targetNode.parent) {
+      this.updateKeys(targetNode.parent);
+    }
+    else {
+    }
+    
+    
   }
 
   updateKeys(node: TreeNode) {
     //recursively update keys of a given node.
+    console.log(node,'updateKey')
     const key = node.data.key;
     if(node.children) {
       let i = 0;
