@@ -397,19 +397,19 @@ export class TablodataService {
       console.log(targetNode)
       targetNode.children.push(structuredClone(copiedNode));
     }
+   
     //update keys
     if(targetNode.parent) {
       this.updateKeys(targetNode.parent);
     }
     else {
     }
-    
+    this.updateKeys(targetNode);
     
   }
 
   updateKeys(node: TreeNode) {
     //recursively update keys of a given node.
-    console.log(node,'updateKey')
     const key = node.data.key;
     if(node.children) {
       let i = 0;
@@ -421,6 +421,22 @@ export class TablodataService {
         i+=1;
       }
     }
+  }
+
+  updateParentKeys(node: TreeNode) {
+    //recursively update keys of a given node.
+    const key = node.data.key;
+    if(node.children) {
+      let i = 0;
+      for(const child of node.children) {
+        child.data.key= key + '.' + (i + 1)
+        if(child.children && child.children.length>0) {
+          this.updateKeys(child);
+        }
+        i+=1;
+      }
+    }
+    
   }
  
   addNewNode(datatree: any[]) {

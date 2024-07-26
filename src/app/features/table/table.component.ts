@@ -265,8 +265,10 @@ export class TableComponent implements OnInit {
   addRowToNode(node: TreeNode, positionSpecified: boolean) {
     this.dataService.addRowToNode(node, positionSpecified);
     this.updateView();
-    this.currentWidth =this.currentWidth *1.05;
+    if(!positionSpecified) {
+      this.currentWidth =this.currentWidth *1.05;
     this.tableStyle.width= (this.currentWidth *1.05) +'%';
+    }
     this.expandAllNodes(this.files);
   }
 
@@ -617,13 +619,22 @@ export class TableComponent implements OnInit {
   dragStart(node: any) {
     this.keepOriginal=false;
     node.node.data['Poz No'] = node.node.data.key;
-    this.selectedNodes = [node.node];
+    this.selectedNode = node.node;
+    
   }
   dragEnd(node: any) {
     node.node.data['Poz No'] = node.node.data.key;
-    console.log('drag end target:', node.node,'selected', this.selectedNodes);
     
-    this.pasteSelectedRows(node.node);
+    this.dataService.pasteNodeToNode(node.node,this.selectedNode,true);
+    
+    this.deleteNode(this.selectedNode)
+    
+   this.selectedNodes=[];
+   
+   this.updateNodeTotal(node.node);
+   
+   this.updateAllTreeTotal();
+   this.updateView();
   }
   // calculateRowForField(col: Column, rowData: any, rowNode: TreeNode, field: string) {
   //   if (col) {
