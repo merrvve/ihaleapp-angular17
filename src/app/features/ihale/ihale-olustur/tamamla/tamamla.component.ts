@@ -46,9 +46,15 @@ export class TamamlaComponent implements OnInit {
       if(currentTenderIsDraft) {
         this.tenderService.updateTender(isDraft);
       }
-      //else, create new tender
+      //else, if it is edit mode, update; else create new tender
       else {
-        this.tenderService.createTender(isDraft);
+        if(isEditMode) {
+          this.tenderService.updateTender(isDraft);
+        }
+        else {
+          this.tenderService.createTender(isDraft);
+        }
+        
       }
     }  
   }

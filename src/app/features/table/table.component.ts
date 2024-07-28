@@ -104,10 +104,11 @@ export class TableComponent implements OnInit {
 
   ngOnInit(): void {
     // verileri yükle
+    console.log("table comp")
     this.subscription = this.dataService.cols$.subscribe({
       next: (v) => {(this.cols = v);
         this.selectedColumns = this.cols;
-       
+       console.log(this.cols);
       },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
@@ -535,7 +536,11 @@ export class TableComponent implements OnInit {
       this.files,
       this.cols,
     );
+    console.log(this.cols, "destroy")
+    
     this.dataService.currentData = tabloData;
+    this.dataService.setCols(this.cols);
+    this.dataService.setData(this.files);
     this.subscription.unsubscribe(); 
     this.subscription2.unsubscribe();
   }

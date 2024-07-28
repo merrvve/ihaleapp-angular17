@@ -77,10 +77,10 @@ private compareService: CompareBidsService) {}
   getEventValue($event:any) :string {
     return $event.target.value;
   } 
-
   compareBids() {
     if(this.selectedBids) {
       this.compareService.compareBids=this.selectedBids;
+      this.compareService.tender = this.tenderService._currentTender.getValue();
       this.router.navigate(['/ihale/karsilastir'])
     }
     

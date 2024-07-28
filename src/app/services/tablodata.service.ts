@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Column } from '../models/column.interface';
 import { TreeNode } from 'primeng/api';
-
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -27,22 +26,29 @@ export class TablodataService {
   ];
 
   public allTreeTotal!: number;
-  public currentData: any[][] = [];
+  public currentData!: any[][];
   private _colsSubject = new BehaviorSubject<Column[]>(
-    this.columns(this.ornekData),
+    []
   );
   cols$ = this._colsSubject.asObservable();
   birimCols = 0;
-  private _datatreeSubject = new BehaviorSubject<any[]>(
-    this.convertToTreeTable(this.ornekData,this._colsSubject.getValue()),
-  );
+  private _datatreeSubject = new BehaviorSubject<any[]>([]);
   datatree$ = this._datatreeSubject.asObservable();
 
-  
+  setCols(cols:Column[]) {
+    this._colsSubject.next(cols);
+  }
+  setData(data:any[]) {
+    this._datatreeSubject.next(data);
+  }
 
   constructor() {
-    this.loadData(this.ornekData);
-    this.allTreeTotal=0;
+    if(this.currentData) {
+      this.loadData(this.currentData);
+    }
+    else {
+      this.loadData(this.ornekData);
+    }
   }
 
   loadData(datalist: any[]) {
@@ -169,8 +175,6 @@ export class TablodataService {
         else {
           node.data[col.field] = row[index];
         }
-        
-        console.log(node.data)
         node.expanded = true;
       })
     }

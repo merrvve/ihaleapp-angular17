@@ -1,36 +1,66 @@
 import { Injectable } from '@angular/core';
 import { TenderBid } from '../models/tender-bid';
+import { Tender } from '../models/tender';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompareBidsService {
   compareBids!: TenderBid[];
+  tender!: Tender;
   constructor() { }
   createTableData(bids:TenderBid[]=[]) {
-    let columns =['Poz No','İş Tanımı','Miktar','Birim'];
-    let tableData = [];
-    for (const key in bids[0].discovery_data) {
+    //set static column names of tender discovery data 
+    let columns = ['key','İş Tanımı','Marka','Miktar','Birim']
+    let tableData: any = [];
+    let otherCols :string[]= [];
+    bids.forEach((bid)=> {
+      let data = this.convertToObject(bid.discovery_data,this.tender.discoveryData[0]);
+      tableData.push(data);
+    })
+    console.log(tableData)
+    for (const key in this.tender.discoveryData) {
       if(key!=='0') {
-        const row = bids[0].discovery_data[key];
-        let newRow = [row[0], row[1], row[3], row[4],row[2],row[bids[0].discovery_data[key].length-1]];
-        for(let i=1; i<bids.length; i++) {
-          newRow.push(bids[i].discovery_data[key][2],row[bids[i].discovery_data[key].length-1])
+        const row = this.tender.discoveryData[key];
+        
+        for(let i=0; i<bids.length; i++) {
+           for (const column of this.tender.discoveryData[0]) {
+              if(!columns.includes(column)) {
+                if(!otherCols.includes(column)) {
+                  otherCols.push(column);
+                }
+                
+                const newColName = `${bids[i].company_name} ${column}` +i;
+                if(!columns.includes(newColName)) {
+                  columns.push(newColName);
+                }
+                
+              }
+            }
         }
-        tableData.push(newRow);
+        
       }
       
   }
-  
-    for (const bid of bids) {
-      if(bid.discovery_data[0].includes('Marka')) {
-        columns.push(bid.company_name +' Marka')
-      }
-      if(bid.discovery_data[0].includes('Toplam Fiyat')) {
-        columns.push(bid.company_name +' Toplam Fiyat')
-      }
+  const tenderData = this.convertToObject(this.tender.discoveryData, this.tender.discoveryData[0])
+    console.log(otherCols)
+     return { columns, otherCols, tableData, tenderData: tenderData };
+  }
+
+  convertToObject(data: any[],columns:string[]) {
+    let newObjects: any[] = [];
+    for(const key in data) {
+      if(key!=="0") {
+        let newObject : any = {}
+        columns.forEach((column,index) => 
+          {
+          newObject[column]= data[key][index];
+        });
+        
+        newObjects.push(newObject);
+      } 
+      
     }
-    console.log(tableData)
-    return { columns, tableData };
+    return newObjects; 
   }
 }
