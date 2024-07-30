@@ -36,9 +36,10 @@ export class IhaleKarsilastirComponent implements OnInit {
   tableStyle = {width:"100%"}
   tenderData!: any[];
   bidsCountArray! : number[];
-  colNames : string[] =[];
+  colNames! : string[];
   data: any [] = [];
-  selectedColumns! : Column[];
+  selectedColumns! : string[];
+  visibleColNames! : string[];
   constructor(
     private compareService: CompareBidsService
   ){}
@@ -48,19 +49,35 @@ export class IhaleKarsilastirComponent implements OnInit {
     this.tenderData = data.tenderData;
     this.tableData = data.table;
     this.bidsCountArray =  Array.from({ length: data.bidsCount }, (_, index) => index + 1);
-    
-    
+    this.visibleColNames = [];
+    this.colNames= [];
     this.columns.forEach((column,index)=> {
       if(column.isBirim || column.isToplam) {
-          this.bidsCountArray.forEach((count)=>{this.colNames.push(column.header + count)})
-          
+          this.bidsCountArray.forEach((count)=>{this.colNames.push(column.header + count); this.visibleColNames.push('Teklif '+count )})
+          this.colNames.push(column.header+' min')
+          this.visibleColNames.push('Minimum')
       }
       else {
           this.colNames.push(column.field);
+          this.visibleColNames.push(column.header)
       }
       });
       this.tableStyle.width = (this.colNames.length *10) +'rem';
-    
+    this.selectedColumns = this.colNames;
     console.log(this.tableData)
+  }
+
+  onColReorder(event: any) {
+    // This is called whenever columns are reordered.
+    const reorderedColNames = event.columns; // This gives the new order of `colNames`
+    
+    // Reorder `visibleColNames` based on the new order of `colNames`
+    this.visibleColNames = reorderedColNames.map((colName:string )=> {
+      const index = this.colNames.indexOf(colName);
+      return this.visibleColNames[index];
+    });
+
+    // Update `colNames` to match the reordered columns
+    this.visibleColNames = reorderedColNames;
   }
 }

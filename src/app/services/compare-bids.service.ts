@@ -9,6 +9,11 @@ interface Price {
   price: number;
 }
 
+interface MinMax {
+  min: number;
+  max: number;
+}
+
 interface CompareTableRow {
   id: string;
   key: string;
@@ -116,9 +121,6 @@ export class CompareBidsService {
             'Miktar': tenderObject[i]['Miktar'],
             'Birim': tenderObject[i]['Birim'],
             'Marka': tenderObject[i]['Marka'],
-            unitPrices: unitPrices,
-            minUnitPrices: [],
-            totalPrices: totalPrices
           }
        
       unitPrices.forEach((price,i)=>{
@@ -126,9 +128,21 @@ export class CompareBidsService {
        })
        totalPrices.forEach((price,i)=>{
         anyRow[price.title+(price.bid+1)] = price.price;
-       })
+       });
+
+      const minMaxUnitP = this.calculateMinMax(unitPrices);
+      const minMaxTotalP = this.calculateMinMax(totalPrices);
+      for (const [title, { min, max }] of Object.entries(minMaxUnitP) as any) {
+        anyRow[`${title} min`] = min;
+        anyRow[`${title} max`] = max;
+      }
+      for (const [title, { min, max }] of Object.entries(minMaxTotalP) as any) {
+        anyRow[`${title} min`] = min;
+        anyRow[`${title} max`] = max;
+      }
       result.push(anyRow);
     }
+    console.log(result)
     return result;
 
   }
@@ -171,8 +185,31 @@ export class CompareBidsService {
           isAllTotal: isAllTotal
         });
       }
-      return cols;
-      
-    
+      return cols; 
+  }
+
+ calculateMinMax(prices: Price[]) {
+    // Step 1: Group prices by title
+    const groupedByTitle = prices.reduce((acc:any, { title, price }) => {
+      if (!acc[title]) {
+        acc[title] = [];
+      }
+      acc[title].push(price);
+      return acc;
+    }, {});
+  
+    // Step 2: Calculate min and max for each title
+    const result :any = {};
+    for (const [title, priceArray] of Object.entries(groupedByTitle)) {
+      if (Array.isArray(priceArray) && priceArray.every(p => typeof p === 'number')) {
+        const min = Math.min(...priceArray);
+        const max = Math.max(...priceArray);
+        result[title] = { min, max };
+      } else {
+        result[title] = { min: NaN, max: NaN }; // Handle cases where prices are not numbers
+      }
+    }
+  
+    return result;
   }
 }
