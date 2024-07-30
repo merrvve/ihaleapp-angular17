@@ -2,9 +2,17 @@
     <h2 class="p-2">Teklifleri Karşılaştır</h2>
 </div>
 @if(tableData) {
-    <p-table [value]="tableData" [tableStyle]="tableStyle"
-    styleClass="p-datatable-striped" 
-    >
+    <p-table [value]="tableData" [columns]="colNames"  [reorderableColumns]="true" [tableStyle]="tableStyle" styleClass="p-datatable-striped">
+        <!-- <ng-template pTemplate="caption">
+            <p-multiSelect 
+                display="chip" 
+                [options]="columns" 
+                [(ngModel)]="selectedColumns" 
+                optionLabel="header"
+                selectedItemsLabel="{0} columns selected" 
+                [style]="{'min-width': '200px'}" 
+                placeholder="Choose Columns" />
+        </ng-template> -->
         <ng-template pTemplate="header">
             <tr>
                 @for(column of columns; track column; let i =$index) {
@@ -12,44 +20,26 @@
                         <th [attr.colspan]="bidsCountArray.length"> {{column.header}} </th>
                     }
                     @else {
-                        <th rowspan="2" [pSortableColumn]="column.field">{{ i===0 ?  'Poz No' : column.header }}  
+                         <!-- <th [pSortableColumn]="column.field">{{ i===0 ?  'Poz No' : column.header }}  
                             <p-sortIcon [field]="column.field"></p-sortIcon>
-                        </th>
+                        </th>  -->
+                        <th></th>
                     }
                     
                 }
             </tr>
             <tr>
-                @for(column of columns; track column; let i =$index) {
-                    @if(column.isBirim || column.isToplam) {
-                        @for(bid of bidsCountArray; track bid) {
-                            <th> Teklif {{bid}} </th>
-                        }
-                    }
-                    @else {
-                        
-                    }
-                    
+               @for(col of colNames; track col; let i=$index) {
+                <th pReorderableColumn> {{ col==='key' ? 'Poz No' : col}} </th>
+               }
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-columns="colNames">
+            <tr>
+                @for(col of colNames; track col) {
+                    <td> {{row[col]}} </td>
                 }
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-row let-i="rowIndex">
-            
-                    <tr>
-                        <td> {{row.key }} </td>
-                        <td> {{row.title }} </td>
-                        <td> {{row.brand}} </td>
-                        <td> {{row.amount}} </td>
-                        <td> {{row.unit}} </td>
-                        @for(unitPrice of row.unitPrices; track unitPrice) {
-                            <td> {{unitPrice.price}} </td>
-                        }
-                        @for(totalPrice of row.totalPrices; track totalPrice) {
-                            <td> {{totalPrice.price}} </td>
-                        }
-                    </tr>
-             
-        </ng-template>
     </p-table>
-    
 }

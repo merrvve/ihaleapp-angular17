@@ -86,7 +86,7 @@ export class CompareBidsService {
   }
 
   convertToCompareTable(columns: Column[], tenderObject: any[],  bidObjects: any[]) {
-    let result : CompareTableRow[] = [];
+    let result : any[] = [];
     
     for(let i=0; i<tenderObject.length; i++) {
     // store prices for this row
@@ -108,20 +108,26 @@ export class CompareBidsService {
           ) 
         }
       }
-      let newRow : CompareTableRow =
+      let anyRow : any =
           {
             id: '',
-            key: tenderObject[i]['key'],
-            title: tenderObject[i]['İş Tanımı'],
-            amount: tenderObject[i]['Miktar'],
-            unit: tenderObject[i]['Birim'],
-            brand: tenderObject[i]['Marka'],
+            'key': tenderObject[i]['key'],
+            'İş Tanımı': tenderObject[i]['İş Tanımı'],
+            'Miktar': tenderObject[i]['Miktar'],
+            'Birim': tenderObject[i]['Birim'],
+            'Marka': tenderObject[i]['Marka'],
             unitPrices: unitPrices,
             minUnitPrices: [],
             totalPrices: totalPrices
           }
-      console.log(newRow);
-      result.push(newRow);
+       
+      unitPrices.forEach((price,i)=>{
+        anyRow[price.title+(price.bid+1)] = price.price;
+       })
+       totalPrices.forEach((price,i)=>{
+        anyRow[price.title+(price.bid+1)] = price.price;
+       })
+      result.push(anyRow);
     }
     return result;
 
