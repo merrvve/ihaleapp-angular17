@@ -7,6 +7,8 @@ interface Price {
   title: string;
   bid: number;
   price: number;
+  isMin?:boolean;
+  isMax?:boolean;
 }
 
 interface MinMax {
@@ -70,7 +72,7 @@ export class CompareBidsService {
   columns = this.convertToColumn(this.tender.discoveryData[0]);
   table = this.convertToCompareTable(columns,tenderData,tableData);
   const bidsCount = this.compareBids.length;
-     return { columns, tenderData: tenderData, table: table, bidsCount };
+     return { columns, tenderData: tenderData, table: table, bidsCount, bids:this.compareBids };
   }
 
   convertToObject(data: any[],columns:string[]) {
@@ -90,48 +92,189 @@ export class CompareBidsService {
     return newObjects; 
   }
 
-  convertToCompareTable(columns: Column[], tenderObject: any[],  bidObjects: any[]) {
-    let result : any[] = [];
+  // convertToCompareTable(columns: Column[], tenderObject: any[],  bidObjects: any[]) {
+  //   let result : any[] = [];
     
-    for(let i=0; i<tenderObject.length; i++) {
-    // store prices for this row
-      let unitPrices : Price[] =[];
-      let totalPrices : Price[] = [];
-      for(const column of columns) {
-        if(column.isBirim) {
-          bidObjects.forEach((bid,index) => 
-            {
-              unitPrices.push({title: column.header, bid: index, price: +bid[i][column.header] });       
-            }
-          ) 
-        }
-        else if(column.isToplam) {
-          bidObjects.forEach((bid,index) => 
-            {
-              totalPrices.push({title: column.header, bid: index, price: +bid[i][column.header] });       
-            }
-          ) 
+  //   for(let i=0; i<tenderObject.length; i++) {
+  //   // store prices for this row
+  //     let unitPrices : Price[] =[];
+  //     let totalPrices : Price[] = [];
+  //     for(const column of columns) {
+  //       if(column.isBirim) {
+  //         bidObjects.forEach((bid,index) => 
+  //           {
+  //             unitPrices.push({title: column.header, bid: index, price: +bid[i][column.header] });       
+  //           }
+  //         ) 
+  //       }
+  //       else if(column.isToplam) {
+  //         bidObjects.forEach((bid,index) => 
+  //           {
+  //             totalPrices.push({title: column.header, bid: index, price: +bid[i][column.header] });       
+  //           }
+  //         ) 
+  //       }
+  //     }
+  //     let anyRow : any =
+  //         {
+  //           id: '',
+  //           'key': tenderObject[i]['key'],
+  //           'İş Tanımı': tenderObject[i]['İş Tanımı'],
+  //           'Miktar': tenderObject[i]['Miktar'],
+  //           'Birim': tenderObject[i]['Birim'],
+  //           'Marka': tenderObject[i]['Marka'],
+  //         }
+       
+  //     unitPrices.forEach((price,i)=>{
+  //       anyRow[price.title+(price.bid+1)] = price.price;
+  //      })
+  //      totalPrices.forEach((price,i)=>{
+  //       anyRow[price.title+(price.bid+1)] = price.price;
+  //      });
+
+  //     const minMaxUnitP = this.calculateMinMax(unitPrices);
+  //     const minMaxTotalP = this.calculateMinMax(totalPrices);
+  //     for (const [title, { min, max }] of Object.entries(minMaxUnitP) as any) {
+  //       anyRow[`${title} min`] = min;
+  //       anyRow[`${title} max`] = max;
+  //     }
+  //     for (const [title, { min, max }] of Object.entries(minMaxTotalP) as any) {
+  //       anyRow[`${title} min`] = min;
+  //       anyRow[`${title} max`] = max;
+  //     }
+  //     result.push(anyRow);
+  //   }
+  //   console.log(result)
+  //   return result;
+
+  // }
+  // convertToCompareTable(columns: Column[], tenderObject: any[], bidObjects: any[]): CompareTableRow[] {
+  //   let result: CompareTableRow[] = [];
+    
+  //   for (let i = 0; i < tenderObject.length; i++) {
+  //     let unitPrices: Price[] = [];
+  //     let totalPrices: Price[] = [];
+  //     let minUnitPrices: Price[] = []; // To store the min prices specifically
+  
+  //     for (const column of columns) {
+  //       if (column.isBirim) {
+  //         let pricesForColumn: Price[] = [];
+  //         bidObjects.forEach((bid, index) => {
+  //           pricesForColumn.push({ title: column.header, bid: index, price: +bid[i][column.header] });
+  //         });
+  
+  //         // Determine min and max prices for this column
+  //         const minPriceValue = Math.min(...pricesForColumn.map(p => p.price));
+  //         const maxPriceValue = Math.max(...pricesForColumn.map(p => p.price));
+  
+  //         // Assign isMin and isMax properties
+  //         pricesForColumn.forEach(price => {
+  //           price.isMin = price.price === minPriceValue;
+  //           price.isMax = price.price === maxPriceValue;
+  //         });
+  
+  //         unitPrices.push(...pricesForColumn);
+  //       } else if (column.isToplam) {
+  //         let pricesForColumn: Price[] = [];
+  //         bidObjects.forEach((bid, index) => {
+  //           pricesForColumn.push({ title: column.header, bid: index, price: +bid[i][column.header] });
+  //         });
+  
+  //         // Determine min and max prices for this column
+  //         const minPriceValue = Math.min(...pricesForColumn.map(p => p.price));
+  //         const maxPriceValue = Math.max(...pricesForColumn.map(p => p.price));
+  
+  //         // Assign isMin and isMax properties
+  //         pricesForColumn.forEach(price => {
+  //           price.isMin = price.price === minPriceValue;
+  //           price.isMax = price.price === maxPriceValue;
+  //         });
+  
+  //         totalPrices.push(...pricesForColumn);
+  //       }
+  //     }
+  
+  //     let anyRow: any = {
+  //       id: '', // or some unique identifier
+  //       key: tenderObject[i]['key'],
+  //       title: tenderObject[i]['İş Tanımı'],
+  //       amount: tenderObject[i]['Miktar'],
+  //       unit: tenderObject[i]['Birim'],
+  //       brand: tenderObject[i]['Marka'],
+  //       unitPrices,
+  //       totalPrices
+  //     };
+  
+  //     // Populate row data with prices
+  //     unitPrices.forEach((price) => {
+  //       anyRow[price.title + (price.bid + 1)] = price.price;
+  //     });
+  //     totalPrices.forEach((price) => {
+  //       anyRow[price.title + (price.bid + 1)] = price.price;
+  //     });
+  
+  //     result.push(anyRow);
+  //   }
+  //   console.log(result)
+  //   return result;
+  // }
+  convertToCompareTable(columns: Column[], tenderObject: any[], bidObjects: any[]): CompareTableRow[] {
+    let result: CompareTableRow[] = [];
+    
+    for (let i = 0; i < tenderObject.length; i++) {
+      let unitPrices: Price[] = [];
+      let totalPrices: Price[] = [];
+  
+      for (const column of columns) {
+        if (column.isBirim) {
+          bidObjects.forEach((bid, index) => {
+            unitPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] });
+          });
+        } else if (column.isToplam) {
+          bidObjects.forEach((bid, index) => {
+            totalPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] });
+          });
         }
       }
-      let anyRow : any =
-          {
-            id: '',
-            'key': tenderObject[i]['key'],
-            'İş Tanımı': tenderObject[i]['İş Tanımı'],
-            'Miktar': tenderObject[i]['Miktar'],
-            'Birim': tenderObject[i]['Birim'],
-            'Marka': tenderObject[i]['Marka'],
-          }
-       
-      unitPrices.forEach((price,i)=>{
-        anyRow[price.title+(price.bid+1)] = price.price;
-       })
-       totalPrices.forEach((price,i)=>{
-        anyRow[price.title+(price.bid+1)] = price.price;
-       });
-
+  
+      // Calculate min/max for unit and total prices
       const minMaxUnitP = this.calculateMinMax(unitPrices);
       const minMaxTotalP = this.calculateMinMax(totalPrices);
+  
+      // Mark isMin and isMax
+      unitPrices.forEach(price => {
+        const { min, max } = minMaxUnitP[price.title];
+        price.isMin = price.price === min;
+        price.isMax = price.price === max;
+      });
+  
+      totalPrices.forEach(price => {
+        const { min, max } = minMaxTotalP[price.title];
+        price.isMin = price.price === min;
+        price.isMax = price.price === max;
+      });
+  
+      // Create the row object
+      let anyRow: any = {
+        id: '', // or some unique identifier
+        key: tenderObject[i]['key'],
+        'İş Tanımı': tenderObject[i]['İş Tanımı'],
+        'Miktar': tenderObject[i]['Miktar'],
+        'Birim': tenderObject[i]['Birim'],
+        'Marka': tenderObject[i]['Marka'],
+        unitPrices,
+        totalPrices
+      };
+  
+      // Add prices to the row
+      unitPrices.forEach(price => {
+        anyRow[price.title + (price.bid + 1)] = price.price;
+      });
+      totalPrices.forEach(price => {
+        anyRow[price.title + (price.bid + 1)] = price.price;
+      });
+  
+      // Add min and max values to the row
       for (const [title, { min, max }] of Object.entries(minMaxUnitP) as any) {
         anyRow[`${title} min`] = min;
         anyRow[`${title} max`] = max;
@@ -140,13 +283,14 @@ export class CompareBidsService {
         anyRow[`${title} min`] = min;
         anyRow[`${title} max`] = max;
       }
+  
       result.push(anyRow);
     }
     console.log(result)
     return result;
-
   }
-
+  
+  
   convertToColumn(columnNames: any) {
     
       let cols: Column[] = [];
@@ -209,6 +353,8 @@ export class CompareBidsService {
         result[title] = { min: NaN, max: NaN }; // Handle cases where prices are not numbers
       }
     }
+
+    
   
     return result;
   }

@@ -1,9 +1,11 @@
 <div class="container mb-5">
     <h2 class="p-2">Teklifleri Karşılaştır</h2>
     <div class="grid">
-    @for(count of bidsCountArray; track count) {
+    @for(bid of bids; track bid.id; let i=$index) {
         <div class="col">
-            Teklif {{count}} : Firma Adı ... <br/> Teklif no ..<br/>
+           <strong> Teklif {{i+1}} : </strong> <br/>
+            <strong> Firma Adı: </strong> {{bid.company_name}} <br/> 
+           <strong>Teklif no: </strong> {{bid.id}} <br/>
         </div>
     }
 </div>
@@ -11,20 +13,21 @@
 @if(tableData) {
 <div class="card sticky">
     <p-table [value]="tableData" [columns]="selectedColumns"  [reorderableColumns]="true" [tableStyle]="tableStyle" styleClass="p-datatable-striped p-datatable-sm"
-    (onColReorder)="onColReorder($event)">
+    >
         <ng-template pTemplate="caption">
             <p-multiSelect 
                 display="chip" 
-                [options]="colNames" 
+                [options]="compareColumns" 
                 [(ngModel)]="selectedColumns" 
+                optionLabel="header"
                 [style]="{'min-width': '200px'}" 
                 placeholder="Gösterilecek Sütunları Seçiniz" />
         </ng-template>
-        <ng-template pTemplate="header" let-colNames>
+        <ng-template pTemplate="header" let-compareColumns>
             <tr>
                 @for(column of columns; track column; let i =$index) {
                     @if(column.isBirim || column.isToplam) {
-                        <th [attr.colspan]="bidsCountArray.length+1"> {{column.header}} </th>
+                        <th [attr.colspan]="bids.length+1"> {{column.header}} </th>
                     }
                     @else {
                          <!-- <th [pSortableColumn]="column.field">{{ i===0 ?  'Poz No' : column.header }}  
@@ -36,23 +39,18 @@
                 }
             </tr>
             <tr>
-               @for(col of colNames; track col; ) {
-                <th pReorderableColumn> {{ col==='key' ? 'Poz No' : col}}</th>
+               @for(col of compareColumns; track col; ) {
+                <th pReorderableColumn [ngClass]="col.color ? col.color : ''"> {{ col.header}}</th>
                }
             </tr>
-            <tr>
-                @for(col of visibleColNames; track col; ) {
-                 <th> {{ col==='key' ? 'Poz No' : col}}</th>
-                }
-             </tr>
             
         </ng-template>
         
-        <ng-template pTemplate="body" let-row let-columns="colNames">
+        <ng-template pTemplate="body" let-row let-columns="compareColumns">
             
             <tr>
-                @for(col of colNames; track col) {
-                    <td> {{row[col]}} </td>
+                @for(col of compareColumns; track col) {
+                    <td [ngClass]="[col.color ? col.color : '',row[col.field]===10000 ? 'bg-green-100' : ''  ]"> {{row[col.field]}} </td>
                 }
             </tr>
         </ng-template>

@@ -93,7 +93,7 @@ export class IhaleDetayComponent implements OnInit {
               {
                 label: 'Yeni Tablo',
                 icon: 'pi pi-fw pi-user-plus mr-2',
-                routerLink: ['teklif/teklifci/ekle'],
+                routerLink: [`ihale/ihale/${this.tenderId || '1'}/teklifler`],
               },
               {
                 label: 'Tablolar',
