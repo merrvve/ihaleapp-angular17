@@ -11,23 +11,42 @@
 </div>
 </div>
 @if(tableData) {
-<div class="card sticky">
+    <p-menubar [model]="tableMenuItems" styleClass="sticky">
+        <ng-template pTemplate="end">
+          <div class="flex align-items-center gap-2">
+            <p-multiSelect 
+            display="chip" 
+            [options]="compareColumns" 
+            [(ngModel)]="selectedColumns" 
+            optionLabel="header"
+            [style]="{'min-width': '200px'}" 
+            placeholder="Gösterilecek Sütunları Seçiniz" />
+        </div>
+      </ng-template>
+      </p-menubar>
+<div class="card">
     <p-table [value]="tableData" [columns]="selectedColumns"  [reorderableColumns]="true" [tableStyle]="tableStyle" styleClass="p-datatable-striped p-datatable-sm"
     >
         <ng-template pTemplate="caption">
-            <p-multiSelect 
-                display="chip" 
-                [options]="compareColumns" 
-                [(ngModel)]="selectedColumns" 
-                optionLabel="header"
-                [style]="{'min-width': '200px'}" 
-                placeholder="Gösterilecek Sütunları Seçiniz" />
+           @if(markMin) {
+            <p-toggleButton 
+            [(ngModel)]="markMin" 
+            (ngModelChange)="unMarkAll(tableData,compareColumns)"
+            onLabel="Minimum Değerler" 
+            offLabel="Minimum Değerler" 
+            onIcon="pi pi-check" 
+            offIcon="pi pi-times" 
+            styleClass="text-xs mx-2"
+            ariaLabel="Miniumları İşaretle"
+             styleClass="" />
+           }
+                
         </ng-template>
         <ng-template pTemplate="header" let-compareColumns>
             <tr>
                 @for(column of columns; track column; let i =$index) {
                     @if(column.isBirim || column.isToplam) {
-                        <th [attr.colspan]="bids.length+1"> {{column.header}} </th>
+                        <th [attr.colspan]="bids.length+colExpandValue"> {{column.header}} </th>
                     }
                     @else {
                          <!-- <th [pSortableColumn]="column.field">{{ i===0 ?  'Poz No' : column.header }}  
@@ -49,8 +68,10 @@
         <ng-template pTemplate="body" let-row let-columns="compareColumns">
             
             <tr>
-                @for(col of compareColumns; track col) {
-                    <td [ngClass]="[col.color ? col.color : '',row[col.field]===10000 ? 'bg-green-100' : ''  ]"> {{row[col.field]}} </td>
+                @for(col of selectedColumns; track col) {
+                    
+                        <td [ngClass]="[row[col.field+'mark'] ? row[col.field+'mark'] : col.color ? col.color : '' ]"> {{row[col.field]}} </td>
+                   
                 }
             </tr>
         </ng-template>
