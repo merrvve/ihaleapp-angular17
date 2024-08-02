@@ -10,6 +10,8 @@ import { CompareColumn } from '../../../models/compare-column.interface';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 interface Price {
   title: string;
   bid: number;
@@ -30,7 +32,9 @@ interface CompareTableRow {
 @Component({
   selector: 'app-ihale-karsilastir',
   standalone: true,
-  imports: [TableModule, MultiSelectModule, FormsModule, NgClass, ToggleButtonModule, MenubarModule],
+  imports: [TableModule, MultiSelectModule, FormsModule, NgClass, ToggleButtonModule, MenubarModule, DialogModule,
+    ButtonModule
+  ],
   templateUrl: './ihale-karsilastir.component.html',
   styleUrl: './ihale-karsilastir.component.scss'
 })
@@ -41,9 +45,10 @@ export class IhaleKarsilastirComponent implements OnInit {
   tableStyle = {width:"100%"}
   tenderData!: any[];
   tableMenuItems!: MenuItem[];
-  data: any [] = [];
+  
   selectedColumns! : CompareColumn[];
-  colExpandValue = 2;
+  colExpandValue = 0;
+  budegetModalVisible: boolean =false;
 
   bids!: TenderBid[];
   markMin: boolean = false;
@@ -112,6 +117,18 @@ export class IhaleKarsilastirComponent implements OnInit {
           });
 
           idx +=1;
+          this.compareColumns.push({
+            id: idx,
+            field: column.header + ' budget',
+            header:'Bütçe' ,
+            isUnit: column.isBirim,
+            isTotal: column.isToplam,
+            isAllTotal: column.isAllTotal,
+            color: 'bg-primary-50'
+
+          });
+
+          idx +=1;
       }
       else {
         this.compareColumns.push({
@@ -127,7 +144,7 @@ export class IhaleKarsilastirComponent implements OnInit {
       }
       });
      
-    this.selectedColumns = this.compareColumns.filter(x=>x.header!=='Minimum' && x.header!=='Maksimum' && x.header!=='Ortalama' );
+    this.selectedColumns = this.compareColumns.filter(x=>x.header!=='Minimum' && x.header!=='Maksimum' && x.header!=='Ortalama'  && x.header!=='Bütçe');
     this.colExpandValue = 0;
     console.log(this.selectedColumns);
     this.tableStyle.width = (this.selectedColumns.length *7) +'rem';
@@ -154,7 +171,25 @@ export class IhaleKarsilastirComponent implements OnInit {
             {
               label: 'Bütçe',
               icon: 'pi pi-calculator',
-              //command: () => (this.saveDraft()),
+              items: [
+                {
+                  label: 'Bütçeyi Göster',
+                  icon: 'pi pi-eye',
+                  command: () => this.AddCol('Bütçe'),
+                },
+                {
+                  label: 'Bütçeyi Düzenle',
+                  icon: 'pi pi-file-edit',
+                  disabled: true,
+                  //command: () => this.AddCol('Bütçe'),
+                },
+                {
+                  label: 'Yeni Bütçe Oluştur',
+                  icon: 'pi pi-plus',
+                  routerLink: ['/']
+                  //command: () => this.AddCol('Minimum'),
+                },
+                ]
             }
           ]
       },
@@ -169,8 +204,8 @@ export class IhaleKarsilastirComponent implements OnInit {
           }
         ]
       }
-     ]
-
+     ];
+     
      
   }
 

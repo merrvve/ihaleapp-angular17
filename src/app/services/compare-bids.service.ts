@@ -3,6 +3,7 @@ import { TenderBid } from '../models/tender-bid';
 import { Tender } from '../models/tender';
 import { Column } from '../models/column.interface';
 import { average } from '@angular/fire/firestore';
+import { CompareColumn } from '../models/compare-column.interface';
 
 interface Price {
   title: string;
@@ -28,13 +29,63 @@ interface CompareTableRow {
   minUnitPrices: Price[];
   totalPrices: Price[];
 }
-
+interface BudgetObject {
+  title:string;
+  value: number;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class CompareBidsService {
   compareBids!: TenderBid[];
   tender!: Tender;
+  budget: TenderBid = {
+    bidder_id: '0',
+    created_at: '',
+    total_price: 0,
+    discovery_data: {
+      "0": [
+          "key",
+          "İş Tanımı",
+          "Marka",
+          "Miktar",
+          "Birim",
+          "Malzeme Birim Fiyat",
+          "İşçilik Birim Fiyat",
+          "Toplam Birim Fiyat",
+          "Malzeme Toplam Fiyat",
+          "İşçilik Toplam Fiyat",
+          "Toplam Fiyat"
+      ],
+      "1": [
+          "1",
+          "Başlık",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          60000
+      ],
+      "2": [
+          "1.1",
+          "zz",
+          "zzz",
+          50,
+          "m",
+          400,
+          800,
+          1200,
+          20000,
+          40000,
+          60000
+      ]
+  }
+  }
+
   constructor() { }
   createTableData(bids:TenderBid[]=[]) {
     //set static column names of tender discovery data 
@@ -70,9 +121,11 @@ export class CompareBidsService {
       
     // }
   const tenderData = this.convertToObject(this.tender.discoveryData, this.tender.discoveryData[0])
+  const budgetObject = this.convertToObject(this.budget.discovery_data,this.tender.discoveryData[0])
   columns = this.convertToColumn(this.tender.discoveryData[0]);
-  table = this.convertToCompareTable(columns,tenderData,tableData);
+  table = this.convertToCompareTable(columns,tenderData,tableData,budgetObject);
   const bidsCount = this.compareBids.length;
+  this.loadBudget(this.compareBids[1],table,columns);
      return { columns, tenderData: tenderData, table: table, bidsCount, bids:this.compareBids };
   }
 
@@ -93,148 +146,29 @@ export class CompareBidsService {
     return newObjects; 
   }
 
-  // convertToCompareTable(columns: Column[], tenderObject: any[],  bidObjects: any[]) {
-  //   let result : any[] = [];
-    
-  //   for(let i=0; i<tenderObject.length; i++) {
-  //   // store prices for this row
-  //     let unitPrices : Price[] =[];
-  //     let totalPrices : Price[] = [];
-  //     for(const column of columns) {
-  //       if(column.isBirim) {
-  //         bidObjects.forEach((bid,index) => 
-  //           {
-  //             unitPrices.push({title: column.header, bid: index, price: +bid[i][column.header] });       
-  //           }
-  //         ) 
-  //       }
-  //       else if(column.isToplam) {
-  //         bidObjects.forEach((bid,index) => 
-  //           {
-  //             totalPrices.push({title: column.header, bid: index, price: +bid[i][column.header] });       
-  //           }
-  //         ) 
-  //       }
-  //     }
-  //     let anyRow : any =
-  //         {
-  //           id: '',
-  //           'key': tenderObject[i]['key'],
-  //           'İş Tanımı': tenderObject[i]['İş Tanımı'],
-  //           'Miktar': tenderObject[i]['Miktar'],
-  //           'Birim': tenderObject[i]['Birim'],
-  //           'Marka': tenderObject[i]['Marka'],
-  //         }
-       
-  //     unitPrices.forEach((price,i)=>{
-  //       anyRow[price.title+(price.bid+1)] = price.price;
-  //      })
-  //      totalPrices.forEach((price,i)=>{
-  //       anyRow[price.title+(price.bid+1)] = price.price;
-  //      });
 
-  //     const minMaxUnitP = this.calculateMinMax(unitPrices);
-  //     const minMaxTotalP = this.calculateMinMax(totalPrices);
-  //     for (const [title, { min, max }] of Object.entries(minMaxUnitP) as any) {
-  //       anyRow[`${title} min`] = min;
-  //       anyRow[`${title} max`] = max;
-  //     }
-  //     for (const [title, { min, max }] of Object.entries(minMaxTotalP) as any) {
-  //       anyRow[`${title} min`] = min;
-  //       anyRow[`${title} max`] = max;
-  //     }
-  //     result.push(anyRow);
-  //   }
-  //   console.log(result)
-  //   return result;
-
-  // }
-  // convertToCompareTable(columns: Column[], tenderObject: any[], bidObjects: any[]): CompareTableRow[] {
-  //   let result: CompareTableRow[] = [];
-    
-  //   for (let i = 0; i < tenderObject.length; i++) {
-  //     let unitPrices: Price[] = [];
-  //     let totalPrices: Price[] = [];
-  //     let minUnitPrices: Price[] = []; // To store the min prices specifically
-  
-  //     for (const column of columns) {
-  //       if (column.isBirim) {
-  //         let pricesForColumn: Price[] = [];
-  //         bidObjects.forEach((bid, index) => {
-  //           pricesForColumn.push({ title: column.header, bid: index, price: +bid[i][column.header] });
-  //         });
-  
-  //         // Determine min and max prices for this column
-  //         const minPriceValue = Math.min(...pricesForColumn.map(p => p.price));
-  //         const maxPriceValue = Math.max(...pricesForColumn.map(p => p.price));
-  
-  //         // Assign isMin and isMax properties
-  //         pricesForColumn.forEach(price => {
-  //           price.isMin = price.price === minPriceValue;
-  //           price.isMax = price.price === maxPriceValue;
-  //         });
-  
-  //         unitPrices.push(...pricesForColumn);
-  //       } else if (column.isToplam) {
-  //         let pricesForColumn: Price[] = [];
-  //         bidObjects.forEach((bid, index) => {
-  //           pricesForColumn.push({ title: column.header, bid: index, price: +bid[i][column.header] });
-  //         });
-  
-  //         // Determine min and max prices for this column
-  //         const minPriceValue = Math.min(...pricesForColumn.map(p => p.price));
-  //         const maxPriceValue = Math.max(...pricesForColumn.map(p => p.price));
-  
-  //         // Assign isMin and isMax properties
-  //         pricesForColumn.forEach(price => {
-  //           price.isMin = price.price === minPriceValue;
-  //           price.isMax = price.price === maxPriceValue;
-  //         });
-  
-  //         totalPrices.push(...pricesForColumn);
-  //       }
-  //     }
-  
-  //     let anyRow: any = {
-  //       id: '', // or some unique identifier
-  //       key: tenderObject[i]['key'],
-  //       title: tenderObject[i]['İş Tanımı'],
-  //       amount: tenderObject[i]['Miktar'],
-  //       unit: tenderObject[i]['Birim'],
-  //       brand: tenderObject[i]['Marka'],
-  //       unitPrices,
-  //       totalPrices
-  //     };
-  
-  //     // Populate row data with prices
-  //     unitPrices.forEach((price) => {
-  //       anyRow[price.title + (price.bid + 1)] = price.price;
-  //     });
-  //     totalPrices.forEach((price) => {
-  //       anyRow[price.title + (price.bid + 1)] = price.price;
-  //     });
-  
-  //     result.push(anyRow);
-  //   }
-  //   console.log(result)
-  //   return result;
-  // }
-  convertToCompareTable(columns: Column[], tenderObject: any[], bidObjects: any[]): CompareTableRow[] {
+  convertToCompareTable(columns: Column[], tenderObject: any[], bidObjects: any[], budgetData: any[]): CompareTableRow[] {
     let result: CompareTableRow[] = [];
     
     for (let i = 0; i < tenderObject.length; i++) {
       let unitPrices: Price[] = [];
       let totalPrices: Price[] = [];
-  
+      let budgetRow :any = {}
       for (const column of columns) {
         if (column.isBirim) {
           bidObjects.forEach((bid, index) => {
             unitPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] });
           });
+          budgetRow[column.header] =budgetData[i][column.header]
+          
+          //unitPrices.push({ title: column.header, bid: -1, price: budgetData[i][column.header]})
         } else if (column.isToplam) {
           bidObjects.forEach((bid, index) => {
             totalPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] });
           });
+          budgetRow[column.header] =budgetData[i][column.header]
+          
+          //totalPrices.push({ title: column.header, bid: -1, price: budgetData[i][column.header]});
         }
       }
   
@@ -280,16 +214,19 @@ export class CompareBidsService {
         anyRow[`${title} min`] = min;
         anyRow[`${title} max`] = max;
         anyRow[`${title} avg`] = average;
+        anyRow[`${title} budget`] = budgetRow[title];
+
       }
       for (const [title, { min, max, average }] of Object.entries(minMaxTotalP) as any) {
         anyRow[`${title} min`] = min;
         anyRow[`${title} max`] = max;
         anyRow[`${title} avg`] = average;
+        anyRow[`${title} budget`] = budgetRow[title];
       }
-  
+      
       result.push(anyRow);
     }
-    console.log(result)
+    console.log(result);
     return result;
   }
   
@@ -358,9 +295,20 @@ export class CompareBidsService {
         result[title] = { min: NaN, max: NaN, average:NaN }; // Handle cases where prices are not numbers
       }
     }
-
-    
-  
     return result;
+  }
+
+  loadBudget(budget: TenderBid,tableData: any[], columns: Column[]) {
+    const budgetObject = this.convertToObject(budget.discovery_data,this.tender.discoveryData[0]);
+    console.log(tableData)
+    for(let i=0; i<tableData.length; i++) {
+      for(const column of columns) {
+        if(column.isBirim || column.isToplam) {
+         console.log(budgetObject[i][column.header], tableData[i])
+          tableData[i][column.header+ ' budget'] = budgetObject[i][column.header]
+        }
+      }
+    }
+    
   }
 }
