@@ -60,10 +60,12 @@ export class IhaleKarsilastirComponent implements OnInit {
     this.bids = data.bids;
     
     this.compareColumns =[];
+    let idx = 0;
     this.columns.forEach((column,index)=> {
       if(column.isBirim || column.isToplam) {
           this.bids.forEach((bid,count)=>{
             this.compareColumns.push({
+              id: idx,
               field: column.header + (count+1),
               header:'Teklif '+(count+1) ,
               isUnit: column.isBirim,
@@ -71,10 +73,12 @@ export class IhaleKarsilastirComponent implements OnInit {
               isAllTotal: column.isAllTotal,
               bid: (count+1),
               color: colors[count]
-            })
+            }); 
+            idx +=1;
             })
           
           this.compareColumns.push({
+            id:idx,
             field: column.header + ' min',
             header:'Minimum' ,
             isUnit: column.isBirim,
@@ -83,7 +87,9 @@ export class IhaleKarsilastirComponent implements OnInit {
             color: 'bg-green-100'
 
           });
+          idx+=1;
           this.compareColumns.push({
+            id: idx,
             field: column.header + ' max',
             header:'Maksimum' ,
             isUnit: column.isBirim,
@@ -93,21 +99,37 @@ export class IhaleKarsilastirComponent implements OnInit {
 
           });
 
-          
+          idx +=1;
+          this.compareColumns.push({
+            id: idx,
+            field: column.header + ' avg',
+            header:'Ortalama' ,
+            isUnit: column.isBirim,
+            isTotal: column.isToplam,
+            isAllTotal: column.isAllTotal,
+            color: 'bg-teal-50'
+
+          });
+
+          idx +=1;
       }
       else {
         this.compareColumns.push({
+          id: idx,
           field: column.field,
           header: column.header,
           isUnit: column.isBirim,
           isTotal: column.isToplam,
           isAllTotal: column.isAllTotal
-        })
+        });
+        idx+=1;
           
       }
       });
      
-    this.selectedColumns = this.compareColumns;
+    this.selectedColumns = this.compareColumns.filter(x=>x.header!=='Minimum' && x.header!=='Maksimum' && x.header!=='Ortalama' );
+    this.colExpandValue = 0;
+    console.log(this.selectedColumns);
     this.tableStyle.width = (this.selectedColumns.length *7) +'rem';
     this.tableMenuItems = [
       {
@@ -117,17 +139,17 @@ export class IhaleKarsilastirComponent implements OnInit {
             {
               label: 'Minimum',
               icon: 'pi pi-file-import',
-              //command: () => this.AddCol('Minimum'),
+              command: () => this.AddCol('Minimum'),
             },
             {
-              label: 'En Yüksek Değer',
+              label: 'Maksimum',
               icon: 'pi pi-file-export',
-              //command: () => this.exportAsExcel(),
+              command: () => this.AddCol('Maksimum'),
             },
             {
               label: 'Ortalama Değer',
               icon: 'pi pi-calculator',
-              //command: () => (this.saveDraft()),
+              command: () => this.AddCol('Ortalama'),
             },
             {
               label: 'Bütçe',
@@ -186,8 +208,13 @@ export class IhaleKarsilastirComponent implements OnInit {
 
   AddCol(colType: string) {
     
-   
-   console.log(this.compareColumns,this.compareColumns.filter(x=>x.header==='Minimum'))
-   this.tableStyle.width = (this.selectedColumns.length *7) +'rem';
+  this.selectedColumns = this.selectedColumns.concat(this.compareColumns.filter(x=>x.header===colType)) 
+  this.colExpandValue +=1;
+  this.selectedColumns.sort((a,b)=>a.id-b.id);
+   this.tableStyle.width = (this.selectedColumns.length *8) +'rem';
+  }
+
+  colReorder() {
+    this.selectedColumns.sort((a,b)=>a.id-b.id);
   }
 }

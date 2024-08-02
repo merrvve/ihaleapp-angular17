@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TenderBid } from '../models/tender-bid';
 import { Tender } from '../models/tender';
 import { Column } from '../models/column.interface';
+import { average } from '@angular/fire/firestore';
 
 interface Price {
   title: string;
@@ -275,13 +276,15 @@ export class CompareBidsService {
       });
   
       // Add min and max values to the row
-      for (const [title, { min, max }] of Object.entries(minMaxUnitP) as any) {
+      for (const [title, { min, max, average }] of Object.entries(minMaxUnitP) as any) {
         anyRow[`${title} min`] = min;
         anyRow[`${title} max`] = max;
+        anyRow[`${title} avg`] = average;
       }
-      for (const [title, { min, max }] of Object.entries(minMaxTotalP) as any) {
+      for (const [title, { min, max, average }] of Object.entries(minMaxTotalP) as any) {
         anyRow[`${title} min`] = min;
         anyRow[`${title} max`] = max;
+        anyRow[`${title} avg`] = average;
       }
   
       result.push(anyRow);
@@ -348,9 +351,11 @@ export class CompareBidsService {
       if (Array.isArray(priceArray) && priceArray.every(p => typeof p === 'number')) {
         const min = Math.min(...priceArray);
         const max = Math.max(...priceArray);
-        result[title] = { min, max };
+        const average = (priceArray.reduce((sum, price) => sum + price, 0) / priceArray.length).toFixed(2);
+      result[title] = { min, max, average };
+       
       } else {
-        result[title] = { min: NaN, max: NaN }; // Handle cases where prices are not numbers
+        result[title] = { min: NaN, max: NaN, average:NaN }; // Handle cases where prices are not numbers
       }
     }
 

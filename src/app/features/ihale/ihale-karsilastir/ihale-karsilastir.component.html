@@ -18,6 +18,7 @@
             display="chip" 
             [options]="compareColumns" 
             [(ngModel)]="selectedColumns" 
+            (ngModelChange)="colReorder()"
             optionLabel="header"
             [style]="{'min-width': '200px'}" 
             placeholder="Gösterilecek Sütunları Seçiniz" />

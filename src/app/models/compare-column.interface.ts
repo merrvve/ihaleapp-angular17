@@ -1,4 +1,5 @@
 export interface CompareColumn {
+    id: number;
     field: string;
     header: string;
     bid?: number;
