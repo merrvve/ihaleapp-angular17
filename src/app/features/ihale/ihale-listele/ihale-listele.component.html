@@ -3,7 +3,28 @@
 </div>
 @if(tenders$|async; as tenders) {
     <div class="card">
-        <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple">
+        <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
+        #tendersTable
+        [paginator]="true"
+        [rows] ="20"
+        [rowsPerPageOptions]="[20, 40, 50]"
+        [globalFilterFields]="['id', 'name','description','currency','cost']"
+        styleClass ='p-datatable-sm'
+        >
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <p-iconField iconPosition="left" class="ml-auto">
+                    <p-inputIcon>
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input 
+                        pInputText 
+                        type="text" 
+                        (input)="tendersTable.filterGlobal(getEventValue($event), 'contains')" 
+                        placeholder="Tabloda Ara..." />
+                </p-iconField>
+            </div>
+        </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th>İhale No</th>
@@ -25,21 +46,26 @@
                             type="text"
                             field="id" 
                             placeholder="Ara..." 
-                            ariaLabel="Id" />
+                            ariaLabel="Id"
+                            matchMode="contains" [showMenu]="false" />
                     </th>
                     <th>
                         <p-columnFilter 
                             type="text"
                             field="name" 
                             placeholder="Ara..." 
-                            ariaLabel="İhale Adı" />
+                            ariaLabel="İhale Adı" 
+                            matchMode="contains" [showMenu]="false"/>
                     </th>
                     <th>
                         <p-columnFilter 
                             type="text"
                             field="description" 
                             placeholder="Ara..." 
-                            ariaLabel="İhale Açıklaması" />
+                            ariaLabel="İhale Açıklaması" 
+                            styleClass="w-100"
+                            matchMode="contains" [showMenu]="false"
+                            />
                     </th>
                     <th pSortableColumn="status">
                         <p-sortIcon field="status" />
@@ -49,22 +75,35 @@
                             type="text"
                             field="name" 
                             placeholder="Ara..." 
-                            ariaLabel="İhale Adı" />
+                            ariaLabel="İhale Adı" 
+                            matchMode="contains" [showMenu]="false"/>
                     </th>
                     <th>
-                       
+                        <p-columnFilter 
+                            type="text"
+                            field="name" 
+                            placeholder="Ara..." 
+                            ariaLabel="İhale Adı" 
+                            matchMode="contains" [showMenu]="false"/>
+                    </th>
+                    <th pSortableColumn="created_at">
+                        <p-sortIcon field="created_at" />
+                    </th>
+                    <th pSortableColumn="completed_at">
+                        <p-sortIcon field="completed_at" />
+                    </th>
+                    <th pSortableColumn="cost">
+                        <p-sortIcon field="cost" />
                     </th>
                     <th>
-                       
-                    </th>
-                    <th>
-                        
-                    </th>
-                    <th>
-                        
-                    </th>
-                    <th>
-                       
+                        <p-columnFilter 
+                            type="text"
+                            field="currency" 
+                            placeholder="Ara..." 
+                            ariaLabel="Para Birimi" 
+                            styleClass="w-100"
+                            matchMode="contains" [showMenu]="false"
+                            />
                     </th>
                     <th></th>
                 </tr>
@@ -75,11 +114,11 @@
                         <td>{{ tender.id }}</td>
                         <td>{{ tender.name }}</td>
                         <td>{{ tender.description }}</td>
-                        <td>{{ tender.isCompleted }}</td>
+                        <td>{{ tender.isCompleted ? 'Tamamlandı' : 'Devam Ediyor' }}</td>
                         <td></td>
                         <td></td>
                         <td>{{ tender.created_at |date }}</td>
-                        <td>{{ tender.completed_at }}</td>
+                        <td>{{ tender.completed_at |date }}</td>
                         <td>{{ tender.cost }}</td>
                         <td>{{ tender.currency }}</td>
                         <td>

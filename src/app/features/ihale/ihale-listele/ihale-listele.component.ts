@@ -7,11 +7,14 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { Router } from '@angular/router';
 import { TenderService } from '../../../services/tender.service';
 import { Tender } from '../../../models/tender';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-ihale-listele',
   standalone: true,
-  imports: [TableModule, ButtonModule, AsyncPipe, LoadingSpinnerComponent, JsonPipe, DatePipe],
+  imports: [TableModule, ButtonModule, AsyncPipe, LoadingSpinnerComponent, JsonPipe, DatePipe,IconFieldModule, InputIconModule,InputTextModule],
   templateUrl: './ihale-listele.component.html',
   styleUrl: './ihale-listele.component.scss',
 })
@@ -41,5 +44,7 @@ export class IhaleListeleComponent implements OnInit {
   deleteTender(tenderId: string) {
     this.tenderService.deleteTender(tenderId);
   }
-  
+  getEventValue($event:any) :string {
+    return $event.target.value;
+  }
 }
