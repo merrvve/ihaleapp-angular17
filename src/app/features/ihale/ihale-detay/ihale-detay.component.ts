@@ -92,18 +92,18 @@ export class IhaleDetayComponent implements OnInit {
             items: [
               {
                 label: 'Bütçe Fiyatı',
-                icon: 'pi pi-fw pi-user-plus mr-2',
+                icon: 'pi pi-fw pi-calculator mr-2',
                 routerLink: [`/ihale/${this.tenderId || '1'}/butce`],
               },
               {
                 label: 'Yeni Tablo',
-                icon: 'pi pi-fw pi-user-plus mr-2',
+                icon: 'pi pi-fw pi-plus mr-2',
                 routerLink: [`ihale/ihale/${this.tenderId || '1'}/teklifler`],
               },
               {
                 label: 'Tablolar',
-                icon: 'pi pi-fw pi-user-plus mr-2',
-                routerLink: ['/'],
+                icon: 'pi pi-fw pi-database mr-2',
+                routerLink: [`/ihale/${this.tenderId || '1'}/karsilastirma-tablolari`],
               },
             ],
           },

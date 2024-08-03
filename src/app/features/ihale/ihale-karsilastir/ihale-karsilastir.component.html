@@ -75,7 +75,7 @@
             <tr>
                 @for(column of columns; track column; let i =$index) {
                     @if(column.isBirim || column.isToplam) {
-                        <th [attr.colspan]="bids.length+colExpandValue"> {{column.header}} </th>
+                        <th [attr.colspan]="bids.length+colExpandValue"> {{column.header}} {{ ' ('+ selectedCurrency +') '}} </th>
                     }
                     @else {
                          <!-- <th [pSortableColumn]="column.field">{{ i===0 ?  'Poz No' : column.header }}  

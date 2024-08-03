@@ -12,6 +12,8 @@ import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { Tender } from '../../../models/tender';
+import { CurrencyService } from '../../../services/currency.service';
 interface Price {
   title: string;
   bid: number;
@@ -43,10 +45,11 @@ export class IhaleKarsilastirComponent implements OnInit {
   compareColumns!: CompareColumn[];
   tableData! : any[];
   tableStyle = {width:"100%"}
-  tenderid!: string | undefined;
+  tender!: Tender | undefined;
   tableMenuItems!: MenuItem[];
   
   selectedColumns! : CompareColumn[];
+  selectedCurrency!: string;
   colExpandValue = 0;
   budegetModalVisible: boolean =false;
 
@@ -55,16 +58,17 @@ export class IhaleKarsilastirComponent implements OnInit {
   markMax: boolean = false;
 
   constructor(
-    private compareService: CompareBidsService
+    private compareService: CompareBidsService,
+    private currencyService: CurrencyService
   ){}
   ngOnInit(): void {
     const data= this.compareService.createTableData(this.compareService.compareBids);
     const colors = ['bg-blue-100','bg-yellow-100','bg-pink-100','bg-purple-100']
     this.columns = data.columns;
-    this.tenderid = data.tenderid;
+    this.tender = data.tender;
     this.tableData = data.table;
     this.bids = data.bids;
-    
+    this.selectedCurrency = this.tender.currency;
     this.compareColumns =[];
     let idx = 0;
     this.columns.forEach((column,index)=> {
@@ -147,7 +151,6 @@ export class IhaleKarsilastirComponent implements OnInit {
      
     this.selectedColumns = this.compareColumns.filter(x=>x.header!=='Minimum' && x.header!=='Maksimum' && x.header!=='Ortalama'  && x.header!=='Bütçe');
     this.colExpandValue = 0;
-    console.log(this.selectedColumns);
     this.tableStyle.width = (this.selectedColumns.length *7) +'rem';
     this.tableMenuItems = [
       {
@@ -157,6 +160,7 @@ export class IhaleKarsilastirComponent implements OnInit {
           {
             label: 'Kaydet',
             icon: 'pi pi-save',
+            disabled: true
           },
           {
             label: 'Yazdır',
@@ -196,15 +200,10 @@ export class IhaleKarsilastirComponent implements OnInit {
                 {
                   label: 'Bütçeyi Düzenle',
                   icon: 'pi pi-file-edit',
-                  disabled: true,
+                  routerLink: ['/','ihale', this.tender.id,'butce']
                   //command: () => this.AddCol('Bütçe'),
-                },
-                {
-                  label: 'Yeni Bütçe Oluştur',
-                  icon: 'pi pi-plus',
-                  routerLink: ['/','ihale', this.tenderid,'butce']
-                  //command: () => this.AddCol('Minimum'),
-                },
+                }
+                
                 ]
             }
           ]
@@ -223,6 +222,12 @@ export class IhaleKarsilastirComponent implements OnInit {
             icon: 'pi pi-angle-double-up',
             command: () => {this.markMax=true; this.markFields(this.tableData,this.compareColumns,1)},
         },
+        {
+          label: 'Diğer',
+          icon: 'pi pi-angle-double-up',
+          disabled: true
+          //command: () => {this.markMax=true; this.markFields(this.tableData,this.compareColumns,1)},
+      },
         ]
       },
       {
@@ -236,17 +241,35 @@ export class IhaleKarsilastirComponent implements OnInit {
               {
                 label: 'Dolar',
                 icon: 'pi pi-dollar',
-                //command: () => this.printTable(),
+                command: () => 
+                  {
+                    const division = this.calculateRate(this.selectedCurrency,"dolar")
+                    this.changeCurrency(division,this.tableData,this.compareColumns);
+                    this.selectedCurrency ="dolar"
+                    
+                  }
               },
               {
                 label: 'Euro',
                 icon: 'pi pi-euro',
-                //command: () => this.printTable(),
+                command: () => 
+                  {
+                    const division = this.calculateRate(this.selectedCurrency,"euro")
+                    this.changeCurrency(division,this.tableData,this.compareColumns);
+                    this.selectedCurrency ="euro"
+                    
+                  }
               },
               {
                 label: 'Türk Lirası',
                 icon: 'pi pi-turkish-lira',
-                //command: () => this.printTable(),
+                command: () => 
+                  {
+                    const division = this.calculateRate(this.selectedCurrency,"TL")
+                    this.changeCurrency(division,this.tableData,this.compareColumns);
+                    this.selectedCurrency ="TL"
+                    
+                  }
               },
             ]
           }
@@ -367,4 +390,46 @@ export class IhaleKarsilastirComponent implements OnInit {
     printWindow?.document.close();
     printWindow?.print();
   }
+
+  calculateRate(present:string, next: string) {
+    const currencyRate = this.currencyService.getCurrencyRates();
+    let divide = 1;
+    if(present==="TL") {
+      if(next==="dolar") {
+        divide = currencyRate.dolar;
+      }
+      else if(next==="euro") {
+        divide = currencyRate.euro;
+      }
+    }
+    else if(present==="dolar") {
+      if(next==="TL") {
+        divide = 1/currencyRate.dolar;
+      }
+      else if(next==="euro") {
+        divide = 1/currencyRate.dolar*currencyRate.euro;
+      }
+    }
+    else if(present==="euro") {
+      if(next==="TL") {
+        divide= 1/currencyRate.euro;
+      }
+      else if(next==="dolar") {
+        divide= 1/currencyRate.euro*currencyRate.dolar;
+      }
+    }
+    return divide;
+  }
+
+  changeCurrency(divide: number, tableData: any[], columns:CompareColumn[]) {
+    console.log(divide)
+    for(const row of tableData) {
+      for(const column of columns) {
+        if(column.isUnit || column.isTotal) {
+          const original = parseFloat(row[column.field])
+          row[column.field] = (original/divide).toFixed(2);
+        }
+      }
+    }
+  } 
 }

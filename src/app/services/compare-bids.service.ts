@@ -121,7 +121,7 @@ export class CompareBidsService {
   table = this.convertToCompareTable(columns,tenderData,tableData,budgetObject);
   const bidsCount = this.compareBids.length;
   this.loadBudget(this.budget,table,columns);
-     return { columns, tenderid: this.tender.id, table: table, bidsCount, bids:this.compareBids };
+     return { columns, tender: this.tender, table: table, bidsCount, bids:this.compareBids };
   }
 
   convertToObject(data: any[],columns:string[]) {
@@ -221,7 +221,6 @@ export class CompareBidsService {
       
       result.push(anyRow);
     }
-    console.log(result);
     return result;
   }
   
@@ -295,11 +294,9 @@ export class CompareBidsService {
 
   loadBudget(budget: TenderBid,tableData: any[], columns: Column[]) {
     const budgetObject = this.convertToObject(budget.discovery_data,this.tender.discoveryData[0]);
-    console.log(tableData)
     for(let i=0; i<tableData.length; i++) {
       for(const column of columns) {
         if(column.isBirim || column.isToplam) {
-         console.log(budgetObject[i][column.header], tableData[i])
           tableData[i][column.header+ ' budget'] = budgetObject[i][column.header]
         }
       }

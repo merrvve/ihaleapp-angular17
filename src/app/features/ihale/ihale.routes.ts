@@ -12,6 +12,7 @@ import { IhaleKarsilastirComponent } from './ihale-karsilastir/ihale-karsilastir
 import { TaslaklarComponent } from './ihale-listele/taslaklar/taslaklar.component';
 import { CreateBudgetComponent } from './budget/create-budget/create-budget.component';
 import { FirmaTeklifleriComponent } from './ihale-detay/ihale-teklifleri/firma-teklifleri/firma-teklifleri.component';
+import { ListCompareTablesComponent } from './ihale-karsilastir/list-compare-tables/list-compare-tables.component';
 
 
 export const IHALE_ROUTES: Route[] = [
@@ -33,6 +34,7 @@ export const IHALE_ROUTES: Route[] = [
   { path: 'listele', component: IhaleListeleComponent },
   { path: 'taslaklar', component: TaslaklarComponent },
   { path: 'karsilastir', component: IhaleKarsilastirComponent },
+  { path: ':id/karsilastirma-tablolari', component: ListCompareTablesComponent },
   { path: ':id/butce', component: CreateBudgetComponent },
   { path: '', redirectTo: 'listele', pathMatch: 'full' },
       
