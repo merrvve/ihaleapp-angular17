@@ -43,7 +43,7 @@ export class IhaleKarsilastirComponent implements OnInit {
   compareColumns!: CompareColumn[];
   tableData! : any[];
   tableStyle = {width:"100%"}
-  tenderData!: any[];
+  tenderid!: string | undefined;
   tableMenuItems!: MenuItem[];
   
   selectedColumns! : CompareColumn[];
@@ -52,6 +52,7 @@ export class IhaleKarsilastirComponent implements OnInit {
 
   bids!: TenderBid[];
   markMin: boolean = false;
+  markMax: boolean = false;
 
   constructor(
     private compareService: CompareBidsService
@@ -60,7 +61,7 @@ export class IhaleKarsilastirComponent implements OnInit {
     const data= this.compareService.createTableData(this.compareService.compareBids);
     const colors = ['bg-blue-100','bg-yellow-100','bg-pink-100','bg-purple-100']
     this.columns = data.columns;
-    this.tenderData = data.tenderData;
+    this.tenderid = data.tenderid;
     this.tableData = data.table;
     this.bids = data.bids;
     
@@ -150,8 +151,23 @@ export class IhaleKarsilastirComponent implements OnInit {
     this.tableStyle.width = (this.selectedColumns.length *7) +'rem';
     this.tableMenuItems = [
       {
+        label: 'Dosya',
+        icon: 'pi pi-folder-open',
+        items: [
+          {
+            label: 'Kaydet',
+            icon: 'pi pi-save',
+          },
+          {
+            label: 'Yazdır',
+            icon: 'pi pi-print',
+            command: () => this.printTable(),
+          }
+        ]
+      },
+      {
           label: 'Sütun Ekle',
-          icon: 'pi pi-plus',
+          icon: 'pi pi-plus-circle',
           items: [
             {
               label: 'Minimum',
@@ -186,7 +202,7 @@ export class IhaleKarsilastirComponent implements OnInit {
                 {
                   label: 'Yeni Bütçe Oluştur',
                   icon: 'pi pi-plus',
-                  routerLink: ['/']
+                  routerLink: ['/','ihale', this.tenderid,'butce']
                   //command: () => this.AddCol('Minimum'),
                 },
                 ]
@@ -199,17 +215,57 @@ export class IhaleKarsilastirComponent implements OnInit {
           items: [
             {
               label: 'Minimum',
-              icon: 'pi pi-file-import',
-              command: () => {this.markMin=true; this.markMinFields(this.tableData,this.compareColumns)},
+              icon: 'pi pi-angle-double-down',
+              command: () => {this.markMin=true; this.markFields(this.tableData,this.compareColumns,0)},
+          },
+          {
+            label: 'Maksimum',
+            icon: 'pi pi-angle-double-up',
+            command: () => {this.markMax=true; this.markFields(this.tableData,this.compareColumns,1)},
+        },
+        ]
+      },
+      {
+        label: 'Ayarlar',
+        icon: 'pi pi-wrench',
+        items: [
+          {
+            label: 'Para Birimi',
+            icon: 'pi pi-money-bill',
+            items: [
+              {
+                label: 'Dolar',
+                icon: 'pi pi-dollar',
+                //command: () => this.printTable(),
+              },
+              {
+                label: 'Euro',
+                icon: 'pi pi-euro',
+                //command: () => this.printTable(),
+              },
+              {
+                label: 'Türk Lirası',
+                icon: 'pi pi-turkish-lira',
+                //command: () => this.printTable(),
+              },
+            ]
           }
         ]
       }
+      
      ];
      
      
   }
 
-  markMinFields(rows:any[],columns: CompareColumn[]) {
+  markFields(rows:any[],columns: CompareColumn[],choice:number) {
+    // Mark fileds
+    /* Choices:
+        0: min,
+        1: max,
+        2:... 
+    */
+   if(choice===0) {
     if(this.markMin) {
       for(const row of rows) {
         for (const column of columns) {
@@ -217,7 +273,7 @@ export class IhaleKarsilastirComponent implements OnInit {
             //field name minus numbers + min
             const minName = column.field.replace(/\d+$/, '') + ' min';
             if(row[column.field]===row[minName]) {
-              row[column.field + 'mark'] = 'bg-green-100';
+              row[column.field + 'mark'] = 'bg-green-200';
             }
           }
         }
@@ -229,13 +285,43 @@ export class IhaleKarsilastirComponent implements OnInit {
       this.unMarkAll(rows,columns);
       return;
     }
- 
+   }
+    
+   if(choice===1) {
+    if(this.markMax) {
+      for(const row of rows) {
+        for (const column of columns) {
+          if(column.isUnit || column.isTotal) {
+            //field name minus numbers + min
+            const minName = column.field.replace(/\d+$/, '') + ' max';
+            if(row[column.field]===row[minName]) {
+              row[column.field + 'mark'] = 'bg-red-200';
+            }
+          }
+        }
+      }
+      return;
+    }
+    else {
+    
+      this.unMarkAll(rows,columns);
+      return;
+    }
+   }
   }
-  unMarkAll(rows:any[], columns:CompareColumn[]) {
+  unMarkAll(rows:any[], columns:CompareColumn[], markToDelete?: string) {
     for(const row of rows) {
       for (const column of columns) {
         if(row[column.field + 'mark']) {
-          row[column.field + 'mark']='';
+          if(markToDelete) {
+            if(row[column.field + 'mark']===markToDelete) {
+              row[column.field + 'mark']='';
+            }
+          }
+          else{
+            row[column.field + 'mark']='';
+          }
+          
         }
       }
     }
@@ -251,5 +337,34 @@ export class IhaleKarsilastirComponent implements OnInit {
 
   colReorder() {
     this.selectedColumns.sort((a,b)=>a.id-b.id);
+  }
+
+  printTable() {
+    const printContent = document.querySelector('.card')?.innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow?.document.write('<html><head><title>Print Table</title>');
+    printWindow?.document.write('<style>');
+    printWindow?.document.write(`
+      .card {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    `);
+    printWindow?.document.write('</style></head><body>');
+    printWindow?.document.write(printContent||'');
+    printWindow?.document.write('</body></html>');
+    printWindow?.document.close();
+    printWindow?.print();
   }
 }

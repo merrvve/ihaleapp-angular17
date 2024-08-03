@@ -49,20 +49,25 @@ export class IhaleDetayComponent implements OnInit {
             icon: 'pi pi-fw pi-file mr-2',
             items: [
               {
+                label: 'İhale Dosyaları',
+                icon: 'pi pi-fw pi-folder mr-2',
+                routerLink: ['/'],
+              },
+              {
                 label: 'Zeyilname (Revizyonlar)',
                 icon: 'pi pi-fw pi-plus mr-2',
                 
                   
                 items: [
                       {
-                        label: 'Zeyilname 1',
-                        icon: 'pi pi-fw pi-users mr-2',
-                        routerLink: ['teklif/teklifci/listele'],
+                        label: 'Listele',
+                        icon: 'pi pi-fw pi-list mr-2',
+                        routerLink: ['/'],
                       },
                       {
-                        label: 'Zeyilname 2',
-                        icon: 'pi pi-fw pi-verified mr-2',
-                        routerLink: ['teklif/firmalar'],
+                        label: 'Yeni Zeyilname',
+                        icon: 'pi pi-fw pi-plus mr-2',
+                        routerLink: ['/'],
                       },
                     ],
                   
@@ -88,7 +93,7 @@ export class IhaleDetayComponent implements OnInit {
               {
                 label: 'Bütçe Fiyatı',
                 icon: 'pi pi-fw pi-user-plus mr-2',
-                routerLink: ['teklif/teklifci/ekle'],
+                routerLink: [`/ihale/${this.tenderId || '1'}/butce`],
               },
               {
                 label: 'Yeni Tablo',
@@ -98,7 +103,7 @@ export class IhaleDetayComponent implements OnInit {
               {
                 label: 'Tablolar',
                 icon: 'pi pi-fw pi-user-plus mr-2',
-                routerLink: ['teklif/teklifci/ekle'],
+                routerLink: ['/'],
               },
             ],
           },
@@ -111,12 +116,12 @@ export class IhaleDetayComponent implements OnInit {
           {
             label: 'Soru Cevap',
             icon: 'pi pi-fw pi-user-plus mr-2',
-            routerLink: ['teklif/teklifci/ekle'],
+            routerLink: ['/'],
           },
           {
             label: 'Toplantılar',
             icon: 'pi pi-fw pi-user-plus mr-2',
-            routerLink: ['teklif/teklifci/ekle'],
+            routerLink: ['/'],
           },
         ];
       }

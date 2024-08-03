@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { TenderBid } from '../models/tender-bid';
 import { Tender } from '../models/tender';
 import { Column } from '../models/column.interface';
-import { average } from '@angular/fire/firestore';
-import { CompareColumn } from '../models/compare-column.interface';
 
 interface Price {
   title: string;
@@ -29,10 +27,7 @@ interface CompareTableRow {
   minUnitPrices: Price[];
   totalPrices: Price[];
 }
-interface BudgetObject {
-  title:string;
-  value: number;
-}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -125,8 +120,8 @@ export class CompareBidsService {
   columns = this.convertToColumn(this.tender.discoveryData[0]);
   table = this.convertToCompareTable(columns,tenderData,tableData,budgetObject);
   const bidsCount = this.compareBids.length;
-  this.loadBudget(this.compareBids[1],table,columns);
-     return { columns, tenderData: tenderData, table: table, bidsCount, bids:this.compareBids };
+  this.loadBudget(this.budget,table,columns);
+     return { columns, tenderid: this.tender.id, table: table, bidsCount, bids:this.compareBids };
   }
 
   convertToObject(data: any[],columns:string[]) {

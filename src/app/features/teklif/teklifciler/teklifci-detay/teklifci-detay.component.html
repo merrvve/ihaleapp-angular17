@@ -1,0 +1,30 @@
+@if(bidder) {
+    <div class="col-12 md:col-6">
+        <div class="surface-card shadow-2 p-3 border-round mb-3">
+            <span class="block text-500 font-medium mb-3">Firma Yetkilisi Detayı</span>
+            <table>
+                <tr>
+                    <td>Adı Soyadı</td>
+                    <td>:</td>
+                    <td> {{bidder.displayName}} </td>
+                </tr>
+                <tr>
+                    <td>Firma</td>
+                    <td>:</td>
+                    <td> {{bidder.companyName}} </td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>:</td>
+                    <td> {{bidder.email}} </td>
+                </tr>
+                <tr>
+                    <td>Telefon</td>
+                    <td>:</td>
+                    <td> {{bidder.phoneNumber}} </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+}

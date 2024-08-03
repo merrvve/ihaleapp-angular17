@@ -26,7 +26,7 @@
                     <td>{{teklifci.phoneNumber}}</td>
                     <td>{{teklifci.email}}</td>
                     <td>
-                        <p-button label="Detay" icon="pi pi-file" severity="primary" ></p-button>
+                        <p-button label="Detay" icon="pi pi-file" severity="primary" [routerLink]="['/', 'teklif','teklifci',teklifci.uid]" ></p-button>
                     </td>
                 </tr>
             </ng-template>

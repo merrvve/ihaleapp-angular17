@@ -48,14 +48,26 @@
            @if(markMin) {
             <p-toggleButton 
             [(ngModel)]="markMin" 
-            (ngModelChange)="unMarkAll(tableData,compareColumns)"
+            (ngModelChange)="unMarkAll(tableData,compareColumns,'bg-green-200')"
             onLabel="Minimum Değerler" 
             offLabel="Minimum Değerler" 
             onIcon="pi pi-check" 
             offIcon="pi pi-times" 
-            styleClass="text-xs mx-2"
+            styleClass="mx-2"
             ariaLabel="Miniumları İşaretle"
-             styleClass="" />
+             />
+           }
+           @if(markMax) {
+            <p-toggleButton 
+            [(ngModel)]="markMax" 
+            (ngModelChange)="unMarkAll(tableData,compareColumns,'bg-red-200')"
+            onLabel="Maksimum Değerler" 
+            offLabel="Maksimum Değerler" 
+            onIcon="pi pi-check" 
+            offIcon="pi pi-times" 
+            styleClass="mx-2 red-toggle"
+            ariaLabel="Miniumları İşaretle"
+              />
            }
                 
         </ng-template>

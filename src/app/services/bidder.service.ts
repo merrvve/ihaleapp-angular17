@@ -27,19 +27,21 @@ export class BidderService {
     
   }
 
-  public getBidderDetails(uid: string) {
+  getBidderDetails(uid: string): Promise<UserDetail | null> {
     const userProfileDocRef = doc(this.firestore, 'users', uid);
-    getDoc(userProfileDocRef).then((documentSnapshot) => {
-      if (documentSnapshot) {
-        const bidderDetail = documentSnapshot.data() as UserDetail;
-        return bidderDetail;
-      } else {
+    return getDoc(userProfileDocRef)
+      .then((documentSnapshot) => {
+        if (documentSnapshot.exists()) {
+          const bidderDetail = documentSnapshot.data() as UserDetail;
+          return bidderDetail;
+        } else {
+          return null;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
         return null;
-      }
-    }).catch((error) => {
-      console.log(error);
-    });
-   
+      });
   }
 
   
