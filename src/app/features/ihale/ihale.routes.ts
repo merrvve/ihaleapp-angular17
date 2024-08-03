@@ -11,6 +11,7 @@ import { KesifDetayComponent } from './ihale-detay/ihale-teklifleri/kesif-detay/
 import { IhaleKarsilastirComponent } from './ihale-karsilastir/ihale-karsilastir.component';
 import { TaslaklarComponent } from './ihale-listele/taslaklar/taslaklar.component';
 import { CreateBudgetComponent } from './budget/create-budget/create-budget.component';
+import { FirmaTeklifleriComponent } from './ihale-detay/ihale-teklifleri/firma-teklifleri/firma-teklifleri.component';
 
 
 export const IHALE_ROUTES: Route[] = [
@@ -27,6 +28,7 @@ export const IHALE_ROUTES: Route[] = [
   },
   { path: 'ihale/:id', component: IhaleDetayComponent },
   { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },
+  { path: 'ihale/:id/teklifler/firma/:firmaid', component: FirmaTeklifleriComponent },
   { path: 'kesif-detay', component: KesifDetayComponent},
   { path: 'listele', component: IhaleListeleComponent },
   { path: 'taslaklar', component: TaslaklarComponent },

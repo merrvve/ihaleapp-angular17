@@ -1,5 +1,5 @@
 <div class="container mb-5">
-    <h2 class="p-2">{{currentTender?.name}} İhalesi Teklifleri</h2>
+    <h2 class="p-2">Firma Teklifleri</h2>
 </div>
 @if(bids$ |async; as bids) {
     <div class="card">
@@ -79,9 +79,7 @@
                     </td>
                     <td>{{bid.id}}</td>
                     <td>{{bid.created_at}}</td>
-                    <td>
-                        <a [routerLink]="['/ihale/ihale', currentTender?.id, 'teklifler','firma', bid.company_id ]">  {{bid?.company_name}}</a>
-                    </td>
+                    <td>{{bid?.company_name}}</td>
                     <td>{{bid.bidder_id}}</td>
                     <td>{{bid.total_price}}</td>
                     
