@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { TenderBid } from '../models/tender-bid';
 import { Tender } from '../models/tender';
 import { Column } from '../models/column.interface';
+import { Budget } from '../models/budget';
+import { BudgetService } from './budget.service';
 
 interface Price {
   title: string;
@@ -34,60 +36,21 @@ interface CompareTableRow {
 export class CompareBidsService {
   compareBids!: TenderBid[];
   tender!: Tender;
-  budget: TenderBid = {
-    bidder_id: '0',
-    created_at: '',
-    total_price: 0,
-    discovery_data: {
-      "0": [
-          "key",
-          "İş Tanımı",
-          "Marka",
-          "Miktar",
-          "Birim",
-          "Malzeme Birim Fiyat",
-          "İşçilik Birim Fiyat",
-          "Toplam Birim Fiyat",
-          "Malzeme Toplam Fiyat",
-          "İşçilik Toplam Fiyat",
-          "Toplam Fiyat"
-      ],
-      "1": [
-          "1",
-          "Başlık",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          "",
-          60000
-      ],
-      "2": [
-          "1.1",
-          "zz",
-          "zzz",
-          50,
-          "m",
-          400,
-          800,
-          1200,
-          20000,
-          40000,
-          60000
-      ]
-  }
-  }
+  budget: Budget = {
+    name: '',
+    tender_id: '',
+    discovery_data: undefined
+  }; 
 
-  constructor() { }
-  createTableData(bids:TenderBid[]=[]) {
-    //set static column names of tender discovery data 
+  constructor(
+    private budgetService: BudgetService
+  ) { }
+  createTableData(bids:TenderBid[]) {
+    
     let columns : Column[] = []; 
     let table : CompareTableRow[] = [];
     let tableData: any = [];
-    //let otherCols :string[]= [];
+    
     bids.forEach((bid)=> {
       let data = this.convertToObject(bid.discovery_data,this.tender.discoveryData[0]);
       tableData.push(data);
@@ -116,11 +79,29 @@ export class CompareBidsService {
       
     // }
   const tenderData = this.convertToObject(this.tender.discoveryData, this.tender.discoveryData[0])
-  const budgetObject = this.convertToObject(this.budget.discovery_data,this.tender.discoveryData[0])
+  let budgetObject = this.convertToObject(this.tender.discoveryData,this.tender.discoveryData[0])
+  if(this.tender.id) {
+    this.budgetService.getBudgetsByTenderId(this.tender.id).then(budgets=> {
+      if(budgets && budgets[0]?.discovery_data) {
+        this.budget= budgets[0];
+        budgetObject = this.convertToObject(this.budget.discovery_data,this.tender.discoveryData[0]);
+      }
+      else {
+        this.budget.discovery_data = this.tender.discoveryData;
+      }
+      this.loadBudget(this.budget.discovery_data,table,columns);
+      
+    });
+  
+    
+  }
+
+  this.budgetService.setTenderData(this.tender.discoveryData);
+  
   columns = this.convertToColumn(this.tender.discoveryData[0]);
   table = this.convertToCompareTable(columns,tenderData,tableData,budgetObject);
   const bidsCount = this.compareBids.length;
-  this.loadBudget(this.budget,table,columns);
+  
      return { columns, tender: this.tender, table: table, bidsCount, bids:this.compareBids };
   }
 
@@ -292,8 +273,8 @@ export class CompareBidsService {
     return result;
   }
 
-  loadBudget(budget: TenderBid,tableData: any[], columns: Column[]) {
-    const budgetObject = this.convertToObject(budget.discovery_data,this.tender.discoveryData[0]);
+  loadBudget(budget: any,tableData: any[], columns: Column[]) {
+    const budgetObject = this.convertToObject(budget,this.tender.discoveryData[0]);
     for(let i=0; i<tableData.length; i++) {
       for(const column of columns) {
         if(column.isBirim || column.isToplam) {

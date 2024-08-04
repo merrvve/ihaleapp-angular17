@@ -71,11 +71,9 @@ export class TenderService {
     updateDoc(tenderRef, tender as object)
       .then(() => {
         console.log('Tender updated successfully!');
-        // Optional: Handle success scenarios (e.g., emit an event, show a success message)
       })
       .catch((error) => {
         console.error('Error updating tender:', error);
-        // Handle error scenarios (e.g., display an error message to the user)
       });
   }
   
