@@ -14,23 +14,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { Tender } from '../../../models/tender';
 import { CurrencyService } from '../../../services/currency.service';
-interface Price {
-  title: string;
-  bid: number;
-  price: number;
-}
+import { CompareTable } from '../../../models/compare-table';
+import { CompareTablesService } from '../../../services/compare-tables.service';
 
-interface CompareTableRow {
-  id: string;
-  key: string;
-  title: string;
-  amount: number;
-  unit: string;
-  brand: string;
-  unitPrices: Price[];
-  minUnitPrices: Price[];
-  totalPrices: Price[];
-}
 @Component({
   selector: 'app-ihale-karsilastir',
   standalone: true,
@@ -56,10 +42,12 @@ export class IhaleKarsilastirComponent implements OnInit {
   bids!: TenderBid[];
   markMin: boolean = false;
   markMax: boolean = false;
+  saveTableVisible: boolean = false;;
 
   constructor(
     private compareService: CompareBidsService,
-    private currencyService: CurrencyService
+    private currencyService: CurrencyService,
+    private compareTableService: CompareTablesService
   ){}
   ngOnInit(): void {
     const data= this.compareService.createTableData(this.compareService.compareBids);
@@ -160,7 +148,7 @@ export class IhaleKarsilastirComponent implements OnInit {
           {
             label: 'Kaydet',
             icon: 'pi pi-save',
-            disabled: true
+            command: () => this.saveTableVisible=true,
           },
           {
             label: 'Yazdır',
@@ -279,6 +267,20 @@ export class IhaleKarsilastirComponent implements OnInit {
      ];
      
      
+  }
+
+  saveCompareTable(name: string) {
+    if(this.tender?.id) {
+      const table: CompareTable = {
+        tenderId: this.tender.id,
+        bids: this.bids.map((bid)=>bid.id ||''),
+        name: name,
+        created_at: new Date().toLocaleString(),
+        options: null
+      }
+      this.compareTableService.createTable(table);
+    }
+    
   }
 
   markFields(rows:any[],columns: CompareColumn[],choice:number) {

@@ -13,10 +13,6 @@ interface Price {
   isMax?:boolean;
 }
 
-interface MinMax {
-  min: number;
-  max: number;
-}
 
 interface CompareTableRow {
   id: string;
@@ -55,29 +51,7 @@ export class CompareBidsService {
       let data = this.convertToObject(bid.discovery_data,this.tender.discoveryData[0]);
       tableData.push(data);
     })
-    // for (const key in this.tender.discoveryData) {
-    //   if(key!=='0') {
-    //     const row = this.tender.discoveryData[key];
-        
-    //     for(let i=0; i<bids.length; i++) {
-    //        for (const column of this.tender.discoveryData[0]) {
-    //           if(!columns.includes(column)) {
-    //             if(!otherCols.includes(column)) {
-    //               otherCols.push(column);
-    //             }
-                
-    //             const newColName = `${bids[i].company_name} ${column}` +i;
-    //             if(!columns.includes(newColName)) {
-    //               columns.push(newColName);
-    //             }
-                
-    //           }
-    //         }
-    //     }
-        
-    //   }
-      
-    // }
+    
   const tenderData = this.convertToObject(this.tender.discoveryData, this.tender.discoveryData[0])
   let budgetObject = this.convertToObject(this.tender.discoveryData,this.tender.discoveryData[0])
   if(this.tender.id) {

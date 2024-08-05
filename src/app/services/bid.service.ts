@@ -95,4 +95,8 @@ export class BidService {
     const bidsQuery = query(bidsRef);
     return collectionData(bidsQuery, { idField: 'id' }) as Observable<TenderBid[]>;
   }
+
+  getBidById(bidId: string) {
+    
+  }
 }

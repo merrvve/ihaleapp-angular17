@@ -17,7 +17,7 @@ export class CompareTablesService {
   }
   
   async getTablesByTenderId(tenderid: string) {
-    const tableQuery = query(this.tablesCollection, where('tender_id', '==', tenderid));
+    const tableQuery = query(this.tablesCollection, where('tenderId', '==', tenderid));
     try {
       const querySnapshot = await getDocs(tableQuery);
       let tables: CompareTable[] = [];
@@ -34,6 +34,7 @@ export class CompareTablesService {
   }
 
   createTable(compareTable: CompareTable) {
+    console.log(compareTable, this.tablesCollection)
     addDoc(this.tablesCollection, compareTable ).then((documentReference: DocumentReference) => {
       console.log(documentReference);
   });
