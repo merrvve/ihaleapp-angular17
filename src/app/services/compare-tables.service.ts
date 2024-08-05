@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CompareTable } from '../models/compare-table';
-import { addDoc, collection, CollectionReference, doc, DocumentReference, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, deleteDoc, doc, DocumentReference, Firestore, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +50,17 @@ export class CompareTablesService {
     .catch((error) => {
       console.error('Error updating tender:', error);
     });
+  }
+
+  deleteTable(tableid: string) {
+    const tableRef = doc(this.tablesCollection,tableid);
+  
+    deleteDoc(tableRef)
+      .then(() => {
+        console.log('Table deleted successfully!');
+      })
+      .catch((error) => {
+        console.error('Error deleting table:', error);
+      });
   }
 }

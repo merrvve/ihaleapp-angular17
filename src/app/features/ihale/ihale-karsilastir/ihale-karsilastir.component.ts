@@ -51,7 +51,7 @@ export class IhaleKarsilastirComponent implements OnInit {
   ){}
   ngOnInit(): void {
     const data= this.compareService.createTableData(this.compareService.compareBids);
-    const colors = ['bg-blue-100','bg-yellow-100','bg-pink-100','bg-purple-100']
+    const colors = ['bg-blue-100','bg-yellow-100','bg-pink-100','bg-purple-100','bg-teal-100'] //add logic!
     this.columns = data.columns;
     this.tender = data.tender;
     this.tableData = data.table;
@@ -123,6 +123,21 @@ export class IhaleKarsilastirComponent implements OnInit {
 
           idx +=1;
       }
+      else if (column.header==='Marka') {
+        this.bids.forEach((bid,count)=>{
+          this.compareColumns.push({
+            id: idx,
+            field: column.header + (count+1),
+            header:'Teklif '+(count+1) ,
+            isUnit: column.isBirim,
+            isTotal: column.isToplam,
+            isAllTotal: column.isAllTotal,
+            bid: (count+1),
+            color: colors[count]
+          }); 
+          idx +=1;
+          })
+        }
       else {
         this.compareColumns.push({
           id: idx,

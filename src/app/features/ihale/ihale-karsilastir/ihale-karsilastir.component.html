@@ -92,6 +92,10 @@
                     @if(column.isBirim || column.isToplam) {
                         <th [attr.colspan]="bids.length+colExpandValue"> {{column.header}} {{ ' ('+ selectedCurrency +') '}} </th>
                     }
+                    @else if(column.header==='Marka') {
+                        <th [attr.colspan]="bids.length+colExpandValue"> {{column.header}}</th>
+                   
+                    }
                     @else {
                         <th colspan="1" > </th>
                     }

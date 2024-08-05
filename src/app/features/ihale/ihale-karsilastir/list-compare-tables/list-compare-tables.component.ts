@@ -54,18 +54,30 @@ export class ListCompareTablesComponent {
 
   openTable(table: CompareTable) {
     let tender: Tender|null;
-    let bids: TenderBid[];
+    let bidsList: TenderBid[] =[];
     if(this.tenderId) {
       this.tenderSerivce.getTenderById(this.tenderId).subscribe(result=>{
         tender=result;
-        if(tender) {
-          table.bids.forEach((bid)=> {
-            //get bid and push to bids array
-          });
+        if(tender && tender.id) {
           this.compareBidsService.tender=tender;
-          this.compareBidsService.compareBids =bids;
-          this.router.navigate(['/ihale/karsilastir'])
+          
+          this.bidService.getBidsByTenderId(tender.id).subscribe(
+            bids=> {
+              bids.forEach((bid)=>{
+                if(bid.id) {
+                  if(table.bids.includes(bid.id)) {
+                    console.log(table.bids,bid.id)
+                    bidsList.push(bid);
+                  }
+                }
+                
+              });
+              this.compareBidsService.compareBids =bidsList;
+              this.router.navigate(['/ihale/karsilastir'])
 
+            }
+          )
+          
           
         }
       })
@@ -74,5 +86,6 @@ export class ListCompareTablesComponent {
     }
  
   deleteTable(tableid: string) {
+    this.compareTableService.deleteTable(tableid);
     }
 }
