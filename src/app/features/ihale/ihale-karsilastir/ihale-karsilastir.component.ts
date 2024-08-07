@@ -34,6 +34,7 @@ export class IhaleKarsilastirComponent implements OnInit {
   columns!: Column[];
   compareColumns!: CompareColumn[];
   tableData! : any[];
+  selectedTableData!: any[] ;
   tableStyle = {width:"100%"}
   tender!: Tender | undefined;
   tableMenuItems!: MenuItem[];
@@ -50,6 +51,8 @@ export class IhaleKarsilastirComponent implements OnInit {
 
   saveTableVisible: boolean = false;
   markFieldsVisible: boolean = false;
+
+  isIcmal:boolean = false;
 
   baseOptions = ['Minimum', 'Ortalama', 'Bütçe']
   selectedBaseOption: string='Minimum'
@@ -288,7 +291,7 @@ export class IhaleKarsilastirComponent implements OnInit {
       }
       
      ];
-     
+     this.selectedTableData =this.tableData; 
      console.log(this.tableData,this.compareColumns)
   }
 
@@ -518,4 +521,32 @@ export class IhaleKarsilastirComponent implements OnInit {
       }
     }
   } 
+
+  selectTableData() {
+    // If the next row no has one more . it is a title be a title
+    // the first row is always title
+    if(this.isIcmal===true) {
+      this.selectedTableData=[];
+      for(let i=0; i<this.tableData.length-1; i++) {
+        if(i===0) {
+          this.selectedTableData.push(this.tableData[i]);
+        }
+        else {
+          const countDot=this.tableData[i][0].match(/./g || [].length);
+          const countDotNext = this.tableData[i+1][0].match(/./g || [].length);
+          if(countDot < countDotNext) {
+            this.selectedTableData.push(this.tableData[i]);
+          }
+          else if(countDot===0) {
+            this.selectedTableData.push(this.tableData[i])
+          }
+        }
+      }
+      console.log(this.selectedTableData)
+    }
+    else {
+      this.selectedTableData = this.tableData;
+    }
+
+  }
 }

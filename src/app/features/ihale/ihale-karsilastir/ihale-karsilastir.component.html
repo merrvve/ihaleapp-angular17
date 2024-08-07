@@ -82,9 +82,14 @@
         <p-button label="İşaretle" (onClick)="markFieldsVisible = false; customMark=true; markCustomFileds(tableData,compareColumns,baseRatio.valueAsNumber/100)" />
     </div>
 </p-dialog>
-
+<p-selectButton 
+    [options]="[{label:'Tüm Kalemler', value:false},{label:'İcmal', value:true}]" 
+    [(ngModel)]="isIcmal" 
+    optionLabel="label" 
+    optionValue="value"
+    (ngModelChange)="selectTableData()" />
 <div class="card">
-    <p-table [value]="tableData" [columns]="selectedColumns"  [reorderableColumns]="true" [tableStyle]="tableStyle" styleClass="p-datatable-striped p-datatable-sm"
+    <p-table [value]="selectedTableData" [columns]="selectedColumns"  [reorderableColumns]="true" [tableStyle]="tableStyle" styleClass="p-datatable-striped p-datatable-sm"
     >
         <ng-template pTemplate="caption">
            @if(markMin) {
