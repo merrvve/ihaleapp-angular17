@@ -104,6 +104,7 @@ export class CompareBidsService {
       let unitPrices: Price[] = [];
       let totalPrices: Price[] = [];
       let budgetRow :any = {}
+      let brands: string[] =[];
       for (const column of columns) {
         if (column.isBirim) {
           bidObjects.forEach((bid, index) => {
@@ -119,6 +120,11 @@ export class CompareBidsService {
           budgetRow[column.header] =budgetData[i][column.header]
           
           //totalPrices.push({ title: column.header, bid: -1, price: budgetData[i][column.header]});
+        }
+        else if(column.header==='Marka') {
+          bidObjects.forEach((bid, index) => {
+            brands.push(bid[i]['Marka'])
+          });
         }
       }
   
@@ -146,8 +152,7 @@ export class CompareBidsService {
         'İş Tanımı': tenderObject[i]['İş Tanımı'],
         'Miktar': tenderObject[i]['Miktar'],
         'Birim': tenderObject[i]['Birim'],
-        'Marka': tenderObject[i]['Marka'],
-        unitPrices,
+         unitPrices,
         totalPrices
       };
   
@@ -158,6 +163,11 @@ export class CompareBidsService {
       totalPrices.forEach(price => {
         anyRow[price.title + (price.bid + 1)] = price.price;
       });
+
+      //Add brands
+      brands.forEach((brand,i)=>
+        anyRow['Marka'+(i+1)] = brand
+      )
   
       // Add min and max values to the row
       for (const [title, { min, max, average }] of Object.entries(minMaxUnitP) as any) {

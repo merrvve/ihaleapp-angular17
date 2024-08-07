@@ -1,5 +1,3 @@
-import { TreeNode } from "primeng/api";
-import { Column } from "./column.interface";
 import { RequestedDocument } from "./requested-document";
 import { TenderBid } from "./tender-bid";
 
@@ -26,7 +24,10 @@ export interface Tender {
   
   
   export interface TenderFile {
-    // Add properties for tender files (e.g., name, url)
+    id?: string;
+    name: string;
+    url: string;
+    created_at: string;
   }
   
   export interface TenderRevision {

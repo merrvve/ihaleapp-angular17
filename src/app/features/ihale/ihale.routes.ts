@@ -13,6 +13,8 @@ import { TaslaklarComponent } from './ihale-listele/taslaklar/taslaklar.componen
 import { CreateBudgetComponent } from './budget/create-budget/create-budget.component';
 import { FirmaTeklifleriComponent } from './ihale-detay/ihale-teklifleri/firma-teklifleri/firma-teklifleri.component';
 import { ListCompareTablesComponent } from './ihale-karsilastir/list-compare-tables/list-compare-tables.component';
+import { IhaleDosyalariComponent } from './ihale-detay/ihale-dosyalari/ihale-dosyalari.component';
+import { RevizyonlarComponent } from './ihale-detay/revizyonlar/revizyonlar.component';
 
 
 export const IHALE_ROUTES: Route[] = [
@@ -28,6 +30,8 @@ export const IHALE_ROUTES: Route[] = [
     ],
   },
   { path: 'ihale/:id', component: IhaleDetayComponent },
+  { path: 'ihale/:id/dosyalar', component: IhaleDosyalariComponent },
+  { path: 'ihale/:id/revizyonlar', component: RevizyonlarComponent },
   { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },
   { path: 'ihale/:id/teklifler/firma/:firmaid', component: FirmaTeklifleriComponent },
   { path: 'kesif-detay', component: KesifDetayComponent},

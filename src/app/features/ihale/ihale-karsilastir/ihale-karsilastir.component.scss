@@ -1,6 +1,3 @@
-.invisible {
-    opacity:0;
-}
 :host ::ng-deep .red-toggle.p-highlight.p-togglebutton {
     border: none;
     background: #c70000fb;
@@ -11,4 +8,17 @@
   
 :host ::ng-deep .red-toggle.p-togglebutton:focus { 
     box-shadow: 0 0 0 0.2rem #a80205fb; 
+}
+
+
+:host ::ng-deep .blue-toggle.p-highlight.p-togglebutton {
+    border: none;
+    background: #1491cbfb;
+} 
+:host ::ng-deep .blue-toggle.p-highlight.p-togglebutton:hover { 
+    background: #011490fb; 
+} 
+  
+:host ::ng-deep .blue-toggle.p-togglebutton:focus { 
+    box-shadow: 0 0 0 0.2rem #0247a8fb; 
 }

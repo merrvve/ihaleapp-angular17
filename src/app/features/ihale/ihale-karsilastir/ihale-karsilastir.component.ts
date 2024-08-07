@@ -16,12 +16,16 @@ import { Tender } from '../../../models/tender';
 import { CurrencyService } from '../../../services/currency.service';
 import { CompareTable } from '../../../models/compare-table';
 import { CompareTablesService } from '../../../services/compare-tables.service';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'app-ihale-karsilastir',
   standalone: true,
   imports: [TableModule, MultiSelectModule, FormsModule, NgClass, ToggleButtonModule, MenubarModule, DialogModule,
-    ButtonModule
+    ButtonModule, InputGroupAddonModule, InputGroupModule, InputNumberModule, SelectButtonModule
   ],
   templateUrl: './ihale-karsilastir.component.html',
   styleUrl: './ihale-karsilastir.component.scss'
@@ -42,8 +46,13 @@ export class IhaleKarsilastirComponent implements OnInit {
   bids!: TenderBid[];
   markMin: boolean = false;
   markMax: boolean = false;
-  saveTableVisible: boolean = false;;
+  customMark: boolean = false;
 
+  saveTableVisible: boolean = false;
+  markFieldsVisible: boolean = false;
+
+  baseOptions = ['Minimum', 'Ortalama', 'Bütçe']
+  selectedBaseOption: string='Minimum'
   constructor(
     private compareService: CompareBidsService,
     private currencyService: CurrencyService,
@@ -154,7 +163,7 @@ export class IhaleKarsilastirComponent implements OnInit {
      
     this.selectedColumns = this.compareColumns.filter(x=>x.header!=='Minimum' && x.header!=='Maksimum' && x.header!=='Ortalama'  && x.header!=='Bütçe');
     this.colExpandValue = 0;
-    this.tableStyle.width = (this.selectedColumns.length *7) +'rem';
+    this.tableStyle.width = (this.selectedColumns.length *8) +'rem';
     this.tableMenuItems = [
       {
         label: 'Dosya',
@@ -226,10 +235,9 @@ export class IhaleKarsilastirComponent implements OnInit {
             command: () => {this.markMax=true; this.markFields(this.tableData,this.compareColumns,1)},
         },
         {
-          label: 'Diğer',
+          label: 'Baz Fiyata Göre Karşılaştır',
           icon: 'pi pi-angle-double-up',
-          disabled: true
-          //command: () => {this.markMax=true; this.markFields(this.tableData,this.compareColumns,1)},
+          command: () => {this.markFieldsVisible= true; },
       },
         ]
       },
@@ -281,7 +289,7 @@ export class IhaleKarsilastirComponent implements OnInit {
       
      ];
      
-     
+     console.log(this.tableData,this.compareColumns)
   }
 
   saveCompareTable(name: string) {
@@ -299,6 +307,7 @@ export class IhaleKarsilastirComponent implements OnInit {
   }
 
   markFields(rows:any[],columns: CompareColumn[],choice:number) {
+  
     // Mark fileds
     /* Choices:
         0: min,
@@ -312,9 +321,10 @@ export class IhaleKarsilastirComponent implements OnInit {
           if(column.isUnit || column.isTotal) {
             //field name minus numbers + min
             const minName = column.field.replace(/\d+$/, '') + ' min';
-            if(row[column.field]===row[minName]) {
-              row[column.field + 'mark'] = 'bg-green-200';
-            }
+              if(row[column.field]===row[minName]) {
+                row[column.field + 'mark'] = 'bg-green-200';
+              }
+            
           }
         }
       }
@@ -348,6 +358,65 @@ export class IhaleKarsilastirComponent implements OnInit {
       return;
     }
    }
+  }
+
+
+  markCustomFileds(rows:any[],columns: CompareColumn[],ratio:number) {
+    
+    if(this.customMark) {
+      if(this.selectedBaseOption==='Minimum') {
+        for(const row of rows) {
+          for (const column of columns) {
+            if(column.isUnit || column.isTotal) {
+              const minName = column.field.replace(/\d+$/, '') + ' min';
+                if(row[column.field]>row[minName]*(ratio+1)) {
+                  row[column.field + 'mark'] = 'bg-red-300';
+                }
+                else {
+                  row[column.field + 'mark'] = 'bg-blue-300';
+                }
+              
+            }
+          }
+        }
+      }
+      else if(this.selectedBaseOption==='Ortalama') {
+        for(const row of rows) {
+          for (const column of columns) {
+            if(column.isUnit || column.isTotal) {
+              const avgName = column.field.replace(/\d+$/, '') + ' avg';
+                if(row[column.field]>row[avgName]*(ratio+1)) {
+                  row[column.field + 'mark'] = 'bg-red-300';
+                }
+                else {
+                  row[column.field + 'mark'] = 'bg-blue-300';
+                }
+              
+            }
+          }
+        }
+      }
+      else if(this.selectedBaseOption==='Bütçe') {
+        for(const row of rows) {
+          for (const column of columns) {
+            if(column.isUnit || column.isTotal) {
+              const budgetName = column.field.replace(/\d+$/, '') + ' budget';
+                if(row[column.field]>row[budgetName]*(ratio+1)) {
+                  row[column.field + 'mark'] = 'bg-red-300';
+                }
+                else {
+                  row[column.field + 'mark'] = 'bg-blue-300';
+                }
+              
+            }
+          }
+        }
+      }
+    }
+    else {
+      this.unMarkAll(rows,columns);
+      return;
+    }
   }
   unMarkAll(rows:any[], columns:CompareColumn[], markToDelete?: string) {
     for(const row of rows) {

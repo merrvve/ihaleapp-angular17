@@ -1,0 +1,29 @@
+@if(tender$ | async; as tender) {
+    <div class="container mb-5">
+        <h2 class="p-2">{{tender?.name}} İhalesi Dosyaları</h2>
+    </div>
+    <p-table [value]="tender.tenderFiles">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Id</th>
+                <th>Adı</th>
+                <th>İşlemler</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-file>
+            <tr>
+                <td>{{ file?.id }}</td>
+                <td>{{ file?.name }}</td>
+                <td> 
+                    <p-button label="İndir" icon="pi pi-download" iconPos="right" />
+                    <p-button label="Sil" icon="pi pi-trash" iconPos="right" severity="danger"/>
+                </td>
+              
+            </tr>
+        </ng-template>
+    </p-table>
+}
+
+@else {
+    <app-loading-spinner></app-loading-spinner>
+}
