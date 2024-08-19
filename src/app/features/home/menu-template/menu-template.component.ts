@@ -12,6 +12,7 @@ import { ThemeService } from '../../../services/theme.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { MenuService } from '../../../services/menu.service';
 import { AsyncPipe } from '@angular/common';
+import { UserDetail } from '../../../models/user-detail.interface';
 
 @Component({
   selector: 'app-menu-template',
@@ -23,11 +24,15 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './menu-template.component.scss'
 })
 export class MenuTemplateComponent implements OnInit {
-  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
-  themeToggle=false;
-  sidebarVisible: boolean = false;
   @Input() items!: MenuItem[] |undefined;
   @Input() userMenu!: MenuItem[] |undefined;
+  @Input() user!: UserDetail | null;
+
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+
+  themeToggle=false;
+  sidebarVisible: boolean = false;
+  
   extraItems$! : Observable<MenuItem[]>;
 
 
