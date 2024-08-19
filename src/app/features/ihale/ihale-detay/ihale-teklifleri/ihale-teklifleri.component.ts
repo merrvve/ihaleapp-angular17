@@ -4,7 +4,7 @@ import { Tender } from '../../../../models/tender';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BidService } from '../../../../services/bid.service';
 import { TenderBid } from '../../../../models/tender-bid';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
@@ -14,6 +14,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TablodataService } from '../../../../services/tablodata.service';
 import { CompareBidsService } from '../../../../services/compare-bids.service';
+import { MenuService } from '../../../../services/menu.service';
 
 @Component({
   selector: 'app-ihale-teklifleri',
@@ -26,17 +27,21 @@ export class IhaleTeklifleriComponent {
   currentTender! : Tender | null;
   bids$!: Observable<TenderBid[]>;
   selectedBids! : TenderBid[];
+  paramSubscription!: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
     private tableService: TablodataService,
     private router: Router,
   private bidService: BidService,
-private compareService: CompareBidsService) {}
+private compareService: CompareBidsService,
+private menuService: MenuService) {}
   ngOnInit() {
     this.currentTender = this.tenderService._currentTender.value;
-    this.route.paramMap.subscribe(params => {
+    this.paramSubscription = this.route.paramMap.subscribe(params => {
       const id = params.get('id');
+      this.menuService.setItems(id||'')
       if(id && id!==this.currentTender?.id ) {
         this.tenderService.getTenderById(id).subscribe({
           next: (result) => {this.currentTender=result;
@@ -52,7 +57,6 @@ private compareService: CompareBidsService) {}
       
     });
     if(this.currentTender?.id) {
-      console.log(this.currentTender.id)
       this.bids$= this.bidService.getBidsByTenderId(this.currentTender?.id);
     }
 
@@ -84,5 +88,10 @@ private compareService: CompareBidsService) {}
       this.router.navigate(['/ihale/karsilastir'])
     }
     
+  }
+
+  ngOnDestroy() {
+    this.menuService.clearItems();
+    this.paramSubscription.unsubscribe();
   }
 }

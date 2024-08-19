@@ -7,6 +7,7 @@ import { AsyncPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { LoadingSpinnerComponent } from "../../../../components/loading-spinner/loading-spinner.component";
+import { MenuService } from '../../../../services/menu.service';
 
 @Component({
   selector: 'app-ihale-dosyalari',
@@ -20,7 +21,8 @@ export class IhaleDosyalariComponent {
   tender$!: Observable<Tender |null>;
   constructor(
     private route: ActivatedRoute,
-    private tenderService: TenderService
+    private tenderService: TenderService,
+    private menuService: MenuService
   ) {}
 
   ngOnInit() {
@@ -28,7 +30,12 @@ export class IhaleDosyalariComponent {
       this.tenderId = params.get('id');
       if(this.tenderId) {
         this.tender$ = this.tenderService.currentTender$;
+        this.menuService.setItems(this.tenderId);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.menuService.clearItems();
   }
 }

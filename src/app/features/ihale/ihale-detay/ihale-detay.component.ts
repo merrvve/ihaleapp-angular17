@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { IhaleService } from '../../../services/ihale.service';
-import { Ihale } from '../../../models/ihale.interface';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { TableModule } from 'primeng/table';
@@ -27,6 +25,7 @@ export class IhaleDetayComponent implements OnInit {
   menuItems: MenuItem[] =[];
   bids$!: Observable<TenderBid[]>;
 
+  paramSupscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,100 +35,20 @@ export class IhaleDetayComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
+    this.paramSupscription = this.route.paramMap.subscribe(params => {
       const id = params.get('id'); 
       if(id) {
         this.tenderId=id;
         this.tender$ = this.tenderService.getTenderById(id);
         this.bids$ = this.bidService.getBidsByTenderId(id);
-        this.menuItems =  [
-    
-          {
-            label: 'İhale Dosyası',
-            icon: 'pi pi-fw pi-file mr-2',
-            items: [
-              {
-                label: 'İhale Dosyaları',
-                icon: 'pi pi-fw pi-folder mr-2',
-                routerLink: ['/'],
-              },
-              {
-                label: 'Zeyilname (Revizyonlar)',
-                icon: 'pi pi-fw pi-plus mr-2',
-                
-                  
-                items: [
-                      {
-                        label: 'Listele',
-                        icon: 'pi pi-fw pi-list mr-2',
-                        routerLink: ['/'],
-                      },
-                      {
-                        label: 'Yeni Zeyilname',
-                        icon: 'pi pi-fw pi-plus mr-2',
-                        routerLink: ['/'],
-                      },
-                    ],
-                  
-          
-                
-              },
-            ],
-          },
-          {
-            label: 'Teklifler',
-            icon: 'pi pi-fw pi-file mr-2',
-            items: [{
-              label: 'Listele',
-              icon: 'pi pi-fw pi-file mr-2',
-              routerLink: [`ihale/ihale/${this.tenderId || '1'}/teklifler`],
-            }]
-            
-          },
-          {
-            label: 'Fiyat Karşılaştırma',
-            icon: 'pi pi-fw pi-user',
-            items: [
-              {
-                label: 'Bütçe Fiyatı',
-                icon: 'pi pi-fw pi-calculator mr-2',
-                routerLink: [`/ihale/${this.tenderId || '1'}/butce`],
-              },
-              {
-                label: 'Yeni Tablo',
-                icon: 'pi pi-fw pi-plus mr-2',
-                routerLink: [`ihale/ihale/${this.tenderId || '1'}/teklifler`],
-              },
-              {
-                label: 'Tablolar',
-                icon: 'pi pi-fw pi-database mr-2',
-                routerLink: [`/ihale/${this.tenderId || '1'}/karsilastirma-tablolari`],
-              },
-            ],
-          },
-      
-          {
-            label: 'Firma Raporları',
-            icon: 'pi pi-fw pi-power-off',
-            
-          },
-          {
-            label: 'Soru Cevap',
-            icon: 'pi pi-fw pi-user-plus mr-2',
-            routerLink: ['/'],
-          },
-          {
-            label: 'Toplantılar',
-            icon: 'pi pi-fw pi-user-plus mr-2',
-            routerLink: ['/'],
-          },
-        ];
+        this.menuService.setItems(this.tenderId);
       }
   });
-    this.menuService.setItems(this.menuItems);
+    
   }
 
   ngOnDestroy() {
-    this.menuService.setItems([]);
+    this.menuService.clearItems();
+    this.paramSupscription.unsubscribe();
   }
 }

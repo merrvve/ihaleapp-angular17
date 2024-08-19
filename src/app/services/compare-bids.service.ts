@@ -123,7 +123,11 @@ export class CompareBidsService {
         }
         else if(column.header==='Marka') {
           bidObjects.forEach((bid, index) => {
-            brands.push(bid[i]['Marka'])
+            
+            if(bid[i] && bid[i]['Marka']) {
+              brands.push(bid[i]['Marka'])
+            }
+            
           });
         }
       }

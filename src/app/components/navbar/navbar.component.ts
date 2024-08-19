@@ -37,7 +37,8 @@ export class NavbarComponent implements OnInit {
       },
       {
         label: 'İhalelerim',
-        icon: 'pi pi-fw pi-file mr-2',
+        icon: 'pi pi-fw pi-folder mr-2',
+        routerLink: ['ihale/listele'],
         items: [
           {
             label: 'Yeni İhale',
@@ -59,6 +60,7 @@ export class NavbarComponent implements OnInit {
       {
         label: 'Firmalar/Teklifçiler',
         icon: 'pi pi-fw pi-user mr-2',
+        routerLink: ['teklif/firmalar'],
         items: [
       
               {
