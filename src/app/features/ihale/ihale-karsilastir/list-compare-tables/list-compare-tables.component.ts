@@ -9,6 +9,7 @@ import { Tender } from '../../../../models/tender';
 import { TenderBid } from '../../../../models/tender-bid';
 import { BidService } from '../../../../services/bid.service';
 import { TenderService } from '../../../../services/tender.service';
+import { MenuService } from '../../../../services/menu.service';
 
 @Component({
   selector: 'app-list-compare-tables',
@@ -27,7 +28,8 @@ export class ListCompareTablesComponent {
     private compareBidsService: CompareBidsService,
     private bidService: BidService,
     private tenderSerivce: TenderService,
-    private router: Router
+    private router: Router,
+    private menuService: MenuService
   ) {}
 
   ngOnInit() {
@@ -35,6 +37,7 @@ export class ListCompareTablesComponent {
       (params=> {
         this.tenderId = params.get('id');
         if(this.tenderId) {
+          this.menuService.setItems(this.tenderId)
           this.compareTableService.getTablesByTenderId(this.tenderId).then(
             result=>{
               if(result) {

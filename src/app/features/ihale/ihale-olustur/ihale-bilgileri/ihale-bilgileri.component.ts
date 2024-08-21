@@ -7,8 +7,7 @@ import { RouterLink } from '@angular/router';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CalendarModule } from 'primeng/calendar';
 import { Ihale } from '../../../../models/ihale.interface';
-import { IhaleService } from '../../../../services/ihale.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable} from 'rxjs';
 import { TenderService } from '../../../../services/tender.service';
 import { Tender } from '../../../../models/tender';
 import { AsyncPipe } from '@angular/common';
@@ -47,11 +46,10 @@ export class IhaleBilgileriComponent implements OnInit {
   
   tender$!: Observable<Tender>;
 
-  constructor(private ihaleService: IhaleService,
+  constructor(
     private tenderService: TenderService
   ) {}
   ngOnInit(): void {
-    this.selectedFiles = this.ihaleService.files;
     
     this.tender$ = this.tenderService.currentTender$;
   }
@@ -65,6 +63,6 @@ export class IhaleBilgileriComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.ihaleService.files = this.selectedFiles;
+    
   }
 }

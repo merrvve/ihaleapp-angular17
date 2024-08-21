@@ -20,6 +20,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { MenuService } from '../../../services/menu.service';
 
 @Component({
   selector: 'app-ihale-karsilastir',
@@ -59,7 +60,8 @@ export class IhaleKarsilastirComponent implements OnInit {
   constructor(
     private compareService: CompareBidsService,
     private currencyService: CurrencyService,
-    private compareTableService: CompareTablesService
+    private compareTableService: CompareTablesService,
+    private menuService: MenuService
   ){}
   ngOnInit(): void {
     const data= this.compareService.createTableData(this.compareService.compareBids);
@@ -71,6 +73,10 @@ export class IhaleKarsilastirComponent implements OnInit {
     this.selectedCurrency = this.tender.currency;
     this.compareColumns =[];
     let idx = 0;
+    if(this.tender.id) {
+      this.menuService.setItems(this.tender.id);
+    }
+    
     this.columns.forEach((column,index)=> {
       if(column.isBirim || column.isToplam) {
           this.bids.forEach((bid,count)=>{

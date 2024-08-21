@@ -4,11 +4,9 @@ import { TeklifOlusturComponent } from "../teklif-olustur.component";
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
-import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessagesModule } from 'primeng/messages';
 import { Message } from 'primeng/api';
-import { TeklifciService } from '../../../../services/teklifci.service';
 import { BidService } from '../../../../services/bid.service';
 
 @Component({

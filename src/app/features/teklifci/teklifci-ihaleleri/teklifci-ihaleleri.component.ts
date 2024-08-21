@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable} from 'rxjs';
-import { TeklifciService } from '../../../services/teklifci.service';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TablodataService } from '../../../services/tablodata.service';

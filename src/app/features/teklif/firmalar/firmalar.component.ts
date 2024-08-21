@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { TeklifciService } from '../../../services/teklifci.service';
-import { Firma } from '../../../models/firma.interface';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CompaniesService } from '../../../services/companies.service';
@@ -20,7 +18,7 @@ export class FirmalarComponent implements OnInit {
   companies$! : Observable<Company[]>;
   constructor(
     private companiesService: CompaniesService,
-    private teklifciService: TeklifciService) {}
+    ) {}
   // Teklifçi bilgilerini al
 
   ngOnInit() {

@@ -49,8 +49,8 @@ export const IHALE_ROUTES: Route[] = [
   { path: 'listele', component: IhaleListeleComponent },
   { path: 'taslaklar', component: TaslaklarComponent },
   { path: 'karsilastir', component: IhaleKarsilastirComponent },
-  { path: ':id/karsilastirma-tablolari', component: ListCompareTablesComponent },
-  { path: ':id/butce', component: CreateBudgetComponent },
+  { path: 'ihale/:id/karsilastirma-tablolari', component: ListCompareTablesComponent },
+  { path: 'ihale/:id/butce', component: CreateBudgetComponent },
   { path: '', redirectTo: 'listele', pathMatch: 'full' },
       
 ];

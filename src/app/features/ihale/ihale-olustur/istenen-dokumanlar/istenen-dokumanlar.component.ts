@@ -4,11 +4,9 @@ import { MessagesModule } from 'primeng/messages';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
-import { IhaleService } from '../../../../services/ihale.service';
-import { TalepEdilenEvrak } from '../../../../models/talepedilenevrak.interface';
 
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { RequestedDocument } from '../../../../models/requested-document';
 import { TenderService } from '../../../../services/tender.service';
 
@@ -32,7 +30,7 @@ export class IstenenDokumanlarComponent implements OnInit {
   requestedDocs: RequestedDocument[] = [];
   id: number = 0;
 
-  constructor(private ihaleService: IhaleService,
+  constructor(
     private tenderService: TenderService
   ) {}
 

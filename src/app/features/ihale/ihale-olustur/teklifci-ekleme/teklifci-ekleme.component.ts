@@ -4,16 +4,12 @@ import { MessagesModule } from 'primeng/messages';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
-import { TeklifciService } from '../../../../services/teklifci.service';
-import { FirmaYetkilisi } from '../../../../models/firmayetkilisi.interface';
 import { TableModule } from 'primeng/table';
 import { Observable, Subscription } from 'rxjs';
 import { PickListModule } from 'primeng/picklist';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { IhaleService } from '../../../../services/ihale.service';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { TeklifciEkleComponent } from "../../../teklif/teklifci-ekle/teklifci-ekle.component";
 import { TenderService } from '../../../../services/tender.service';
 import { UserDetail } from '../../../../models/user-detail.interface';
 import { BidderService } from '../../../../services/bidder.service';
@@ -34,7 +30,7 @@ import { AsyncPipe } from '@angular/common';
         DragDropModule,
         DialogModule,
         ProgressSpinnerModule,
-        TeklifciEkleComponent,
+        
         AsyncPipe
     ]
 })

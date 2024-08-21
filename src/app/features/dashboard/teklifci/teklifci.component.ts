@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { TeklifciService } from '../../../services/teklifci.service';
 import { Ihale } from '../../../models/ihale.interface';
 import { Observable } from 'rxjs/internal/Observable';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { Teklif } from '../../../models/teklif.interface';
 import { RouterLink } from '@angular/router';
 import { Tender } from '../../../models/tender';
 import { TenderService } from '../../../services/tender.service';
@@ -23,7 +21,7 @@ export class TeklifciComponent implements OnInit {
   tenderBids$!: Observable<TenderBid[]>;
   
   ihaleler! : Ihale[];
-  constructor(private teklifciService: TeklifciService,
+  constructor(
     private tenderService: TenderService,
     private bidService: BidService
   ) {}

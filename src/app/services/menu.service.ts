@@ -65,7 +65,7 @@ export class MenuService {
           {
             label: 'Bütçe Fiyatı',
             icon: 'pi pi-fw pi-calculator mr-2',
-            routerLink: [`/ihale/${tenderId}/butce`],
+            routerLink: [`/ihale/ihale/${tenderId}/butce`],
           },
           {
             label: 'Yeni Tablo',
@@ -75,7 +75,7 @@ export class MenuService {
           {
             label: 'Tablolar',
             icon: 'pi pi-fw pi-database mr-2',
-            routerLink: [`/ihale/${tenderId}/karsilastirma-tablolari`],
+            routerLink: [`/ihale/ihale/${tenderId}/karsilastirma-tablolari`],
           },
         ],
       },
@@ -83,22 +83,22 @@ export class MenuService {
       {
         label: 'Firma Raporları',
         icon: 'pi pi-fw pi-chart-line mr-2',
-        routerLink: [`/ihale/${tenderId}/firma-raporlari`],
+        routerLink: [`/ihale/ihale/${tenderId}/firma-raporlari`],
         items: [
           {
             label: 'Rapor Oluştur',
             icon: 'pi pi-fw pi-plus mr-2',
-            routerLink: [`/ihale/${tenderId}/firma-raporlari/rapor-olustur`],
+            routerLink: [`/ihale/ihale/${tenderId}/firma-raporlari/rapor-olustur`],
           },
           {
             label: 'Listele',
             icon: 'pi pi-fw pi-list mr-2',
-            routerLink: [`/ihale/${tenderId}/firma-raporlari`],
+            routerLink: [`/ihale/ihale/${tenderId}/firma-raporlari`],
           },
           {
             label: 'Ayarlar',
             icon: 'pi pi-fw pi-wrench mr-2',
-            routerLink: [`/ihale/${tenderId}/firma-raporlari/ayarlar`],
+            routerLink: [`/ihale/ihale/${tenderId}/firma-raporlari/ayarlar`],
           },
         ],
         
@@ -106,22 +106,22 @@ export class MenuService {
       {
         label: 'Soru Cevap',
         icon: 'pi pi-fw pi-question mr-2',
-        routerLink: [`/ihale/${tenderId}/soru-cevap`],
+        routerLink: [`/ihale/ihale/${tenderId}/soru-cevap`],
       },
       {
         label: 'Toplantılar',
         icon: 'pi pi-fw pi-users mr-2',
-        routerLink: [`/ihale/${tenderId}/toplantilar`],
+        routerLink: [`/ihale/ihale/${tenderId}/toplantilar`],
         items: [
           {
             label: 'Listele',
             icon: 'pi pi-fw pi-list mr-2',
-            routerLink: [`/ihale/${tenderId}/toplantilar`],
+            routerLink: [`/ihale/ihale/${tenderId}/toplantilar`],
           },
           {
             label: 'Yeni Toplantı',
             icon: 'pi pi-fw pi-plus mr-2',
-            routerLink: [`/ihale/${tenderId}/toplantilar/yeni-toplanti`],
+            routerLink: [`/ihale/ihale/${tenderId}/toplantilar/yeni-toplanti`],
           },
         ]
       },
