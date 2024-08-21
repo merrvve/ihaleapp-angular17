@@ -49,33 +49,33 @@ export class MenuService {
       {
         label: 'Teklifler',
         icon: 'pi pi-fw pi-money-bill mr-2',
-        routerLink: [`ihale/ihale/${tenderId || '1'}/teklifler`],
+        routerLink: [`ihale/ihale/${tenderId}/teklifler`],
         items: [{
           label: 'Listele',
           icon: 'pi pi-fw pi-list mr-2',
-          routerLink: [`ihale/ihale/${tenderId || '1'}/teklifler`],
+          routerLink: [`ihale/ihale/${tenderId}/teklifler`],
         }]
         
       },
       {
         label: 'Fiyat Karşılaştırma',
         icon: 'pi pi-fw pi-chart-bar mr-2',
-        routerLink: [`/ihale/${tenderId || '1'}/karsilastirma-tablolari`],
+        routerLink: [`/ihale/${tenderId}/karsilastirma-tablolari`],
         items: [
           {
             label: 'Bütçe Fiyatı',
             icon: 'pi pi-fw pi-calculator mr-2',
-            routerLink: [`/ihale/${tenderId || '1'}/butce`],
+            routerLink: [`/ihale/${tenderId}/butce`],
           },
           {
             label: 'Yeni Tablo',
             icon: 'pi pi-fw pi-plus mr-2',
-            routerLink: [`ihale/ihale/${tenderId || '1'}/teklifler`],
+            routerLink: [`ihale/ihale/${tenderId}/teklifler`],
           },
           {
             label: 'Tablolar',
             icon: 'pi pi-fw pi-database mr-2',
-            routerLink: [`/ihale/${tenderId || '1'}/karsilastirma-tablolari`],
+            routerLink: [`/ihale/${tenderId}/karsilastirma-tablolari`],
           },
         ],
       },
@@ -83,17 +83,47 @@ export class MenuService {
       {
         label: 'Firma Raporları',
         icon: 'pi pi-fw pi-chart-line mr-2',
+        routerLink: [`/ihale/${tenderId}/firma-raporlari`],
+        items: [
+          {
+            label: 'Rapor Oluştur',
+            icon: 'pi pi-fw pi-plus mr-2',
+            routerLink: [`/ihale/${tenderId}/firma-raporlari/rapor-olustur`],
+          },
+          {
+            label: 'Listele',
+            icon: 'pi pi-fw pi-list mr-2',
+            routerLink: [`/ihale/${tenderId}/firma-raporlari`],
+          },
+          {
+            label: 'Ayarlar',
+            icon: 'pi pi-fw pi-wrench mr-2',
+            routerLink: [`/ihale/${tenderId}/firma-raporlari/ayarlar`],
+          },
+        ],
         
       },
       {
         label: 'Soru Cevap',
         icon: 'pi pi-fw pi-question mr-2',
-        routerLink: ['/'],
+        routerLink: [`/ihale/${tenderId}/soru-cevap`],
       },
       {
         label: 'Toplantılar',
         icon: 'pi pi-fw pi-users mr-2',
-        routerLink: ['/toplantilar'],
+        routerLink: [`/ihale/${tenderId}/toplantilar`],
+        items: [
+          {
+            label: 'Listele',
+            icon: 'pi pi-fw pi-list mr-2',
+            routerLink: [`/ihale/${tenderId}/toplantilar`],
+          },
+          {
+            label: 'Yeni Toplantı',
+            icon: 'pi pi-fw pi-plus mr-2',
+            routerLink: [`/ihale/${tenderId}/toplantilar/yeni-toplanti`],
+          },
+        ]
       },
     ];
     this._items.next(menuItems);

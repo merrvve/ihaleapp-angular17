@@ -15,6 +15,11 @@ import { FirmaTeklifleriComponent } from './ihale-detay/ihale-teklifleri/firma-t
 import { ListCompareTablesComponent } from './ihale-karsilastir/list-compare-tables/list-compare-tables.component';
 import { IhaleDosyalariComponent } from './ihale-detay/ihale-dosyalari/ihale-dosyalari.component';
 import { RevizyonlarComponent } from './ihale-detay/revizyonlar/revizyonlar.component';
+import { FirmaRaporlariComponent } from './ihale-detay/firma-raporlari/firma-raporlari.component';
+import { RaporAyarComponent } from './ihale-detay/firma-raporlari/rapor-ayar/rapor-ayar.component';
+import { RaporOlusturComponent } from './ihale-detay/firma-raporlari/rapor-olustur/rapor-olustur.component';
+import { SoruCevapComponent } from './ihale-detay/soru-cevap/soru-cevap.component';
+import { ToplantilarComponent } from './ihale-detay/toplantilar/toplantilar.component';
 
 
 export const IHALE_ROUTES: Route[] = [
@@ -34,6 +39,12 @@ export const IHALE_ROUTES: Route[] = [
   { path: 'ihale/:id/revizyonlar', component: RevizyonlarComponent },
   { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },
   { path: 'ihale/:id/teklifler/firma/:firmaid', component: FirmaTeklifleriComponent },
+  { path: 'ihale/:id/firma-raporlari', component: FirmaRaporlariComponent },
+  { path: 'ihale/:id/firma-raporlari/ayarlar', component: RaporAyarComponent },
+  { path: 'ihale/:id/firma-raporlari/rapor-olustur', component: RaporOlusturComponent },
+  { path: 'ihale/:id/soru-cevap', component: SoruCevapComponent },
+  { path: 'ihale/:id/toplantilar', component: ToplantilarComponent },
+  { path: 'ihale/:id/toplantilar/yeni-toplanti', component: ToplantilarComponent },
   { path: 'kesif-detay', component: KesifDetayComponent},
   { path: 'listele', component: IhaleListeleComponent },
   { path: 'taslaklar', component: TaslaklarComponent },

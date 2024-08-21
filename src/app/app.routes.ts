@@ -34,12 +34,5 @@ export const routes: Routes = [
     data: { role: 'TENDERER' },
     canActivate: [authGuard],
   },
-  {
-    path: 'toplantilar',
-    loadChildren: () =>
-      import('./features/meeting/toplanti.routes').then((mod) => mod.TOPLANTI_ROUTES),
-    data: { role: 'TENDERER' },
-    //canActivate: [authGuard],
-  },
   { path: '', component: LoginComponent },
 ];
