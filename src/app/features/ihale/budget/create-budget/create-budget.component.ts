@@ -6,6 +6,7 @@ import { Budget } from '../../../../models/budget';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TenderService } from '../../../../services/tender.service';
+import { MenuService } from '../../../../services/menu.service';
 
 @Component({
   selector: 'app-create-budget',
@@ -20,12 +21,16 @@ budgetData!: Budget;
   constructor(private budgetService: BudgetService,
     private tenderService: TenderService,
     private tableService: TablodataService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private menuService: MenuService
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((params)=>{
       this.tenderId = params.get('id');
+      if(this.tenderId) {
+        this.menuService.setItems(this.tenderId)
+      }
     })
     this.budgetData= this.budgetService.getCurrentBudget();
     if(!this.budgetData.discovery_data) {
@@ -84,6 +89,10 @@ budgetData!: Budget;
       }
       
     }
+  }
+
+  ngOnDestroy() {
+    this.menuService.clearItems();
   }
 }
   

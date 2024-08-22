@@ -17,32 +17,17 @@ export class MenuService {
       {
         label: 'İhale Dosyası',
         icon: 'pi pi-fw pi-folder mr-2',
+        routerLink: [`ihale/ihale/${tenderId}/ihale-dosyalari`],
         items: [
           {
             label: 'İhale Dosyaları',
             icon: 'pi pi-fw pi-folder-open mr-2',
-            routerLink: ['/'],
+            routerLink: [`ihale/ihale/${tenderId}/ihale-dosyalari`],
           },
           {
-            label: 'Zeyilname (Revizyonlar)',
+            label: 'Yeni Zeyilname (Revizyon)',
             icon: 'pi pi-fw pi-wallet mr-2',
-            routerLink: ['/'],
-              
-            items: [
-                  {
-                    label: 'Listele',
-                    icon: 'pi pi-fw pi-list mr-2',
-                    routerLink: ['/'],
-                  },
-                  {
-                    label: 'Yeni Zeyilname',
-                    icon: 'pi pi-fw pi-plus mr-2',
-                    routerLink: ['/'],
-                  },
-                ],
-              
-      
-            
+            routerLink: [`ihale/ihale/${tenderId}/ihale-dosyalari/yeni-zeyilname`],       
           },
         ],
       },
@@ -60,7 +45,7 @@ export class MenuService {
       {
         label: 'Fiyat Karşılaştırma',
         icon: 'pi pi-fw pi-chart-bar mr-2',
-        routerLink: [`/ihale/${tenderId}/karsilastirma-tablolari`],
+        routerLink: [`/ihale/ihale/${tenderId}/karsilastirma-tablolari`],
         items: [
           {
             label: 'Bütçe Fiyatı',
