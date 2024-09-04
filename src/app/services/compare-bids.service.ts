@@ -108,14 +108,14 @@ export class CompareBidsService {
       for (const column of columns) {
         if (column.isBirim) {
           bidObjects.forEach((bid, index) => {
-            unitPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] });
+            unitPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] ||0 });
           });
           budgetRow[column.header] =budgetData[i][column.header]
           
           //unitPrices.push({ title: column.header, bid: -1, price: budgetData[i][column.header]})
         } else if (column.isToplam) {
           bidObjects.forEach((bid, index) => {
-            totalPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] });
+            totalPrices.push({ title: column.header, bid: index, price: +bid[i][column.header] || 0 });
           });
           budgetRow[column.header] =budgetData[i][column.header]
           

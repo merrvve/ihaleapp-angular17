@@ -1,52 +1,161 @@
 @if(tender$ | async; as tender) {
-    <div class="mb-5">
-        <h2 class="p-2">{{tender.name}} İhalesi Rapor Ayarları</h2>
-    </div>
-    <div class="p-3">
-        <div class="flex flex-column justify-content-center surface-card shadow-2 p-5 border-round">
+<div class="mb-5">
+    <h2 class="p-2">{{tender.name}} İhalesi Rapor Ayarları</h2>
+</div>
+<div class="grid surface-card shadow-2 p-3 border-round m-2">
+    <div class="col">
+        <div class="flex flex-column justify-content-center ">
+
+            <h3>Genel Rapor Ayarları</h3>
+
+            <div class="field grid mb-3">
+                <label class="mb-2 w-20rem">Baz Değer</label>
+                <div class="mb-2">
+                    <p-selectButton [options]="baseOptions" [(ngModel)]="selectedBaseOption" />
+                </div>
+            </div>
+
+            <div class="field grid mb-3">
+                <label class="mb-2 w-20rem">Baz değerin ne olduğu belirtilsin mi?</label>
+                <div class="flex flex-wrap gap-3">
+                    <span>
+                        <input type="radio" class="p-1" name="belirt" value="true" /><label class="m-1">Evet</label>
+                    </span>
+                    <span>
+                        <input type="radio" class="p-1" name="belirt" value="false" /><label class="m-1">Hayır</label>
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="field grid mb-3">
+                <label class="mb-2 w-20rem">Baz Değere Oranı</label>
+                <div class="flex flex-row mb-2">
+
+                    <p-inputGroup class="mb-2">
+                        <p-inputGroupAddon>%</p-inputGroupAddon>
+                        <input #baseRatio type="number" pInputNumber placeholder="10" max="100" min="0" />
+                        <p-inputGroupAddon>üstü/altı</p-inputGroupAddon>
+                    </p-inputGroup>
+
+                </div>
+            </div>
             
+            <div class="field grid my-3">
+                <label class="mb-2 w-20rem">Yüksek fiyat bilgisi belirtilsin mi?</label>
+                <div class="flex flex-wrap gap-3">
+                    <span>
+                        <input type="radio" class="p-1" name="yuksek" value="true" /><label class="m-1">Evet</label>
+                    </span>
+                    <span>
+                        <input type="radio" class="p-1" name="yuksek" value="false" /><label class="m-1">Hayır</label>
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="field grid mb-4">
+                <label class="mb-2 w-20rem">Yüksek fiyat oranı belirtilsin mi?</label>
+                <div class="flex flex-wrap gap-3">
+                    <span>
+                        <input type="radio" class="p-1" name="yuksekoran" value="true" /><label class="m-1">Evet</label>
+                    </span>
+                    <span>
+                        <input type="radio" class="p-1" name="yuksekoran" value="false" /><label
+                            class="m-1">Hayır</label>
+                    </span>
+
+                </div>
+            </div>
             
-               
-                    <div class="field grid mb-3">
-                        <label class="mb-2 w-12rem">Baz Değer</label>
-                        <div class="mb-2">
-                            <p-selectButton 
-                                [options]="baseOptions" 
-                                [(ngModel)]="selectedBaseOption" 
-                                 />
-                        </div>
-                    </div>
-            
-                    <div class="field grid mb-3">
-                        <label class="mb-2 w-12rem">Baz Değere Oranı</label>
-                        <div class="flex flex-row mb-2">
-                            
-                            <p-inputGroup class="mb-2">
-                                <p-inputGroupAddon>%</p-inputGroupAddon>
-                                <input #baseRatio type="number" pInputNumber placeholder="10" max="100" min="0"/>
-                                <p-inputGroupAddon>üstü/altı</p-inputGroupAddon>
-                            </p-inputGroup>    
-                    
-                        </div> 
-                    </div>
-            
-                    <div class="field grid mb-3">
-                        <label class="mb-2 w-12rem">Başlık Derinliği Seçimi</label>
-                        <div class="mb-2">
-                            <!-- <textarea type="text" rows="8"
-                             [(ngModel)]="tender.description" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-                                </textarea> -->
-                            </div>
-                    </div>
-   
-        </div>
-        <div class="flex justify-content-end mt-5">
-            <p-button pRipple label="Kaydet" icon="pi pi-check" class="mx-5"></p-button>
-        </div>
+            <div class="field grid my-3">
+                <label class="mb-2 w-20rem">Düşük fiyat bilgisi belirtilsin mi?</label>
+                <div class="flex flex-wrap gap-3">
+                    <span>
+                        <input type="radio" class="p-1" name="dusuk" value="true" /><label class="m-1">Evet</label>
+                    </span>
+                    <span>
+                        <input type="radio" class="p-1" name="dusuk" value="false" /><label class="m-1">Hayır</label>
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="field grid mb-3">
+                <label class="mb-2 w-20rem">Düşük fiyat oranı belirtilsin mi?</label>
+                <div class="flex flex-wrap gap-3">
+                    <span>
+                        <input type="radio" class="p-1" name="dusukoran" value="true" /><label class="m-1">Evet</label>
+                    </span>
+                    <span>
+                        <input type="radio" class="p-1" name="dusukoran" value="false" /><label
+                            class="m-1">Hayır</label>
+                    </span>
+
+                </div>
+            </div>
+
+
         
+
+        </div>
     </div>
+    <div class="col">
+        <h3>İş Kalemleri İçin Kırılım Seçimi</h3>
+        
+        <div class="field grid my-3">
+            <label class="mb-2 w-20rem">Genel toplam durumu belirtilsin mi?</label>
+            <div class="flex flex-wrap gap-3">
+                <span>
+                    <input type="radio" class="p-1" name="yuksek" value="true" /><label class="m-1">Evet</label>
+                </span>
+                <span>
+                    <input type="radio" class="p-1" name="yuksek" value="false" /><label class="m-1">Hayır</label>
+                </span>
+            </div>
+        </div>
+        <div class="field grid my-3">
+            <label class="mb-2 w-20rem">Alt Başlıkların durumu belirtilsin mi?</label>
+            <div class="flex flex-wrap gap-3">
+                <span>
+                    <input type="radio" class="p-1" name="yuksek" value="true" /><label class="m-1">Evet</label>
+                </span>
+                <span>
+                    <input type="radio" class="p-1" name="yuksek" value="false" /><label class="m-1">Hayır</label>
+                </span>
+            </div>
+        </div>
+        <div class="field grid mt-3 mb-5">
+            <label class="mb-2 w-20rem">İş Kalemlerinin durumu belirtilsin mi?</label>
+            <div class="flex flex-wrap gap-3">
+                <span>
+                    <input type="radio" class="p-1" name="yuksek" value="true" /><label class="m-1">Evet</label>
+                </span>
+                <span>
+                    <input type="radio" class="p-1" name="yuksek" value="false" /><label class="m-1">Hayır</label>
+                </span>
+            </div>
+        </div>
+        <h3>Fiyatlar İçin Kırılım Seçimi</h3>
+        <div class="field grid my-3">
+            <label class="mb-2 w-20rem">Rapor hangi kırılımda olsun?</label>
+            <div class="mb-2">
+                <select class="p-2">
+                    <option>Sadece Toplam Tutara Göre</option>
+                    <option>Alt Kırılımlar Dahil Edilsin</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<div class="flex justify-content-end mt-5">
+    <p-button pRipple label="Kaydet" icon="pi pi-check" class="mx-5"></p-button>
+</div>
 }
 
 @else {
-    <app-loading-spinner></app-loading-spinner>
+<app-loading-spinner></app-loading-spinner>
 }

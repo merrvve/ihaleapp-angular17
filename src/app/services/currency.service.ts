@@ -1,23 +1,41 @@
 import { Injectable } from '@angular/core';
 import { CurrencyRate } from '../models/currency-rate';
-import { HttpBackend, HttpRequest } from '@angular/common/http';
+import { HttpBackend, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrencyService {
-  private apiUrl = 'http://hasanadiguzel.com.tr/api/kurgetir';
+  private currencyKey = environment.freeapi 
+  private apiUrl = `https://api.freecurrencyapi.com/v1/latest?apikey=${this.currencyKey}&currencies=EUR%2CUSD&base_currency=TRY`;
 
   constructor(private handler: HttpBackend) {}
   
   getCurrencyRates() {
-    //const req = new HttpRequest('GET', this.apiUrl);
-    // const req = new HttpRequest('GET', this.apiUrl, {
+    
+    const req = new HttpRequest('GET', this.apiUrl, {
       
-    //   mode: 'no-cors'
+      mode: 'no-cors'
+    });
+    
+
+    // this.handler.handle(req).subscribe({
+    //   next: (event) => {
+    //     if (event.type === HttpEventType.Response) {
+    //       const response = event as HttpResponse<any>;
+    //       if (response.status === 200) {
+    //         const body = response.body;
+    //         console.log('Parsed result:', body.data);
+    //       }
+    //     }
+    //   },
+    //   error: (err) => {
+    //     console.error('Request failed with error:', err);
+    //   }
     // });
-    // this.handler.handle(req).subscribe(result=>console.log(result))
-    //fetch('http://hasanadiguzel.com.tr/api/kurgetir', {mode:'no-cors'}).then(response =>{ response.json(); console.log(response)})
+
+    
     const currencyRate : CurrencyRate = {
       dolar: 33.22,
       euro: 36.22

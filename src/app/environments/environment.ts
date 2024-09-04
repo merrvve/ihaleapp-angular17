@@ -8,6 +8,7 @@ export const environment = {
     storageBucket: "ihaleapp-2024.appspot.com",
     messagingSenderId: "839263083902",
     appId: "1:839263083902:web:359e4b15e1cffa95d0672f"
-  }
+  },
+  freeapi: "fca_live_Wps6DV1m6Jqcq7bsHGnXQue6yZxAGYZFS7YS1Lu6"
   
 };
