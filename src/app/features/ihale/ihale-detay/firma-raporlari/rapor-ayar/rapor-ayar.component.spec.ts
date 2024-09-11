@@ -8,10 +8,9 @@ describe('RaporAyarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RaporAyarComponent]
-    })
-    .compileComponents();
-    
+      imports: [RaporAyarComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(RaporAyarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

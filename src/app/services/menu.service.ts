@@ -3,17 +3,14 @@ import { MenuItem } from 'primeng/api/menuitem';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MenuService {
   private _items = new BehaviorSubject<MenuItem[]>([]);
   items$ = this._items.asObservable();
-  
-  
 
   setItems(tenderId: string) {
-    const menuItems =  [
-    
+    const menuItems = [
       {
         label: 'İhale Dosyası',
         icon: 'pi pi-fw pi-folder mr-2',
@@ -27,7 +24,9 @@ export class MenuService {
           {
             label: 'Yeni Zeyilname (Revizyon)',
             icon: 'pi pi-fw pi-wallet mr-2',
-            routerLink: [`ihale/ihale/${tenderId}/ihale-dosyalari/yeni-zeyilname`],       
+            routerLink: [
+              `ihale/ihale/${tenderId}/ihale-dosyalari/yeni-zeyilname`,
+            ],
           },
         ],
       },
@@ -35,12 +34,13 @@ export class MenuService {
         label: 'Teklifler',
         icon: 'pi pi-fw pi-money-bill mr-2',
         routerLink: [`ihale/ihale/${tenderId}/teklifler`],
-        items: [{
-          label: 'Listele',
-          icon: 'pi pi-fw pi-list mr-2',
-          routerLink: [`ihale/ihale/${tenderId}/teklifler`],
-        }]
-        
+        items: [
+          {
+            label: 'Listele',
+            icon: 'pi pi-fw pi-list mr-2',
+            routerLink: [`ihale/ihale/${tenderId}/teklifler`],
+          },
+        ],
       },
       {
         label: 'Fiyat Karşılaştırma',
@@ -64,7 +64,7 @@ export class MenuService {
           },
         ],
       },
-  
+
       {
         label: 'Firma Raporları',
         icon: 'pi pi-fw pi-chart-line mr-2',
@@ -73,7 +73,9 @@ export class MenuService {
           {
             label: 'Rapor Oluştur',
             icon: 'pi pi-fw pi-plus mr-2',
-            routerLink: [`/ihale/ihale/${tenderId}/firma-raporlari/rapor-olustur`],
+            routerLink: [
+              `/ihale/ihale/${tenderId}/firma-raporlari/rapor-olustur`,
+            ],
           },
           {
             label: 'Listele',
@@ -86,7 +88,6 @@ export class MenuService {
             routerLink: [`/ihale/ihale/${tenderId}/firma-raporlari/ayarlar`],
           },
         ],
-        
       },
       {
         label: 'Soru Cevap',
@@ -108,7 +109,7 @@ export class MenuService {
             icon: 'pi pi-fw pi-plus mr-2',
             routerLink: [`/ihale/ihale/${tenderId}/toplantilar/yeni-toplanti`],
           },
-        ]
+        ],
       },
     ];
     this._items.next(menuItems);
@@ -117,6 +118,4 @@ export class MenuService {
   clearItems() {
     this._items.next([]);
   }
-
-
 }

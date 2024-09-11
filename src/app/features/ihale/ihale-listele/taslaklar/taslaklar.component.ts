@@ -10,33 +10,36 @@ import { Tender } from '../../../../models/tender';
 @Component({
   selector: 'app-taslaklar',
   standalone: true,
-  imports: [TableModule, ButtonModule, AsyncPipe, LoadingSpinnerComponent, JsonPipe, DatePipe],
+  imports: [
+    TableModule,
+    ButtonModule,
+    AsyncPipe,
+    LoadingSpinnerComponent,
+    JsonPipe,
+    DatePipe,
+  ],
   templateUrl: './taslaklar.component.html',
-  styleUrl: './taslaklar.component.scss'
+  styleUrl: './taslaklar.component.scss',
 })
 export class TaslaklarComponent implements OnInit {
   tenders$!: Observable<Tender[]>;
-  
+
   constructor(
     private tenderService: TenderService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
-   
-    this.tenders$ =  this.tenderService.getTendersByOwnerId(true);
-    
+    this.tenders$ = this.tenderService.getTendersByOwnerId(true);
   }
 
-  
   editTender(tender: Tender) {
-    tender.isEditMode=true;
+    tender.isEditMode = true;
     this.tenderService.setTender(tender);
-    this.router.navigate(['ihale/ihale-olustur'])
+    this.router.navigate(['ihale/ihale-olustur']);
   }
 
   deleteTender(tenderId: string) {
     this.tenderService.deleteTender(tenderId);
   }
-  
 }

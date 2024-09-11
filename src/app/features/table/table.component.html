@@ -3,146 +3,278 @@
 <p-menubar [model]="tableMenuItems" styleClass="sticky">
   <ng-template pTemplate="end">
     <div class="flex align-items-center gap-2">
-      <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="{0} sütun seçildi" [style]="{ width: '20em' }" defaultLabel="Gösterilecek Sütunları Seç" display="chip"></p-multiSelect>
+      <p-multiSelect
+        [options]="cols"
+        [(ngModel)]="selectedColumns"
+        optionLabel="header"
+        selectedItemsLabel="{0} sütun seçildi"
+        [style]="{ width: '20em' }"
+        defaultLabel="Gösterilecek Sütunları Seç"
+        display="chip"
+      ></p-multiSelect>
     </div>
-</ng-template>
+  </ng-template>
 </p-menubar>
-<div class="container mt-5 ">
- 
-          <!-- Modal Dialoglar -->
-          <!-- Excel Yükle -->
-          <div class="card flex justify-content-center">
-            <p-dialog header="Excel Dosyası Yükle" [(visible)]="visibleExcelDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                <label for="file-upload" class="custom-file-upload">
-                  {{ selectedFile ? selectedFile.name : 'Dosya Seçiniz' }}
-              </label>
-          <input id="file-upload" (change)="onFileChange($event)" type="file" />
-                <p-button (click)="importExcel(); visibleExcelDialog=false;" label="Yükle" class="m-3"></p-button>
-            </p-dialog>
-          </div>
+<div class="container mt-5">
+  <!-- Modal Dialoglar -->
+  <!-- Excel Yükle -->
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Excel Dosyası Yükle"
+      [(visible)]="visibleExcelDialog"
+      [breakpoints]="{ '960px': '75vw' }"
+      [style]="{ width: '50vw' }"
+      [draggable]="false"
+      [resizable]="false"
+    >
+      <label for="file-upload" class="custom-file-upload">
+        {{ selectedFile ? selectedFile.name : "Dosya Seçiniz" }}
+      </label>
+      <input id="file-upload" (change)="onFileChange($event)" type="file" />
+      <p-button
+        (click)="importExcel(); visibleExcelDialog = false"
+        label="Yükle"
+        class="m-3"
+      ></p-button>
+    </p-dialog>
+  </div>
 
-          
+  <!-- Diğer Sütun Ekle -->
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Sütun Ekle"
+      [(visible)]="visible"
+      [breakpoints]="{ '960px': '75vw' }"
+      [style]="{ width: '50vw' }"
+      [draggable]="false"
+      [resizable]="false"
+    >
+      <p>Sütun Adı:</p>
+      <input type="text" pInputText #colName placeholder="Sütun Adı Giriniz" />
+      <p-button
+        (click)="addOtherCol(colName.value)"
+        label="Sütun Ekle"
+        class="m-3"
+      ></p-button>
+    </p-dialog>
+  </div>
 
-          <!-- Diğer Sütun Ekle -->
-          <div class="card flex justify-content-center">
-            <p-dialog header="Sütun Ekle" [(visible)]="visible" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                <p>
-                Sütun Adı:     
-                </p>
-                <input type="text" pInputText #colName placeholder="Sütun Adı Giriniz"/>
-                <p-button (click)="addOtherCol(colName.value)" label="Sütun Ekle" class="m-3"></p-button>
-            </p-dialog>
-          </div>
+  <!-- Diğer Birim Fiyat Ekle -->
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Birim Fiyat Sütunu Ekle"
+      [(visible)]="visibleBirimDialog"
+      [breakpoints]="{ '960px': '75vw' }"
+      [style]="{ width: '50vw' }"
+      [draggable]="true"
+      [resizable]="false"
+    >
+      <p>Sütun Adı:</p>
+      <input
+        type="text"
+        pInputText
+        #colNameBirim
+        placeholder="Sütun Adı Giriniz"
+      />
+      <p-button
+        (click)="addBirimCol(colNameBirim.value); visibleBirimDialog = false"
+        label="Birim Fiyat Ekle"
+        class="m-3"
+      ></p-button>
+    </p-dialog>
+  </div>
 
-          <!-- Diğer Birim Fiyat Ekle -->
-          <div class="card flex justify-content-center">
-            <p-dialog header="Birim Fiyat Sütunu Ekle" [(visible)]="visibleBirimDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false">
-                <p>
-                Sütun Adı:     
-                </p>
-                <input type="text" pInputText #colNameBirim placeholder="Sütun Adı Giriniz"/>
-                <p-button (click)="addBirimCol(colNameBirim.value); visibleBirimDialog=false;" label="Birim Fiyat Ekle" class="m-3"></p-button>
-            </p-dialog>
-          </div>
+  <!-- Diğer Birim Fiyat Ekle -->
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Birim Fiyat Sütunu Ekle"
+      [(visible)]="visibleAnaBaslikDialog"
+      [breakpoints]="{ '960px': '75vw' }"
+      [style]="{ width: '50vw' }"
+      [draggable]="true"
+      [resizable]="false"
+    >
+      <p>Eklenecek Başlık Sayısı</p>
+      <input
+        type="number"
+        pInputText
+        #rowCount
+        placeholder="Sayı Giriniz"
+        value="1"
+      />
+      <p-button
+        (click)="addNewNode(+rowCount.value); visibleAnaBaslikDialog = false"
+        label="Ana Başlık Ekle"
+        class="m-3"
+      ></p-button>
+    </p-dialog>
+  </div>
+  <!-- Sütun Sil -->
 
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Sütun Sil"
+      [(visible)]="visibleDeleteColDialog"
+      [breakpoints]="{ '960px': '75vw' }"
+      [style]="{ width: '50vw', height: '75vh' }"
+      [draggable]="true"
+      [resizable]="true"
+    >
+      <p-multiSelect
+        [options]="cols | excludeCols: 5 : 1"
+        optionLabel="header"
+        [(ngModel)]="delCols"
+        placeholder="Silinecek Sütunları seçiniz"
+        display="chip"
+        [showClear]="true"
+      ></p-multiSelect>
 
-          <!-- Diğer Birim Fiyat Ekle -->
-          <div class="card flex justify-content-center">
-            <p-dialog header="Birim Fiyat Sütunu Ekle" [(visible)]="visibleAnaBaslikDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="true" [resizable]="false">
-                <p>
-                Eklenecek Başlık Sayısı     
-                </p>
-                <input type="number" pInputText #rowCount placeholder="Sayı Giriniz" value="1"/>
-                <p-button (click)="addNewNode(+(rowCount.value)); visibleAnaBaslikDialog=false;" label="Ana Başlık Ekle" class="m-3"></p-button>
-            </p-dialog>
-          </div>
-          <!-- Sütun Sil -->
-          
-          <div class="card flex justify-content-center">
-            <p-dialog header="Sütun Sil" [(visible)]="visibleDeleteColDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw', height:'75vh' }" [draggable]="true" [resizable]="true">
-              <p-multiSelect [options]="cols | excludeCols:5:1" optionLabel="header" [(ngModel)]="delCols" placeholder="Silinecek Sütunları seçiniz"  display="chip" [showClear]="true"></p-multiSelect>
-              
-              <p-button (click)="deleteCol(delCols); visibleDeleteColDialog=false;" severity="danger" label="Seçili Sütunları Sil" class="m-3"></p-button>
-            </p-dialog>
-          </div>
+      <p-button
+        (click)="deleteCol(delCols); visibleDeleteColDialog = false"
+        severity="danger"
+        label="Seçili Sütunları Sil"
+        class="m-3"
+      ></p-button>
+    </p-dialog>
+  </div>
 
-          <!-- Başlığa Satır Ekle -->
-          <div class="card flex justify-content-center">
-            <p-dialog header="Başlığa Satır Ekle" [(visible)]="visibleRowDialog" [breakpoints]="{ '960px': '75vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                
-            <p-dropdown appendTo="body" [options]="allKeys" [(ngModel)]="selectedKey"  [showClear]="true" placeholder="Bir Başlık Seçin"></p-dropdown>
-            <p-inputNumber [(ngModel)]="rowNum" [showButtons]="true"  buttonLayout="horizontal" inputId="horizontal" spinnerMode="horizontal" [step]="1" 
-            decrementButtonClass="p-button-secondary"
-              incrementButtonClass="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" ></p-inputNumber> 
-            <p-button (click)="addMultipleRows(selectedKey); visibleRowDialog=false;" label="Ekle" class="m-3"></p-button>
-            </p-dialog>
-          </div>
-        </div>
-    <!-- Tablo -->
-    <p-treeTable #dataTreeTable [autoLayout]="true"  [resizableColumns]="true"  [reorderableColumns]="true"  [value]="files" columnResizeMode="expand" 
-    selectionMode="checkbox" [(selection)]="selectedNodes" dataKey="key"
-    [(contextMenuSelection)]="selectedNode" [contextMenu]="cm"  [tableStyle]="tableStyle"
-    
-    [columns]="selectedColumns"  styleClass="p-treetable-gridlines p-treetable-sm mb-3 text-xs" >
-    
+  <!-- Başlığa Satır Ekle -->
+  <div class="card flex justify-content-center">
+    <p-dialog
+      header="Başlığa Satır Ekle"
+      [(visible)]="visibleRowDialog"
+      [breakpoints]="{ '960px': '75vw' }"
+      [style]="{ width: '50vw' }"
+      [draggable]="false"
+      [resizable]="false"
+    >
+      <p-dropdown
+        appendTo="body"
+        [options]="allKeys"
+        [(ngModel)]="selectedKey"
+        [showClear]="true"
+        placeholder="Bir Başlık Seçin"
+      ></p-dropdown>
+      <p-inputNumber
+        [(ngModel)]="rowNum"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        inputId="horizontal"
+        spinnerMode="horizontal"
+        [step]="1"
+        decrementButtonClass="p-button-secondary"
+        incrementButtonClass="p-button-secondary"
+        incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus"
+      ></p-inputNumber>
+      <p-button
+        (click)="addMultipleRows(selectedKey); visibleRowDialog = false"
+        label="Ekle"
+        class="m-3"
+      ></p-button>
+    </p-dialog>
+  </div>
+</div>
+<!-- Tablo -->
+<p-treeTable
+  #dataTreeTable
+  [autoLayout]="true"
+  [resizableColumns]="true"
+  [reorderableColumns]="true"
+  [value]="files"
+  columnResizeMode="expand"
+  selectionMode="checkbox"
+  [(selection)]="selectedNodes"
+  dataKey="key"
+  [(contextMenuSelection)]="selectedNode"
+  [contextMenu]="cm"
+  [tableStyle]="tableStyle"
+  [columns]="selectedColumns"
+  styleClass="p-treetable-gridlines p-treetable-sm mb-3 text-xs"
+>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      @for (col of columns; track col) {
+        <th ttReorderableColumn [ttSortableColumn]="col.field">
+          {{ col.header }}
+          @if (col.isToplam || col.isBirim) {
+            {{
+              currency === "TL"
+                ? "(TL)"
+                : currency === "Euro"
+                  ? "(€)"
+                  : currency === "Dolar"
+                    ? "($)"
+                    : ""
+            }}
+          }
+          <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
+        </th>
+      }
+    </tr>
+  </ng-template>
 
-        <ng-template pTemplate="header" let-columns>
-          <tr>
-            @for (col of columns; track col) {
-              <th ttReorderableColumn [ttSortableColumn]="col.field">
-                {{ col.header }}
-                @if(col.isToplam || col.isBirim) {
-                    {{currency === 'TL' ? '(TL)' : currency==='Euro' ? '(€)': currency==='Dolar' ? '($)': ''}} 
-                  }
-                <p-treeTableSortIcon [field]="col.field"></p-treeTableSortIcon>
-              </th>
-            }
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns" >
-            <tr [ttRow]="rowNode" [ttContextMenuRow]="rowNode" pDraggable pDroppable (onDrop)="dragEnd(rowNode)"
-            (onDragStart)="dragStart(rowNode)" 
-           >
-              @for (col of columns; track col; let i = $index) {
-                <td ttEditableColumn [ttEditableColumnDisabled]="col.editable == false" [ngClass]="{ 'p-toggler-column': i === 0 }">
-                  @if (i === 0) {
-                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                    <p-treeTableCheckbox [value]="rowNode" (click)="onCheck(rowNode.node.data.key,rowNode,rowData)" styleClass="text-xs"></p-treeTableCheckbox>
-                   
-                  }
-                  <p-treeTableCellEditor>
-                    <ng-template pTemplate="input">
-                        <div class="input-container">
-                            @if (col.numberField== true) {
-                                <p-inputNumber [(ngModel)]="rowData[col.field]"
-                                  (ngModelChange)="onCellEdit($event, rowData, col.field, rowNode)"> </p-inputNumber>
-                              }
-                              @else {
-                                <input pInputText type="text"
-                                  [(ngModel)]="rowData[col.field]" (ngModelChange)="onCellEdit($event, rowData, col.field, rowNode)" />
-                                }
-                        </div>
-                    
-                    </ng-template>
-                    <ng-template pTemplate="output">{{ rowData[col.field] }}</ng-template>
-                </p-treeTableCellEditor>
-                </td>
-                  }
-                </tr>
-              </ng-template>
-     
-   
-        </p-treeTable>
-        <div class="flex justify-content-end m-3 p-1">
-          <strong><span class="mr-5">Toplam Bedel: </span>{{allTreeTotal}} </strong>
-        </div>
-        <p-contextMenu #cm [model]="rowContextItems"></p-contextMenu>
-
-      
-       
-      
-    
-
-
-
+  <ng-template
+    pTemplate="body"
+    let-rowNode
+    let-rowData="rowData"
+    let-columns="columns"
+  >
+    <tr
+      [ttRow]="rowNode"
+      [ttContextMenuRow]="rowNode"
+      pDraggable
+      pDroppable
+      (onDrop)="dragEnd(rowNode)"
+      (onDragStart)="dragStart(rowNode)"
+    >
+      @for (col of columns; track col; let i = $index) {
+        <td
+          ttEditableColumn
+          [ttEditableColumnDisabled]="col.editable == false"
+          [ngClass]="{ 'p-toggler-column': i === 0 }"
+        >
+          @if (i === 0) {
+            <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+            <p-treeTableCheckbox
+              [value]="rowNode"
+              (click)="onCheck(rowNode.node.data.key, rowNode, rowData)"
+              styleClass="text-xs"
+            ></p-treeTableCheckbox>
+          }
+          <p-treeTableCellEditor>
+            <ng-template pTemplate="input">
+              <div class="input-container">
+                @if (col.numberField == true) {
+                  <p-inputNumber
+                    [(ngModel)]="rowData[col.field]"
+                    (ngModelChange)="
+                      onCellEdit($event, rowData, col.field, rowNode)
+                    "
+                  >
+                  </p-inputNumber>
+                } @else {
+                  <input
+                    pInputText
+                    type="text"
+                    [(ngModel)]="rowData[col.field]"
+                    (ngModelChange)="
+                      onCellEdit($event, rowData, col.field, rowNode)
+                    "
+                  />
+                }
+              </div>
+            </ng-template>
+            <ng-template pTemplate="output">{{
+              rowData[col.field]
+            }}</ng-template>
+          </p-treeTableCellEditor>
+        </td>
+      }
+    </tr>
+  </ng-template>
+</p-treeTable>
+<div class="flex justify-content-end m-3 p-1">
+  <strong><span class="mr-5">Toplam Bedel: </span>{{ allTreeTotal }} </strong>
+</div>
+<p-contextMenu #cm [model]="rowContextItems"></p-contextMenu>

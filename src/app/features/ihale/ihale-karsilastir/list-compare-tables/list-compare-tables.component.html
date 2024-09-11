@@ -1,30 +1,46 @@
 <div class="container mb-5">
-    <h2 class="p-2">Karşılaştırma Tabloları</h2>
+  <h2 class="p-2">Karşılaştırma Tabloları</h2>
 </div>
 
-<p-button label="Yeni Tablo Oluştur" icon="pi pi-plus" iconPos="left" [routerLink]="['/','ihale','ihale',tenderId,'teklifler']" />
+<p-button
+  label="Yeni Tablo Oluştur"
+  icon="pi pi-plus"
+  iconPos="left"
+  [routerLink]="['/', 'ihale', 'ihale', tenderId, 'teklifler']"
+/>
 
-@if(compareTables) {
-    <p-table [value]="compareTables">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Id</th>
-                <th>İsim</th>
-                <th>Oluşturulma Tarihi</th>
-                <th>Detay</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-table>
-            <tr>
-                <td>{{ table.id }}</td>
-                <td>{{ table?.name }}</td>
-                <td>{{ table.created_at }}</td>
-                <td> 
-                    <p-button type="button" severity="danger"  icon="pi pi-trash" (click)="deleteTable(table.id)" class="mr-1"></p-button>
-                    <p-button type="button" severity="info"  icon="pi pi-folder-open" (click)="openTable(table)" class="mr-1"></p-button>
-                     
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+@if (compareTables) {
+  <p-table [value]="compareTables">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Id</th>
+        <th>İsim</th>
+        <th>Oluşturulma Tarihi</th>
+        <th>Detay</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-table>
+      <tr>
+        <td>{{ table.id }}</td>
+        <td>{{ table?.name }}</td>
+        <td>{{ table.created_at }}</td>
+        <td>
+          <p-button
+            type="button"
+            severity="danger"
+            icon="pi pi-trash"
+            (click)="deleteTable(table.id)"
+            class="mr-1"
+          ></p-button>
+          <p-button
+            type="button"
+            severity="info"
+            icon="pi pi-folder-open"
+            (click)="openTable(table)"
+            class="mr-1"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 }

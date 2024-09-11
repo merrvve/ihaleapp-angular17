@@ -1,36 +1,30 @@
-
-    
-@if(user$ | async; as user) {
-    @if(user.role==="TENDERER") {
-        <app-menu-template [items]="items" [userMenu]="userMenu" [user]="user"></app-menu-template>
-    }
-    @else if(user.role==="BIDDER") {
-        <app-menu-template [items]="teklifciMenu" [userMenu]="userMenu" [user]="user"></app-menu-template>
-    }
-}
-
-
-        
-    
-@else {
-    <!-- <app-menu-template [items]="items" [userMenu]="userMenu" ></app-menu-template>
+@if (user$ | async; as user) {
+  @if (user.role === "TENDERER") {
+    <app-menu-template
+      [items]="items"
+      [userMenu]="userMenu"
+      [user]="user"
+    ></app-menu-template>
+  } @else if (user.role === "BIDDER") {
+    <app-menu-template
+      [items]="teklifciMenu"
+      [userMenu]="userMenu"
+      [user]="user"
+    ></app-menu-template>
+  }
+} @else {
+  <!-- <app-menu-template [items]="items" [userMenu]="userMenu" ></app-menu-template>
      -->
-    <p-menubar>
-            <ng-template pTemplate="start">
-                <a [routerLink]="['/']">            
-                    <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="40" class="mx-2" />
-                </a>
-            </ng-template>
-            <ng-template pTemplate="end">
-            </ng-template>
-        </p-menubar>
-        
-   }
-
-
-
-
-
-
-
-
+  <p-menubar>
+    <ng-template pTemplate="start">
+      <a [routerLink]="['/']">
+        <img
+          src="https://primefaces.org/cdn/primeng/images/primeng.svg"
+          height="40"
+          class="mx-2"
+        />
+      </a>
+    </ng-template>
+    <ng-template pTemplate="end"> </ng-template>
+  </p-menubar>
+}

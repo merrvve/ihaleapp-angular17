@@ -30,9 +30,7 @@ export class IstenenDokumanlarComponent implements OnInit {
   requestedDocs: RequestedDocument[] = [];
   id: number = 0;
 
-  constructor(
-    private tenderService: TenderService
-  ) {}
+  constructor(private tenderService: TenderService) {}
 
   ngOnInit(): void {
     //mesajları oluştur
@@ -46,23 +44,25 @@ export class IstenenDokumanlarComponent implements OnInit {
     ];
 
     //evraklar varsa yükle
-    this.requestedDocs = this.tenderService._currentTender.value.requestedDocuments;
+    this.requestedDocs =
+      this.tenderService._currentTender.value.requestedDocuments;
   }
 
-  addDoc (name: string, format: string) {
+  addDoc(name: string, format: string) {
     const id = Date.now();
-    this.requestedDocs.push({name:name,format:format,id:id})
+    this.requestedDocs.push({ name: name, format: format, id: id });
   }
 
-  deleteDoc(id:number) {
+  deleteDoc(id: number) {
     const index = this.requestedDocs.findIndex((x) => x.id == id);
     if (index > -1) {
       this.requestedDocs.splice(index, 1);
     }
   }
-  
+
   ngOnDestroy() {
-    this.tenderService._currentTender.value.requestedDocuments = this.requestedDocs;
+    this.tenderService._currentTender.value.requestedDocuments =
+      this.requestedDocs;
     // let evraklarString = '';
     // for (const evrak of this.evraklar) {
     //   evraklarString += evrak.evrak + '|' + evrak.bicim + '||';

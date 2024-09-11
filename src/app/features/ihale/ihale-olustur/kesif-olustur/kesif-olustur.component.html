@@ -1,11 +1,17 @@
 <app-ihale-olustur></app-ihale-olustur>
 <app-table [currency]="currency"></app-table>
 <div class="flex justify-content-end">
-    <p-button label="Geri" icon="pi pi-arrow-left" severity="secondary" class="mx-2" [routerLink]="['/ihale/ihale-olustur/ihale-bilgileri']"></p-button>
-    
-    <p-button label="İlerle" icon="pi pi-arrow-right" [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"></p-button>
-  
-  </div>
+  <p-button
+    label="Geri"
+    icon="pi pi-arrow-left"
+    severity="secondary"
+    class="mx-2"
+    [routerLink]="['/ihale/ihale-olustur/ihale-bilgileri']"
+  ></p-button>
 
-
-
+  <p-button
+    label="İlerle"
+    icon="pi pi-arrow-right"
+    [routerLink]="['/ihale/ihale-olustur/istenen-dokumanlar']"
+  ></p-button>
+</div>

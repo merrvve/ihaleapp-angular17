@@ -8,10 +8,9 @@ describe('YeniToplantiComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [YeniToplantiComponent]
-    })
-    .compileComponents();
-    
+      imports: [YeniToplantiComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(YeniToplantiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

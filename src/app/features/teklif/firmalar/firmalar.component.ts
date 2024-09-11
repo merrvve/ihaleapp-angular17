@@ -14,17 +14,11 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './firmalar.component.scss',
 })
 export class FirmalarComponent implements OnInit {
-  
-  companies$! : Observable<Company[]>;
-  constructor(
-    private companiesService: CompaniesService,
-    ) {}
+  companies$!: Observable<Company[]>;
+  constructor(private companiesService: CompaniesService) {}
   // Teklifçi bilgilerini al
 
   ngOnInit() {
     this.companies$ = this.companiesService.getCompanies();
-    
   }
-
-  
 }

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MenuItem, Message, MessageService, TreeNode } from 'primeng/api';
 import { TablodataService } from '../../services/tablodata.service';
 import { Column } from '../../models/column.interface';
@@ -45,15 +52,13 @@ import { DragDropModule } from 'primeng/dragdrop';
     SplitButtonModule,
     MenubarModule,
     ExcludeColsPipe,
-    DragDropModule
+    DragDropModule,
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
 export class TableComponent implements OnInit {
-
-  @Input() currency!:string;
-  
+  @Input() currency!: string;
 
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
@@ -63,7 +68,6 @@ export class TableComponent implements OnInit {
   selectionKeys: any = {};
   selectedNode!: TreeNode; // sağ tuşla seçilen node
   selectedNodes: TreeNode[] = []; // sağ tuşla seçilen node
-
 
   rowContextItems!: MenuItem[]; //Tablo üzerinde sağ tuşla gelen menü
   tableMenuItems!: MenuItem[]; //Dosya İşlemleri Menüsü
@@ -83,13 +87,10 @@ export class TableComponent implements OnInit {
   rowNum: number = 1;
   allKeys: string[] = [];
   selectedKey: string = '';
-  allTreeTotal!: number; 
+  allTreeTotal!: number;
 
-  currentWidth: number =100;
-  tableStyle = {'width': this.currentWidth+'%', 'padding':'5rem'}
-
-
-
+  currentWidth: number = 100;
+  tableStyle = { width: this.currentWidth + '%', padding: '5rem' };
 
   showDialog() {
     this.visible = true;
@@ -99,28 +100,29 @@ export class TableComponent implements OnInit {
     private dataService: TablodataService,
     private excelService: XlsxService,
     private messageService: MessageService,
-    private tenderService: TenderService
+    private tenderService: TenderService,
   ) {}
 
   ngOnInit(): void {
     // verileri yükle
-    console.log("table comp")
+    console.log('table comp');
     this.subscription = this.dataService.cols$.subscribe({
-      next: (v) => {(this.cols = v);
+      next: (v) => {
+        this.cols = v;
         this.selectedColumns = this.cols;
-       console.log(this.cols);
+        console.log(this.cols);
       },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
     });
-   
+
     this.subscription2 = this.dataService.datatree$.subscribe({
-      next: (v) => {(
-        this.files = v); 
-        for(const node of this.files) {
+      next: (v) => {
+        this.files = v;
+        for (const node of this.files) {
           this.updateNodeTotal(node);
         }
-        
+
         this.updateAllTreeTotal();
       },
       error: (e) => console.error(e),
@@ -129,25 +131,25 @@ export class TableComponent implements OnInit {
     // menüleri oluştur
     this.tableMenuItems = [
       {
-          label: 'Dosya',
-          icon: 'pi pi-file',
-          items: [
-            {
-              label: 'Excel Dosyası Yükle',
-              icon: 'pi pi-file-import',
-              command: () => this.visibleExcelDialog=true,
-            },
-            {
-              label: 'Excel Olarak Kaydet',
-              icon: 'pi pi-file-export',
-              command: () => this.exportAsExcel(),
-            },
-            {
-              label: 'Taslaklarıma Kaydet',
-              icon: 'pi pi-calculator',
-              command: () => (this.saveDraft()),
-            }
-          ]
+        label: 'Dosya',
+        icon: 'pi pi-file',
+        items: [
+          {
+            label: 'Excel Dosyası Yükle',
+            icon: 'pi pi-file-import',
+            command: () => (this.visibleExcelDialog = true),
+          },
+          {
+            label: 'Excel Olarak Kaydet',
+            icon: 'pi pi-file-export',
+            command: () => this.exportAsExcel(),
+          },
+          {
+            label: 'Taslaklarıma Kaydet',
+            icon: 'pi pi-calculator',
+            command: () => this.saveDraft(),
+          },
+        ],
       },
       {
         label: 'Sütun Ekle',
@@ -173,41 +175,41 @@ export class TableComponent implements OnInit {
             icon: 'pi pi-server',
             command: () => this.showDialog(),
           },
-        ]
+        ],
       },
       {
         label: 'Sütun Sil',
         icon: 'pi pi-trash',
         command: () => {
-          this.visibleDeleteColDialog=true
-         }
+          this.visibleDeleteColDialog = true;
+        },
       },
       {
         label: 'Ana Başlık Ekle',
         icon: 'pi pi-plus',
         command: () => {
-          this.visibleAnaBaslikDialog=true;
-         }
+          this.visibleAnaBaslikDialog = true;
         },
-      {
-          label: 'Satır Ekle',
-          icon: 'pi pi-plus',
-          command: () => {
-            this.getAllKeys(); 
-            this.visibleRowDialog=true;
-           }
       },
       {
-          separator: true
+        label: 'Satır Ekle',
+        icon: 'pi pi-plus',
+        command: () => {
+          this.getAllKeys();
+          this.visibleRowDialog = true;
+        },
+      },
+      {
+        separator: true,
       },
       {
         label: 'Seçilen Satırları Sil',
         icon: 'pi pi-trash',
         command: () => {
           this.deleteSelectedRows();
-         }
-    },
-  ];
+        },
+      },
+    ];
     this.rowContextItems = [
       {
         label: 'Başlık Olarak İşaretle',
@@ -239,11 +241,11 @@ export class TableComponent implements OnInit {
         icon: 'pi pi-trash',
         command: (event) => this.deleteSelectedRows(),
       },
-       {
-         label: 'Seçili Satırları Kopyala',
-         icon: 'pi pi-copy',
-         command: (event) => this.cutSelectedRows(true),
-       },
+      {
+        label: 'Seçili Satırları Kopyala',
+        icon: 'pi pi-copy',
+        command: (event) => this.cutSelectedRows(true),
+      },
       {
         label: 'Seçili Satırları Kes',
         icon: 'pi pi-copy',
@@ -252,32 +254,31 @@ export class TableComponent implements OnInit {
       {
         label: 'Bu Satırın Altına Yapıştır',
         icon: 'pi pi-clone',
-        command: (event) => this.pasteSelectedRows(this.selectedNode,true),
+        command: (event) => this.pasteSelectedRows(this.selectedNode, true),
       },
       {
         label: 'Bu Başlığa Yapıştır',
         icon: 'pi pi-clone',
-        command: (event) => this.pasteSelectedRows(this.selectedNode,false),
+        command: (event) => this.pasteSelectedRows(this.selectedNode, false),
       },
     ];
-    
   }
 
   addRowToNode(node: TreeNode, positionSpecified: boolean) {
     this.dataService.addRowToNode(node, positionSpecified);
     this.updateView();
-    if(!positionSpecified) {
-      this.currentWidth =this.currentWidth *1.05;
-    this.tableStyle.width= (this.currentWidth *1.05) +'%';
+    if (!positionSpecified) {
+      this.currentWidth = this.currentWidth * 1.05;
+      this.tableStyle.width = this.currentWidth * 1.05 + '%';
     }
     this.expandAllNodes(this.files);
   }
 
-  addNewNode(count:number=1) {
-    let i=0
-    while (i<count) {
+  addNewNode(count: number = 1) {
+    let i = 0;
+    while (i < count) {
       this.dataService.addNewNode(this.files);
-      i+=1;
+      i += 1;
     }
     this.updateView();
     this.expandAllNodes(this.files);
@@ -292,7 +293,6 @@ export class TableComponent implements OnInit {
     });
   }
   deleteNode(selectedNode: TreeNode<any>): void {
-    
     //Satırı sil ve poz noları güncelle
     const result = this.dataService.deleteRow(selectedNode, this.files);
     if (result) {
@@ -316,15 +316,14 @@ export class TableComponent implements OnInit {
     for (let i = 0; i < columns.length; i++) {
       const index = this.cols.indexOf(columns[i]);
       if (i > -1) {
-        
         this.cols.splice(index, 1);
         const related = columns[i].relatedField;
-        if(related && related!=='') {
-          const relatedIndex = this.cols.findIndex(x=>x.field==related);
+        if (related && related !== '') {
+          const relatedIndex = this.cols.findIndex((x) => x.field == related);
           this.cols.splice(relatedIndex, 1);
         }
-        this.currentWidth =this.currentWidth*0.9;
-        this.tableStyle.width = this.currentWidth*0.9 +'%';
+        this.currentWidth = this.currentWidth * 0.9;
+        this.tableStyle.width = this.currentWidth * 0.9 + '%';
         this.messageService.add({
           severity: 'success',
           summary: 'Sütunlar Silindi',
@@ -340,7 +339,6 @@ export class TableComponent implements OnInit {
   }
   addOtherCol(name: string) {
     if (this.cols.find((x) => x.header == name)) {
-      
       this.messageService.add({
         severity: 'error',
         summary: 'Sütun Mevcut',
@@ -359,12 +357,11 @@ export class TableComponent implements OnInit {
     //Satırları Güncelle
     this.dataService.addColumnToTree(this.files, name, '');
     this.currentWidth = this.currentWidth * 1.1;
-    this.tableStyle={'width':this.currentWidth+'%', 'padding':'5rem'}
+    this.tableStyle = { width: this.currentWidth + '%', padding: '5rem' };
   }
 
   addBirimCol(name: string = 'Diğer') {
     if (this.cols.find((x) => x.header == name + ' Birim Fiyat')) {
-      
       this.messageService.add({
         severity: 'error',
         summary: 'Sütun Mevcut',
@@ -382,7 +379,7 @@ export class TableComponent implements OnInit {
 
     this.dataService.addColumnToTree(this.files, toplamName, null);
     this.currentWidth = this.currentWidth * 1.15;
-    this.tableStyle={'width':this.currentWidth+'%', 'padding':'5rem'}
+    this.tableStyle = { width: this.currentWidth + '%', padding: '5rem' };
   }
 
   expandAllNodes(nodes: TreeNode[]) {
@@ -395,15 +392,14 @@ export class TableComponent implements OnInit {
   }
 
   onCellEdit(event: any, rowData: any, field: string, rowNode: any) {
-    if(event===undefined) {
+    if (event === undefined) {
       return;
     }
-    
+
     //Başlıksa sadece iş tanımına izin ver
-    if(rowNode.node?.children.length>0) {
-      
-      if(field!=="İş Tanımı") {
-        rowData[field]=undefined;
+    if (rowNode.node?.children.length > 0) {
+      if (field !== 'İş Tanımı') {
+        rowData[field] = undefined;
       }
       return;
     }
@@ -416,103 +412,108 @@ export class TableComponent implements OnInit {
 
     if (col) {
       const isMiktar = col.isMiktar;
-      const updateTotal = ()=> {
+      const updateTotal = () => {
         // Bu satırdaki toplamı hesapla
-        let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.isAllTotal==false));
+        let toplamCols = this.cols.filter(
+          (x) =>
+            x.isToplam === true &&
+            x.isBirimToplam === false &&
+            x.isAllTotal == false,
+        );
         let toplam = 0;
         if (toplamCols) {
           for (let i = 0; i < toplamCols.length; i++) {
             const name = toplamCols[i].field;
-            if(rowData[name]!==null && rowData[name]!==undefined)
-            toplam += +(rowData[name]);
+            if (rowData[name] !== null && rowData[name] !== undefined)
+              toplam += +rowData[name];
           }
-          if(toplam!==undefined && toplam!==null) {
-            rowData["Toplam Fiyat"] = toplam;
+          if (toplam !== undefined && toplam !== null) {
+            rowData['Toplam Fiyat'] = toplam;
           }
           // Ana toplamı güncelle
-          const updateAllTotal = (rowNode:any)=> {
+          const updateAllTotal = (rowNode: any) => {
             if (rowNode.parent?.children) {
               let allToplam = 0;
               for (const child of rowNode.parent.children) {
-                if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
-                  allToplam += +(child.data["Toplam Fiyat"]);
+                if (
+                  child.data['Toplam Fiyat'] !== null &&
+                  child.data['Toplam Fiyat'] !== undefined
+                ) {
+                  allToplam += +child.data['Toplam Fiyat'];
                 }
               }
-              rowNode.parent.data["Toplam Fiyat"] = allToplam;
-              
-              if(rowNode.parent?.parent){
+              rowNode.parent.data['Toplam Fiyat'] = allToplam;
+
+              if (rowNode.parent?.parent) {
                 updateAllTotal(rowNode.parent);
               }
             }
-          }
+          };
           updateAllTotal(rowNode);
           this.updateAllTreeTotal();
         }
-      }
+      };
       if (isMiktar) {
         const birimCols = this.cols.filter((x) => x.isBirim == true);
         let birimToplam = 0;
         if (birimCols) {
           for (let i = 0; i < birimCols.length; i++) {
             const rf = birimCols[i].relatedField;
-            if (rf!==undefined && rf!==null && rowData[birimCols[i].field]!==undefined && rowData[birimCols[i].field]!==null && event!==undefined && event!==null) {
-              rowData[rf] =
-                +(rowData[birimCols[i].field]) * +(event);
+            if (
+              rf !== undefined &&
+              rf !== null &&
+              rowData[birimCols[i].field] !== undefined &&
+              rowData[birimCols[i].field] !== null &&
+              event !== undefined &&
+              event !== null
+            ) {
+              rowData[rf] = +rowData[birimCols[i].field] * +event;
             }
             const name = birimCols[i].field;
-            if(rowData[name]!==undefined && rowData[name]!==null) {
-              birimToplam += +(rowData[name]);
-            
+            if (rowData[name] !== undefined && rowData[name] !== null) {
+              birimToplam += +rowData[name];
             }
-            
           }
-          if(birimToplam!==undefined && birimToplam!==null) {
+          if (birimToplam !== undefined && birimToplam !== null) {
+            rowData['Toplam Birim Fiyat'] = birimToplam;
+          }
+          updateTotal();
+        }
+      } else if (col.relatedField !== undefined && rowData['Miktar'] !== null) {
+        rowData[col.relatedField] = +event * +rowData['Miktar'];
+        const birimCols = this.cols.filter((x) => x.isBirim == true);
+        let birimToplam = 0;
+        if (birimCols) {
+          for (let i = 0; i < birimCols.length; i++) {
+            const name = birimCols[i].field;
+            if (rowData[name] !== null && rowData[name] !== undefined) {
+              birimToplam += +rowData[name];
+            }
+          }
+          if (birimToplam !== undefined && birimToplam !== null) {
             rowData['Toplam Birim Fiyat'] = birimToplam;
           }
           updateTotal();
         }
       }
-      else if (col.relatedField!==undefined && rowData['Miktar']!==null) {
-          rowData[col.relatedField] = +(event) * +(rowData['Miktar']);
-          const birimCols = this.cols.filter((x) => x.isBirim == true);
-          let birimToplam = 0;
-          if (birimCols) {
-            for (let i = 0; i < birimCols.length; i++) {
-              const name = birimCols[i].field;
-              if(rowData[name]!==null && rowData[name]!==undefined) {
-                birimToplam += +(rowData[name]);
-              }
-              
-            }
-            if(birimToplam!==undefined && birimToplam!==null) {
-              rowData['Toplam Birim Fiyat'] = birimToplam;
-            }
-            updateTotal();
-          }
-        } 
-  
-  
     }
   }
 
   exportAsExcel() {
-   
     let datalist = this.dataService.convertTreeToDatalist(
       this.files,
       this.cols,
     );
-   
+
     this.excelService.exportAsExcelFile(datalist, 'deneme.xlsx');
   }
 
   onFileChange(event: any) {
     this.selectedFile = event.target.files[0];
-    
   }
 
-  importExcel() {   
+  importExcel() {
     this.excelService.importExcelFile(this.selectedFile).then((data) => {
-    
       this.dataService.loadData(data);
       this.selectedColumns = this.cols;
     });
@@ -536,12 +537,12 @@ export class TableComponent implements OnInit {
       this.files,
       this.cols,
     );
-    console.log(this.cols, "destroy")
-    
+    console.log(this.cols, 'destroy');
+
     this.dataService.currentData = tabloData;
     this.dataService.setCols(this.cols);
     this.dataService.setData(this.files);
-    this.subscription.unsubscribe(); 
+    this.subscription.unsubscribe();
     this.subscription2.unsubscribe();
   }
 
@@ -557,48 +558,44 @@ export class TableComponent implements OnInit {
   }
 
   addMultipleRows(key: string) {
-    let foundNode : any;
+    let foundNode: any;
     for (const node of this.files) {
-      foundNode = this.dataService.findNodeByKey(node,key)
-      if(foundNode) {
+      foundNode = this.dataService.findNodeByKey(node, key);
+      if (foundNode) {
         break;
       }
     }
-    
-    if(foundNode) {
-      
+
+    if (foundNode) {
       for (let i = 0; i < this.rowNum; i++) {
         this.dataService.addRowToNode(foundNode);
       }
       this.updateView();
     }
-    
   }
 
-  pasteSelectedRows(targetNode: TreeNode, positionSpecified=false) {
+  pasteSelectedRows(targetNode: TreeNode, positionSpecified = false) {
     //if selected node has children, copy all
     for (const node of this.selectedNodes) {
-      if((node.children && node.children.length>0) || !node.parent) {
-          this.dataService.pasteNodeToNode(targetNode,node,positionSpecified);
-      }
-      else {
-        if(node.parent && node.parent.partialSelected) {
-          this.dataService.pasteNodeToNode(targetNode,node,positionSpecified);
+      if ((node.children && node.children.length > 0) || !node.parent) {
+        this.dataService.pasteNodeToNode(targetNode, node, positionSpecified);
+      } else {
+        if (node.parent && node.parent.partialSelected) {
+          this.dataService.pasteNodeToNode(targetNode, node, positionSpecified);
         }
       }
       this.updateRowTotal(node);
     }
     //else the selected node has no children
-      //if the parentnode is partially selected, take action
-      //else ignore this node
-    
-     if (!this.keepOriginal) {
-       this.deleteSelectedRows();
-     }
-    
-    
+    //if the parentnode is partially selected, take action
+    //else ignore this node
+
+    if (!this.keepOriginal) {
+      this.deleteSelectedRows();
+    }
+
     this.updateNodeTotal(targetNode);
-    
+
     this.updateAllTreeTotal();
     this.updateView();
   }
@@ -618,28 +615,27 @@ export class TableComponent implements OnInit {
   }
 
   getAllKeys() {
-    this.allKeys = this.dataService.getAllKeys(this.files)
+    this.allKeys = this.dataService.getAllKeys(this.files);
   }
 
   dragStart(node: any) {
-    this.keepOriginal=false;
+    this.keepOriginal = false;
     node.node.data['Poz No'] = node.node.data.key;
     this.selectedNode = node.node;
-    
   }
   dragEnd(node: any) {
     node.node.data['Poz No'] = node.node.data.key;
-    
-    this.dataService.pasteNodeToNode(node.node,this.selectedNode,true);
-    
-    this.deleteNode(this.selectedNode)
-    
-   this.selectedNodes=[];
-   
-   this.updateNodeTotal(node.node);
-   
-   this.updateAllTreeTotal();
-   this.updateView();
+
+    this.dataService.pasteNodeToNode(node.node, this.selectedNode, true);
+
+    this.deleteNode(this.selectedNode);
+
+    this.selectedNodes = [];
+
+    this.updateNodeTotal(node.node);
+
+    this.updateAllTreeTotal();
+    this.updateView();
   }
   // calculateRowForField(col: Column, rowData: any, rowNode: TreeNode, field: string) {
   //   if (col) {
@@ -690,9 +686,9 @@ export class TableComponent implements OnInit {
   //           const name = birimCols[i].field;
   //           if(rowData[name]!==undefined && rowData[name]!==null) {
   //             birimToplam += +(rowData[name]);
-            
+
   //           }
-            
+
   //         }
   //         if(birimToplam!==undefined && birimToplam!==null) {
   //           rowData['Toplam Birim Fiyat'] = birimToplam;
@@ -710,16 +706,15 @@ export class TableComponent implements OnInit {
   //             if(rowData[name]!==null && rowData[name]!==undefined) {
   //               birimToplam += +(rowData[name]);
   //             }
-              
+
   //           }
   //           if(birimToplam!==undefined && birimToplam!==null) {
   //             rowData['Toplam Birim Fiyat'] = birimToplam;
   //           }
   //           updateTotal();
   //         }
-  //       } 
-  
-  
+  //       }
+
   //   }
   // }
 
@@ -734,56 +729,57 @@ export class TableComponent implements OnInit {
   //       if(node.parent) {
   //         this.updateNodeTotal(node.parent);
   //       }
-        
+
   //     }
   //   }
   // }
 
   updateAllTreeTotal() {
     let total = 0;
-    for(const node of this.files) {
-      if(node.data["Toplam Fiyat"]) {
-        total += +(node.data["Toplam Fiyat"]);
+    for (const node of this.files) {
+      if (node.data['Toplam Fiyat']) {
+        total += +node.data['Toplam Fiyat'];
       }
+    }
+    this.allTreeTotal = total;
+    this.dataService.allTreeTotal = total;
   }
-  this.allTreeTotal = total;
-  this.dataService.allTreeTotal=total;
 
-  }
-
-  updateRowTotal (selectedNode:any) {
+  updateRowTotal(selectedNode: any) {
     if (selectedNode.parent) {
       if (selectedNode.parent.children) {
         let allToplam = 0;
         for (const child of selectedNode.parent.children) {
-          if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
-            allToplam += child.data["Toplam Fiyat"];
+          if (
+            child.data['Toplam Fiyat'] !== null &&
+            child.data['Toplam Fiyat'] !== undefined
+          ) {
+            allToplam += child.data['Toplam Fiyat'];
           }
-          
         }
-        if(allToplam){
-          selectedNode.parent.data["Toplam Fiyat"] = allToplam;
+        if (allToplam) {
+          selectedNode.parent.data['Toplam Fiyat'] = allToplam;
         }
-        
       }
     }
   }
 
   updateNodeTotal(node: any) {
-    let total =0;
-    if(node.children?.length>0) {
+    let total = 0;
+    if (node.children?.length > 0) {
       for (const child of node.children) {
-        if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
-          total += +(child.data["Toplam Fiyat"]);
+        if (
+          child.data['Toplam Fiyat'] !== null &&
+          child.data['Toplam Fiyat'] !== undefined
+        ) {
+          total += +child.data['Toplam Fiyat'];
         }
-       
       }
     }
-    node.data["Toplam Fiyat"] = total;
+    node.data['Toplam Fiyat'] = total;
 
-    if(node.parent) {
+    if (node.parent) {
       this.updateNodeTotal(node.parent);
     }
   }
-  
 }

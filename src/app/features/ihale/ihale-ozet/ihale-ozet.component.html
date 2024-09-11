@@ -1,73 +1,71 @@
-@if(tender) {
-    <div class="col-12">
-        <div class="surface-card shadow-2 p-3 border-round mb-3">
-            <span class="block text-500 font-medium mb-3">İhale Özeti</span>
-        
-            <table class="ihale-card-table">
-                <tr>
-                    <td>İhale No </td>
-                    <td>:</td>
-                    <td> {{ tender.id}}</td>
-                </tr>
-                <tr>
-                    <td>İhale Adı </td>
-                    <td>:</td>
-                    
-                    <td>  {{tender.name}}</td>
-                </tr>
-                <tr>
-                    <td>İhale Açıklaması </td>
-                    <td>:</td>
-                    
-                    <td>  {{tender.description}}</td>
-                </tr>
-                <tr>
-                    <td>Durum </td>
-                    <td>:</td>
-                    
-                    <td>  {{tender.isCompleted ? 'Tamamlandı': 'Devam Ediyor' }}</td>
-                </tr>
-                <tr>
-                    <td>Eklenen Dosyalar </td>
-                    <td>:</td>
-                    
-                    <td> {{tender.tenderFiles.length}}</td>
-                </tr>
-                <tr>
-                    <td>Keşif Tablosu </td>
-                    <td>:</td>
-                    
-                    <td> Detay </td>
-                </tr>
-                <tr>
-                    <td>Davet Edilen Teklifçi Sayısı </td>
-                    <td>:</td>
-                    
-                    <td> {{tender.bidders.length}}</td>
-                </tr>
-                <tr>
-                    <td>Talep Edilen Belge Sayısı </td>
-                    <td>:</td>
-                    
-                    <td> {{tender.requestedDocuments.length}}</td>
-                </tr>
-                <tr>
-                    <td>Toplam Bedel </td>
-                    <td>:</td>
-                    
-                    <td> {{tender.cost}}</td>
-                </tr>
-                <tr>
-                    <td>Para Birimi </td>
-                    <td>:</td>
-                    
-                    <td> {{tender.currency}}</td>
-                </tr>
-            </table>
-        </div>
-    </div> 
+@if (tender) {
+  <div class="col-12">
+    <div class="surface-card shadow-2 p-3 border-round mb-3">
+      <span class="block text-500 font-medium mb-3">İhale Özeti</span>
 
-}
-@else {
-    <app-loading-spinner></app-loading-spinner>
+      <table class="ihale-card-table">
+        <tr>
+          <td>İhale No</td>
+          <td>:</td>
+          <td>{{ tender.id }}</td>
+        </tr>
+        <tr>
+          <td>İhale Adı</td>
+          <td>:</td>
+
+          <td>{{ tender.name }}</td>
+        </tr>
+        <tr>
+          <td>İhale Açıklaması</td>
+          <td>:</td>
+
+          <td>{{ tender.description }}</td>
+        </tr>
+        <tr>
+          <td>Durum</td>
+          <td>:</td>
+
+          <td>{{ tender.isCompleted ? "Tamamlandı" : "Devam Ediyor" }}</td>
+        </tr>
+        <tr>
+          <td>Eklenen Dosyalar</td>
+          <td>:</td>
+
+          <td>{{ tender.tenderFiles.length }}</td>
+        </tr>
+        <tr>
+          <td>Keşif Tablosu</td>
+          <td>:</td>
+
+          <td>Detay</td>
+        </tr>
+        <tr>
+          <td>Davet Edilen Teklifçi Sayısı</td>
+          <td>:</td>
+
+          <td>{{ tender.bidders.length }}</td>
+        </tr>
+        <tr>
+          <td>Talep Edilen Belge Sayısı</td>
+          <td>:</td>
+
+          <td>{{ tender.requestedDocuments.length }}</td>
+        </tr>
+        <tr>
+          <td>Toplam Bedel</td>
+          <td>:</td>
+
+          <td>{{ tender.cost }}</td>
+        </tr>
+        <tr>
+          <td>Para Birimi</td>
+          <td>:</td>
+
+          <td>{{ tender.currency }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+} @else {
+  <app-loading-spinner></app-loading-spinner>
 }

@@ -8,10 +8,9 @@ describe('RaporOlusturComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RaporOlusturComponent]
-    })
-    .compileComponents();
-    
+      imports: [RaporOlusturComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(RaporOlusturComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

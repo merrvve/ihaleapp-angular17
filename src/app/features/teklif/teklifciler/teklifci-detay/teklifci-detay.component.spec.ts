@@ -8,10 +8,9 @@ describe('TeklifciDetayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TeklifciDetayComponent]
-    })
-    .compileComponents();
-    
+      imports: [TeklifciDetayComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TeklifciDetayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

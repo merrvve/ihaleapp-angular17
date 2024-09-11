@@ -1,4 +1,4 @@
 export interface Document {
-    name: string;
-    docType: "file" | "info"
+  name: string;
+  docType: 'file' | 'info';
 }

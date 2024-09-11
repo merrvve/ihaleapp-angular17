@@ -1,37 +1,45 @@
 <div class="container mb-5">
-    <h2 class="p-2">İhalelerim</h2>
+  <h2 class="p-2">İhalelerim</h2>
 </div>
-@if( tenders$ | async ; as tenders) {
-    <div class="card">
-        <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Id</th>
-                    <th>İhale Adı</th>
-                    <th>Oluşturan</th>
-                    <th>Açıklaması</th>
-                    <th>Başlangıç Tarihi</th>
-                    <th>Durum</th>
-                    <th>İhale Bedeli</th>
-                    <th>Para Birimi</th>
-                    <th style="width: 5rem">Detay</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-tender>
-                <tr>
-                    <td>{{ tender.id }}</td>
-                    <td>{{ tender.name }}</td>
-                    <td>{{ tender.owner_id }}</td>
-                    <td>{{ tender.description }}</td>
-                    <td>{{ tender.created_at }}</td>
-                    <td>{{ tender.isCompleted ? 'Tamamlandı': 'Devam Ediyor' }}</td>
-                    <td>{{ tender.cost }}</td>
-                    <td>{{ tender.currency }}</td>
-                    <td>
-                        <button type="button" pButton pRipple icon="pi pi-edit" (click)="createBid(tender.id)">Teklif Ver</button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+@if (tenders$ | async; as tenders) {
+  <div class="card">
+    <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Id</th>
+          <th>İhale Adı</th>
+          <th>Oluşturan</th>
+          <th>Açıklaması</th>
+          <th>Başlangıç Tarihi</th>
+          <th>Durum</th>
+          <th>İhale Bedeli</th>
+          <th>Para Birimi</th>
+          <th style="width: 5rem">Detay</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tender>
+        <tr>
+          <td>{{ tender.id }}</td>
+          <td>{{ tender.name }}</td>
+          <td>{{ tender.owner_id }}</td>
+          <td>{{ tender.description }}</td>
+          <td>{{ tender.created_at }}</td>
+          <td>{{ tender.isCompleted ? "Tamamlandı" : "Devam Ediyor" }}</td>
+          <td>{{ tender.cost }}</td>
+          <td>{{ tender.currency }}</td>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-edit"
+              (click)="createBid(tender.id)"
+            >
+              Teklif Ver
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 }

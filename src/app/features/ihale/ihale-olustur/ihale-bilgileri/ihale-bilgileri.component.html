@@ -1,93 +1,112 @@
+@if (tender$ | async; as tender) {
+  <app-ihale-olustur [isDraft]="tender.isDraft"></app-ihale-olustur>
+  <div class="container p-3">
+    <div
+      class="grid justify-content-center surface-card shadow-2 p-3 border-round"
+    >
+      <div class="col-12">
+        <h3>İhale Bilgileri</h3>
+      </div>
 
-@if(tender$|async; as tender) {
-<app-ihale-olustur [isDraft]="tender.isDraft"></app-ihale-olustur>
-<div class="container p-3">
-    <div class="grid justify-content-center surface-card shadow-2 p-3 border-round">
-        <div class="col-12">
-            <h3>İhale Bilgileri</h3>
+      <div class="col-12 md:col-5 px-2 py-3">
+        <div class="field grid">
+          <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Adı</label>
+          <div class="col-12 md:col-9">
+            <input
+              type="text"
+              [(ngModel)]="tender.name"
+              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+            />
+          </div>
         </div>
-        
-            <div class="col-12 md:col-5 px-2 py-3">
-                <div class="field grid">
-                    <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Adı</label>
-                    <div class="col-12 md:col-9">
-                        <input type="text" [(ngModel)]="tender.name"  class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-                    </div>
-                </div>
-        
-                <div class="field grid">
-                    <label class="col-12 mb-2 md:col-3 md:mb-0">Para Birimi</label>
-                    <div class="flex flex-row mt-3">
-                        @for(currency of currencies; track currency) {
-                            <div  class="field-checkbox mx-2">
-                            <p-radioButton [inputId]="currency" name="category" [value]="currency" [(ngModel)]="tender.currency"></p-radioButton>
-                            <label [for]="currency" class="ml-2">{{ currency }}</label> 
-                        </div>   
-                        }
-                
-                    </div>
-                </div>
-        
-                <div class="field grid">
-                    <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Açıklaması</label>
-                    <div class="col-12 md:col-9">
-                        <textarea type="text" rows="8"
-                         [(ngModel)]="tender.description" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
-                            </textarea>
-                        </div>
-                </div>
-        
-            </div>
-            <div class="col-12 md:col-5 px-2 py-3">
-         
-                <div class="field grid">
-                    <label class="col-12 mb-2 md:col-4 md:mb-0">İhale Dökümanları</label>
-                    <div class="col-12 md:col-7">
-                        <input type="file" id="ihale-file-upload" (change)="onFileChange($event)" multiple="true">
-                        <label for="ihale-file-upload" class="custom-file-upload bg-primary border-round p-2">Dosya Seç
-                        </label>
-                        <div>
-                                @if(selectedFiles.length>0) {
-                                    <table class="m-3">
-                                        <thead>
-                                            <tr>
-                                                <th>Dosya Adı</th>
-                                                <th>Boyut</th>
-                                                <th>Sil</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for (file of selectedFiles; track file) {
-                                                <tr>
-                                                    <td>{{ file.name }}</td>
-                                                    <td>{{ file.size }} bytes</td>
-                                                    <td>    
-                                                        <p-button icon="pi pi-trash" severity="danger" class="mx-3"></p-button>
-                                                    </td>
-                                                </tr>
-                                            }
-                                              
-                                        </tbody>
-                                    </table>
-                              
-                                }
-                        </div>
-        
-                    </div>
-                </div>
-         
-            </div>
-    
-       
 
+        <div class="field grid">
+          <label class="col-12 mb-2 md:col-3 md:mb-0">Para Birimi</label>
+          <div class="flex flex-row mt-3">
+            @for (currency of currencies; track currency) {
+              <div class="field-checkbox mx-2">
+                <p-radioButton
+                  [inputId]="currency"
+                  name="category"
+                  [value]="currency"
+                  [(ngModel)]="tender.currency"
+                ></p-radioButton>
+                <label [for]="currency" class="ml-2">{{ currency }}</label>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="field grid">
+          <label class="col-12 mb-2 md:col-3 md:mb-0">İhale Açıklaması</label>
+          <div class="col-12 md:col-9">
+            <textarea
+              type="text"
+              rows="8"
+              [(ngModel)]="tender.description"
+              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+            >
+            </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 md:col-5 px-2 py-3">
+        <div class="field grid">
+          <label class="col-12 mb-2 md:col-4 md:mb-0">İhale Dökümanları</label>
+          <div class="col-12 md:col-7">
+            <input
+              type="file"
+              id="ihale-file-upload"
+              (change)="onFileChange($event)"
+              multiple="true"
+            />
+            <label
+              for="ihale-file-upload"
+              class="custom-file-upload bg-primary border-round p-2"
+              >Dosya Seç
+            </label>
+            <div>
+              @if (selectedFiles.length > 0) {
+                <table class="m-3">
+                  <thead>
+                    <tr>
+                      <th>Dosya Adı</th>
+                      <th>Boyut</th>
+                      <th>Sil</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (file of selectedFiles; track file) {
+                      <tr>
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.size }} bytes</td>
+                        <td>
+                          <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            class="mx-3"
+                          ></p-button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="flex justify-content-end mt-5">
-        <p-button pRipple label="İlerle" icon="pi pi-arrow-right" class="mx-5" [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"></p-button>
+      <p-button
+        pRipple
+        label="İlerle"
+        icon="pi pi-arrow-right"
+        class="mx-5"
+        [routerLink]="['/ihale/ihale-olustur/kesif-olustur']"
+      ></p-button>
     </div>
-    
-</div>
-
-}
-@else {
-    <app-loading-spinner></app-loading-spinner>
+  </div>
+} @else {
+  <app-loading-spinner></app-loading-spinner>
 }

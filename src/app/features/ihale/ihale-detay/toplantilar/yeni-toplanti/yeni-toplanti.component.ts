@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './yeni-toplanti.component.html',
-  styleUrl: './yeni-toplanti.component.scss'
+  styleUrl: './yeni-toplanti.component.scss',
 })
-export class YeniToplantiComponent {
-
-}
+export class YeniToplantiComponent {}

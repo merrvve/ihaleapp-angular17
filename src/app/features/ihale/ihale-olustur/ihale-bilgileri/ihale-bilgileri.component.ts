@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CalendarModule } from 'primeng/calendar';
 import { Ihale } from '../../../../models/ihale.interface';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { TenderService } from '../../../../services/tender.service';
 import { Tender } from '../../../../models/tender';
 import { AsyncPipe } from '@angular/common';
@@ -30,7 +30,7 @@ interface UploadEvent {
     FileUploadModule,
     CalendarModule,
     AsyncPipe,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
   ],
   templateUrl: './ihale-bilgileri.component.html',
   styleUrl: './ihale-bilgileri.component.scss',
@@ -43,14 +43,11 @@ export class IhaleBilgileriComponent implements OnInit {
   firstDate: string | undefined;
   secondDate: Date | undefined;
   ihale!: Ihale;
-  
+
   tender$!: Observable<Tender>;
 
-  constructor(
-    private tenderService: TenderService
-  ) {}
+  constructor(private tenderService: TenderService) {}
   ngOnInit(): void {
-    
     this.tender$ = this.tenderService.currentTender$;
   }
 
@@ -62,7 +59,5 @@ export class IhaleBilgileriComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() {
-    
-  }
+  ngOnDestroy() {}
 }

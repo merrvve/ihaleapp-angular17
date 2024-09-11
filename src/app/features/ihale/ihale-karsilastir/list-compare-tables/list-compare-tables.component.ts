@@ -16,11 +16,10 @@ import { MenuService } from '../../../../services/menu.service';
   standalone: true,
   imports: [ButtonModule, RouterLink, TableModule],
   templateUrl: './list-compare-tables.component.html',
-  styleUrl: './list-compare-tables.component.scss'
+  styleUrl: './list-compare-tables.component.scss',
 })
 export class ListCompareTablesComponent {
-
-  tenderId! : string | null;
+  tenderId!: string | null;
   compareTables!: CompareTable[];
   constructor(
     private route: ActivatedRoute,
@@ -29,66 +28,54 @@ export class ListCompareTablesComponent {
     private bidService: BidService,
     private tenderSerivce: TenderService,
     private router: Router,
-    private menuService: MenuService
+    private menuService: MenuService,
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe(
-      (params=> {
-        this.tenderId = params.get('id');
-        if(this.tenderId) {
-          this.menuService.setItems(this.tenderId)
-          this.compareTableService.getTablesByTenderId(this.tenderId).then(
-            result=>{
-              if(result) {
-                this.compareTables = result;
-              }
-              else {
-                this.compareTables =[];
-              }
-              
+    this.route.paramMap.subscribe((params) => {
+      this.tenderId = params.get('id');
+      if (this.tenderId) {
+        this.menuService.setItems(this.tenderId);
+        this.compareTableService
+          .getTablesByTenderId(this.tenderId)
+          .then((result) => {
+            if (result) {
+              this.compareTables = result;
+            } else {
+              this.compareTables = [];
             }
-          )
-        }
-      })
-    )
+          });
+      }
+    });
   }
 
-
   openTable(table: CompareTable) {
-    let tender: Tender|null;
-    let bidsList: TenderBid[] =[];
-    if(this.tenderId) {
-      this.tenderSerivce.getTenderById(this.tenderId).subscribe(result=>{
-        tender=result;
-        if(tender && tender.id) {
-          this.compareBidsService.tender=tender;
-          
-          this.bidService.getBidsByTenderId(tender.id).subscribe(
-            bids=> {
-              bids.forEach((bid)=>{
-                if(bid.id) {
-                  if(table.bids.includes(bid.id)) {
-                    console.log(table.bids,bid.id)
-                    bidsList.push(bid);
-                  }
-                }
-                
-              });
-              this.compareBidsService.compareBids =bidsList;
-              this.router.navigate(['/ihale/karsilastir'])
+    let tender: Tender | null;
+    let bidsList: TenderBid[] = [];
+    if (this.tenderId) {
+      this.tenderSerivce.getTenderById(this.tenderId).subscribe((result) => {
+        tender = result;
+        if (tender && tender.id) {
+          this.compareBidsService.tender = tender;
 
-            }
-          )
-          
-          
+          this.bidService.getBidsByTenderId(tender.id).subscribe((bids) => {
+            bids.forEach((bid) => {
+              if (bid.id) {
+                if (table.bids.includes(bid.id)) {
+                  console.log(table.bids, bid.id);
+                  bidsList.push(bid);
+                }
+              }
+            });
+            this.compareBidsService.compareBids = bidsList;
+            this.router.navigate(['/ihale/karsilastir']);
+          });
         }
-      })
-  
+      });
     }
-    }
- 
+  }
+
   deleteTable(tableid: string) {
     this.compareTableService.deleteTable(tableid);
-    }
+  }
 }

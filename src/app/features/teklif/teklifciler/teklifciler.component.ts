@@ -16,16 +16,11 @@ import { RouterLink } from '@angular/router';
 })
 export class TeklifcilerComponent implements OnInit {
   selectTeklifci(teklifci: any) {}
-  
-  bidders$!: Observable<UserDetail[]>;
-  constructor(
-    private bidderService: BidderService,
-  ) {}
-  
-  ngOnInit() {
-    this.bidders$=this.bidderService.getBidders();
-   
-  }
 
-  
+  bidders$!: Observable<UserDetail[]>;
+  constructor(private bidderService: BidderService) {}
+
+  ngOnInit() {
+    this.bidders$ = this.bidderService.getBidders();
+  }
 }

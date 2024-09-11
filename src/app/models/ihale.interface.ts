@@ -1,4 +1,4 @@
-import { Ihalefile } from "./ihalefile.interface";
+import { Ihalefile } from './ihalefile.interface';
 
 export interface Ihale {
   id?: number;

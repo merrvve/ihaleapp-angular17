@@ -16,22 +16,18 @@ import { BidService } from '../../../services/bid.service';
   styleUrl: './teklifci.component.scss',
 })
 export class TeklifciComponent implements OnInit {
-
-  tenders$! : Observable<Tender[]>;
+  tenders$!: Observable<Tender[]>;
   tenderBids$!: Observable<TenderBid[]>;
-  
-  ihaleler! : Ihale[];
+
+  ihaleler!: Ihale[];
   constructor(
     private tenderService: TenderService,
-    private bidService: BidService
+    private bidService: BidService,
   ) {}
   ngOnInit(): void {
-      this.tenders$ = this.tenderService.getTendersByBidderId();
-      this.tenderBids$ = this.bidService.getBidsByBidderId();
-      
+    this.tenders$ = this.tenderService.getTendersByBidderId();
+    this.tenderBids$ = this.bidService.getBidsByBidderId();
   }
 
-  ngOnDestroy() {
-    
-  }
+  ngOnDestroy() {}
 }

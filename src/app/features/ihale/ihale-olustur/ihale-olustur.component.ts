@@ -11,13 +11,11 @@ import { TablodataService } from '../../../services/tablodata.service';
 })
 export class IhaleOlusturComponent implements OnInit {
   steps: any[] = [];
-  @Input() isDraft: boolean = false; 
-  constructor(private tableService: TablodataService) {
-    
-  }
+  @Input() isDraft: boolean = false;
+  constructor(private tableService: TablodataService) {}
   ngOnInit(): void {
     //this.tableService.loadData(this.tableService.ornekData);
-    
+
     this.steps = [
       {
         label: 'İhale Bilgileri',

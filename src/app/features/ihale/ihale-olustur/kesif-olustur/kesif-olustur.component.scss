@@ -1,6 +1,6 @@
 .input-container {
-    max-width: 100%; /* Limit the width to the size of the column */
-  }
+  max-width: 100%; /* Limit the width to the size of the column */
+}
 
 .input-container input {
   width: 90%;
@@ -15,8 +15,6 @@
   width: 90%;
   box-sizing: border-box;
 }
-
-
 
 input[type="file"] {
   display: none;

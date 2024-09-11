@@ -8,10 +8,9 @@ describe('ListCompareTablesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ListCompareTablesComponent]
-    })
-    .compileComponents();
-    
+      imports: [ListCompareTablesComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ListCompareTablesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

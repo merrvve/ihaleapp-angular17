@@ -8,10 +8,9 @@ describe('ToplantilarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToplantilarComponent]
-    })
-    .compileComponents();
-    
+      imports: [ToplantilarComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ToplantilarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

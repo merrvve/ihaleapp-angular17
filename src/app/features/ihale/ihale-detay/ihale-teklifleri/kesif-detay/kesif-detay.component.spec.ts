@@ -8,10 +8,9 @@ describe('KesifDetayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [KesifDetayComponent]
-    })
-    .compileComponents();
-    
+      imports: [KesifDetayComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(KesifDetayComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

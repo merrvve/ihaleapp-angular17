@@ -10,7 +10,7 @@ export class ThemeService {
 
   switchTheme(): void {
     let themeLink = this.document.getElementById(
-      'app-theme'
+      'app-theme',
     ) as HTMLLinkElement;
 
     if (this.theme === 'light-theme') {

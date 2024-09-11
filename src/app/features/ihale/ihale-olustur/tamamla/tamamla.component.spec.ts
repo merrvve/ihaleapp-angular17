@@ -8,10 +8,9 @@ describe('TamamlaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TamamlaComponent]
-    })
-    .compileComponents();
-    
+      imports: [TamamlaComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TamamlaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

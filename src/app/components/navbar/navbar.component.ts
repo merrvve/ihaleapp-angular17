@@ -3,18 +3,24 @@ import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { MenuItem } from 'primeng/api';
-import { MenuTemplateComponent } from "../../features/home/menu-template/menu-template.component";
+import { MenuTemplateComponent } from '../../features/home/menu-template/menu-template.component';
 import { FirebaseAuthService } from '../../services/firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { UserDetail } from '../../models/user-detail.interface';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-navbar',
-    standalone: true,
-    templateUrl: './navbar.component.html',
-    styleUrl: './navbar.component.scss',
-    imports: [MenuModule, ButtonModule, MenubarModule, MenuTemplateComponent, AsyncPipe]
+  selector: 'app-navbar',
+  standalone: true,
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.scss',
+  imports: [
+    MenuModule,
+    ButtonModule,
+    MenubarModule,
+    MenuTemplateComponent,
+    AsyncPipe,
+  ],
 })
 export class NavbarComponent implements OnInit {
   items: MenuItem[] | undefined;
@@ -22,12 +28,11 @@ export class NavbarComponent implements OnInit {
   teklifciMenu: MenuItem[] | undefined;
   isLoggedIn: boolean = false;
   user$!: Observable<UserDetail | null>;
-  
-  constructor(public auth: FirebaseAuthService,
-  ) {}
-  
+
+  constructor(public auth: FirebaseAuthService) {}
+
   ngOnInit(): void {
-    this.user$ =  this.auth.userDetails$;
+    this.user$ = this.auth.userDetails$;
 
     this.items = [
       {
@@ -62,19 +67,16 @@ export class NavbarComponent implements OnInit {
         icon: 'pi pi-fw pi-user mr-2',
         routerLink: ['teklif/firmalar'],
         items: [
-      
-              {
-                label: 'Firma Yetkilileri',
-                icon: 'pi pi-fw pi-users mr-2',
-                routerLink: ['teklif/teklifci/listele'],
-              },
-              {
-                label: 'Tüm Firmalar',
-                icon: 'pi pi-fw pi-verified mr-2',
-                routerLink: ['teklif/firmalar'],
-              }
-            
-         
+          {
+            label: 'Firma Yetkilileri',
+            icon: 'pi pi-fw pi-users mr-2',
+            routerLink: ['teklif/teklifci/listele'],
+          },
+          {
+            label: 'Tüm Firmalar',
+            icon: 'pi pi-fw pi-verified mr-2',
+            routerLink: ['teklif/firmalar'],
+          },
         ],
       },
 
@@ -112,7 +114,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'İhalelerim',
             icon: 'pi pi-fw pi-list mr-2',
-            routerLink: ['/teklifci/ihalelerim']
+            routerLink: ['/teklifci/ihalelerim'],
           },
           {
             separator: true,
@@ -120,8 +122,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'Tekliflerim',
             icon: 'pi pi-fw pi-external-link mr-2',
-            routerLink: ['/teklifci/tekliflerim']
-           
+            routerLink: ['/teklifci/tekliflerim'],
           },
         ],
       },

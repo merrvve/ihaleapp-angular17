@@ -19,14 +19,13 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideRouter(routes),
-   // { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig},
-    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)), 
-      provideAuth(() => getAuth()), 
-      provideFirestore(() => getFirestore()), 
-//      provideDatabase(() => getDatabase()),
+    // { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig},
+    provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    //      provideDatabase(() => getDatabase()),
     provideHttpClient(withInterceptors([authInterceptor])),
     MessageService,
-    DatePipe, 
-    
+    DatePipe,
   ],
 };

@@ -16,23 +16,23 @@ import { BidderService } from '../../../../services/bidder.service';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
-    selector: 'app-teklifci-ekleme',
-    standalone: true,
-    templateUrl: './teklifci-ekleme.component.html',
-    styleUrl: './teklifci-ekleme.component.scss',
-    imports: [
-        MessagesModule,
-        ButtonModule,
-        RouterLink,
-        IhaleOlusturComponent,
-        TableModule,
-        PickListModule,
-        DragDropModule,
-        DialogModule,
-        ProgressSpinnerModule,
-        
-        AsyncPipe
-    ]
+  selector: 'app-teklifci-ekleme',
+  standalone: true,
+  templateUrl: './teklifci-ekleme.component.html',
+  styleUrl: './teklifci-ekleme.component.scss',
+  imports: [
+    MessagesModule,
+    ButtonModule,
+    RouterLink,
+    IhaleOlusturComponent,
+    TableModule,
+    PickListModule,
+    DragDropModule,
+    DialogModule,
+    ProgressSpinnerModule,
+
+    AsyncPipe,
+  ],
 })
 export class TeklifciEklemeComponent implements OnInit {
   messages: Message[] = []; // bilgilendirme mesajı
@@ -45,12 +45,12 @@ export class TeklifciEklemeComponent implements OnInit {
 
   constructor(
     private tenderService: TenderService,
-    private bidderService: BidderService
+    private bidderService: BidderService,
   ) {}
   ngOnInit(): void {
     // Teklifçi bilgilerini al
-    this.bidders$=this.bidderService.getBidders();
-   
+    this.bidders$ = this.bidderService.getBidders();
+
     //mesajları oluştur
     this.messages = [
       {
@@ -67,8 +67,6 @@ export class TeklifciEklemeComponent implements OnInit {
     for (const bidder of this.selectedBidders) {
       bidders.push(bidder.uid);
     }
-    this.tenderService._currentTender.value.bidders=bidders;
-    }
-
- 
+    this.tenderService._currentTender.value.bidders = bidders;
+  }
 }

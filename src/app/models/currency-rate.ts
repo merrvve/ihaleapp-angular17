@@ -1,5 +1,4 @@
 export interface CurrencyRate {
-    dolar: number;
-    euro: number;
+  dolar: number;
+  euro: number;
 }
-

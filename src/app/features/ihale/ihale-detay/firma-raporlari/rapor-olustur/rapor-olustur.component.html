@@ -1,13 +1,19 @@
-@if(tender$ | async; as tender) {
-    <div class="mb-5">
-        <h2 class="p-2">{{tender.name}} İhalesi Rapor Oluştur</h2>
-    </div>
+@if (tender$ | async; as tender) {
+  <div class="mb-5">
+    <h2 class="p-2">{{ tender.name }} İhalesi Rapor Oluştur</h2>
+  </div>
+
+  <h4 class="mb-3">
+    Lütfen Rapora eklenecek Teklifleri Seçiniz. Seçilen teklifler için,
+    belirlediğiniz
+    <a [routerLink]="['/ihale/ihale/' + tender.id + '/firma-raporlari/ayarlar']"
+      >ayarlara</a
+    >
+    göre, ilişkili firmalara rapor gönderilecek raporlar oluşturulacaktır.
+  </h4>
 }
-<h4 class="mb-3"> Lütfen Rapora eklenecek Teklifleri Seçiniz. Seçilen teklifler için belirlediğiniz ayarlar ile ilişkili firmalara rapor gönderilecektir. </h4>
-<p> ... Teklifler Tablosu ..</p>
-<app-bids-table [compare]="showCompare" [bids$]="bids$" (createReports)="createReports()"></app-bids-table>
-<h4 class="mb-3"> Teklif Gönderilecek Firmalar: ...</h4>
-<p> Rapor Önizleme </p>
-<div class="flex justify-content-end mt-5">
+<app-bids-table [compare]="showCompare" [bids$]="bids$"></app-bids-table>
+<!-- <div class="flex justify-content-end mt-5">
+    <p-button pRipple label="Oluştur" icon="pi pi-send" class="mx-5"></p-button>
     <p-button pRipple label="Gönder" icon="pi pi-send" class="mx-5"></p-button>
-</div>
+</div> -->

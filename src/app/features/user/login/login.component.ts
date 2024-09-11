@@ -18,21 +18,19 @@ export class LoginComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.auth.userDetails$.subscribe({
-      next: (value)=> {
-        if(value) {
-          if(value.role==="TENDERER") {
-            console.log(value.role)
-            this.router.navigate(['/isveren'])
-          }
-          else{
-            this.router.navigate(['/teklifci'])
+      next: (value) => {
+        if (value) {
+          if (value.role === 'TENDERER') {
+            console.log(value.role);
+            this.router.navigate(['/isveren']);
+          } else {
+            this.router.navigate(['/teklifci']);
           }
         }
-      }
-    })
+      },
+    });
   }
   login(email: string, password: string) {
-   this.auth.login(email, password);
-    
+    this.auth.login(email, password);
   }
 }

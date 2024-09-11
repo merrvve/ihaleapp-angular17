@@ -27,36 +27,35 @@ export class TablodataService {
 
   public allTreeTotal!: number;
   public currentData!: any[][];
-  private _colsSubject = new BehaviorSubject<Column[]>(
-    []
-  );
+  private _colsSubject = new BehaviorSubject<Column[]>([]);
   cols$ = this._colsSubject.asObservable();
   birimCols = 0;
   private _datatreeSubject = new BehaviorSubject<any[]>([]);
   datatree$ = this._datatreeSubject.asObservable();
 
-  setCols(cols:Column[]) {
+  setCols(cols: Column[]) {
     this._colsSubject.next(cols);
   }
-  setData(data:any[]) {
+  setData(data: any[]) {
     this._datatreeSubject.next(data);
   }
 
   constructor() {
-    if(this.currentData) {
+    if (this.currentData) {
       this.loadData(this.currentData);
-    }
-    else {
+    } else {
       this.loadData(this.ornekData);
     }
   }
 
   loadData(datalist: any[]) {
     this._colsSubject.next(this.columns(datalist));
-    this._datatreeSubject.next(this.convertToTreeTable(datalist,this._colsSubject.getValue()));
+    this._datatreeSubject.next(
+      this.convertToTreeTable(datalist, this._colsSubject.getValue()),
+    );
   }
 
-  loadDataByColandDataTree(cols:Column[], datatree: TreeNode[]) {
+  loadDataByColandDataTree(cols: Column[], datatree: TreeNode[]) {
     this._colsSubject.next(cols);
     this._datatreeSubject.next(datatree);
   }
@@ -77,14 +76,16 @@ export class TablodataService {
       let editable = i === 0 ? false : true;
       let nf = false;
       let isToplam = columnNames[i].toLocaleLowerCase().includes('toplam');
-      let isBirimToplam = columnNames[i].toLocaleLowerCase().includes('birim') && isToplam;
-      let isBirim = columnNames[i].toLocaleLowerCase().includes('birim fiyat') && !isToplam;
+      let isBirimToplam =
+        columnNames[i].toLocaleLowerCase().includes('birim') && isToplam;
+      let isBirim =
+        columnNames[i].toLocaleLowerCase().includes('birim fiyat') && !isToplam;
       const isMiktar = columnNames[i].toLocaleLowerCase().includes('miktar');
-      const isAllTotal = i===len-1 ? true : false;
-      let relatedField=undefined;
+      const isAllTotal = i === len - 1 ? true : false;
+      let relatedField = undefined;
       if (isBirim) {
-        relatedField = columnNames[i].slice(0,-11) + "Toplam Fiyat";
-        if(!columnNames.includes(relatedField)) {
+        relatedField = columnNames[i].slice(0, -11) + 'Toplam Fiyat';
+        if (!columnNames.includes(relatedField)) {
           columnNames.push(relatedField);
         }
       }
@@ -92,11 +93,10 @@ export class TablodataService {
         nf = true;
       }
       editable = isToplam ? false : editable;
-      
 
       cols.push({
-        field: i===0 ? 'key' : columnNames[i],
-        header: i===0 ? 'Poz No' : columnNames[i],
+        field: i === 0 ? 'key' : columnNames[i],
+        header: i === 0 ? 'Poz No' : columnNames[i],
         editable: editable,
         numberField: nf,
         isBirim: isBirim,
@@ -104,11 +104,10 @@ export class TablodataService {
         isBirimToplam: isBirimToplam,
         isToplam: isToplam,
         isMiktar: isMiktar,
-        isAllTotal: isAllTotal
+        isAllTotal: isAllTotal,
       });
     }
     return cols;
-    
   }
 
   convertToTreeTable(data: string[][], cols: Column[]): TreeNode[] {
@@ -117,7 +116,7 @@ export class TablodataService {
         'Input data should have at least two lists: column names and row data.',
       );
     }
-    
+
     const result: TreeNode[] = [];
 
     // Create a map to store nodes by their keys for easy access
@@ -148,35 +147,30 @@ export class TablodataService {
       const node = createNode(key, parentNodeKey);
 
       // Assign data to the node
-      const miktarIndex = cols.findIndex(x=>x.isMiktar===true);
-      const totalName = cols.find(x=>x.isAllTotal==true)?.field || 'Toplam Fiyat';
-      node.data['Toplam Birim Fiyat']=0;
+      const miktarIndex = cols.findIndex((x) => x.isMiktar === true);
+      const totalName =
+        cols.find((x) => x.isAllTotal == true)?.field || 'Toplam Fiyat';
+      node.data['Toplam Birim Fiyat'] = 0;
       node.data[totalName] = 0;
       cols.forEach((col, index) => {
-        
-        if(col.isBirim) {
+        if (col.isBirim) {
           node.data[col.field] = row[index];
-          
-          if(col.relatedField && col.relatedField!=='') {
-            const value = +row[index] * +row[miktarIndex]
-          
-            node.data[col.relatedField] = +value
-             node.data['Toplam Birim Fiyat'] += +row[index];
-             node.data[totalName] += +node.data[col.relatedField];
-          }
-        }
-        else if(col.isBirimToplam) {
-          
-        }
-        else if(col.isToplam) {
 
-        }
-        else if(col.isAllTotal) {}
-        else {
+          if (col.relatedField && col.relatedField !== '') {
+            const value = +row[index] * +row[miktarIndex];
+
+            node.data[col.relatedField] = +value;
+            node.data['Toplam Birim Fiyat'] += +row[index];
+            node.data[totalName] += +node.data[col.relatedField];
+          }
+        } else if (col.isBirimToplam) {
+        } else if (col.isToplam) {
+        } else if (col.isAllTotal) {
+        } else {
           node.data[col.field] = row[index];
         }
         node.expanded = true;
-      })
+      });
     }
 
     return result;
@@ -234,14 +228,13 @@ export class TablodataService {
       }
       datalist.push(row);
       if (node.children.length > 0) {
-        for( const child of node.children) {
-        addRowsToDataList(child)
-      }
+        for (const child of node.children) {
+          addRowsToDataList(child);
+        }
       }
     };
     for (let i = 0; i < datatree.length; i++) {
       addRowsToDataList(datatree[i]);
-
     }
     return datalist;
   }
@@ -267,7 +260,7 @@ export class TablodataService {
       isToplam: false,
       isBirimToplam: false,
       isMiktar: false,
-      isAllTotal:false
+      isAllTotal: false,
     });
     this._colsSubject.next(columns);
   }
@@ -285,8 +278,8 @@ export class TablodataService {
       isBirim: true,
       isToplam: false,
       isBirimToplam: false,
-      isMiktar:false,
-      isAllTotal:false
+      isMiktar: false,
+      isAllTotal: false,
     });
 
     columns.splice(columns.length - 1, 0, {
@@ -298,7 +291,7 @@ export class TablodataService {
       isToplam: true,
       isBirimToplam: false,
       isMiktar: false,
-      isAllTotal: false
+      isAllTotal: false,
     });
 
     this._colsSubject.next(columns);
@@ -326,13 +319,11 @@ export class TablodataService {
   }
 
   findNodeByKey(node: TreeNode, key: string): TreeNode | null {
-    
     // Check if the current node has the given key
     if (node.data.key === key) {
-      console.log(node,"found");
+      console.log(node, 'found');
       return node;
-    }
-    else if (node.children) {
+    } else if (node.children) {
       // Traverse children nodes recursively
       for (const child of node.children) {
         const foundNode = this.findNodeByKey(child, key);
@@ -346,83 +337,82 @@ export class TablodataService {
   }
 
   addRowToNode(node: any, positionSpecified: boolean = false) {
-    
     if (!positionSpecified) {
       const key = node.data.key;
 
       const len = node.children.length;
-      const newKey =  key + '.' + String(len + 1);
+      const newKey = key + '.' + String(len + 1);
       let newNode: TreeNode = {
-        data: {
-          
-        },
+        data: {},
         children: [],
         expanded: true,
       };
-      for(const column of this.getCols()) {
-        newNode.data[column.header]=''
+      for (const column of this.getCols()) {
+        newNode.data[column.header] = '';
       }
-      newNode.data.key=newKey;
+      newNode.data.key = newKey;
       node.children.push(newNode);
-      
+
       return;
     } else {
       const key = node.parent.data.key;
-      
+
       const position = node.parent.children.indexOf(node);
       const newKey = key + '.' + (position + 2);
       const newNode: TreeNode = {
-        data: {
-          
-        },
+        data: {},
         children: [],
         expanded: true,
       };
-      for(const column of this.getCols()) {
-        newNode.data[column.header]=''
+      for (const column of this.getCols()) {
+        newNode.data[column.header] = '';
       }
-      newNode.data.key=newKey;
+      newNode.data.key = newKey;
       node.parent.children.splice(position + 1, 0, newNode);
 
-      
       this.updateKeys(node.parent);
 
       return;
     }
   }
-  pasteNodeToNode (targetNode: any, copiedNode: TreeNode, positionSpecified:boolean=false) {
-    if(positionSpecified) {
-      if(targetNode.parent) {
+  pasteNodeToNode(
+    targetNode: any,
+    copiedNode: TreeNode,
+    positionSpecified: boolean = false,
+  ) {
+    if (positionSpecified) {
+      if (targetNode.parent) {
         const position = targetNode.parent.children.indexOf(targetNode);
-        targetNode.parent.children.splice(position+1, 0, structuredClone(copiedNode));
-      }     
-    }
-    else {
-      console.log(targetNode)
+        targetNode.parent.children.splice(
+          position + 1,
+          0,
+          structuredClone(copiedNode),
+        );
+      }
+    } else {
+      console.log(targetNode);
       targetNode.children.push(structuredClone(copiedNode));
     }
-   
+
     //update keys
-    if(targetNode.parent) {
+    if (targetNode.parent) {
       this.updateKeys(targetNode.parent);
-    }
-    else {
+    } else {
     }
     this.updateKeys(targetNode);
-    
   }
 
   updateKeys(node: TreeNode) {
     //recursively update keys of a given node.
     const key = node.data.key;
-    if(node.children) {
+    if (node.children) {
       let i = 0;
-      for(const child of node.children) {
-        child.data.key= key + '.' + (i + 1)
-        if(child.children && child.children.length>0) {
+      for (const child of node.children) {
+        child.data.key = key + '.' + (i + 1);
+        if (child.children && child.children.length > 0) {
           this.updateKeys(child);
         }
-        i+=1;
+        i += 1;
       }
     }
   }
@@ -430,19 +420,18 @@ export class TablodataService {
   updateParentKeys(node: TreeNode) {
     //recursively update keys of a given node.
     const key = node.data.key;
-    if(node.children) {
+    if (node.children) {
       let i = 0;
-      for(const child of node.children) {
-        child.data.key= key + '.' + (i + 1)
-        if(child.children && child.children.length>0) {
+      for (const child of node.children) {
+        child.data.key = key + '.' + (i + 1);
+        if (child.children && child.children.length > 0) {
           this.updateKeys(child);
         }
-        i+=1;
+        i += 1;
       }
     }
-    
   }
- 
+
   addNewNode(datatree: any[]) {
     const len = datatree.length;
     const newNode: TreeNode = {
@@ -478,18 +467,14 @@ export class TablodataService {
   }
 
   getAllKeys(files: any) {
-    let keys : string[] = [];
-    
-    for ( const node of files ) {
-      keys.push(node.data.key)
-      if(node.children?.length>0) {
-        
-          keys = keys.concat(this.getAllKeys(node.children));
-        
+    let keys: string[] = [];
+
+    for (const node of files) {
+      keys.push(node.data.key);
+      if (node.children?.length > 0) {
+        keys = keys.concat(this.getAllKeys(node.children));
       }
     }
     return keys;
   }
-
-  
 }

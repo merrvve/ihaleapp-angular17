@@ -6,7 +6,7 @@ import { StepsModule } from 'primeng/steps';
   standalone: true,
   imports: [StepsModule],
   templateUrl: './teklif-olustur.component.html',
-  styleUrl: './teklif-olustur.component.scss'
+  styleUrl: './teklif-olustur.component.scss',
 })
 export class TeklifOlusturComponent implements OnInit {
   steps: any[] = [];
@@ -23,9 +23,8 @@ export class TeklifOlusturComponent implements OnInit {
       },
       {
         label: 'Teklif Özet',
-        routerLink: ['/teklifci/teklif-olustur/teklif-ozet']
-      }
+        routerLink: ['/teklifci/teklif-olustur/teklif-ozet'],
+      },
     ];
   }
-
 }

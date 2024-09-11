@@ -17,42 +17,47 @@ import { UserDetail } from '../../../models/user-detail.interface';
 @Component({
   selector: 'app-menu-template',
   standalone: true,
-  imports: [SidebarModule, ButtonModule, RippleModule, AvatarModule, StyleClassModule,MenuModule, MenubarModule,BadgeModule,
-    AsyncPipe
+  imports: [
+    SidebarModule,
+    ButtonModule,
+    RippleModule,
+    AvatarModule,
+    StyleClassModule,
+    MenuModule,
+    MenubarModule,
+    BadgeModule,
+    AsyncPipe,
   ],
   templateUrl: './menu-template.component.html',
-  styleUrl: './menu-template.component.scss'
+  styleUrl: './menu-template.component.scss',
 })
 export class MenuTemplateComponent implements OnInit {
-  @Input() items!: MenuItem[] |undefined;
-  @Input() userMenu!: MenuItem[] |undefined;
+  @Input() items!: MenuItem[] | undefined;
+  @Input() userMenu!: MenuItem[] | undefined;
   @Input() user!: UserDetail | null;
 
   @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
-  themeToggle=false;
+  themeToggle = false;
   sidebarVisible: boolean = false;
-  
-  extraItems$! : Observable<MenuItem[]>;
 
+  extraItems$!: Observable<MenuItem[]>;
 
-  constructor(private themeService: ThemeService,
-    private menuService: MenuService
+  constructor(
+    private themeService: ThemeService,
+    private menuService: MenuService,
   ) {}
 
   ngOnInit(): void {
     this.extraItems$ = this.menuService.items$;
   }
 
-
   switchTheme(): void {
-    this.themeToggle=!this.themeToggle;
+    this.themeToggle = !this.themeToggle;
     this.themeService.switchTheme();
   }
 
-  closeCallback(e:any): void {
-      this.sidebarRef.close(e);
+  closeCallback(e: any): void {
+    this.sidebarRef.close(e);
   }
-
-  
 }

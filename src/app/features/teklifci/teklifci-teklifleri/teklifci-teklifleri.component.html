@@ -1,30 +1,36 @@
-@if(bids$ | async; as bids) {
-    <div class="container mb-5">
-        <h2 class="p-2">Tekliflerim</h2>
-    </div>
-    
-    <div class="card">
-        <p-table [value]="bids" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Id</th>
-                    <th>İhale No</th>
-                    <th>Teklif Tarihi</th>
-                    <th>Toplam Bedel</th>
-                    <th style="width: 5rem">Detay</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-bid>
-                <tr>
-                    <td>{{ bid.id }}</td>
-                    <td></td>
-                    <td>{{ bid.created_at }}</td>
-                    <td>{{ bid.total_price }}</td>
-                    <td>
-                        <button type="button" pButton pRipple icon="pi pi-file" (click)="seeTenderBidDetails(bid)"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
+@if (bids$ | async; as bids) {
+  <div class="container mb-5">
+    <h2 class="p-2">Tekliflerim</h2>
+  </div>
+
+  <div class="card">
+    <p-table [value]="bids" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Id</th>
+          <th>İhale No</th>
+          <th>Teklif Tarihi</th>
+          <th>Toplam Bedel</th>
+          <th style="width: 5rem">Detay</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-bid>
+        <tr>
+          <td>{{ bid.id }}</td>
+          <td></td>
+          <td>{{ bid.created_at }}</td>
+          <td>{{ bid.total_price }}</td>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-file"
+              (click)="seeTenderBidDetails(bid)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 }

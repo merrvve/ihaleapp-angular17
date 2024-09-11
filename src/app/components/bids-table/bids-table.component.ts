@@ -16,38 +16,43 @@ import { TenderService } from '../../services/tender.service';
 @Component({
   selector: 'app-bids-table',
   standalone: true,
-  imports: [AsyncPipe, LoadingSpinnerComponent,  TableModule, ButtonModule,IconFieldModule,InputIconModule,InputTextModule,],
+  imports: [
+    AsyncPipe,
+    LoadingSpinnerComponent,
+    TableModule,
+    ButtonModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
+  ],
   templateUrl: './bids-table.component.html',
-  styleUrl: './bids-table.component.scss'
+  styleUrl: './bids-table.component.scss',
 })
 export class BidsTableComponent {
   @Input() bids$!: Observable<TenderBid[]>;
   @Input() compare!: boolean;
-  
- 
+
   @Output() createReports = new EventEmitter<void>();
 
-  @Output() selectedBids!: TenderBid[]
+  @Output() selectedBids!: TenderBid[];
 
-  
   constructor(
     private tableService: TablodataService,
     private router: Router,
     private compareService: CompareBidsService,
-    private tenderService: TenderService
+    private tenderService: TenderService,
   ) {}
 
-  getEventValue($event:any) :string {
+  getEventValue($event: any): string {
     return $event.target.value;
-  } 
+  }
 
   compareBids() {
-    if(this.selectedBids) {
-      this.compareService.compareBids=this.selectedBids;
+    if (this.selectedBids) {
+      this.compareService.compareBids = this.selectedBids;
       this.compareService.tender = this.tenderService._currentTender.getValue();
-      this.router.navigate(['/ihale/karsilastir'])
+      this.router.navigate(['/ihale/karsilastir']);
     }
-    
   }
 
   onCreateReports() {
@@ -55,16 +60,15 @@ export class BidsTableComponent {
   }
 
   seeTenderBidDetails(bid: TenderBid) {
-    let tableData =[];
-    if(bid.discovery_data) {
-              for(const key in bid.discovery_data) {
-                tableData.push(bid.discovery_data[key])
-              }
-              this.tableService.loadData(tableData);
-              this.router.navigate(['/ihale/kesif-detay']);
-            }
-            else {
-              console.log("no discovery data")
-            }
+    let tableData = [];
+    if (bid.discovery_data) {
+      for (const key in bid.discovery_data) {
+        tableData.push(bid.discovery_data[key]);
+      }
+      this.tableService.loadData(tableData);
+      this.router.navigate(['/ihale/kesif-detay']);
+    } else {
+      console.log('no discovery data');
+    }
   }
 }

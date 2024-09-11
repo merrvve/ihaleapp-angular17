@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TableComponent } from '../../../table/table.component';
-import { TeklifOlusturComponent } from "../teklif-olustur.component";
+import { TeklifOlusturComponent } from '../teklif-olustur.component';
 import { ButtonModule } from 'primeng/button';
 import { Router, RouterLink } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
@@ -10,41 +10,42 @@ import { Message } from 'primeng/api';
 import { BidService } from '../../../../services/bid.service';
 
 @Component({
-    selector: 'app-kesif',
-    standalone: true,
-    templateUrl: './kesif.component.html',
-    styleUrl: './kesif.component.scss',
-    imports: [TableComponent, TeklifOlusturComponent, ButtonModule, RouterLink, DialogModule, ProgressSpinnerModule, MessagesModule]
+  selector: 'app-kesif',
+  standalone: true,
+  templateUrl: './kesif.component.html',
+  styleUrl: './kesif.component.scss',
+  imports: [
+    TableComponent,
+    TeklifOlusturComponent,
+    ButtonModule,
+    RouterLink,
+    DialogModule,
+    ProgressSpinnerModule,
+    MessagesModule,
+  ],
 })
-export class KesifComponent implements OnInit{
-  
+export class KesifComponent implements OnInit {
   isLoading: boolean = false;
   isTeklifModalVisible: boolean = false;
   messages!: Message[];
   error: boolean = false;
 
-  constructor(private router: Router,
-    private bidService:BidService
-  ){}
-  ngOnInit(): void {
-    
-  }
+  constructor(
+    private router: Router,
+    private bidService: BidService,
+  ) {}
+  ngOnInit(): void {}
   createBid() {
-    this.bidService.createBid().subscribe(
-     {
-      next: (result)=> console.log(result),
-      error: (error)=>console.log(error)
-     }
-    )
+    this.bidService.createBid().subscribe({
+      next: (result) => console.log(result),
+      error: (error) => console.log(error),
+    });
   }
-  
 
   completed() {
-    this.isTeklifModalVisible=false;
-    if(!this.error){
-      this.router.navigate(['/teklifci'])
+    this.isTeklifModalVisible = false;
+    if (!this.error) {
+      this.router.navigate(['/teklifci']);
     }
   }
-
-  
 }

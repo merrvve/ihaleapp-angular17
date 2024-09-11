@@ -8,22 +8,18 @@ import { BidService } from '../../../../services/bid.service';
   standalone: true,
   imports: [ButtonModule, RouterLink],
   templateUrl: './teklif-ozet.component.html',
-  styleUrl: './teklif-ozet.component.scss'
+  styleUrl: './teklif-ozet.component.scss',
 })
 export class TeklifOzetComponent {
-  constructor(private router: Router,
-    private bidService:BidService
-  ){}
-  ngOnInit(): void {
-    
-  }
+  constructor(
+    private router: Router,
+    private bidService: BidService,
+  ) {}
+  ngOnInit(): void {}
   createBid() {
-    this.bidService.createBid().subscribe(
-     {
-      next: (result)=> console.log(result),
-      error: (error)=>console.log(error)
-     }
-    )
+    this.bidService.createBid().subscribe({
+      next: (result) => console.log(result),
+      error: (error) => console.log(error),
+    });
   }
-  
 }

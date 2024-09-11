@@ -21,7 +21,6 @@ import { RaporOlusturComponent } from './ihale-detay/firma-raporlari/rapor-olust
 import { SoruCevapComponent } from './ihale-detay/soru-cevap/soru-cevap.component';
 import { ToplantilarComponent } from './ihale-detay/toplantilar/toplantilar.component';
 
-
 export const IHALE_ROUTES: Route[] = [
   {
     path: 'ihale-olustur',
@@ -38,21 +37,35 @@ export const IHALE_ROUTES: Route[] = [
   { path: 'ihale/:id/dosyalar', component: IhaleDosyalariComponent },
   { path: 'ihale/:id/revizyonlar', component: RevizyonlarComponent },
   { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },
-  { path: 'ihale/:id/teklifler/firma/:firmaid', component: FirmaTeklifleriComponent },
+  {
+    path: 'ihale/:id/teklifler/firma/:firmaid',
+    component: FirmaTeklifleriComponent,
+  },
   { path: 'ihale/:id/firma-raporlari', component: FirmaRaporlariComponent },
   { path: 'ihale/:id/firma-raporlari/ayarlar', component: RaporAyarComponent },
-  { path: 'ihale/:id/firma-raporlari/rapor-olustur', component: RaporOlusturComponent },
+  {
+    path: 'ihale/:id/firma-raporlari/rapor-olustur',
+    component: RaporOlusturComponent,
+  },
   { path: 'ihale/:id/soru-cevap', component: SoruCevapComponent },
   { path: 'ihale/:id/toplantilar', component: ToplantilarComponent },
-  { path: 'ihale/:id/toplantilar/yeni-toplanti', component: ToplantilarComponent },
-  { path: 'kesif-detay', component: KesifDetayComponent},
+  {
+    path: 'ihale/:id/toplantilar/yeni-toplanti',
+    component: ToplantilarComponent,
+  },
+  { path: 'kesif-detay', component: KesifDetayComponent },
   { path: 'listele', component: IhaleListeleComponent },
   { path: 'taslaklar', component: TaslaklarComponent },
   { path: 'karsilastir', component: IhaleKarsilastirComponent },
-  { path: 'ihale/:id/karsilastirma-tablolari', component: ListCompareTablesComponent },
+  {
+    path: 'ihale/:id/karsilastirma-tablolari',
+    component: ListCompareTablesComponent,
+  },
   { path: 'ihale/:id/butce', component: CreateBudgetComponent },
   { path: 'ihale/:id/ihale-dosyalari', component: IhaleDosyalariComponent },
-  { path: 'ihale/:id/ihale-dosyalari/yeni-zeyilname', component: RevizyonlarComponent },
+  {
+    path: 'ihale/:id/ihale-dosyalari/yeni-zeyilname',
+    component: RevizyonlarComponent,
+  },
   { path: '', redirectTo: 'listele', pathMatch: 'full' },
-      
 ];

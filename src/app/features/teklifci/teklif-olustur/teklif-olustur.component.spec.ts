@@ -8,10 +8,9 @@ describe('TeklifOlusturComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TeklifOlusturComponent]
-    })
-    .compileComponents();
-    
+      imports: [TeklifOlusturComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TeklifOlusturComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

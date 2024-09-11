@@ -1,138 +1,168 @@
 <div class="container mb-5">
-    <h2 class="p-2">İhalelerim</h2>
+  <h2 class="p-2">İhalelerim</h2>
 </div>
-@if(tenders$|async; as tenders) {
-    <div class="card">
-        <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
-        #tendersTable
-        [paginator]="true"
-        [rows] ="20"
-        [rowsPerPageOptions]="[20, 40, 50]"
-        [globalFilterFields]="['id', 'name','description','currency','cost']"
-        styleClass ='p-datatable-sm'
-        >
-        <ng-template pTemplate="caption">
-            <div class="flex">
-                <p-iconField iconPosition="left" class="ml-auto">
-                    <p-inputIcon>
-                        <i class="pi pi-search"></i>
-                    </p-inputIcon>
-                    <input 
-                        pInputText 
-                        type="text" 
-                        (input)="tendersTable.filterGlobal(getEventValue($event), 'contains')" 
-                        placeholder="Tabloda Ara..." />
-                </p-iconField>
-            </div>
-        </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>İhale No</th>
-                    <th>İhale Adı</th>
-                    <th>Açıklama</th>
-                    <th >Durum</th>
-                    <th>Firma</th>
-                    <th>Yetkili Kişi</th>
-                    <th>Başlangıç Tarihi</th>
-                    <th>Bitiş Tarihi</th>
-                    
-                    <th>İhale Bedeli</th>
-                    <th>Para Birimi</th>
-                    <th style="width: 12rem">Detay</th>
-                </tr>
-                <tr>
-                    <th>
-                        <p-columnFilter 
-                            type="text"
-                            field="id" 
-                            placeholder="Ara..." 
-                            ariaLabel="Id"
-                            matchMode="contains" [showMenu]="false" />
-                    </th>
-                    <th>
-                        <p-columnFilter 
-                            type="text"
-                            field="name" 
-                            placeholder="Ara..." 
-                            ariaLabel="İhale Adı" 
-                            matchMode="contains" [showMenu]="false"/>
-                    </th>
-                    <th>
-                        <p-columnFilter 
-                            type="text"
-                            field="description" 
-                            placeholder="Ara..." 
-                            ariaLabel="İhale Açıklaması" 
-                            styleClass="w-100"
-                            matchMode="contains" [showMenu]="false"
-                            />
-                    </th>
-                    <th pSortableColumn="status">
-                        <p-sortIcon field="status" />
-                    </th>
-                    <th>
-                        <p-columnFilter 
-                            type="text"
-                            field="name" 
-                            placeholder="Ara..." 
-                            ariaLabel="İhale Adı" 
-                            matchMode="contains" [showMenu]="false"/>
-                    </th>
-                    <th>
-                        <p-columnFilter 
-                            type="text"
-                            field="name" 
-                            placeholder="Ara..." 
-                            ariaLabel="İhale Adı" 
-                            matchMode="contains" [showMenu]="false"/>
-                    </th>
-                    <th pSortableColumn="created_at">
-                        <p-sortIcon field="created_at" />
-                    </th>
-                    <th pSortableColumn="completed_at">
-                        <p-sortIcon field="completed_at" />
-                    </th>
-                    <th pSortableColumn="cost">
-                        <p-sortIcon field="cost" />
-                    </th>
-                    <th>
-                        <p-columnFilter 
-                            type="text"
-                            field="currency" 
-                            placeholder="Ara..." 
-                            ariaLabel="Para Birimi" 
-                            styleClass="w-100"
-                            matchMode="contains" [showMenu]="false"
-                            />
-                    </th>
-                    <th></th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-tender>
-                @if(!tender.isDraft) {
-                    <tr>
-                        <td>{{ tender.id }}</td>
-                        <td>{{ tender.name }}</td>
-                        <td>{{ tender.description }}</td>
-                        <td>{{ tender.isCompleted ? 'Tamamlandı' : 'Devam Ediyor' }}</td>
-                        <td></td>
-                        <td></td>
-                        <td>{{ tender.created_at |date }}</td>
-                        <td>{{ tender.completed_at |date }}</td>
-                        <td>{{ tender.cost }}</td>
-                        <td>{{ tender.currency }}</td>
-                        <td>
-                            <p-button type="button" severity="danger"  icon="pi pi-trash" (click)="deleteTender(tender.id)" class="mr-1"></p-button>
-                            <p-button type="button" severity="info"  icon="pi pi-file-edit" (click)="editTender(tender)" class="mr-1"></p-button>
-                            <p-button type="button"  icon="pi pi-eye" (click)="selectTender(tender.id)"></p-button>
-                        </td>
-                    </tr>
-    
-                }
-            </ng-template>
-        </p-table>
-    </div>
-}
-@else {
-    <app-loading-spinner></app-loading-spinner>
+@if (tenders$ | async; as tenders) {
+  <div class="card">
+    <p-table
+      [value]="tenders"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      sortMode="multiple"
+      #tendersTable
+      [paginator]="true"
+      [rows]="20"
+      [rowsPerPageOptions]="[20, 40, 50]"
+      [globalFilterFields]="['id', 'name', 'description', 'currency', 'cost']"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex">
+          <p-iconField iconPosition="left" class="ml-auto">
+            <p-inputIcon>
+              <i class="pi pi-search"></i>
+            </p-inputIcon>
+            <input
+              pInputText
+              type="text"
+              (input)="
+                tendersTable.filterGlobal(getEventValue($event), 'contains')
+              "
+              placeholder="Tabloda Ara..."
+            />
+          </p-iconField>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>İhale No</th>
+          <th>İhale Adı</th>
+          <th>Açıklama</th>
+          <th>Durum</th>
+          <th>Firma</th>
+          <th>Yetkili Kişi</th>
+          <th>Başlangıç Tarihi</th>
+          <th>Bitiş Tarihi</th>
+
+          <th>İhale Bedeli</th>
+          <th>Para Birimi</th>
+          <th style="width: 12rem">Detay</th>
+        </tr>
+        <tr>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="id"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="name"
+              placeholder="Ara..."
+              ariaLabel="İhale Adı"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="description"
+              placeholder="Ara..."
+              ariaLabel="İhale Açıklaması"
+              styleClass="w-100"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th pSortableColumn="status">
+            <p-sortIcon field="status" />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="name"
+              placeholder="Ara..."
+              ariaLabel="İhale Adı"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="name"
+              placeholder="Ara..."
+              ariaLabel="İhale Adı"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th pSortableColumn="created_at">
+            <p-sortIcon field="created_at" />
+          </th>
+          <th pSortableColumn="completed_at">
+            <p-sortIcon field="completed_at" />
+          </th>
+          <th pSortableColumn="cost">
+            <p-sortIcon field="cost" />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="currency"
+              placeholder="Ara..."
+              ariaLabel="Para Birimi"
+              styleClass="w-100"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-tender>
+        @if (!tender.isDraft) {
+          <tr>
+            <td>{{ tender.id }}</td>
+            <td>{{ tender.name }}</td>
+            <td>{{ tender.description }}</td>
+            <td>{{ tender.isCompleted ? "Tamamlandı" : "Devam Ediyor" }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ tender.created_at | date }}</td>
+            <td>{{ tender.completed_at | date }}</td>
+            <td>{{ tender.cost }}</td>
+            <td>{{ tender.currency }}</td>
+            <td>
+              <p-button
+                type="button"
+                severity="danger"
+                icon="pi pi-trash"
+                (click)="deleteTender(tender.id)"
+                class="mr-1"
+              ></p-button>
+              <p-button
+                type="button"
+                severity="info"
+                icon="pi pi-file-edit"
+                (click)="editTender(tender)"
+                class="mr-1"
+              ></p-button>
+              <p-button
+                type="button"
+                icon="pi pi-eye"
+                (click)="selectTender(tender.id)"
+              ></p-button>
+            </td>
+          </tr>
+        }
+      </ng-template>
+    </p-table>
+  </div>
+} @else {
+  <app-loading-spinner></app-loading-spinner>
 }

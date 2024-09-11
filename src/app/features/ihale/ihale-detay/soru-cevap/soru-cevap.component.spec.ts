@@ -8,10 +8,9 @@ describe('SoruCevapComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SoruCevapComponent]
-    })
-    .compileComponents();
-    
+      imports: [SoruCevapComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SoruCevapComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

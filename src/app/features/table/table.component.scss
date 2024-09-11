@@ -1,13 +1,14 @@
 .text-xs {
-    font-size: 0.9em;
+  font-size: 0.9em;
 }
-tr, td {
-    padding:0.2rem;
+tr,
+td {
+  padding: 0.2rem;
 }
 
 .input-container {
-    max-width: 100%; 
-  }
+  max-width: 100%;
+}
 
 .input-container input {
   width: 90%;
@@ -23,8 +24,6 @@ tr, td {
   box-sizing: border-box;
 }
 
-
-
 input[type="file"] {
   display: none;
 }
@@ -38,6 +37,6 @@ input[type="file"] {
 
 :host ::ng-deep {
   [pDraggable] {
-      cursor: move;
+    cursor: move;
   }
 }
