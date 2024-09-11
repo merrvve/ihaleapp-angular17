@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Ihale } from '../../../models/ihale.interface';
 import { Observable } from 'rxjs/internal/Observable';
 import { AsyncPipe, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -19,7 +18,6 @@ export class TeklifciComponent implements OnInit {
   tenders$!: Observable<Tender[]>;
   tenderBids$!: Observable<TenderBid[]>;
 
-  ihaleler!: Ihale[];
   constructor(
     private tenderService: TenderService,
     private bidService: BidService,

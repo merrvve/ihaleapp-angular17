@@ -6,7 +6,6 @@ import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { FileUploadModule } from 'primeng/fileupload';
 import { CalendarModule } from 'primeng/calendar';
-import { Ihale } from '../../../../models/ihale.interface';
 import { Observable } from 'rxjs';
 import { TenderService } from '../../../../services/tender.service';
 import { Tender } from '../../../../models/tender';
@@ -42,7 +41,6 @@ export class IhaleBilgileriComponent implements OnInit {
   selectedFiles: File[] = [];
   firstDate: string | undefined;
   secondDate: Date | undefined;
-  ihale!: Ihale;
 
   tender$!: Observable<Tender>;
 

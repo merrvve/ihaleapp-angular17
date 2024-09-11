@@ -12,7 +12,7 @@
           <div class="mb-2">
             <p-selectButton
               [options]="baseOptions"
-              [(ngModel)]="selectedBaseOption"
+              [(ngModel)]="reportSetting.baseValue"
             />
           </div>
         </div>
@@ -28,6 +28,7 @@
                 class="p-1"
                 name="belirt"
                 value="true"
+                [(ngModel)]="reportSetting.showBaseValue"
               /><label class="m-1">Evet</label>
             </span>
             <span>
@@ -36,6 +37,7 @@
                 class="p-1"
                 name="belirt"
                 value="false"
+                [(ngModel)]="reportSetting.showBaseValue"
               /><label class="m-1">Hayır</label>
             </span>
           </div>
@@ -47,7 +49,7 @@
             <p-inputGroup class="mb-2">
               <p-inputGroupAddon>%</p-inputGroupAddon>
               <input
-                #baseRatio
+                [(ngModel)]="reportSetting.toBaseRatio"
                 type="number"
                 pInputNumber
                 placeholder="10"
@@ -61,7 +63,9 @@
 
         <div class="field grid my-3">
           <label class="mb-2 w-20rem"
-            >Yüksek fiyat bilgisi belirtilsin mi?</label
+            >
+            Yüksek fiyat bilgisi belirtilsin mi?
+            </label
           >
           <div class="flex flex-wrap gap-3">
             <span>
@@ -70,7 +74,9 @@
                 class="p-1"
                 name="yuksek"
                 value="true"
-              /><label class="m-1">Evet</label>
+                [(ngModel)]="reportSetting.showHighPrice"
+              />
+              <label class="m-1">Evet</label>
             </span>
             <span>
               <input
@@ -78,7 +84,9 @@
                 class="p-1"
                 name="yuksek"
                 value="false"
-              /><label class="m-1">Hayır</label>
+                [(ngModel)]="reportSetting.showHighPrice"
+              />
+              <label class="m-1">Hayır</label>
             </span>
           </div>
         </div>
@@ -92,6 +100,7 @@
                 class="p-1"
                 name="yuksekoran"
                 value="true"
+                [(ngModel)]="reportSetting.showHightRatio"
               /><label class="m-1">Evet</label>
             </span>
             <span>
@@ -100,6 +109,7 @@
                 class="p-1"
                 name="yuksekoran"
                 value="false"
+                [(ngModel)]="reportSetting.showHightRatio"
               /><label class="m-1">Hayır</label>
             </span>
           </div>
@@ -111,10 +121,11 @@
           >
           <div class="flex flex-wrap gap-3">
             <span>
-              <input type="radio" class="p-1" name="dusuk" value="true" /><label
-                class="m-1"
-                >Evet</label
-              >
+              <input type="radio" class="p-1" name="dusuk" value="true"
+              [(ngModel)]="reportSetting.showLowPrice" />
+              <label
+                class="m-1">
+                Evet</label>
             </span>
             <span>
               <input
@@ -122,6 +133,7 @@
                 class="p-1"
                 name="dusuk"
                 value="false"
+                [(ngModel)]="reportSetting.showLowPrice"
               /><label class="m-1">Hayır</label>
             </span>
           </div>
@@ -136,6 +148,7 @@
                 class="p-1"
                 name="dusukoran"
                 value="true"
+                [(ngModel)]="reportSetting.showLowRatio"
               /><label class="m-1">Evet</label>
             </span>
             <span>
@@ -144,6 +157,7 @@
                 class="p-1"
                 name="dusukoran"
                 value="false"
+                [(ngModel)]="reportSetting.showLowRatio"
               /><label class="m-1">Hayır</label>
             </span>
           </div>
@@ -157,13 +171,16 @@
         <label class="mb-2 w-20rem">Genel toplam durumu belirtilsin mi?</label>
         <div class="flex flex-wrap gap-3">
           <span>
-            <input type="radio" class="p-1" name="yuksek" value="true" /><label
+            <input type="radio" class="p-1" name="allTotal" value="true" 
+            [(ngModel)]="reportSetting.showAllTotal"
+            /><label
               class="m-1"
               >Evet</label
             >
           </span>
           <span>
-            <input type="radio" class="p-1" name="yuksek" value="false" /><label
+            <input type="radio" class="p-1" name="allTotal" value="false"
+            [(ngModel)]="reportSetting.showAllTotal" /><label
               class="m-1"
               >Hayır</label
             >
@@ -176,13 +193,15 @@
         >
         <div class="flex flex-wrap gap-3">
           <span>
-            <input type="radio" class="p-1" name="yuksek" value="true" /><label
+            <input type="radio" class="p-1" name="subHeading" value="true"
+            [(ngModel)]="reportSetting.showSubHeading" /><label
               class="m-1"
               >Evet</label
             >
           </span>
           <span>
-            <input type="radio" class="p-1" name="yuksek" value="false" /><label
+            <input type="radio" class="p-1" name="subHeading" value="false" 
+            [(ngModel)]="reportSetting.showSubHeading"/><label
               class="m-1"
               >Hayır</label
             >
@@ -195,13 +214,15 @@
         >
         <div class="flex flex-wrap gap-3">
           <span>
-            <input type="radio" class="p-1" name="yuksek" value="true" /><label
+            <input type="radio" class="p-1" name="allRows" value="true"
+            [(ngModel)]="reportSetting.showAllRows" /><label
               class="m-1"
               >Evet</label
             >
           </span>
           <span>
-            <input type="radio" class="p-1" name="yuksek" value="false" /><label
+            <input type="radio" class="p-1" name="allRows" value="false" 
+            [(ngModel)]="reportSetting.showAllRows"/><label
               class="m-1"
               >Hayır</label
             >
@@ -212,16 +233,16 @@
       <div class="field grid my-3">
         <label class="mb-2 w-20rem">Rapor hangi kırılımda olsun?</label>
         <div class="mb-2">
-          <select class="p-2">
-            <option>Sadece Toplam Tutara Göre</option>
-            <option>Alt Kırılımlar Dahil Edilsin</option>
+          <select class="p-2"  [(ngModel)]="reportSetting.calculateSetting" >
+            <option value="onlyTotal">Sadece Toplam Tutara Göre</option>
+            <option value="allHeading">Alt Kırılımlar Dahil Edilsin</option>
           </select>
         </div>
       </div>
     </div>
   </div>
   <div class="flex justify-content-end mt-5">
-    <p-button pRipple label="Kaydet" icon="pi pi-check" class="mx-5"></p-button>
+    <p-button (onClick)="saveSetting(reportSetting)" pRipple label="Kaydet" icon="pi pi-check" class="mx-5" ></p-button>
   </div>
 } @else {
   <app-loading-spinner></app-loading-spinner>

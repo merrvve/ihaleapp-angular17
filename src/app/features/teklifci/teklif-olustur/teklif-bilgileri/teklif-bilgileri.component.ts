@@ -4,7 +4,6 @@ import { TeklifOlusturComponent } from '../teklif-olustur.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { FileUploadModule } from 'primeng/fileupload';
-import { Ihale } from '../../../../models/ihale.interface';
 import { BidService } from '../../../../services/bid.service';
 import { Tender } from '../../../../models/tender';
 import { Observable } from 'rxjs/internal/Observable';
@@ -25,7 +24,6 @@ import { AsyncPipe } from '@angular/common';
   ],
 })
 export class TeklifBilgileriComponent implements OnInit {
-  ihale!: Ihale;
   selectedFiles: File[] = [];
 
   tender$!: Observable<Tender | null>;

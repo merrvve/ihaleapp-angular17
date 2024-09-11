@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { ReportSettings } from '../../../../../models/report-settings';
 
 @Component({
   selector: 'app-rapor-ayar',
@@ -34,6 +35,7 @@ export class RaporAyarComponent {
   baseOptions = ['Minimum', 'Ortalama', 'Bütçe'];
   selectedBaseOption: string = 'Minimum';
 
+  reportSetting! : ReportSettings; 
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
@@ -46,8 +48,26 @@ export class RaporAyarComponent {
       if (this.tenderId) {
         this.tender$ = this.tenderService.currentTender$;
         this.menuService.setItems(this.tenderId);
+        this.reportSetting = {
+          id: this.tenderId,
+          baseValue: 'Minimum',
+          showBaseValue: true,
+          toBaseRatio: 10,
+          showHighPrice: true,
+          showHightRatio: true,
+          showLowPrice: true,
+          showLowRatio: true,
+          showAllTotal: true,
+          showSubHeading: true,
+          showAllRows: true,
+          calculateSetting: "onlyTotal"
+        }
       }
     });
+  }
+
+  saveSetting(reportSetting: ReportSettings) {
+    console.log(reportSetting)
   }
 
   ngOnDestroy() {
