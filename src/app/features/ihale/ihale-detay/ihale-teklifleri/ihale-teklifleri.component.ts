@@ -15,11 +15,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TablodataService } from '../../../../services/tablodata.service';
 import { CompareBidsService } from '../../../../services/compare-bids.service';
 import { MenuService } from '../../../../services/menu.service';
+import { BidsTableComponent } from "../../../../components/bids-table/bids-table.component";
 
 @Component({
   selector: 'app-ihale-teklifleri',
   standalone: true,
-  imports: [AsyncPipe,LoadingSpinnerComponent, TableModule, ButtonModule,IconFieldModule,InputIconModule,InputTextModule, RouterLink],
+  imports: [AsyncPipe, LoadingSpinnerComponent, TableModule, ButtonModule, IconFieldModule, InputIconModule, InputTextModule, RouterLink, BidsTableComponent],
   templateUrl: './ihale-teklifleri.component.html',
   styleUrl: './ihale-teklifleri.component.scss'
 })
@@ -28,6 +29,7 @@ export class IhaleTeklifleriComponent {
   bids$!: Observable<TenderBid[]>;
   selectedBids! : TenderBid[];
   paramSubscription!: Subscription;
+  compare = true;
 
   constructor(
     private route: ActivatedRoute,

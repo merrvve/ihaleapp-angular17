@@ -7,13 +7,13 @@ import { MenuService } from '../../../../../services/menu.service';
 import { TenderBid } from '../../../../../models/tender-bid';
 import { AsyncPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { BidsTableComponent } from "../../../../../components/bids-table/bids-table.component";
 
 @Component({
   selector: 'app-rapor-olustur',
   standalone: true,
   imports: [RouterLink, AsyncPipe,
-    ButtonModule
-  ],
+    ButtonModule, BidsTableComponent],
   templateUrl: './rapor-olustur.component.html',
   styleUrl: './rapor-olustur.component.scss'
 })
@@ -21,6 +21,8 @@ export class RaporOlusturComponent {
   tenderId!: string | null;
   tender$!: Observable<Tender |null>;
   bids$!: Observable<TenderBid[]>;
+  showCompare = false;
+  
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
@@ -36,6 +38,8 @@ export class RaporOlusturComponent {
       }
     });
   }
+
+  createReports() {}
 
   ngOnDestroy() {
     this.menuService.clearItems();

@@ -14,11 +14,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TenderService } from '../../../../../services/tender.service';
 import { TablodataService } from '../../../../../services/tablodata.service';
 import { CompareBidsService } from '../../../../../services/compare-bids.service';
+import { BidsTableComponent } from "../../../../../components/bids-table/bids-table.component";
 
 @Component({
   selector: 'app-firma-teklifleri',
   standalone: true,
-  imports: [AsyncPipe, LoadingSpinnerComponent,  TableModule, ButtonModule,IconFieldModule,InputIconModule,InputTextModule, RouterLink],
+  imports: [AsyncPipe, LoadingSpinnerComponent, TableModule, ButtonModule, IconFieldModule, InputIconModule, InputTextModule, RouterLink, BidsTableComponent],
   templateUrl: './firma-teklifleri.component.html',
   styleUrl: './firma-teklifleri.component.scss'
 })
@@ -27,6 +28,7 @@ export class FirmaTeklifleriComponent implements OnInit {
   company_id: string | null = null;
   bids$!: Observable<TenderBid[]>;
   selectedBids! : TenderBid[];
+  compare = true;
   constructor(private route: ActivatedRoute,
     private bidService: BidService,
     private tenderService: TenderService,
