@@ -1,5 +1,4 @@
 export interface ReportSettings {
-    id: string;
     baseValue: string;
     showBaseValue: boolean;
     toBaseRatio: number;

@@ -27,7 +27,7 @@
                 type="radio"
                 class="p-1"
                 name="belirt"
-                value="true"
+                [value]="true"
                 [(ngModel)]="reportSetting.showBaseValue"
               /><label class="m-1">Evet</label>
             </span>
@@ -36,7 +36,7 @@
                 type="radio"
                 class="p-1"
                 name="belirt"
-                value="false"
+                [value]="false"
                 [(ngModel)]="reportSetting.showBaseValue"
               /><label class="m-1">Hayır</label>
             </span>
@@ -73,7 +73,7 @@
                 type="radio"
                 class="p-1"
                 name="yuksek"
-                value="true"
+                [value]="true"
                 [(ngModel)]="reportSetting.showHighPrice"
               />
               <label class="m-1">Evet</label>
@@ -83,7 +83,7 @@
                 type="radio"
                 class="p-1"
                 name="yuksek"
-                value="false"
+                [value]="false"
                 [(ngModel)]="reportSetting.showHighPrice"
               />
               <label class="m-1">Hayır</label>
@@ -99,7 +99,7 @@
                 type="radio"
                 class="p-1"
                 name="yuksekoran"
-                value="true"
+                [value]="true"
                 [(ngModel)]="reportSetting.showHightRatio"
               /><label class="m-1">Evet</label>
             </span>
@@ -108,7 +108,7 @@
                 type="radio"
                 class="p-1"
                 name="yuksekoran"
-                value="false"
+                [value]="false"
                 [(ngModel)]="reportSetting.showHightRatio"
               /><label class="m-1">Hayır</label>
             </span>
@@ -121,7 +121,8 @@
           >
           <div class="flex flex-wrap gap-3">
             <span>
-              <input type="radio" class="p-1" name="dusuk" value="true"
+              <input type="radio" class="p-1" name="dusuk" 
+              [value]="true"
               [(ngModel)]="reportSetting.showLowPrice" />
               <label
                 class="m-1">
@@ -132,7 +133,7 @@
                 type="radio"
                 class="p-1"
                 name="dusuk"
-                value="false"
+                [value]="false"
                 [(ngModel)]="reportSetting.showLowPrice"
               /><label class="m-1">Hayır</label>
             </span>
@@ -147,7 +148,7 @@
                 type="radio"
                 class="p-1"
                 name="dusukoran"
-                value="true"
+                [value]="true"
                 [(ngModel)]="reportSetting.showLowRatio"
               /><label class="m-1">Evet</label>
             </span>
@@ -156,7 +157,7 @@
                 type="radio"
                 class="p-1"
                 name="dusukoran"
-                value="false"
+                [value]="false"
                 [(ngModel)]="reportSetting.showLowRatio"
               /><label class="m-1">Hayır</label>
             </span>
@@ -171,7 +172,8 @@
         <label class="mb-2 w-20rem">Genel toplam durumu belirtilsin mi?</label>
         <div class="flex flex-wrap gap-3">
           <span>
-            <input type="radio" class="p-1" name="allTotal" value="true" 
+            <input type="radio" class="p-1" name="allTotal" 
+            [value]="true" 
             [(ngModel)]="reportSetting.showAllTotal"
             /><label
               class="m-1"
@@ -179,7 +181,8 @@
             >
           </span>
           <span>
-            <input type="radio" class="p-1" name="allTotal" value="false"
+            <input type="radio" class="p-1" name="allTotal"
+            [value]="false" 
             [(ngModel)]="reportSetting.showAllTotal" /><label
               class="m-1"
               >Hayır</label
@@ -193,14 +196,16 @@
         >
         <div class="flex flex-wrap gap-3">
           <span>
-            <input type="radio" class="p-1" name="subHeading" value="true"
+            <input type="radio" class="p-1" name="subHeading"
+            [value]="true" 
             [(ngModel)]="reportSetting.showSubHeading" /><label
               class="m-1"
               >Evet</label
             >
           </span>
           <span>
-            <input type="radio" class="p-1" name="subHeading" value="false" 
+            <input type="radio" class="p-1" name="subHeading" 
+            [value]="false"  
             [(ngModel)]="reportSetting.showSubHeading"/><label
               class="m-1"
               >Hayır</label
@@ -214,14 +219,16 @@
         >
         <div class="flex flex-wrap gap-3">
           <span>
-            <input type="radio" class="p-1" name="allRows" value="true"
+            <input type="radio" class="p-1" name="allRows" 
+            [value]="true" 
             [(ngModel)]="reportSetting.showAllRows" /><label
               class="m-1"
               >Evet</label
             >
           </span>
           <span>
-            <input type="radio" class="p-1" name="allRows" value="false" 
+            <input type="radio" class="p-1" name="allRows"
+            [value]="false" 
             [(ngModel)]="reportSetting.showAllRows"/><label
               class="m-1"
               >Hayır</label

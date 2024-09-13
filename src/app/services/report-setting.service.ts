@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, CollectionReference, doc, DocumentReference, Firestore, updateDoc } from '@angular/fire/firestore';
+import { collection, CollectionReference, doc, DocumentReference, Firestore, updateDoc } from '@angular/fire/firestore';
 import { ReportSettings } from '../models/report-settings';
 
 @Injectable({
@@ -7,34 +7,28 @@ import { ReportSettings } from '../models/report-settings';
 })
 export class ReportSettingService {
   private firestore = inject(Firestore);
-  reportSettingsCollection!: CollectionReference;
 
+  
+  tendersCollection!: CollectionReference;
   currentSetting!: ReportSettings;
   constructor() {
-    this.reportSettingsCollection = collection(this.firestore, 'reportSettings');
+    this.tendersCollection = collection(this.firestore, 'tenders');
   }
 
-  createReportSettings(reportSetting: ReportSettings) {
+  updateReportSetting(tenderid: string, reportSetting: ReportSettings) {
+    const tenderRef = doc(this.tendersCollection, tenderid);
     this.currentSetting = reportSetting;
-    addDoc(this.reportSettingsCollection, reportSetting).then(
-      (documentReference: DocumentReference) => {
-        console.log(documentReference);
-      },
-    );
-  }
-
-  updateBudget(reportSetting: ReportSettings) {
-    this.currentSetting = reportSetting;
-    const reportSettingRef = doc(this.reportSettingsCollection, reportSetting.id);
-
-    updateDoc(reportSettingRef, reportSetting as object)
+   
+    // Perform an update on specific fields of the tender document
+    updateDoc(tenderRef, {
+      reportSetting: reportSetting
+    })
       .then(() => {
-        console.log('Tender updated successfully!');
+        console.log('Tender report setting updated successfully!');
       })
       .catch((error) => {
-        console.error('Error updating tender:', error);
+        console.error('Error updating tender report setting:', error);
       });
   }
-  
-  
+ 
 }
