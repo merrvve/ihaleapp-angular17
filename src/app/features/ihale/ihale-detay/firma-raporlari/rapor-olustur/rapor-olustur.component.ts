@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Tender } from '../../../../../models/tender';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TenderService } from '../../../../../services/tender.service';
@@ -9,6 +9,7 @@ import { AsyncPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { BidsTableComponent } from '../../../../../components/bids-table/bids-table.component';
 import { BidService } from '../../../../../services/bid.service';
+import { ReportsService } from '../../../../../services/reports.service';
 
 @Component({
   selector: 'app-rapor-olustur',
@@ -28,6 +29,7 @@ export class RaporOlusturComponent {
     private tenderService: TenderService,
     private menuService: MenuService,
     private bidService: BidService,
+    private reportService: ReportsService
   ) {}
 
   ngOnInit() {
@@ -36,7 +38,11 @@ export class RaporOlusturComponent {
       if (this.tenderId) {
         this.tender$ = this.tenderService.currentTender$;
         this.menuService.setItems(this.tenderId);
-        this.bids$ = this.bidService.getBidsByTenderId(this.tenderId);
+        this.bids$ = this.bidService.getBidsByTenderId(this.tenderId).pipe(
+          tap(bids => {
+            this.bidService.createBidsSummary(bids);
+          })
+        );
       }
     });
   }

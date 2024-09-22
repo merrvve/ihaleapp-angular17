@@ -36,7 +36,7 @@ export class KesifComponent implements OnInit {
   ) {}
   ngOnInit(): void {}
   createBid() {
-    this.bidService.createBid().subscribe({
+    this.bidService.createBid()?.subscribe({
       next: (result) => console.log(result),
       error: (error) => console.log(error),
     });

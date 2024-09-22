@@ -18,9 +18,9 @@ export interface Tender {
   isDraft: boolean;
   isEditMode?: boolean;
   discoveryData?: any;
-  revisions?: TenderRevision[]; // Optional
-  bids?: TenderBid[]; // Optional (can be populated later)
-  messages?: TenderMessage[]; // Optional (can be populated later)
+  revisions?: TenderRevision[]; 
+  bids?: TenderBid[]; 
+  messages?: TenderMessage[]; 
   reportSetting?: ReportSettings
 }
 
@@ -44,3 +44,4 @@ export interface TenderMessage {
   sender_id: string;
   // Add message content field (e.g., text)
 }
+
