@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { Tender } from '../../../../../models/tender';
 import { ActivatedRoute } from '@angular/router';
 import { TenderService } from '../../../../../services/tender.service';
@@ -50,6 +50,7 @@ export class RaporAyarComponent {
       baseValue: 'Minimum',
       showBaseValue: true,
       toBaseRatio: 10,
+      toBaseRatioLow: 10,
       showHighPrice: true,
       showHightRatio: true,
       showLowPrice: true,

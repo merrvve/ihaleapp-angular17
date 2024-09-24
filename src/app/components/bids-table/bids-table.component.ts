@@ -12,6 +12,8 @@ import { TablodataService } from '../../services/tablodata.service';
 import { Router } from '@angular/router';
 import { CompareBidsService } from '../../services/compare-bids.service';
 import { TenderService } from '../../services/tender.service';
+import { Tender } from '../../models/tender';
+import { ReportsService } from '../../services/reports.service';
 
 @Component({
   selector: 'app-bids-table',
@@ -31,6 +33,7 @@ import { TenderService } from '../../services/tender.service';
 export class BidsTableComponent {
   @Input() bids$!: Observable<TenderBid[]>;
   @Input() compare!: boolean;
+  @Input() tender!: Tender;
 
   @Output() createReports = new EventEmitter<void>();
 
@@ -41,6 +44,7 @@ export class BidsTableComponent {
     private router: Router,
     private compareService: CompareBidsService,
     private tenderService: TenderService,
+    private reportService: ReportsService
   ) {}
 
   getEventValue($event: any): string {
@@ -55,8 +59,21 @@ export class BidsTableComponent {
     }
   }
 
-  onCreateReports() {
-    this.createReports.emit();
+  
+
+  onCreateReports(bids: TenderBid[]) {
+    if(!bids) {
+      console.log("No selected bids");
+      return;
+    }
+    if(this.tender) {
+      for (const bid of bids) {
+        this.reportService.createReport(bid, this.tender.reportSetting, this.tender.bidsSummary);
+      }
+    }
+    else {
+      console.log("No selected tender")
+    }
   }
 
   seeTenderBidDetails(bid: TenderBid) {

@@ -6,7 +6,6 @@ import {
   Firestore,
   addDoc,
   collection,
-  collectionData,
   deleteDoc,
   doc,
   getDoc,
@@ -18,8 +17,10 @@ import {
 } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { Observable } from 'rxjs/internal/Observable';
-import { BehaviorSubject, from, map } from 'rxjs';
+import { BehaviorSubject, from, map, of } from 'rxjs';
 import { TablodataService } from './tablodata.service';
+import { Budget } from '../models/budget';
+import { BudgetService } from './budget.service';
 
 @Injectable({
   providedIn: 'root',
@@ -48,6 +49,7 @@ export class TenderService {
   constructor(
     private authService: FirebaseAuthService,
     private tableData: TablodataService,
+    private budgetService: BudgetService
   ) {
     this.tendersCollection = collection(this.firestore, 'tenders');
   }
@@ -62,9 +64,37 @@ export class TenderService {
     tender.discoveryData = data;
     tender.owner_id = this.authService.getUser()?.uid || '';
     tender.isDraft = isDraft;
+    
+    tender.bidsSummary = {
+      maxPrices: {},
+      minPrices: {},
+      avgPrices: {}
+    }
+   
+    tender.reportSetting = {
+      baseValue: 'Minimum',
+      showBaseValue: true,
+      toBaseRatio: 10,
+      toBaseRatioLow: 10,
+      showHighPrice: true,
+      showHightRatio: true,
+      showLowPrice: true,
+      showLowRatio: true,
+      showAllTotal: true,
+      showSubHeading: true,
+      showAllRows: true,
+      calculateSetting: 'allHeading'
+    }
+    
     addDoc(this.tendersCollection, tender).then(
       (documentReference: DocumentReference) => {
         console.log(documentReference);
+        const budget : Budget = {
+          name: 'default',
+          tender_id: documentReference.id,
+          discovery_data: data
+        }
+        this.budgetService.createBudget(budget);
       },
     );
   }
@@ -131,7 +161,10 @@ export class TenderService {
 
   getTendersByBidderId(bidderId?: string): Observable<Tender[]> {
     if (!bidderId) {
-      bidderId = this.authService.getUser()?.uid || '';
+      bidderId = this.authService.getUser()?.uid 
+      if(!bidderId) {
+        return of([]);
+      }   
     }
 
     // Use `getDocs` instead of `collectionData`

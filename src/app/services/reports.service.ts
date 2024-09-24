@@ -10,6 +10,7 @@ export class ReportsService {
   constructor() {}
 
   createReport(bid: TenderBid, reportSetting: ReportSettings, bidsSummary: TenderBidsSummary) {
+    console.log(bid,reportSetting,bidsSummary)
     let reportStatements : any[] = [];
     if(!reportSetting) {
       return;
@@ -48,7 +49,10 @@ export class ReportsService {
       //tüm satırları ekle
     }
 
-
+    // Default true for each setting
+    baseValue.forEach((value,index)=> {
+      console.log(value,index)
+    })
   }
 
   discoveryDataToDict(discovery_data: any[]) {

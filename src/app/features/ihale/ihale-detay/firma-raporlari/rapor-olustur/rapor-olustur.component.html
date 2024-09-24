@@ -11,8 +11,9 @@
     >
     göre, ilişkili firmalara rapor gönderilecek raporlar oluşturulacaktır.
   </h4>
+  <app-bids-table [compare]="showCompare" [bids$]="bids$" [tender]="tender"></app-bids-table>
 }
-<app-bids-table [compare]="showCompare" [bids$]="bids$"></app-bids-table>
+
 <!-- <div class="flex justify-content-end mt-5">
     <p-button pRipple label="Oluştur" icon="pi pi-send" class="mx-5"></p-button>
     <p-button pRipple label="Gönder" icon="pi pi-send" class="mx-5"></p-button>

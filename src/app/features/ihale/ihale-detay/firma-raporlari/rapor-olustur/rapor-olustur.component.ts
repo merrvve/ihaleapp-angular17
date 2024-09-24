@@ -23,6 +23,7 @@ export class RaporOlusturComponent {
   tender$!: Observable<Tender | null>;
   bids$!: Observable<TenderBid[]>;
   showCompare = false;
+  tender!: Tender;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,8 @@ export class RaporOlusturComponent {
       }
     });
   }
+
+  
 
   ngOnDestroy() {
     this.menuService.clearItems();

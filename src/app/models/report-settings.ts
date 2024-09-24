@@ -2,6 +2,7 @@ export interface ReportSettings {
     baseValue: string;
     showBaseValue: boolean;
     toBaseRatio: number;
+    toBaseRatioLow: number;
     showHighPrice: boolean;
     showHightRatio: boolean;
     showLowPrice: boolean;

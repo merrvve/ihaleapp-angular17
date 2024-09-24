@@ -44,7 +44,7 @@
         </div>
 
         <div class="field grid mb-3">
-          <label class="mb-2 w-20rem">Baz Değere Oranı</label>
+          <label class="mb-2 w-20rem">Yüksek Kabul Edilen Değerin Baz Değere Oranı</label>
           <div class="flex flex-row mb-2">
             <p-inputGroup class="mb-2">
               <p-inputGroupAddon>%</p-inputGroupAddon>
@@ -56,7 +56,7 @@
                 max="100"
                 min="0"
               />
-              <p-inputGroupAddon>üstü/altı</p-inputGroupAddon>
+              <p-inputGroupAddon>üstü</p-inputGroupAddon>
             </p-inputGroup>
           </div>
         </div>
@@ -112,6 +112,24 @@
                 [(ngModel)]="reportSetting.showHightRatio"
               /><label class="m-1">Hayır</label>
             </span>
+          </div>
+        </div>
+
+        <div class="field grid mb-3">
+          <label class="mb-2 w-20rem">Düşük Kabul Edilen Değerin Baz Değere Oranı</label>
+          <div class="flex flex-row mb-2">
+            <p-inputGroup class="mb-2">
+              <p-inputGroupAddon>%</p-inputGroupAddon>
+              <input
+                [(ngModel)]="reportSetting.toBaseRatioLow"
+                type="number"
+                pInputNumber
+                placeholder="10"
+                max="100"
+                min="0"
+              />
+              <p-inputGroupAddon>altı</p-inputGroupAddon>
+            </p-inputGroup>
           </div>
         </div>
 

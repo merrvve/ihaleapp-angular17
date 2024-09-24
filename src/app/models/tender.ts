@@ -1,6 +1,7 @@
 import { ReportSettings } from './report-settings';
 import { RequestedDocument } from './requested-document';
 import { TenderBid } from './tender-bid';
+import { TenderBidsSummary } from './tender-bids-summary';
 
 export interface Tender {
   id?: string; // Optional for new tenders
@@ -22,6 +23,7 @@ export interface Tender {
   bids?: TenderBid[]; 
   messages?: TenderMessage[]; 
   reportSetting?: ReportSettings
+  bidsSummary?: TenderBidsSummary
 }
 
 export interface TenderFile {

@@ -8,6 +8,7 @@ import {
   doc,
   getDocs,
   query,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, map, switchMap } from 'rxjs';
 import { Tender } from '../models/tender';
@@ -130,7 +131,21 @@ export class BidService {
   }
 
   updateBidsSummary(bidsSummary: TenderBidsSummary, tenderId: string) {
-    console.log(bidsSummary,tenderId)
+    
+      const tendersCollection = collection(this.firestore, 'tenders');
+ 
+      const tenderRef = doc(tendersCollection, tenderId);
+      
+      updateDoc(tenderRef, {
+        bidsSummary: bidsSummary
+      })
+        .then(() => {
+          console.log('Tender bids Summary updated successfully!');
+        })
+        .catch((error) => {
+          console.error('Error updating tender bids summary:', error);
+        });
+    
   }
 
   createBidsSummary(bids: TenderBid[]): TenderBidsSummary | null {
