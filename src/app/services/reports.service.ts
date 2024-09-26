@@ -21,7 +21,7 @@ export class ReportsService {
     if(!bidsSummary) {
       return;
     }
-    let baseValue: any;
+    let baseValue =[];
     const baseRatio = reportSetting.toBaseRatio;
     let data = this.discoveryDataToDict(bid.discovery_data);
     switch(reportSetting.baseValue) {
@@ -49,6 +49,16 @@ export class ReportsService {
       //tüm satırları ekle
     }
 
+    const columns = bid.discovery_data["0"];
+    console.log(columns,"columns");
+    console.log(Object.values(bid.discovery_data))
+    Object.values(bid.discovery_data).forEach((row: any,index)=>{
+      row.forEach((value,i)=> {
+        if(typeof(value)==="number") {
+          console.log(columns[i], index, +baseValue[index][columns[i]], value)
+        }
+      })
+    })
     // Default true for each setting
     baseValue.forEach((value,index)=> {
       console.log(value,index)
