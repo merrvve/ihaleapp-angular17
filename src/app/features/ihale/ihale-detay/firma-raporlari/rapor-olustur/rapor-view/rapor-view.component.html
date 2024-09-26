@@ -1,0 +1,9 @@
+@if (reportStatements$ | async; as reportStatements) { 
+    <ul>
+      @for(statement of reportStatements; track statement) {
+        <li>
+          {{statement}}
+        </li>
+      }
+    </ul>
+  }

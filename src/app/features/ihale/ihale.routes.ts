@@ -20,6 +20,7 @@ import { RaporAyarComponent } from './ihale-detay/firma-raporlari/rapor-ayar/rap
 import { RaporOlusturComponent } from './ihale-detay/firma-raporlari/rapor-olustur/rapor-olustur.component';
 import { SoruCevapComponent } from './ihale-detay/soru-cevap/soru-cevap.component';
 import { ToplantilarComponent } from './ihale-detay/toplantilar/toplantilar.component';
+import { RaporViewComponent } from './ihale-detay/firma-raporlari/rapor-olustur/rapor-view/rapor-view.component';
 
 export const IHALE_ROUTES: Route[] = [
   {
@@ -46,6 +47,10 @@ export const IHALE_ROUTES: Route[] = [
   {
     path: 'ihale/:id/firma-raporlari/rapor-olustur',
     component: RaporOlusturComponent,
+  },
+  {
+    path: 'ihale/:id/firma-raporlari/rapor-onizleme',
+    component: RaporViewComponent,
   },
   { path: 'ihale/:id/soru-cevap', component: SoruCevapComponent },
   { path: 'ihale/:id/toplantilar', component: ToplantilarComponent },

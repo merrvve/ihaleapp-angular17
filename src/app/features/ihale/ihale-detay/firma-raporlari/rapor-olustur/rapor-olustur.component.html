@@ -18,3 +18,12 @@
     <p-button pRipple label="Oluştur" icon="pi pi-send" class="mx-5"></p-button>
     <p-button pRipple label="Gönder" icon="pi pi-send" class="mx-5"></p-button>
 </div> -->
+@if (reportStatements$ | async; as reportStatements) { 
+  <ul>
+    @for(statement of reportStatements; track statement) {
+      <li>
+        {{statement}}
+      </li>
+    }
+  </ul>
+}

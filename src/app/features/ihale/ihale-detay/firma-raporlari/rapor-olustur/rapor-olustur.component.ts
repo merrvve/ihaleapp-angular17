@@ -22,9 +22,10 @@ export class RaporOlusturComponent {
   tenderId!: string | null;
   tender$!: Observable<Tender | null>;
   bids$!: Observable<TenderBid[]>;
+  reportStatements$!: Observable<string[]>;
   showCompare = false;
   tender!: Tender;
-
+  
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
@@ -44,6 +45,7 @@ export class RaporOlusturComponent {
             this.bidService.createBidsSummary(bids);
           })
         );
+        this.reportStatements$ = this.reportService.reportStatements$;
       }
     });
   }
