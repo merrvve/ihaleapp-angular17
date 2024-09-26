@@ -30,8 +30,7 @@ export class ReportsService {
       return;
     }
     let baseValue =[];
-    const baseRatio = reportSetting.toBaseRatio;
-    let data = this.discoveryDataToDict(bid.discovery_data);
+    
     switch(reportSetting.baseValue) {
       case 'Minimum':
         baseValue = bidsSummary.minPrices;
@@ -64,14 +63,31 @@ export class ReportsService {
         if(typeof(value)==="number") {
           const cellBaseValue = +baseValue[index][columns[i]]
           console.log(cellBaseValue,reportSetting.toBaseRatio, (cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue,value )
-          if(value>= (cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue) {
-            const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} in verdiğiniz teklif: ${value}, tüm tekliflerin ${reportSetting.baseValue} fiyaatından %${reportSetting.toBaseRatio} yüksektir.`;
-            reportStatements.push(statement)
+          if(columns[i]!=="Toplam Fiyat" && reportSetting.calculateSetting==="onlyTotal") {
+              //skip this column
           }
-          if(value<= (cellBaseValue*reportSetting.toBaseRatioLow/100)-cellBaseValue) {
-            const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} in verdiğiniz teklif: ${value}, tüm tekliflerin ${reportSetting.baseValue} fiyaatından %${reportSetting.toBaseRatioLow} düşüktür.`;
-            reportStatements.push(statement)
+          else {
+            if(row[0].includes('.') && !reportSetting.showSubHeading) {
+              //skip this.
+            }
+            if(!row[0].includes('.') && !reportSetting.showAllTotal) {
+              // skip this
+            }
+            else {
+              if(value>= (cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue) {
+                const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatından` : '';
+                const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${value}, ${baseValueStatement} %${reportSetting.toBaseRatio} yüksektir.`;
+                reportStatements.push(statement)
+              }
+              if(value<= (cellBaseValue*reportSetting.toBaseRatioLow/100)-cellBaseValue) {
+                const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatından` : '';
+                const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${value}, ${baseValueStatement}  %${reportSetting.toBaseRatioLow} düşüktür.`;
+                reportStatements.push(statement)
+              }
+            }
+            
           }
+          
         }
       })
     });

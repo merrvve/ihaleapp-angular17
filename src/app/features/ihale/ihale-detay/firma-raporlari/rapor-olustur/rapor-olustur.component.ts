@@ -22,7 +22,6 @@ export class RaporOlusturComponent {
   tenderId!: string | null;
   tender$!: Observable<Tender | null>;
   bids$!: Observable<TenderBid[]>;
-  reportStatements$!: Observable<string[]>;
   showCompare = false;
   tender!: Tender;
   
@@ -31,7 +30,6 @@ export class RaporOlusturComponent {
     private tenderService: TenderService,
     private menuService: MenuService,
     private bidService: BidService,
-    private reportService: ReportsService
   ) {}
 
   ngOnInit() {
@@ -45,7 +43,7 @@ export class RaporOlusturComponent {
             this.bidService.createBidsSummary(bids);
           })
         );
-        this.reportStatements$ = this.reportService.reportStatements$;
+       
       }
     });
   }
