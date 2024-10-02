@@ -1,9 +1,76 @@
-@if (reportStatements$ | async; as reportStatements) { 
-    <ul>
-      @for(statement of reportStatements; track statement) {
-        <li>
-          {{statement}}
-        </li>
+<div class="flex flex-column p-5 justify-center">
+  @if (reportStatements$ | async; as reportStatements) { 
+ 
+ 
+    <table class="table-grid">
+      <thead>
+        <tr>
+          <th colspan="2">
+            {{reportStatements.descriptionStatements[0] || "Teklif Raporu"}}
+          </th>
+        </tr>
+        
+      </thead>
+      <tbody>  
+      @if(reportStatements.descriptionStatements.length>1) {   
+          @for(statement of reportStatements.descriptionStatements.slice(1); track statement) {
+            <tr>
+              <td colspan="2">
+                {{statement}}
+              </td>
+              
+            </tr>
+          }     
       }
-    </ul>
+      @if(reportStatements.positiveStatements.length>0) {
+        <tr>
+          <td colspan="2">
+            <strong>Yüksek Değerler</strong>
+          </td>
+        </tr>
+        
+          @for(statement of reportStatements.positiveStatements; track statement; let i = $index) {
+            <tr>
+              <td style="width:5rem;">
+                {{i+1}}
+              </td>
+              <td>
+                {{statement}}
+              </td>
+              
+            </tr>
+          }
+        
+      }
+      @if(reportStatements.negativeStatements.length>0) {
+        <tr>
+          <td colspan="2">
+          <strong>Düşük Değerler</strong>
+        </td>
+      </tr>
+        
+          @for(statement of reportStatements.negativeStatements; track statement; let i = $index) {
+            <tr>
+              <td style="width:5rem;">
+                {{i+1}}
+              </td>
+              <td>
+                {{statement}}
+              </td>
+            
+            </tr>
+          }
+        
+      }
+    </tbody>
+     
+    </table>
+  
+    <div class="flex justify-content-end mt-5">
+      <p-button pRipple label="Teklif Tablosu Görünümü" icon="pi pi-table" class="mx-2" severity="secondary"></p-button>
+      <p-button pRipple label="Yazdır" icon="pi pi-print" class="mx-2" severity="info" (click)="printPage()"></p-button>
+      <p-button pRipple label="Gönder" icon="pi pi-send" class="mx-2" severity="success"></p-button>
+  </div>
+  
   }
+</div>

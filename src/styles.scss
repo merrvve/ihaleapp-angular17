@@ -20,3 +20,11 @@
   position: absolute;
   top: 0;
 }
+@media print {
+  p-button {
+    display: none;
+  }
+  app-navbar {
+    display: none;
+  }
+}

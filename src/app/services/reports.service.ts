@@ -3,23 +3,36 @@ import { TenderBid } from '../models/tender-bid';
 import { ReportSettings } from '../models/report-settings';
 import { TenderBidsSummary } from '../models/tender-bids-summary';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ReportStatement } from '../models/report-statement';
+
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReportsService {
-  private _reportStatementsSubject = new BehaviorSubject<string[]>([]);
+  private _reportStatementsSubject = new BehaviorSubject<ReportStatement>({
+    positiveStatements: [],
+    negativeStatements: [],
+    descriptionStatements: []
+  });
   reportStatements$ = this._reportStatementsSubject.asObservable(); 
 
   constructor() {}
 
   ngOnInit() {
-    this._reportStatementsSubject.next([])
+    
   }
   createReport(bid: TenderBid, reportSetting: ReportSettings, bidsSummary: TenderBidsSummary) {
     // console.log(bid,reportSetting,bidsSummary)
-    this._reportStatementsSubject.next([]);
-    let reportStatements : any[] = [];
+    this._reportStatementsSubject.next({
+      positiveStatements: [],
+      negativeStatements: [],
+      descriptionStatements: []
+    });
+    let positiveStatements = [];
+    let negativeStatements = [];
+    let descriptionStatements = [`xxx İhalesi ${bid.company_name} Firması ${bid.id} no'lu Teklif Raporu`];
     if(!reportSetting) {
       return;
     }
@@ -77,12 +90,12 @@ export class ReportsService {
               if(value>= (cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue) {
                 const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatından` : '';
                 const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${value}, ${baseValueStatement} %${reportSetting.toBaseRatio} yüksektir.`;
-                reportStatements.push(statement)
+                positiveStatements.push(statement)
               }
               if(value<= (cellBaseValue*reportSetting.toBaseRatioLow/100)-cellBaseValue) {
                 const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatından` : '';
                 const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${value}, ${baseValueStatement}  %${reportSetting.toBaseRatioLow} düşüktür.`;
-                reportStatements.push(statement)
+                negativeStatements.push(statement)
               }
             }
             
@@ -91,10 +104,10 @@ export class ReportsService {
         }
       })
     });
-    if(reportStatements.length===0){
-      reportStatements.push(`Seçilen teklifte, rapor ayarlarında seçilen baz değerin %${reportSetting.toBaseRatio} üstünde ve ya %${reportSetting.toBaseRatioLow} altında değer bulunmamaktadır.`)
+    if(positiveStatements.length===0 && negativeStatements.length===0){
+      descriptionStatements.push(`Seçilen teklifte, rapor ayarlarında seçilen baz değerin %${reportSetting.toBaseRatio} üstünde ve ya %${reportSetting.toBaseRatioLow} altında değer bulunmamaktadır.`)
     }
-    this._reportStatementsSubject.next(reportStatements);
+    this._reportStatementsSubject.next({positiveStatements,negativeStatements,descriptionStatements});
     
   }
 
