@@ -68,7 +68,7 @@ export class BidsTableComponent {
     }
     if(this.tender) {
       for (const bid of bids) {
-        this.reportService.createReport(bid, this.tender.reportSetting, this.tender.bidsSummary);
+        this.reportService.createReport(bid, this.tender.reportSetting, this.tender.bidsSummary, this.tender.id, this.tender.name);
         this.router.navigate([`ihale/ihale/${this.tender.id}/firma-raporlari/rapor-onizleme`])
       }
     }
