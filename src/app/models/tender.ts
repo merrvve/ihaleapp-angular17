@@ -4,12 +4,12 @@ import { TenderBid } from './tender-bid';
 import { TenderBidsSummary } from './tender-bids-summary';
 
 export interface Tender {
-  id?: string; // Optional for new tenders
+  id?: string; 
   owner_id: string;
   name: string;
   description: string;
-  created_at: string; // Use appropriate Firebase import
-  completed_at?: string; // Optional
+  created_at: string; 
+  completed_at?: string; 
   currency: string;
   cost: number;
   requestedDocuments: RequestedDocument[];
@@ -34,9 +34,10 @@ export interface TenderFile {
 }
 
 export interface TenderRevision {
-  id: string;
-  created_at: Date;
-  difference: any;
+  id?: string;
+  name?: string,
+  created_at: string;
+  discoveryData: any;
 }
 
 export interface TenderMessage {
@@ -44,6 +45,5 @@ export interface TenderMessage {
   created_at: Date;
   replied: boolean;
   sender_id: string;
-  // Add message content field (e.g., text)
 }
 

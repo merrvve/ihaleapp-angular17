@@ -8,6 +8,8 @@ import { ButtonModule } from 'primeng/button';
 import { TenderService } from '../../../../services/tender.service';
 import { MenuService } from '../../../../services/menu.service';
 
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-create-budget',
   standalone: true,
@@ -18,6 +20,7 @@ import { MenuService } from '../../../../services/menu.service';
 export class CreateBudgetComponent {
   tenderId!: string | null;
   budgetData!: Budget;
+  tableSubscription!: Subscription;
   constructor(
     private budgetService: BudgetService,
     private tenderService: TenderService,
@@ -86,13 +89,26 @@ export class CreateBudgetComponent {
   }
 
   saveBudget() {
-    if (this.budgetData.tender_id) {
-      this.budgetData.discovery_data = this.tableService.currentData;
+    this.tableSubscription = this.tableService.datatree$.subscribe(
+      value=> {
+        this.tableService.cols$.subscribe(
+          cols=> this.tableService.currentData = this.tableService.convertTreeToDatalist(value,cols)
+        )
+      }
+    )
+  
+
+  
+    let data: { [key: number]: any } = {};
+    for (let i = 0; i < this.tableService.currentData.length; i++) {
+      data[i] = this.tableService.currentData[i];
+    }
+    this.budgetData.discovery_data = data;
+    if (this.budgetData.tender_id) {  
       this.budgetService.updateBudget(this.budgetData);
     } else {
       if (this.tenderId) {
         this.budgetData.tender_id = this.tenderId;
-        this.budgetData.discovery_data = this.tableService.currentData;
         this.budgetService.createBudget(this.budgetData);
       }
     }
@@ -100,5 +116,6 @@ export class CreateBudgetComponent {
 
   ngOnDestroy() {
     this.menuService.clearItems();
+    this.tableSubscription.unsubscribe();
   }
 }

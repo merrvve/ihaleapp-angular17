@@ -2,6 +2,7 @@ import { RequestedDocument } from './requested-document';
 
 export interface TenderBid {
   id?: string;
+  revisionId?: string;
   bidder_id: string;
   company_id?: string;
   company_name?: string;

@@ -239,7 +239,7 @@ export class IhaleKarsilastirComponent implements OnInit {
               {
                 label: 'Bütçeyi Düzenle',
                 icon: 'pi pi-file-edit',
-                routerLink: ['/', 'ihale', this.tender.id, 'butce'],
+                routerLink: ['/', 'ihale','ihale', this.tender.id, 'butce'],
                 //command: () => this.AddCol('Bütçe'),
               },
             ],

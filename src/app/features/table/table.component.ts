@@ -537,7 +537,6 @@ export class TableComponent implements OnInit {
       this.files,
       this.cols,
     );
-    console.log(this.cols, 'destroy');
 
     this.dataService.currentData = tabloData;
     this.dataService.setCols(this.cols);
