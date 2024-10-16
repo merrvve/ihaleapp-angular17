@@ -48,6 +48,9 @@
           <th pSortableColumn="created_at">
             Tarih <p-sortIcon field="created_at" />
           </th>
+          <th pSortableColumn="revisionName">
+            Revizyon <p-sortIcon field="revisionName" />
+          </th>
           <th pSortableColumn="company_name">
             Firma <p-sortIcon field="company_name" />
           </th>
@@ -73,6 +76,14 @@
             <p-columnFilter
               type="text"
               field="created_at"
+              placeholder="Filtrele"
+              ariaLabel="Filter Name"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="revisionName"
               placeholder="Filtrele"
               ariaLabel="Filter Name"
             />
@@ -111,6 +122,7 @@
           </td>
           <td>{{ bid.id }}</td>
           <td>{{ bid.created_at }}</td>
+          <td>{{ bid.revisionName ? bid.revisionName : "R1"  }}</td>
           <td>{{ bid?.company_name }}</td>
           <td>{{ bid.bidder_id }}</td>
           <td>{{ bid.total_price }}</td>

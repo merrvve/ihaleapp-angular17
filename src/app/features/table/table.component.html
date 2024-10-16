@@ -1,20 +1,60 @@
 <p-toast></p-toast>
+@if(tenderId) {
+  <div class="flex justify-content-end gap-2 m-1">
+    <p-dropdown 
+    [options]="revisions" 
+    [(ngModel)]="selectedRevision" 
+    optionLabel="name"
+    placeholder="Revizyon" 
+    (ngModelChange)="selectRevision(selectedRevision?.id)"
+    />
+    @if(userRole && userRole === "TENDERER") {
+      <p-button
+      label="Revizyon Oluştur"
+      icon="pi pi-plus"
+      (onClick)="createRevision()"
+      
+    ></p-button> 
+    }
+    
+  </div>
+}
 <!-- Menubar -->
-<p-menubar [model]="tableMenuItems" styleClass="sticky">
-  <ng-template pTemplate="end">
-    <div class="flex align-items-center gap-2">
-      <p-multiSelect
-        [options]="cols"
-        [(ngModel)]="selectedColumns"
-        optionLabel="header"
-        selectedItemsLabel="{0} sütun seçildi"
-        [style]="{ width: '20em' }"
-        defaultLabel="Gösterilecek Sütunları Seç"
-        display="chip"
-      ></p-multiSelect>
-    </div>
-  </ng-template>
-</p-menubar>
+
+@if(userRole && userRole === "TENDERER") { 
+  <p-menubar [model]="tableMenuItems" styleClass="sticky">
+    <ng-template pTemplate="end">
+      <div class="flex align-items-center gap-2">
+        <p-multiSelect
+          [options]="cols"
+          [(ngModel)]="selectedColumns"
+          optionLabel="header"
+          selectedItemsLabel="{0} sütun seçildi"
+          [style]="{ width: '20em' }"
+          placeholder="Gösterilecek Sütunları Seç"
+          display="chip"
+        ></p-multiSelect>
+      </div>
+    </ng-template>
+  </p-menubar>
+}
+@else {
+  <p-menubar styleClass="sticky">
+    <ng-template pTemplate="end">
+      <div class="flex align-items-center gap-2">
+        <p-multiSelect
+          [options]="cols"
+          [(ngModel)]="selectedColumns"
+          optionLabel="header"
+          selectedItemsLabel="{0} sütun seçildi"
+          [style]="{ width: '20em' }"
+          placeholder="Gösterilecek Sütunları Seç"
+          display="chip"
+        ></p-multiSelect>
+      </div>
+    </ng-template>
+  </p-menubar>
+}
 <div class="container mt-5">
   <!-- Modal Dialoglar -->
   <!-- Excel Yükle -->

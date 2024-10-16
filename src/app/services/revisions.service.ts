@@ -4,6 +4,8 @@ import { TenderRevision } from '../models/tender';
 import { from } from 'rxjs/internal/observable/from';
 import { map } from 'rxjs/internal/operators/map';
 import { BehaviorSubject } from 'rxjs';
+import { DictToDataList } from '../utils/functions/DictToDataList';
+import { TablodataService } from './tablodata.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,9 @@ export class RevisionsService {
   private firestore = inject(Firestore);
   private _currentRevision = new BehaviorSubject<TenderRevision|null>(null);
   currentRevision$ = this._currentRevision.asObservable();
-  constructor() { }
+  constructor(
+    private tableDataService: TablodataService
+  ) { }
 
   createRevision(tenderId: string, discovery_data: any,name: string) {
     const tenderRef = doc(this.firestore, 'tenders', tenderId);
@@ -30,7 +34,8 @@ export class RevisionsService {
 
       // Assign the newly created revision to the BehaviorSubject
       this._currentRevision.next(createdRevision);
-
+      const data= createdRevision.discoveryData;
+      this.tableDataService.loadData(DictToDataList(data));
       // Return the created revision
       return createdRevision;
     }));
@@ -44,6 +49,8 @@ export class RevisionsService {
         if (docSnap.exists()) {
           const revision = docSnap.data() as TenderRevision; 
           this._currentRevision.next(revision)
+          const data= revision.discoveryData;
+          this.tableDataService.loadData(DictToDataList(data));
           return revision;
         } else {
           return null; 
@@ -83,6 +90,8 @@ export class RevisionsService {
     return from(deleteDoc(revisionDocRef));
   }
   getCurrentRevision() {
-    return this._currentRevision.getValue();
+    const revision = this._currentRevision.getValue();
+    this.tableDataService.loadData(DictToDataList(revision.discoveryData));
+    return revision;
   }
 }

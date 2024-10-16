@@ -21,6 +21,8 @@ import { BehaviorSubject, from, map, of } from 'rxjs';
 import { TablodataService } from './tablodata.service';
 import { Budget } from '../models/budget';
 import { BudgetService } from './budget.service';
+import { RevisionsService } from './revisions.service';
+import { ListToDict } from '../utils/functions/ListToDict';
 
 @Injectable({
   providedIn: 'root',
@@ -50,18 +52,17 @@ export class TenderService {
   constructor(
     private authService: FirebaseAuthService,
     private tableData: TablodataService,
-    private budgetService: BudgetService
+    private budgetService: BudgetService,
+    private revisionsService: RevisionsService
   ) {
     this.tendersCollection = collection(this.firestore, 'tenders');
   }
 
   createTender(isDraft = false) {
-    let tender = this._currentTender.getValue();
-    let currentTableData = this.tableData.currentData;
-    let data: { [key: number]: any } = {};
-    for (let i = 0; i < currentTableData.length; i++) {
-      data[i] = currentTableData[i];
-    }
+    const tender = this._currentTender.getValue();
+    const currentTableData = this.tableData.currentData;
+    const data = ListToDict(currentTableData);
+    
     tender.discoveryData = data;
     tender.owner_id = this.authService.getUser()?.uid || '';
     tender.isDraft = isDraft;
@@ -101,17 +102,23 @@ export class TenderService {
   }
 
   updateTender(isDraft = false) {
-    let tender = this._currentTender.getValue();
-    let currentTableData = this.tableData.currentData;
-    let data: { [key: number]: any } = {};
-    for (let i = 0; i < currentTableData.length; i++) {
-      data[i] = currentTableData[i];
+    const tender = this._currentTender.getValue();
+    const tenderRef = doc(this.tendersCollection, tender.id);
+    const currentTableData = this.tableData.currentData;
+    const data = ListToDict(currentTableData);
+    const currentRevision = this.revisionsService.getCurrentRevision();
+    if(currentRevision.id) {
+      currentRevision.discoveryData = data;
+      this.revisionsService.updateRevision(tender.id, currentRevision.id, currentRevision)
     }
-    tender.discoveryData = data;
+    else {
+      tender.discoveryData = data;
+    }
+    
     tender.owner_id = this.authService.getUser()?.uid || '';
     tender.isDraft = isDraft;
     // Obtain a reference to the specific tender document
-    const tenderRef = doc(this.tendersCollection, tender.id);
+    
 
     // Perform an update on the tender document with the provided data
     updateDoc(tenderRef, tender as object)
@@ -168,7 +175,6 @@ export class TenderService {
       }   
     }
 
-    // Use `getDocs` instead of `collectionData`
     return from(getDocs(this.tendersCollection)).pipe(
       map((querySnapshot) => {
         const tenders: Tender[] = [];

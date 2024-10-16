@@ -11,10 +11,11 @@ import {
   updateDoc,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable, from, map, switchMap } from 'rxjs';
-import { Tender } from '../models/tender';
+import { Tender, TenderRevision } from '../models/tender';
 import { TablodataService } from './tablodata.service';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { TenderBidsSummary } from '../models/tender-bids-summary';
+import { RevisionsService } from './revisions.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,21 +32,25 @@ export class BidService {
   constructor(
     private tableService: TablodataService,
     private authService: FirebaseAuthService,
+    private revisionService: RevisionsService
   ) {}
 
   createBid() {
     const tenderId = this.tenderSubject.value?.id;
 
     const currentTableData = this.tableService.currentData;
-
-    console.log(currentTableData);
     let data: { [key: number]: any } = {};
     for (let i = 0; i < currentTableData.length; i++) {
       data[i] = currentTableData[i];
     }
+
+    const currentRevision : TenderRevision = this.revisionService.getCurrentRevision();
+
     let bidData: TenderBid = {
       bidder_id: this.authService.currentUser.uid,
       created_at: new Date().toDateString(),
+      revisionId: currentRevision.id ?  currentRevision.id : null,
+      revisionName: currentRevision.name ? currentRevision.name : "R1",
       company_id: this.authService._userDetails.value?.companyId,
       company_name: this.authService._userDetails.value?.companyName,
       total_price: this.tableService.allTreeTotal,

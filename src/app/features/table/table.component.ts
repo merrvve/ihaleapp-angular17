@@ -30,6 +30,10 @@ import { TenderService } from '../../services/tender.service';
 import { MenubarModule } from 'primeng/menubar';
 import { ExcludeColsPipe } from '../../utils/exclude-cols.pipe';
 import { DragDropModule } from 'primeng/dragdrop';
+import { RevisionsService } from '../../services/revisions.service';
+import { TenderRevision } from '../../models/tender';
+import { ListToDict } from '../../utils/functions/ListToDict';
+import { FirebaseAuthService } from '../../services/firebaseauth.service';
 
 @Component({
   selector: 'app-table',
@@ -52,7 +56,7 @@ import { DragDropModule } from 'primeng/dragdrop';
     SplitButtonModule,
     MenubarModule,
     ExcludeColsPipe,
-    DragDropModule,
+    DragDropModule, 
   ],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
@@ -63,6 +67,7 @@ export class TableComponent implements OnInit {
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
 
+  userRole!: string;
   keepOriginal: boolean = true;
   selectedColumns!: Column[]; // görüntülenecek sütunlar
   selectionKeys: any = {};
@@ -92,6 +97,14 @@ export class TableComponent implements OnInit {
   currentWidth: number = 100;
   tableStyle = { width: this.currentWidth + '%', padding: '5rem' };
 
+  revisions : TenderRevision[] =[{
+    name: 'R1',
+    created_at: '',
+    discoveryData: undefined
+  }];
+  selectedRevision!: any;
+  revSubs! : Subscription;
+  tenderId!: string;
   showDialog() {
     this.visible = true;
   }
@@ -101,11 +114,12 @@ export class TableComponent implements OnInit {
     private excelService: XlsxService,
     private messageService: MessageService,
     private tenderService: TenderService,
+    private revisionsService: RevisionsService,
+    private authService: FirebaseAuthService
   ) {}
 
   ngOnInit(): void {
     // verileri yükle
-    console.log('table comp');
     this.subscription = this.dataService.cols$.subscribe({
       next: (v) => {
         this.cols = v;
@@ -128,6 +142,8 @@ export class TableComponent implements OnInit {
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
     });
+
+    this.userRole = this.authService.getUserRole();
     // menüleri oluştur
     this.tableMenuItems = [
       {
@@ -262,6 +278,25 @@ export class TableComponent implements OnInit {
         command: (event) => this.pasteSelectedRows(this.selectedNode, false),
       },
     ];
+    this.tenderId = this.tenderService._currentTender.getValue().id;
+    if(this.tenderService._currentTender.getValue().id) {
+      
+      this.revSubs = this.revisionsService.getAllRevisions(this.tenderId).subscribe(result=>{this.revisions=this.revisions.concat(result);
+        const currentId = this.revisionsService.getCurrentRevision()?.id;
+        
+         if(currentId) {
+          this.selectedRevision = this.revisions.find(x=>x.id==currentId);
+         }
+         else {
+          this.selectedRevision = this.revisions[0]
+          }
+        }
+        
+      )
+    }
+    else {
+       this.selectedRevision = this.revisions[0]
+    }
   }
 
   addRowToNode(node: TreeNode, positionSpecified: boolean) {
@@ -543,6 +578,9 @@ export class TableComponent implements OnInit {
     this.dataService.setData(this.files);
     this.subscription.unsubscribe();
     this.subscription2.unsubscribe();
+    if(this.revSubs) {
+      this.revSubs.unsubscribe();
+    }
   }
 
   onCheck(key: string, node: TreeNode, rowData: any) {
@@ -636,102 +674,7 @@ export class TableComponent implements OnInit {
     this.updateAllTreeTotal();
     this.updateView();
   }
-  // calculateRowForField(col: Column, rowData: any, rowNode: TreeNode, field: string) {
-  //   if (col) {
-  //     const isMiktar = col.isMiktar;
-  //     const updateTotal = ()=> {
-  //       // Bu satırdaki toplamı hesapla
-  //       let toplamCols = this.cols.filter((x) => (x.isToplam === true)&& (x.isBirimToplam=== false) && (x.isAllTotal==false));
-  //       let toplam = 0;
-  //       if (toplamCols) {
-  //         for (let i = 0; i < toplamCols.length; i++) {
-  //           const name = toplamCols[i].field;
-  //           if(rowData[name]!==null && rowData[name]!==undefined)
-  //           toplam += +(rowData[name]);
-  //         }
-  //         if(toplam!==undefined && toplam!==null) {
-  //           rowData["Toplam Fiyat"] = toplam;
-  //         }
-  //         // Ana toplamı güncelle
-  //         const updateAllTotal = (rowNode:any)=> {
-  //           if (rowNode.parent?.children) {
-  //             let allToplam = 0;
-  //             for (const child of rowNode.parent.children) {
-  //               if(child.data["Toplam Fiyat"]!==null && child.data["Toplam Fiyat"]!==undefined) {
-  //                 allToplam += +(child.data["Toplam Fiyat"]);
-  //               }
-  //             }
-  //             rowNode.parent.data["Toplam Fiyat"] = allToplam;
-  //             console.log(rowNode.parent)
-  //             if(rowNode.parent?.parent){
-  //               updateAllTotal(rowNode.parent);
-  //             }
-  //           }
-  //         }
-  //         updateAllTotal(rowNode);
-  //         this.updateAllTreeTotal();
-  //       }
-  //     }
-  //     if (isMiktar) {
-  //       const birimCols = this.cols.filter((x) => x.isBirim == true);
-  //       let birimToplam = 0;
-  //       if (birimCols) {
-  //         for (let i = 0; i < birimCols.length; i++) {
-  //           const rf = birimCols[i].relatedField;
-  //           if (rf!==undefined && rf!==null && rowData[birimCols[i].field]!==undefined && rowData[birimCols[i].field]!==null && event!==undefined && event!==null) {
-  //             rowData[rf] =
-  //               +(rowData[birimCols[i].field]) * +(event);
-  //           }
-  //           const name = birimCols[i].field;
-  //           if(rowData[name]!==undefined && rowData[name]!==null) {
-  //             birimToplam += +(rowData[name]);
-
-  //           }
-
-  //         }
-  //         if(birimToplam!==undefined && birimToplam!==null) {
-  //           rowData['Toplam Birim Fiyat'] = birimToplam;
-  //         }
-  //         updateTotal();
-  //       }
-  //     }
-  //     else if (col.relatedField!==undefined && rowData['Miktar']!==null) {
-  //         rowData[col.relatedField] = +rowData[field] * +(rowData['Miktar']);
-  //         const birimCols = this.cols.filter((x) => x.isBirim == true);
-  //         let birimToplam = 0;
-  //         if (birimCols) {
-  //           for (let i = 0; i < birimCols.length; i++) {
-  //             const name = birimCols[i].field;
-  //             if(rowData[name]!==null && rowData[name]!==undefined) {
-  //               birimToplam += +(rowData[name]);
-  //             }
-
-  //           }
-  //           if(birimToplam!==undefined && birimToplam!==null) {
-  //             rowData['Toplam Birim Fiyat'] = birimToplam;
-  //           }
-  //           updateTotal();
-  //         }
-  //       }
-
-  //   }
-  // }
-
-  // updateChildCalculations(nodes: any[]) {
-  //   for (const node of nodes) {
-  //     if(node.children && node.children.length>0) {
-  //       this.updateChildCalculations(node.children);
-  //     }
-  //     else {
-  //       this.updateRowTotal(node);
-  //       console.log(node, "updated")
-  //       if(node.parent) {
-  //         this.updateNodeTotal(node.parent);
-  //       }
-
-  //     }
-  //   }
-  // }
+  
 
   updateAllTreeTotal() {
     let total = 0;
@@ -781,4 +724,41 @@ export class TableComponent implements OnInit {
       this.updateNodeTotal(node.parent);
     }
   }
+
+  createRevision() {
+    const tabloData = this.dataService.convertTreeToDatalist(
+      this.files,
+      this.cols,
+    );
+
+    this.dataService.currentData = tabloData;
+    const dataTree = ListToDict(tabloData)
+    const revName = `R${this.revisions.length+1}`
+    if(this.tenderId && this.tenderId!=="") {
+      this.revisionsService.createRevision(this.tenderId,dataTree,revName).subscribe(
+        {
+          next: (revision)=> {
+            this.revisions= (this.revisions || []).concat([revision]);
+            this.selectedRevision = revision
+          },
+          error: (error) => {
+            console.log(error)
+          }
+        }
+      )
+    }
+    else {
+      console.log("It is a new tender")
+    }
+    
+  }
+
+  selectRevision(revisionId: string) {
+    console.log(this.tenderId, revisionId, "rev")
+    if(revisionId) {
+      this.revisionsService.getRevision(this.tenderId,revisionId).subscribe(result=>console.log(result));
+      this.updateView();
+    }
+  }
+  
 }
