@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { StepsModule } from 'primeng/steps';
-import { TablodataService } from '../../../services/tablodata.service';
 
 @Component({
   selector: 'app-ihale-olustur',
@@ -12,8 +12,15 @@ import { TablodataService } from '../../../services/tablodata.service';
 export class IhaleOlusturComponent implements OnInit {
   steps: any[] = [];
   @Input() isDraft: boolean = false;
-  constructor(private tableService: TablodataService) {}
+  @Input() isEditMode:  boolean = false;
+  constructor(
+    private route: ActivatedRoute
+  ) {}
   ngOnInit(): void {
+    this.route.paramMap.subscribe((param)=>{
+      this.isEditMode = param['params']['isEditMode'] === 'true'; 
+    })
+    
     //this.tableService.loadData(this.tableService.ornekData);
 
     this.steps = [

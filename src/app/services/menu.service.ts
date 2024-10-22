@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api/menuitem';
 import { BehaviorSubject } from 'rxjs';
 
@@ -8,6 +9,12 @@ import { BehaviorSubject } from 'rxjs';
 export class MenuService {
   private _items = new BehaviorSubject<MenuItem[]>([]);
   items$ = this._items.asObservable();
+
+  constructor(
+    private router: Router
+  ) {
+
+  }
 
   setItems(tenderId: string) {
     const menuItems = [
@@ -24,9 +31,12 @@ export class MenuService {
           {
             label: 'Yeni Zeyilname (Revizyon)',
             icon: 'pi pi-fw pi-wallet mr-2',
-            routerLink: [
-              `ihale/ihale/${tenderId}/ihale-dosyalari/yeni-zeyilname`,
-            ],
+            routerLink: [`ihale/ihale-olustur/kesif-olustur`,{isEditMode: true}],
+            queryParams: {"isEditMode": "true"}
+            
+            // command: () => {
+            //   this.router.navigate);  
+            // },
           },
         ],
       },

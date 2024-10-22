@@ -91,7 +91,9 @@ export class RevisionsService {
   }
   getCurrentRevision() {
     const revision = this._currentRevision.getValue();
-    this.tableDataService.loadData(DictToDataList(revision.discoveryData));
+    if(revision?.discoveryData) {
+      this.tableDataService.loadData(DictToDataList(revision.discoveryData));
+    }
     return revision;
   }
 }
