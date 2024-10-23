@@ -21,6 +21,7 @@ import { RaporOlusturComponent } from './ihale-detay/firma-raporlari/rapor-olust
 import { SoruCevapComponent } from './ihale-detay/soru-cevap/soru-cevap.component';
 import { ToplantilarComponent } from './ihale-detay/toplantilar/toplantilar.component';
 import { RaporViewComponent } from './ihale-detay/firma-raporlari/rapor-olustur/rapor-view/rapor-view.component';
+import { YeniToplantiComponent } from './ihale-detay/toplantilar/yeni-toplanti/yeni-toplanti.component';
 
 export const IHALE_ROUTES: Route[] = [
   {
@@ -56,7 +57,7 @@ export const IHALE_ROUTES: Route[] = [
   { path: 'ihale/:id/toplantilar', component: ToplantilarComponent },
   {
     path: 'ihale/:id/toplantilar/yeni-toplanti',
-    component: ToplantilarComponent,
+    component: YeniToplantiComponent,
   },
   { path: 'ihale/:id/kesif-detay', component: KesifDetayComponent },
   { path: 'listele', component: IhaleListeleComponent },

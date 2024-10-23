@@ -1,1 +1,33 @@
-<p>yeni-toplanti works!</p>
+<div class="container p-3">
+    <div
+      class="grid justify-content-center surface-card shadow-2 p-3 border-round"
+    >
+      <div class="col-12">
+        <h3>Yeni Toplantı Oluştur</h3>
+      </div>
+
+      <div class="col-12 md:col-5 px-2 py-3">
+        <div class="field grid">
+          <label class="col-12 mb-2 md:col-3 md:mb-0">Toplantı Adı / Konusu</label>
+          <div class="col-12 md:col-9">
+            <input
+              type="text"
+              [(ngModel)]="newMeeting.name"
+              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+            />
+          </div>
+        </div>
+
+       
+      </div>
+    
+    </div>
+    <div class="flex justify-content-end mt-5">
+      <p-button
+        pRipple
+        label="Oluştur"
+        icon="pi pi-arrow-right"
+        class="mx-5"
+      ></p-button>
+    </div>
+  </div>

@@ -1,4 +1,3 @@
-import { Company } from './company.interface';
 
 export interface UserDetail {
   role: 'TENDERER' | 'BIDDER' | 'ADMIN' | undefined;

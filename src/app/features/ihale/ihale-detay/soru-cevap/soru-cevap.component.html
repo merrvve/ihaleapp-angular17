@@ -1,1 +1,56 @@
-<p>soru-cevap works!</p>
+@if (tender$ | async; as tender) {
+    <div class="container mb-5">
+      <h2 class="p-2">{{ tender?.name }} İhalesi Toplantıları</h2>
+    </div>
+}
+@if(qas) {
+    <p-table [value]="qas" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>No</th>
+                <th>Tarih</th>
+                <th>Firma</th>
+                <th>Durum</th>
+                <th>Soru</th>
+                <th>İşlemler</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-qa>
+            <tr>
+                <td>{{ qa.id }}</td>
+                <td>{{ qa.createdAt }}</td>
+                <td>{{ qa.companyName }}</td>
+                <td>{{ qa.status ==='PENDING' ? 'Cevap Bekleniyor' : qa.status ==='ANSWERED' ? 'Cevaplandı' : qa.status ==='CLOSED' ? 'Kapatıldı' : 'Belirsiz' }}</td>
+                <td>{{ qa.question.slice(0,10) }}...</td>
+          
+                
+                <td>
+                    <p-button
+                    type="button"
+                    icon="pi pi-eye"
+                    class="m-1"
+                  ></p-button>
+                    <p-button
+                type="button"
+                severity="danger"
+                icon="pi pi-trash"
+                
+                class="m-1"
+              ></p-button>
+              <p-button
+                type="button"
+                severity="info"
+                icon="pi pi-play"
+                
+                class="m-1"
+              ></p-button>
+              
+              
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+}
+@else {
+    <app-loading-spinner></app-loading-spinner>
+}

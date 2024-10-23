@@ -32,7 +32,6 @@ export class MenuService {
             label: 'Yeni Zeyilname (Revizyon)',
             icon: 'pi pi-fw pi-wallet mr-2',
             routerLink: [`ihale/ihale-olustur/kesif-olustur`,{isEditMode: true}],
-            queryParams: {"isEditMode": "true"}
             
             // command: () => {
             //   this.router.navigate);  
