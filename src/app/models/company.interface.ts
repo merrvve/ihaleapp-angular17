@@ -1,5 +1,5 @@
 export interface Company {
-  uid?: string;
+  id?: string;
   name?: string;
   taxId: string;
   category?: string;

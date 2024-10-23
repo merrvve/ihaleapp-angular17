@@ -1,3 +1,5 @@
+import { Company } from "./company.interface";
+
 export interface Meeting {
     id?: string;
     ownerId: string;
@@ -5,6 +7,6 @@ export interface Meeting {
     date: string;
     notes: string;
     location: string;
-    companies: string[];
+    companies: Company[];
 
 }

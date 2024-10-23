@@ -1,0 +1,68 @@
+
+      <div class="col-12 px-2 py-3">
+        <div class="field grid">
+          <label class="col-12 mb-2 md:col-3 md:mb-0">Toplantı Adı / Konusu</label>
+          <div class="col-12 md:col-9">
+            <input
+              type="text"
+              [(ngModel)]="newMeeting.name"
+              class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+            />
+          </div>
+        </div>
+        <div class="field grid">
+            <label class="col-12 mb-2 md:col-3 md:mb-0">Toplantı Tarihi - Saati</label>
+            <div class="col-12 md:col-9">
+                <p-calendar 
+                [(ngModel)]="date" 
+                [showIcon]="true"
+                [showTime]="true"  
+                inputId="buttondisplay" 
+                hourFormat="12"
+                [showOnFocus]="false" />
+            </div>
+          </div>
+        <div class="field grid">
+            <label class="col-12 mb-2 md:col-3 md:mb-0">Toplantı Yeri / Link</label>
+            <div class="col-12 md:col-9">
+              <input
+                type="text"
+                [(ngModel)]="newMeeting.location"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+              />
+            </div>
+        </div>
+        <div class="field grid">
+            <label class="col-12 mb-2 md:col-3 md:mb-0">Katılacak Firmalar</label>
+            @if(companies$ | async; as companies) {
+                <p-multiSelect 
+                class="ml-2"
+                    [options]="companies" 
+                    [(ngModel)]="newMeeting.companies" 
+                    optionLabel="name" 
+                    placeholder="Firmaları Seçiniz" />
+            }
+
+        </div>
+        <div class="field grid">
+            <label class="col-12 mb-2 md:col-3 md:mb-0">Toplantı Notları</label>
+            <div class="col-12 md:col-9">
+              <textarea
+                [(ngModel)]="newMeeting.notes"
+                rows="5"
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+              ></textarea>
+            </div>
+        </div>
+        <div class="flex justify-content-end mt-5">
+
+            <p-button
+              pRipple
+              label="Oluştur"
+              icon="pi pi-arrow-right"
+              class="mx-5"
+              (onClick)="createMeeting()"
+            ></p-button>
+          </div>
+      </div>
+    

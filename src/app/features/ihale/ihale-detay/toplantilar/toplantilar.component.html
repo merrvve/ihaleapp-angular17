@@ -4,70 +4,86 @@
     </div>
 }
 <div class="flex justify-content-end mb-3">
-    <p-button label="Yeni Toplantı Oluştur" icon="pi pi-plus" ></p-button>
+    <p-button label="Yeni Toplantı Oluştur" icon="pi pi-plus" (onClick)="createVisible=true" ></p-button>
 </div>
-@if(meetings) {
-    <p-table [value]="meetings" [tableStyle]="{ 'min-width': '50rem' }">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>No</th>
-                <th>Tarih - Saat</th>
-                <th>Toplantı Adı / Konusu</th>
-                <th>Katılımcı Firmalar</th>
-                <th>Toplantı Yeri</th>
-                <th>Notlar</th>
-                <th>İşlemler</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-meeting>
-            <tr>
-                <td>{{ meeting.id }}</td>
-                <td>{{ meeting.date }}</td>
-                <td>{{ meeting.name }}</td>
-                <td>{{ meeting.companies }}</td>
-                <td>
-                    <a href="{{meeting.location}}">
-                        {{ meeting.location }}
-                    </a>
+<!-- Create Meeting Modal -->
+<p-dialog header="Yeni Toplantı Oluştur" [modal]="true" [(visible)]="createVisible" class="w-auto">
+    <app-new-meeting-form [tenderId]="tenderId"></app-new-meeting-form>
+</p-dialog>
+@if(meetings$ | async; as meetings) {
+    @if(meetings.length>0) {
+        <p-table [value]="meetings" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>No</th>
+                    <th>Tarih - Saat</th>
+                    <th>Toplantı Adı / Konusu</th>
+                    <th>Katılımcı Firmalar</th>
+                    <th>Toplantı Yeri</th>
+                    <th>Notlar</th>
+                    <th>İşlemler</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-meeting>
+                <tr>
+                    <td>{{ meeting.id }}</td>
+                    <td>{{ meeting.date | date:'short' }}</td>
+                    <td>{{ meeting.name }}</td>
+                    <td>
+                        @for(company of meeting.companies; track company.id) {
+                            - {{company.name}} 
+                        }
                     </td>
-                <td>
-                    <p-button
-                type="button"
-                icon="pi pi-eye"
-                class="m-1"
-              ></p-button>
-              <p-button
-                type="button"
-                severity="info"
-                icon="pi pi-download"
+                    <td>
+                        <a href="{{meeting.location}}">
+                            {{ meeting.location }}
+                        </a>
+                        </td>
+                    <td>
+                        <p-button
+                    type="button"
+                    icon="pi pi-eye"
+                    class="m-1"
+                  ></p-button>
+                  <p-button
+                    type="button"
+                    severity="info"
+                    icon="pi pi-download"
+                    
+                  ></p-button>
+                    </td>
+                    <td>
+                        <p-button
+                    type="button"
+                    severity="danger"
+                    icon="pi pi-trash"
+                    
+                    class="m-1"
+                    (onClick)="deleteMeeting(meeting.id)"
+                  ></p-button>
+                  <p-button
+                    type="button"
+                    severity="info"
+                    icon="pi pi-file-edit"
+                    
+                    class="m-1"
+                  ></p-button>
+                  
+                  <p-button
+                    type="button"
+                    icon="pi pi-play"
+                    label="Yayınla"
+                  ></p-button>
+                    </td>
+                </tr>
                 
-              ></p-button>
-                </td>
-                <td>
-                    <p-button
-                type="button"
-                severity="danger"
-                icon="pi pi-trash"
-                
-                class="m-1"
-              ></p-button>
-              <p-button
-                type="button"
-                severity="info"
-                icon="pi pi-file-edit"
-                
-                class="m-1"
-              ></p-button>
-              
-              <p-button
-                type="button"
-                icon="pi pi-play"
-                label="Yayınla"
-              ></p-button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+            </ng-template>
+        
+        </p-table>
+    }
+    @else {
+        <app-loading-spinner></app-loading-spinner>
+    } 
 }
 @else {
     <app-loading-spinner></app-loading-spinner>

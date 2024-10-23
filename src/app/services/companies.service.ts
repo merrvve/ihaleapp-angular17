@@ -24,11 +24,27 @@ export class CompaniesService {
       const companies: Company[] = [];
       querySnapshot.forEach((doc) => {
         let companyData = doc.data() as Company;
-        companyData.uid = doc.id;
+        companyData.id = doc.id;
         companies.push(companyData);
       });
       this.companiesSubject.next(companies);
     });
     return this.companiesSubject.asObservable();
+  }
+
+  getCompaniesByIdList(ids: string[]) {
+    const companiesQuery = query(collection(this.firestore, 'companies'));
+
+    onSnapshot(companiesQuery, (querySnapshot) => {
+      const companies: Company[] = [];
+      querySnapshot.forEach((doc) => {
+        if(ids.includes(doc.id)) {
+          let companyData = doc.data() as Company;
+          companyData.id = doc.id;
+          companies.push(companyData);
+        }     
+      });
+      return companies;
+    }); 
   }
 }

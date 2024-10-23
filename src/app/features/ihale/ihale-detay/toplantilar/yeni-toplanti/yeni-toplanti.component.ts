@@ -1,33 +1,38 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TenderService } from '../../../../../services/tender.service';
+
 import { MenuService } from '../../../../../services/menu.service';
-import { Observable } from 'rxjs';
-import { Tender } from '../../../../../models/tender';
-import { Meeting } from '../../../../../models/meeting';
-import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
+
+
+import { CompaniesService } from '../../../../../services/companies.service';
+
+import { MeetingsService } from '../../../../../services/meetings.service';
+import { NewMeetingFormComponent } from './new-meeting-form/new-meeting-form.component';
 
 @Component({
   selector: 'app-yeni-toplanti',
   standalone: true,
-  imports: [FormsModule, ButtonModule],
+  imports: [NewMeetingFormComponent],
   templateUrl: './yeni-toplanti.component.html',
   styleUrl: './yeni-toplanti.component.scss',
 })
 export class YeniToplantiComponent {
-  @Input() tenderId!: string;
-  @Input() ownerId: string;
-  newMeeting!: Meeting;
-
+  tenderId!: string;
+  
+  constructor(
+    private route: ActivatedRoute,
+    private menuService: MenuService
+  ) {}
   ngOnInit() {
-    this.newMeeting = {
-      ownerId: this.ownerId,
-      name: '',
-      date: '',
-      notes: '',
-      location: '',
-      companies: []
-    }
+    
+
+    this.route.paramMap.subscribe((params) => {
+      this.tenderId = params.get('id');
+      if (this.tenderId) {
+        this.menuService.setItems(this.tenderId);
+      }
+    });
   }
+
+  
 }
