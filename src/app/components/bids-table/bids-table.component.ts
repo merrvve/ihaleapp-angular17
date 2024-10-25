@@ -14,6 +14,7 @@ import { CompareBidsService } from '../../services/compare-bids.service';
 import { TenderService } from '../../services/tender.service';
 import { Tender } from '../../models/tender';
 import { ReportsService } from '../../services/reports.service';
+import { BudgetService } from '../../services/budget.service';
 
 @Component({
   selector: 'app-bids-table',
@@ -44,7 +45,8 @@ export class BidsTableComponent {
     private router: Router,
     private compareService: CompareBidsService,
     private tenderService: TenderService,
-    private reportService: ReportsService
+    private reportService: ReportsService,
+    private budgetService: BudgetService
   ) {}
 
   getEventValue($event: any): string {
@@ -67,10 +69,16 @@ export class BidsTableComponent {
       return;
     }
     if(this.tender) {
-      for (const bid of bids) {
-        this.reportService.createReport(bid, this.tender.reportSetting, this.tender.bidsSummary, this.tender.id, this.tender.name);
-        this.router.navigate([`ihale/ihale/${this.tender.id}/firma-raporlari/rapor-onizleme`])
-      }
+      this.budgetService.getBudgetsByTenderId(this.tender.id).then(
+        (budgets)=> {
+          const budget = budgets[0].discovery_data;
+          for (const bid of bids) {
+            this.reportService.createReport(bid, this.tender.reportSetting, this.tender.bidsSummary, this.tender.id, this.tender.name,budget);
+            this.router.navigate([`ihale/ihale/${this.tender.id}/firma-raporlari/rapor-onizleme`])
+          }
+        }
+      )
+      
     }
     else {
       console.log("No selected tender")

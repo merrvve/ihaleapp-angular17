@@ -21,6 +21,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { MenuService } from '../../../services/menu.service';
+import { NumberFormatPipe } from '../../../utils/number-format.pipe';
 
 @Component({
   selector: 'app-ihale-karsilastir',
@@ -38,6 +39,7 @@ import { MenuService } from '../../../services/menu.service';
     InputGroupModule,
     InputNumberModule,
     SelectButtonModule,
+    NumberFormatPipe
   ],
   templateUrl: './ihale-karsilastir.component.html',
   styleUrl: './ihale-karsilastir.component.scss',

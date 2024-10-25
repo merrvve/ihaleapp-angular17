@@ -87,7 +87,7 @@
               @for(column of row; track column){
                 
                 <td [ngClass]="column.color" [pTooltip]="column?.description">
-                  {{column.value}}
+                  {{ column.value | numberFormat }}
                  
                 </td>
                 

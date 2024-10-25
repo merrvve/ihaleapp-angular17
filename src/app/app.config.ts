@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig ,LOCALE_ID} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
@@ -17,6 +17,7 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+
     provideAnimations(),
     provideRouter(routes),
     // { provide: FIREBASE_OPTIONS, useValue: environment.firebaseConfig},

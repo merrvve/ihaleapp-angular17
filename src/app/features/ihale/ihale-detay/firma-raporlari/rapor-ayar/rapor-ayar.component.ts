@@ -52,7 +52,7 @@ export class RaporAyarComponent {
       toBaseRatio: 10,
       toBaseRatioLow: 10,
       showHighPrice: true,
-      showHightRatio: true,
+      showHighRatio: true,
       showLowPrice: true,
       showLowRatio: true,
       showAllTotal: true,

@@ -7,6 +7,9 @@ import { ReportStatement } from '../models/report-statement';
 import { ReportTableCell } from '../models/report-table-cell';
 import { ReportData } from '../models/report-data';
 import { addDoc, collection, CollectionReference, Firestore, getDocs } from '@angular/fire/firestore';
+import { BudgetService } from './budget.service';
+import { Budget } from '../models/budget';
+import { TenderService } from './tender.service';
 
 
 @Injectable({
@@ -29,14 +32,18 @@ export class ReportsService {
   private _currentReport = new BehaviorSubject<ReportData>(undefined)
   currentReport$ = this._currentReport.asObservable(); 
   
-  constructor() {
+  budget!: Budget;
+  constructor(
+    private budgetService: BudgetService,
+    
+  ) {
     this.reportsCollection =collection(this.firestore, 'reports');
   }
 
   ngOnInit() {
     
   }
-  createReport(bid: TenderBid, reportSetting: ReportSettings, bidsSummary: TenderBidsSummary, tenderId: string, tenderName: string) {
+  createReport(bid: TenderBid, reportSetting: ReportSettings, bidsSummary: TenderBidsSummary, tenderId: string, tenderName: string, budgetData: any) {
     this._currentReport.next({
       bid_id: bid.id,
       tender_id: tenderId,
@@ -69,7 +76,7 @@ export class ReportsService {
     if(!bidsSummary) {
       return;
     }
-    let baseValue =[];
+    let baseValue ={};
     
     switch(reportSetting.baseValue) {
       case 'Minimum':
@@ -77,8 +84,10 @@ export class ReportsService {
         break;
       case 'Ortalama':
         baseValue = bidsSummary.avgPrices;
+        console.log(baseValue)
         break;
       case 'Bütçe':
+        baseValue =budgetData;
         break;
       default:
         break;
@@ -102,35 +111,54 @@ export class ReportsService {
       let tableRows = []; 
       row.forEach((value:any,i:number)=> {
         let tableRow : ReportTableCell = {
-          value: '',
+          value: value,
           color: 'surface-50'
         }
-        if(typeof(value)==="number") {
-          
+        if(index!==0 && typeof(value)==="number") {
           const cellBaseValue = +baseValue[index][columns[i]]
+          const cellBaseString = cellBaseValue.toLocaleString("de-DE",{minimumFractionDigits: 0,
+            maximumFractionDigits: 2})
+          const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatı olan ${cellBaseString}'dan;` : '';
+          const ratio =(value/cellBaseValue).toLocaleString("de-DE",{minimumFractionDigits: 0,
+            maximumFractionDigits: 2})
+          const ratioStatement = `% ${ratio} daha`;
+          const valueString = value.toLocaleString("de-DE",{minimumFractionDigits: 0,
+            maximumFractionDigits: 2})
           if(columns[i]!=="Toplam Fiyat" && reportSetting.calculateSetting==="onlyTotal") {
+           
               //skip this column
           }
           else {
             if(row[0].includes('.') && !reportSetting.showSubHeading) {
-              //skip this.
+              
             }
-            if(!row[0].includes('.') && !reportSetting.showAllTotal) {
-              // skip this
-            }
+            // if(!row[0].includes('.') && !reportSetting.showAllTotal) {
+            //   // skip this
+            // }
             else {
-              if(value>= (cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue) {
-                const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatından` : '';
-                const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${value}, ${baseValueStatement} %${reportSetting.toBaseRatio} yüksektir.`;
-                positiveStatements.push(statement)
-                tableRow = {value, color:'bg-red-100', description: statement}
+              if(!reportSetting.showAllTotal && row[1].toLowerCase().includes('Toplam')) {
+                // skip this
+               
               }
-              if(value<= (cellBaseValue*reportSetting.toBaseRatioLow/100)-cellBaseValue) {
-                const baseValueStatement = reportSetting.showBaseValue ?  `tüm tekliflerin ${reportSetting.baseValue} fiyatından` : '';
-                const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${value}, ${baseValueStatement}  %${reportSetting.toBaseRatioLow} düşüktür.`;
-                negativeStatements.push(statement)
-                tableRow = {value, color:'bg-blue-100', description:statement}
+              if(!reportSetting.showAllRows && row[0].includes('.')) {
+                // skip this
+                
               }
+              else {
+                if(reportSetting.showHighPrice && value> (cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue) {
+                  console.log(value,cellBaseValue, reportSetting.toBaseRatio,(cellBaseValue*reportSetting.toBaseRatio/100)+cellBaseValue)
+                  const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${valueString}, ${baseValueStatement} ${ratioStatement} yüksektir.`;
+                  positiveStatements.push(statement)
+                  tableRow = {value, color:'bg-red-100', description: statement}
+                }
+                if(reportSetting.showLowPrice && value<= (cellBaseValue*reportSetting.toBaseRatioLow/100)-cellBaseValue) {
+                  
+                  const statement = `${row[0]} poz nolu ${row[1]} iş kalemi ${columns[i]} için verdiğiniz teklif: ${valueString}, ${baseValueStatement}  ${ratioStatement} düşüktür.`;
+                  negativeStatements.push(statement)
+                  tableRow = {value, color:'bg-blue-100', description:statement}
+                }
+              }
+              
             }
             
           }
@@ -146,7 +174,7 @@ export class ReportsService {
     
     this._reportTableData.next(tableData);
     if(positiveStatements.length===0 && negativeStatements.length===0){
-      descriptionStatements.push(`Seçilen teklifte, rapor ayarlarında seçilen baz değerin %${reportSetting.toBaseRatio} üstünde ve ya %${reportSetting.toBaseRatioLow} altında değer bulunmamaktadır.`)
+      descriptionStatements.push(`Seçilen teklifte, rapor ayarlarında seçilen baz değerin (${reportSetting.baseValue}) %${reportSetting.toBaseRatio} üstünde ve ya %${reportSetting.toBaseRatioLow} altında değer bulunmamaktadır.`)
     }
     this._reportStatementsSubject.next({positiveStatements,negativeStatements,descriptionStatements});
     
@@ -177,4 +205,45 @@ export class ReportsService {
       }),
     );
   }
-}
+
+
+  async getBudget(tenderId: string): Promise<any> {
+    try {
+      const result = await this.budgetService.getBudgetsByTenderId(tenderId);
+      
+      const discovery_data = result[0].discovery_data;
+      const columns = discovery_data["0"];
+      let budgetPrices = {}
+      for (const [rowIndex, row] of Object.entries(discovery_data)) {
+        const rowNum = parseInt(rowIndex);
+        if (!budgetPrices[rowNum]) {
+          budgetPrices[rowNum] = {};
+      }
+        columns.forEach((column: any, index: number) => {
+         
+          const value = row[index];
+
+          if (value && typeof value === "number") {
+             budgetPrices[rowNum][column] = value;
+            
+          }
+        });
+      }
+      return budgetPrices;
+      
+    } catch (error) {
+      console.error('Error fetching budget:', error);
+      return null; // Return null in case of error
+    }
+  }
+
+  async fetchBudgetValue(tenderId: string): Promise<any> {
+    let baseValue = await this.getBudget(tenderId); // Assign the result of getBudget to baseValue
+    return baseValue; // Log or further use baseValue as needed
+  }
+      
+    
+    
+  }
+
+

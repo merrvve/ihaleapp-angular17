@@ -116,6 +116,9 @@ export class CreateBudgetComponent {
 
   ngOnDestroy() {
     this.menuService.clearItems();
-    this.tableSubscription.unsubscribe();
+    if(this.tableSubscription) {
+      this.tableSubscription.unsubscribe();
+    }
+    
   }
 }

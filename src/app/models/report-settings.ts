@@ -4,7 +4,7 @@ export interface ReportSettings {
     toBaseRatio: number;
     toBaseRatioLow: number;
     showHighPrice: boolean;
-    showHightRatio: boolean;
+    showHighRatio: boolean;
     showLowPrice: boolean;
     showLowRatio: boolean;
     showAllTotal: boolean;
