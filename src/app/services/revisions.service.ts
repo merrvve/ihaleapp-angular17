@@ -22,7 +22,7 @@ export class RevisionsService {
     const tenderRef = doc(this.firestore, 'tenders', tenderId);
     const revisionsRef = collection(tenderRef, 'revisions'); 
     const revision : TenderRevision = {
-      created_at: new Date().toDateString(),
+      created_at: new Date().toLocaleDateString('tr-TR'),
       discoveryData: discovery_data,
       name: name
     }
@@ -41,23 +41,27 @@ export class RevisionsService {
     }));
   }
 
-  getRevision(tenderId: string, revisionId: string) {
+  async getRevision(tenderId: string, revisionId: string) {
     const revisionDocRef = doc(this.firestore, 'tenders', tenderId, 'revisions', revisionId);
 
-    return from(getDoc(revisionDocRef)).pipe(
-      map((docSnap) => {
+    try {
+        const docSnap = await getDoc(revisionDocRef);
+        
         if (docSnap.exists()) {
-          const revision = docSnap.data() as TenderRevision; 
-          this._currentRevision.next(revision)
-          const data= revision.discoveryData;
-          this.tableDataService.loadData(DictToDataList(data));
-          return revision;
+            const revision = docSnap.data() as TenderRevision; 
+            this._currentRevision.next(revision);
+            const data = revision.discoveryData;
+            this.tableDataService.loadData(DictToDataList(data));
+            return revision;
         } else {
-          return null; 
+            return null; // Return null if the document doesn't exist
         }
-      })
-    );
-  }
+    } catch (error) {
+        console.error("Error fetching revision:", error);
+        throw error; // Throw error for handling in caller function
+    }
+}
+
 
   getAllRevisions(tenderId: string) {
     const revisionsRef = collection(this.firestore, 'tenders', tenderId, 'revisions');
@@ -94,6 +98,12 @@ export class RevisionsService {
     if(revision?.discoveryData) {
       this.tableDataService.loadData(DictToDataList(revision.discoveryData));
     }
-    return revision;
+    if (revision) {
+      return revision;
+    }
+    else {
+      return null;
+    }
+    
   }
 }

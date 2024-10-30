@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { TenderBid } from '../models/tender-bid';
-import { Tender } from '../models/tender';
+import { Tender, TenderRevision } from '../models/tender';
 import { Column } from '../models/column.interface';
 import { Budget } from '../models/budget';
 import { BudgetService } from './budget.service';
+import { RevisionsService } from './revisions.service';
 
 interface Price {
   title: string;
@@ -35,65 +36,82 @@ export class CompareBidsService {
     name: '',
     tender_id: '',
     discovery_data: undefined,
+    revisionName: "R1"
   };
 
-  constructor(private budgetService: BudgetService) {}
-  createTableData(bids: TenderBid[]) {
+  constructor(private budgetService: BudgetService,
+    private revisionService: RevisionsService
+  ) {}
+
+
+  async createTableData(bids: TenderBid[]) {
     let columns: Column[] = [];
     let table: CompareTableRow[] = [];
     let tableData: any = [];
-
-    bids.forEach((bid) => {
-      let data = this.convertToObject(
-        bid.discovery_data,
-        this.tender.discoveryData[0],
-      );
-      tableData.push(data);
-    });
-
-    const tenderData = this.convertToObject(
-      this.tender.discoveryData,
-      this.tender.discoveryData[0],
-    );
-    let budgetObject = this.convertToObject(
-      this.tender.discoveryData,
-      this.tender.discoveryData[0],
-    );
-    if (this.tender.id) {
-      this.budgetService
-        .getBudgetsByTenderId(this.tender.id)
-        .then((budgets) => {
-          if (budgets && budgets[0]?.discovery_data) {
-            this.budget = budgets[0];
-            budgetObject = this.convertToObject(
-              this.budget.discovery_data,
-              this.tender.discoveryData[0],
-            );
-          } else {
-            this.budget.discovery_data = this.tender.discoveryData;
-          }
-          this.loadBudget(this.budget.discovery_data, table, columns);
-        });
+    let currentData: any;
+    const revisionName = bids[0].revisionName;
+    const revisionId = bids[0].revisionId;
+    if (revisionName !== "R1" && revisionId) {
+      const currentRevision =await this.revisionService.getRevision(this.tender.id, revisionId);
+      currentData= currentRevision.discoveryData;
     }
-
-    this.budgetService.setTenderData(this.tender.discoveryData);
-
-    columns = this.convertToColumn(this.tender.discoveryData[0]);
-    table = this.convertToCompareTable(
-      columns,
-      tenderData,
-      tableData,
-      budgetObject,
-    );
-    const bidsCount = this.compareBids.length;
-
-    return {
-      columns,
-      tender: this.tender,
-      table: table,
-      bidsCount,
-      bids: this.compareBids,
-    };
+    else {
+      currentData = this.tender.discoveryData;
+    }
+      
+      bids.forEach((bid) => {
+        let data = this.convertToObject(
+          bid.discovery_data,
+          currentData[0],
+        );
+        tableData.push(data);
+      });
+  
+      const tenderData = this.convertToObject(
+        currentData,
+        currentData[0],
+      );
+      let budgetObject = this.convertToObject(
+        currentData,
+        currentData[0],
+      );
+      if (this.tender.id) {
+        this.budgetService
+          .getBudgetsByTenderId(this.tender.id)
+          .then((budgets) => {
+            if (budgets && budgets[0]?.discovery_data) {
+              this.budget = budgets[0];
+              budgetObject = this.convertToObject(
+                this.budget.discovery_data,
+                currentData[0],
+              );
+            } else {
+              this.budget.discovery_data = currentData;
+            }
+            this.loadBudget(this.budget.discovery_data, table, columns);
+          });
+      }
+  
+      this.budgetService.setTenderData(currentData);
+  
+      columns = this.convertToColumn(currentData[0]);
+      table = this.convertToCompareTable(
+        columns,
+        tenderData,
+        tableData,
+        budgetObject,
+      );
+      const bidsCount = this.compareBids.length;
+  
+      return {
+        columns,
+        tender: this.tender,
+        table: table,
+        bidsCount,
+        bids: this.compareBids,
+      };
+    
+    
   }
 
   convertToObject(data: any[], columns: string[]) {

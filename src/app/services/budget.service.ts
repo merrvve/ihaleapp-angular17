@@ -12,6 +12,8 @@ import {
   where,
 } from '@angular/fire/firestore';
 import { Budget } from '../models/budget';
+import { RevisionsService } from './revisions.service';
+import { TenderRevision } from '../models/tender';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +25,9 @@ export class BudgetService {
 
   budgetsCollection!: CollectionReference;
 
-  constructor() {
+  constructor(
+    private revisionService: RevisionsService
+  ) {
     this.budgetsCollection = collection(this.firestore, 'budgets');
   }
   setTenderData(tenderData: any[]) {
@@ -34,10 +38,14 @@ export class BudgetService {
     this.currentBudget = budget;
   }
   getCurrentBudget() {
+    const currentRevision : TenderRevision = this.revisionService.getCurrentRevision();
+
     if (this.currentBudget) {
       return this.currentBudget;
     } else {
       let budget: Budget = {
+        revisionId: currentRevision &&  currentRevision.id ? currentRevision.id : null,
+        revisionName: currentRevision && currentRevision.name ? currentRevision.name : "R1",
         name: '',
         tender_id: '',
         discovery_data: this.tenderData,

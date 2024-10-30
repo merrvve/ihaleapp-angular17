@@ -76,8 +76,8 @@ export class IhaleKarsilastirComponent implements OnInit {
     private compareTableService: CompareTablesService,
     private menuService: MenuService,
   ) {}
-  ngOnInit(): void {
-    const data = this.compareService.createTableData(
+  async ngOnInit() {
+    const data = await this.compareService.createTableData(
       this.compareService.compareBids,
     );
     const colors = [
@@ -348,7 +348,7 @@ export class IhaleKarsilastirComponent implements OnInit {
         tenderId: this.tender.id,
         bids: this.bids.map((bid) => bid.id || ''),
         name: name,
-        created_at: new Date().toLocaleString(),
+        created_at: new Date().toLocaleDateString('tr-TR'),
         options: null,
       };
       this.compareTableService.createTable(table);

@@ -94,7 +94,9 @@ export class TenderService {
         const budget : Budget = {
           name: 'default',
           tender_id: documentReference.id,
-          discovery_data: data
+          discovery_data: data,
+          revisionId: null,
+          revisionName: "R1"
         }
         this.budgetService.createBudget(budget);
       },

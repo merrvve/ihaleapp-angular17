@@ -55,11 +55,35 @@ export class BidsTableComponent {
 
   compareBids() {
     if (this.selectedBids) {
-      this.compareService.compareBids = this.selectedBids;
-      this.compareService.tender = this.tenderService._currentTender.getValue();
-      this.router.navigate(['/ihale/karsilastir']);
+        let previousRev = null;
+        let currentRev = "";
+        
+        for (let [index, bid] of this.selectedBids.entries()) {
+            if (index === 0) {       
+                previousRev = bid.revisionName ? bid.revisionName : "R1";
+                console.log(previousRev, "index 0");
+            } else {
+                currentRev = bid.revisionName ? bid.revisionName : "R1";
+                console.log(currentRev, "current rev");
+                console.log(currentRev, previousRev);
+                
+                if (currentRev !== previousRev) {
+                    window.alert("Karşılatırılacak tüm teklifler aynı revizyon numarasına ait olmalıdır!");
+                    console.log(currentRev, previousRev);
+                    return; // Exit the function completely
+                }
+                
+                previousRev = currentRev;
+            }
+        }
+
+        // Set values in compareService and navigate
+        this.compareService.compareBids = this.selectedBids;
+        this.compareService.tender = this.tenderService._currentTender.getValue();
+        this.router.navigate(['/ihale/karsilastir']);
     }
-  }
+}
+
 
   
 

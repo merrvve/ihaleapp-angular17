@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api/menuitem';
 import { BehaviorSubject } from 'rxjs';
 
@@ -11,7 +10,7 @@ export class MenuService {
   items$ = this._items.asObservable();
 
   constructor(
-    private router: Router
+    
   ) {
 
   }

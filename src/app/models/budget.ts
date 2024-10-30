@@ -3,4 +3,6 @@ export interface Budget {
   name?: string;
   tender_id: string;
   discovery_data: any;
+  revisionId?: string;
+  revisionName: string;
 }

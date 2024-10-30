@@ -117,9 +117,6 @@ export class NavbarComponent implements OnInit {
             routerLink: ['/teklifci/ihalelerim'],
           },
           {
-            separator: true,
-          },
-          {
             label: 'Tekliflerim',
             icon: 'pi pi-fw pi-external-link mr-2',
             routerLink: ['/teklifci/tekliflerim'],

@@ -9,6 +9,7 @@
         <tr>
           <th>Id</th>
           <th>İhale No</th>
+          <th>Revizyon No</th>
           <th>Teklif Tarihi</th>
           <th>Toplam Bedel</th>
           <th style="width: 5rem">Detay</th>
@@ -17,7 +18,8 @@
       <ng-template pTemplate="body" let-bid>
         <tr>
           <td>{{ bid.id }}</td>
-          <td></td>
+          <td>{{ bid.tenderId }} </td>
+          <td>{{ bid.revisionName || "R1" }} </td>
           <td>{{ bid.created_at }}</td>
           <td>{{ bid.total_price }}</td>
           <td>

@@ -59,7 +59,7 @@ export const IHALE_ROUTES: Route[] = [
     path: 'ihale/:id/toplantilar/yeni-toplanti',
     component: YeniToplantiComponent,
   },
-  { path: 'ihale/:id/kesif-detay', component: KesifDetayComponent },
+  { path: 'kesif-detay', component: KesifDetayComponent },
   { path: 'listele', component: IhaleListeleComponent },
   { path: 'taslaklar', component: TaslaklarComponent },
   { path: 'karsilastir', component: IhaleKarsilastirComponent },

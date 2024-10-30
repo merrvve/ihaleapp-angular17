@@ -48,9 +48,9 @@ export class BidService {
 
     let bidData: TenderBid = {
       bidder_id: this.authService.currentUser.uid,
-      created_at: new Date().toDateString(),
-      revisionId: currentRevision.id ?  currentRevision.id : null,
-      revisionName: currentRevision.name ? currentRevision.name : "R1",
+      created_at: new Date().toLocaleDateString('tr-TR'),
+      revisionId: currentRevision &&  currentRevision.id ? currentRevision.id : null,
+      revisionName: currentRevision && currentRevision.name ? currentRevision.name : "R1",
       company_id: this.authService._userDetails.value?.companyId,
       company_name: this.authService._userDetails.value?.companyName,
       total_price: this.tableService.allTreeTotal,
@@ -115,6 +115,7 @@ export class BidService {
             bidsSnapshot.forEach((bidDoc) => {
               const bid = bidDoc.data() as TenderBid;
               bid.id = bidDoc.id;
+              bid.tenderId = tenderDoc.id;
               if (bid.bidder_id === bidderId) {
                 bids.push(bid);
               }

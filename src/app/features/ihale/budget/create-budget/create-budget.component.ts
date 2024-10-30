@@ -9,6 +9,8 @@ import { TenderService } from '../../../../services/tender.service';
 import { MenuService } from '../../../../services/menu.service';
 
 import { Subscription } from 'rxjs';
+import { RevisionsService } from '../../../../services/revisions.service';
+import { TenderRevision } from '../../../../models/tender';
 
 @Component({
   selector: 'app-create-budget',
@@ -27,6 +29,7 @@ export class CreateBudgetComponent {
     private tableService: TablodataService,
     private route: ActivatedRoute,
     private menuService: MenuService,
+    private revisionService: RevisionsService
   ) {}
 
   ngOnInit() {
@@ -56,10 +59,13 @@ export class CreateBudgetComponent {
                 this.tenderService
                   .getTenderById(this.tenderId)
                   .subscribe((tender) => {
+                    const currentRevision : TenderRevision = this.revisionService.getCurrentRevision();
                     this.budgetData = {
                       tender_id: tender?.id || '',
                       discovery_data: tender?.discoveryData,
                       name: '',
+                      revisionId: currentRevision &&  currentRevision.id ? currentRevision.id : null,
+                      revisionName: currentRevision && currentRevision.name ? currentRevision.name : "R1",
                     };
                     const tableDataList = this.convertToDataList(
                       this.budgetData.discovery_data,

@@ -756,7 +756,7 @@ export class TableComponent implements OnInit {
   selectRevision(revisionId: string) {
     console.log(this.tenderId, revisionId, "rev")
     if(revisionId) {
-      this.revisionsService.getRevision(this.tenderId,revisionId).subscribe(result=>console.log(result));
+      this.revisionsService.getRevision(this.tenderId,revisionId);
       this.updateView();
     }
   }
