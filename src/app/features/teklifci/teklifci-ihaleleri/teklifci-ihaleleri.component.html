@@ -3,18 +3,120 @@
 </div>
 @if (tenders$ | async; as tenders) {
   <div class="card">
-    <p-table [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table #tendersOfBidder [value]="tenders" [tableStyle]="{ 'min-width': '50rem' }"
+    [globalFilterFields]="['id', 'name', 'owner_id', 'description','created_at','cost','currency']"
+    >
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-iconField iconPosition="left" class="ml-auto">
+          <p-inputIcon>
+            <i class="pi pi-search"></i>
+          </p-inputIcon>
+          <input
+            pInputText
+            type="text"
+            (input)="
+              tendersOfBidder.filterGlobal(getEventValue($event), 'contains')
+            "
+            placeholder="Tabloda Ara..."
+          />
+        </p-iconField>
+      </div>
+    </ng-template>
       <ng-template pTemplate="header">
         <tr>
-          <th>Id</th>
-          <th>İhale Adı</th>
-          <th>Oluşturan</th>
-          <th>Açıklaması</th>
-          <th>Başlangıç Tarihi</th>
-          <th>Durum</th>
-          <th>İhale Bedeli</th>
-          <th>Para Birimi</th>
-          <th style="width: 5rem">Detay</th>
+          <th pSortableColumn="id">Id <p-sortIcon field="id" /></th>
+          <th  pSortableColumn="name">İhale Adı <p-sortIcon field="name" /></th>
+          <th pSortableColumn="owner_id">Oluşturan <p-sortIcon field="owner_id" /></th>
+          <th pSortableColumn="description" >Açıklaması <p-sortIcon field="description" /></th>
+          <th pSortableColumn="created_at" >Başlangıç Tarihi <p-sortIcon field="created_at" /></th>
+          <th pSortableColumn="isCompleted" >Durum <p-sortIcon field="isCompleted" /></th>
+          <th pSortableColumn="cost" >İhale Bedeli <p-sortIcon field="cost" /></th>
+          <th pSortableColumn="currency">Para Birimi <p-sortIcon field="currency" /></th>
+          <th style="width: 15rem">İşlemler</th>
+        </tr>
+        <tr>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="id"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="name"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="owner_id"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="description"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="created_at"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="isCompleted"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="cost"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th>
+            <p-columnFilter
+              type="text"
+              field="currency"
+              placeholder="Ara..."
+              ariaLabel="Id"
+              matchMode="contains"
+              [showMenu]="false"
+            />
+          </th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-tender>
@@ -28,15 +130,21 @@
           <td>{{ tender.cost }}</td>
           <td>{{ tender.currency }}</td>
           <td>
-            <button
+            <p-button
+                type="button"
+                icon="pi pi-eye"
+                severity="info"
+                class="m-1"
+                (click)="selectTender(tender.id)"
+              ></p-button>
+            <p-button
               type="button"
-              pButton
               pRipple
-              icon="pi pi-edit"
+              class="m-1"
+              icon="pi pi-file-edit"
               (click)="createBid(tender.id)"
             >
-              Teklif Ver
-            </button>
+            </p-button>
           </td>
         </tr>
       </ng-template>

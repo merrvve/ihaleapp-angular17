@@ -52,7 +52,7 @@ export class CompareBidsService {
     const revisionName = bids[0].revisionName;
     const revisionId = bids[0].revisionId;
     if (revisionName !== "R1" && revisionId) {
-      const currentRevision =await this.revisionService.getRevision(this.tender.id, revisionId);
+      const currentRevision = await this.revisionService.getRevision(this.tender.id, revisionId);
       currentData= currentRevision.discoveryData;
     }
     else {

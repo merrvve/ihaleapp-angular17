@@ -1,38 +1,69 @@
 @if (bids$ | async; as bids) {
-  <div class="container mb-5">
-    <h2 class="p-2">Tekliflerim</h2>
-  </div>
+<div class="container mb-5">
+  <h2 class="p-2">Tekliflerim</h2>
+</div>
 
-  <div class="card">
-    <p-table [value]="bids" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Id</th>
-          <th>İhale No</th>
-          <th>Revizyon No</th>
-          <th>Teklif Tarihi</th>
-          <th>Toplam Bedel</th>
-          <th style="width: 5rem">Detay</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-bid>
-        <tr>
-          <td>{{ bid.id }}</td>
-          <td>{{ bid.tenderId }} </td>
-          <td>{{ bid.revisionName || "R1" }} </td>
-          <td>{{ bid.created_at }}</td>
-          <td>{{ bid.total_price }}</td>
-          <td>
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-file"
-              (click)="seeTenderBidDetails(bid)"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
+<div class="card">
+  <p-table #myBids [value]="bids" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
+    [globalFilterFields]="['id', 'tenderId', 'revisionName', 'created_at','total_price']">
+    
+    <ng-template pTemplate="caption">
+      <div class="flex">
+        <p-iconField iconPosition="left" class="ml-auto">
+          <p-inputIcon>
+            <i class="pi pi-search"></i>
+          </p-inputIcon>
+          <input
+            pInputText
+            type="text"
+            (input)="
+              myBids.filterGlobal(getEventValue($event), 'contains')
+            "
+            placeholder="Tabloda Ara..."
+          />
+        </p-iconField>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">Id <p-sortIcon field="id" /></th>
+        <th pSortableColumn="tenderId">İhale No <p-sortIcon field="tenderId" /></th>
+        <th pSortableColumn="revisionName">Revizyon No <p-sortIcon field="revisionName" /></th>
+        <th pSortableColumn="created_at">Teklif Tarihi <p-sortIcon field="created_at" /></th>
+        <th pSortableColumn="total_price">Toplam Bedel <p-sortIcon field="total_price" /></th>
+        <th style="width: 5rem">Detay</th>
+      </tr>
+      <tr>
+        <th>
+          <p-columnFilter type="text" field="id" placeholder="Ara..." ariaLabel="Id ile ara" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="tenderId" placeholder="Ara..." ariaLabel="İhale Id ile ara" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="revisionName" placeholder="Ara..." ariaLabel="Revizyon no ile ara" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="created_at" placeholder="Ara..." ariaLabel="Tarih ile ara" />
+        </th>
+        <th>
+          <p-columnFilter type="text" field="total_price" placeholder="Ara..." ariaLabel="Toplam Bedel ile ara" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-bid>
+      <tr>
+        <td>{{ bid.id }}</td>
+        <td>{{ bid.tenderId }} </td>
+        <td>{{ bid.revisionName || "R1" }} </td>
+        <td>{{ bid.created_at }}</td>
+        <td>{{ bid.total_price }}</td>
+        <td>
+          <button type="button" pButton pRipple icon="pi pi-file" (click)="seeTenderBidDetails(bid)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
 }

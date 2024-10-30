@@ -104,12 +104,12 @@ export class NavbarComponent implements OnInit {
     this.teklifciMenu = [
       {
         label: 'Ana Sayfa',
-        icon: 'pi pi-fw pi-home',
+        icon: 'pi pi-fw pi-home mr-2',
         routerLink: ['/'],
       },
       {
         label: 'İhalelerim',
-        icon: 'pi pi-fw pi-file',
+        icon: 'pi pi-fw pi-file mr-2',
         items: [
           {
             label: 'İhalelerim',
@@ -126,7 +126,7 @@ export class NavbarComponent implements OnInit {
 
       {
         label: 'Çıkış Yap',
-        icon: 'pi pi-fw pi-power-off',
+        icon: 'pi pi-fw pi-power-off mr-2',
         command: (event: any) => {
           this.auth.logout();
         },

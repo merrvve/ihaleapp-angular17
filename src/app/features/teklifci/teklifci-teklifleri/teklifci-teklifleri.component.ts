@@ -7,11 +7,14 @@ import { TenderBid } from '../../../models/tender-bid';
 import { BidService } from '../../../services/bid.service';
 import { TablodataService } from '../../../services/tablodata.service';
 import { Router } from '@angular/router';
+import { InputIconModule } from 'primeng/inputicon';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-teklifci-teklifleri',
   standalone: true,
-  imports: [AsyncPipe, TableModule, ButtonModule],
+  imports: [AsyncPipe, TableModule, ButtonModule, InputIconModule, IconFieldModule, InputTextModule],
   templateUrl: './teklifci-teklifleri.component.html',
   styleUrl: './teklifci-teklifleri.component.scss',
 })
@@ -37,5 +40,8 @@ export class TeklifciTeklifleriComponent implements OnInit {
     } else {
       console.log('no discovery data');
     }
+  }
+  getEventValue($event: any): string {
+    return $event.target.value;
   }
 }

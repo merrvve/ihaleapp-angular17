@@ -8,11 +8,14 @@ import { Tender } from '../../../models/tender';
 import { TenderService } from '../../../services/tender.service';
 import { AsyncPipe } from '@angular/common';
 import { BidService } from '../../../services/bid.service';
+import { InputIconModule } from 'primeng/inputicon';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-teklifci-ihaleleri',
   standalone: true,
-  imports: [TableModule, ButtonModule, AsyncPipe],
+  imports: [TableModule, ButtonModule, AsyncPipe,InputIconModule, IconFieldModule, InputTextModule],
   templateUrl: './teklifci-ihaleleri.component.html',
   styleUrl: './teklifci-ihaleleri.component.scss',
 })
@@ -49,17 +52,12 @@ export class TeklifciIhaleleriComponent implements OnInit {
         }
       },
     });
-    //   this.teklifciService.getIhaleDetail(ihaleId).subscribe(
-    //     {
-    //       next: (result) => {
-    //         this.tableService.loadData(result.kesif);
-    //         this.teklifciService.teklif.ihale = result.id ? result.id : -1
-    //         this.teklifciService.teklif.kesif = result.kesif
-    //         this.teklifciService.ihale = result
-    //         this.router.navigate(['/teklifci/teklif-olustur'])
-    //       },
-    //       error: (error) => console.log(error)
-    //     }
-    //   )
+   
+  }
+  selectTender(tenderId: string) {
+    
+  }
+  getEventValue($event: any): string {
+    return $event.target.value;
   }
 }

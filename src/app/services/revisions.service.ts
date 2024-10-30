@@ -41,6 +41,8 @@ export class RevisionsService {
     }));
   }
 
+  
+
   async getRevision(tenderId: string, revisionId: string) {
     const revisionDocRef = doc(this.firestore, 'tenders', tenderId, 'revisions', revisionId);
 
@@ -61,7 +63,6 @@ export class RevisionsService {
         throw error; // Throw error for handling in caller function
     }
 }
-
 
   getAllRevisions(tenderId: string) {
     const revisionsRef = collection(this.firestore, 'tenders', tenderId, 'revisions');
