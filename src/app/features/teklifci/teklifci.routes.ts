@@ -6,6 +6,7 @@ import { KesifComponent } from './teklif-olustur/kesif/kesif.component';
 import { TeklifciComponent } from '../dashboard/teklifci/teklifci.component';
 import { TeklifOzetComponent } from './teklif-olustur/teklif-ozet/teklif-ozet.component';
 import { TableComponent } from '../table/table.component';
+import { IhaleDetayComponent } from './teklifci-ihaleleri/ihale-detay/ihale-detay.component';
 
 export const TEKLIFCI_ROUTES: Route[] = [
   {
@@ -17,7 +18,13 @@ export const TEKLIFCI_ROUTES: Route[] = [
       { path: '', redirectTo: 'teklif-bilgileri', pathMatch: 'full' },
     ],
   },
-  { path: 'ihalelerim', component: TeklifciIhaleleriComponent },
+  { path: 'ihalelerim',
+    children: [
+      { path: 'listele', component: TeklifciIhaleleriComponent  },
+      { path: ':id/detay', component: IhaleDetayComponent },
+      { path: '', redirectTo: 'listele', pathMatch: 'full' },
+    ]
+    },
   { path: 'tekliflerim', component: TeklifciTeklifleriComponent },
   { path: 'dashboard', component: TeklifciComponent },
   { path: 'kesif-detay', component: TableComponent },

@@ -1,0 +1,43 @@
+@if(bid) {
+    <div class="col-12">
+        <div class="surface-card shadow-2 p-3 border-round mb-3">
+          <span class="block text-500 font-medium mb-3">Teklif Özeti</span>
+          <table>
+            @if(bid.id) {
+                <tr>
+                    <td>Teklif Id</td>
+                    <td>:</td>
+                    <td> {{bid.id}} </td>
+                </tr>
+            }
+           
+            <tr>
+                <td>İhale Id</td>
+                <td>:</td>
+                <td> {{bid.tenderId}} </td>
+            </tr>
+            <tr>
+                <td>Teklifle İlişkili İhale Revizyonu</td>
+                <td>:</td>
+                <td> {{bid.revisionName}} </td>
+            </tr>
+            <tr>
+                <td>Keşif Bilgileri</td>
+                <td>:</td>
+                <td> Detay </td>
+            </tr>
+            <tr>
+                <td>Yüklenen Evraklar</td>
+                <td>:</td>
+                <td> {{bid.requestedDocuments?.length || 0}} adet </td>
+            </tr>
+            <tr>
+                <td>Toplam Bedel</td>
+                <td>:</td>
+                <td> {{bid.total_price}}  </td>
+            </tr>
+          </table>
+        </div>
+    </div>
+}
+

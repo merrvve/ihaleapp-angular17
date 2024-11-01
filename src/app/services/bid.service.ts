@@ -6,7 +6,9 @@ import {
   collection,
   collectionData,
   doc,
+  getDoc,
   getDocs,
+  increment,
   query,
   updateDoc,
 } from '@angular/fire/firestore';
@@ -26,8 +28,8 @@ export class BidService {
   tenderSubject = new BehaviorSubject<Tender | null>(null);
   tender$ = this.tenderSubject.asObservable();
 
-  bidsSubject = new BehaviorSubject<TenderBid[] | null>(null);
-  bids$ = this.bidsSubject.asObservable();
+  bidSubject = new BehaviorSubject<TenderBid>(null);
+  bid$ = this.bidSubject.asObservable();
 
   constructor(
     private tableService: TablodataService,
@@ -35,9 +37,7 @@ export class BidService {
     private revisionService: RevisionsService
   ) {}
 
-  createBid() {
-    const tenderId = this.tenderSubject.value?.id;
-
+  setBidData() {
     const currentTableData = this.tableService.currentData;
     let data: { [key: number]: any } = {};
     for (let i = 0; i < currentTableData.length; i++) {
@@ -45,7 +45,6 @@ export class BidService {
     }
 
     const currentRevision : TenderRevision = this.revisionService.getCurrentRevision();
-
     let bidData: TenderBid = {
       bidder_id: this.authService.currentUser.uid,
       created_at: new Date().toLocaleDateString('tr-TR'),
@@ -56,6 +55,12 @@ export class BidService {
       total_price: this.tableService.allTreeTotal,
       discovery_data: data,
     };
+    this.bidSubject.next(bidData);
+    return bidData;
+  }
+  createBid() {
+    const tenderId = this.tenderSubject.value?.id;
+    const bidData = this.setBidData();
     if(tenderId) {
       const tenderRef = doc(this.firestore, 'tenders', tenderId);
       const bidsRef = collection(tenderRef, 'bids'); 
@@ -76,6 +81,15 @@ export class BidService {
                       if(summary) {
                         this.updateBidsSummary(summary,tenderId);
                       }
+                      updateDoc(tenderRef, {
+                        bidsCount: increment(1)
+                      })
+                      .then(() => {
+                        console.log('Tender updated successfully! Bids count incremented.');
+                      })
+                      .catch((error) => {
+                        console.error('Error updating tender:', error);
+                      });
                       // Return the ID of the newly added bid
                       return docRef.id;
                   })
@@ -122,7 +136,7 @@ export class BidService {
             });
           });
         });
-        this.bidsSubject.next(bids);
+        
         return bids;
       }),
     );
@@ -219,6 +233,27 @@ export class BidService {
 
     // Return the result as a summary object
     return { minPrices, maxPrices, avgPrices };
+}
+
+async getBid(tenderId: string, bidId: string) {
+  const bidsDocRef = doc(this.firestore, 'tenders', tenderId, 'bids', bidId);
+
+  try {
+      const docSnap = await getDoc(bidsDocRef);
+      
+      if (docSnap.exists()) {
+          const bid = docSnap.data() as TenderBid; 
+          this.bidSubject.next(bid);
+          //const data = bid.discovery_data;
+          //this.tableDataService.loadData(DictToDataList(data));
+          return bid;
+      } else {
+          return null; // Return null if the document doesn't exist
+      }
+  } catch (error) {
+      console.error("Error fetching revision:", error);
+      throw error; // Throw error for handling in caller function
+  }
 }
 
 }

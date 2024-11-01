@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, increment, updateDoc } from '@angular/fire/firestore';
 import { from, map } from 'rxjs';
 import { Qa } from '../models/qa';
 
@@ -19,7 +19,15 @@ export class QasService {
         ...qa,
         id: docRef.id 
       };
-
+      updateDoc(tenderRef, {
+        questionsCount: increment(1)
+      })
+      .then(() => {
+        console.log('Tender updated successfully! Revisions count incremented.');
+      })
+      .catch((error) => {
+        console.error('Error updating tender:', error);
+      });
       return createdQa;
     }));
   }

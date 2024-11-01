@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, CollectionReference, deleteDoc, doc, Firestore, getDoc, getDocs, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, deleteDoc, doc, Firestore, getDoc, getDocs, increment, updateDoc } from '@angular/fire/firestore';
 import { TenderRevision } from '../models/tender';
 import { from } from 'rxjs/internal/observable/from';
 import { map } from 'rxjs/internal/operators/map';
@@ -21,6 +21,7 @@ export class RevisionsService {
   createRevision(tenderId: string, discovery_data: any,name: string) {
     const tenderRef = doc(this.firestore, 'tenders', tenderId);
     const revisionsRef = collection(tenderRef, 'revisions'); 
+    
     const revision : TenderRevision = {
       created_at: new Date().toLocaleDateString('tr-TR'),
       discoveryData: discovery_data,
@@ -36,6 +37,15 @@ export class RevisionsService {
       this._currentRevision.next(createdRevision);
       const data= createdRevision.discoveryData;
       this.tableDataService.loadData(DictToDataList(data));
+      updateDoc(tenderRef, {
+        revisionsCount: increment(1)
+      })
+      .then(() => {
+        console.log('Tender updated successfully! Revisions count incremented.');
+      })
+      .catch((error) => {
+        console.error('Error updating tender:', error);
+      });
       // Return the created revision
       return createdRevision;
     }));

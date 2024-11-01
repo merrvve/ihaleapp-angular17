@@ -1,0 +1,6 @@
+@if(tender$ | async; as tender) {
+    <app-ihale-ozet [tender]="tender" [isLong]="true" [isOwner]="false"></app-ihale-ozet>
+}
+@else {
+    <app-loading-spinner></app-loading-spinner>
+}

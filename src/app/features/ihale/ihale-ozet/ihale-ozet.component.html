@@ -31,7 +31,28 @@
           <td>Eklenen Dosyalar</td>
           <td>:</td>
 
-          <td>{{ tender.tenderFiles.length }}</td>
+          <td>
+            @if(!tender.tenderFiles || tender.tenderFiles.length<1) {
+              0 adet
+            }
+            @else {
+              @if(isLong) {
+                <ul>
+                  @for(file of tender.tenderFiles; track file) {
+                    <li>
+                      <strong> {{file.name}} </strong>
+                      <a href={{file.url}} class="m-2" target="_blank">İndir</a>
+                    </li>
+                  }
+                </ul>
+              }
+              @else {
+                {{ tender.tenderFiles.length }} adet
+              }
+            }
+           
+           
+          </td>
         </tr>
         <tr>
           <td>Keşif Tablosu</td>
@@ -46,10 +67,26 @@
           <td>{{ tender.bidders.length }}</td>
         </tr>
         <tr>
-          <td>Talep Edilen Belge Sayısı</td>
+          <td>Talep Edilen Belgeler</td>
           <td>:</td>
 
-          <td>{{ tender.requestedDocuments.length }}</td>
+          <td>
+            @if(isLong) {
+              <ul>
+                @for(doc of tender.requestedDocuments; track doc) {
+                  <li>
+                    <strong> {{doc.name}} </strong>
+                    <span>( {{doc.format}} ) </span>
+                    <strong>Notlar: </strong> {{ doc.note }}
+                  </li>
+                }
+              </ul>
+            }
+            @else {
+              {{tender.requestedDocuments.length}} adet
+            }
+            
+          </td>
         </tr>
         <tr>
           <td>Toplam Bedel</td>
@@ -63,6 +100,28 @@
 
           <td>{{ tender.currency }}</td>
         </tr>
+        <tr>
+          <td>Revizyon Sayısı</td>
+          <td>:</td>
+
+          <td>{{ tender.revisionsCount || '0' }}</td>
+        </tr>
+        @if(isOwner) {
+
+          <tr>
+            <td>İhaleye Gelen Teklif Sayısı</td>
+            <td>:</td>
+  
+            <td>{{ tender.bidsCount || '0' }}</td>
+          </tr>
+          <tr>
+            <td>İhale ile İlgili soru Sayısı</td>
+            <td>:</td>
+  
+            <td>{{ tender.questionsCount || '0' }}</td>
+          </tr>
+        }
+        
       </table>
     </div>
   </div>

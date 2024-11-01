@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TenderService } from '../../../services/tender.service';
-import { Observable } from 'rxjs';
 import { Tender } from '../../../models/tender';
 import { AsyncPipe } from '@angular/common';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
@@ -8,12 +6,14 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 @Component({
   selector: 'app-ihale-ozet',
   standalone: true,
-  imports: [AsyncPipe, LoadingSpinnerComponent],
+  imports: [AsyncPipe, LoadingSpinnerComponent,],
   templateUrl: './ihale-ozet.component.html',
   styleUrl: './ihale-ozet.component.scss',
 })
 export class IhaleOzetComponent implements OnInit {
   @Input() tender!: Tender;
+  @Input() isLong!: boolean;
+  @Input() isOwner: boolean = true;
   constructor() {}
 
   ngOnInit(): void {}

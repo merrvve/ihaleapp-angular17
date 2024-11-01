@@ -41,7 +41,11 @@ export class TenderService {
     bidders: [],
     isCompleted: false,
     isDraft: false,
-    revisions: []
+    revisions: [],
+    revisionsCount: 0,
+    bidsCount: 0,
+    questionsCount: 0,
+    liscenseTime: 'Kalan Süre'
   });
   tenders$ = this.tendersSubject.asObservable();
   currentTender$ = this._currentTender.asObservable();

@@ -1,3 +1,8 @@
+@if(currentBid$ | async; as currentBid) {
+  <app-teklif-detay [bid]="currentBid"></app-teklif-detay>
+}
+
+
 <div class="flex justify-content-end">
   <p-button
     label="Geri"

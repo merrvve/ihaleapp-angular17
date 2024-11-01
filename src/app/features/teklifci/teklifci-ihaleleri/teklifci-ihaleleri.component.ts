@@ -55,7 +55,7 @@ export class TeklifciIhaleleriComponent implements OnInit {
    
   }
   selectTender(tenderId: string) {
-    
+    this.router.navigate([`teklifci/ihalelerim/${tenderId}/detay`]);
   }
   getEventValue($event: any): string {
     return $event.target.value;

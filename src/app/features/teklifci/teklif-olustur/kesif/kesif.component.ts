@@ -19,9 +19,6 @@ import { BidService } from '../../../../services/bid.service';
     TeklifOlusturComponent,
     ButtonModule,
     RouterLink,
-    DialogModule,
-    ProgressSpinnerModule,
-    MessagesModule,
   ],
 })
 export class KesifComponent implements OnInit {

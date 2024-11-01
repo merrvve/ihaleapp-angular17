@@ -19,6 +19,10 @@ export interface Tender {
   isDraft: boolean;
   isEditMode?: boolean;
   discoveryData?: any;
+  bidsCount: number;
+  revisionsCount: number;
+  questionsCount: number;
+  liscenseTime: string;
   revisions?: TenderRevision[]; 
   bids?: TenderBid[]; 
   messages?: TenderMessage[]; 
