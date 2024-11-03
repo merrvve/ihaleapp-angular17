@@ -3,6 +3,7 @@ import { RequestedDocument } from './requested-document';
 export interface TenderBid {
   id?: string;
   tenderId?: string;
+  isEditMode?: boolean;
   revisionId?: string;
   revisionName?: string;
   bidder_id: string;

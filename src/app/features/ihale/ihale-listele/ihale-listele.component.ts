@@ -41,7 +41,7 @@ export class IhaleListeleComponent implements OnInit {
   }
 
   selectTender(tenderId: number) {
-    this.router.navigate(['ihale/ihale/', tenderId]);
+    this.router.navigate(['ihale/ihale/', tenderId],{queryParams:{isEditMode: true}});
   }
   editTender(tender: Tender) {
     tender.isEditMode = true;

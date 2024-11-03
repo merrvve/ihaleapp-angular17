@@ -1,6 +1,6 @@
 @if(currentBid$ | async; as currentBid) {
   <app-teklif-detay [bid]="currentBid"></app-teklif-detay>
-}
+
 
 
 <div class="flex justify-content-end">
@@ -11,11 +11,25 @@
     class="mx-2"
     [routerLink]="['/teklifci/teklif-olustur/kesif']"
   ></p-button>
-
+@if(currentBid.isEditMode) {
   <p-button
-    label="Teklif Ver"
-    icon="pi pi-check"
-    severity="success"
-    (click)="createBid()"
-  ></p-button>
+  label="Teklifi Güncelle"
+  icon="pi pi-check"
+  severity="success"
+  (click)="updateBid()"
+></p-button>
+}
+@else {
+  <p-button
+  label="Teklif Ver"
+  icon="pi pi-check"
+  severity="success"
+  (click)="createBid()"
+></p-button>
+}
+ 
+
+
 </div>
+
+}

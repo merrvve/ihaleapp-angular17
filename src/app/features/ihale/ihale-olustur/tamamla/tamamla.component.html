@@ -1,5 +1,6 @@
-<app-ihale-olustur></app-ihale-olustur>
 @if (tender$ | async; as tender) {
+<app-ihale-olustur [isEditMode]="tender.isEditMode"></app-ihale-olustur>
+
   <div class="container p-3">
     <div
       class="grid justify-content-center surface-card shadow-2 p-3 border-round"
@@ -31,18 +32,7 @@
       class="mx-3"
       (click)="onSubmit(true, tender.isDraft, tender.isEditMode)"
     ></p-button>
-    @if (!tender.isDraft && tender.isEditMode) {
-      <p-button
-        pRipple
-        label="Revizyon olarak Kaydet"
-        severity="info"
-        icon="pi pi-file-edit"
-        class="mx-3"
-        (click)="saveRevision()"
-        [disabled]="true"
-      >
-      </p-button>
-    }
+    
 
     <p-button
       pRipple

@@ -16,13 +16,14 @@ import { FormsModule, NgModel } from '@angular/forms';
 })
 export class KesifOlusturComponent implements OnInit {
   currency!: string;
- 
+  isEditMode!: boolean;
   constructor(private tenderService: TenderService,
    
   ) {}
   ngOnInit(): void {
     
     this.currency = this.tenderService._currentTender.value.currency;
+    this.isEditMode = this.tenderService._currentTender.value.isEditMode;
     
     
  

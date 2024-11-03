@@ -42,7 +42,7 @@ export class TeklifciEklemeComponent implements OnInit {
   isTeklifciModalVisible: boolean = false;
   bidders$!: Observable<UserDetail[]>;
   selectedBidders: UserDetail[] = [];
-
+  isEditMode!: boolean;
   constructor(
     private tenderService: TenderService,
     private bidderService: BidderService,
@@ -50,7 +50,8 @@ export class TeklifciEklemeComponent implements OnInit {
   ngOnInit(): void {
     // Teklifçi bilgilerini al
     this.bidders$ = this.bidderService.getBidders();
-
+    this.isEditMode = this.tenderService._currentTender.value.isEditMode;
+    
     //mesajları oluştur
     this.messages = [
       {

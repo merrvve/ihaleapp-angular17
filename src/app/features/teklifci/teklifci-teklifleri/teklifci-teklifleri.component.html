@@ -4,7 +4,7 @@
 </div>
 
 <div class="card">
-  <p-table #myBids [value]="bids" [tableStyle]="{ 'min-width': '50rem' }" sortMode="multiple"
+  <p-table #myBids [value]="bids" sortMode="multiple"
     [globalFilterFields]="['id', 'tenderId', 'revisionName', 'created_at','total_price']">
     
     <ng-template pTemplate="caption">
@@ -31,7 +31,7 @@
         <th pSortableColumn="revisionName">Revizyon No <p-sortIcon field="revisionName" /></th>
         <th pSortableColumn="created_at">Teklif Tarihi <p-sortIcon field="created_at" /></th>
         <th pSortableColumn="total_price">Toplam Bedel <p-sortIcon field="total_price" /></th>
-        <th style="width: 5rem">Detay</th>
+        <th>İşlem</th>
       </tr>
       <tr>
         <th>
@@ -60,7 +60,28 @@
         <td>{{ bid.created_at }}</td>
         <td>{{ bid.total_price }}</td>
         <td>
-          <button type="button" pButton pRipple icon="pi pi-file" (click)="seeTenderBidDetails(bid)"></button>
+          <p-button
+                type="button"
+                icon="pi pi-eye"
+                severity="secondary"
+                styleClass="m-2"
+                (click)="seeTenderBidDetails(bid)"
+              ></p-button>
+              <p-button
+              type="button"
+              label="Düzenle"
+              severity="info"
+              icon="pi pi-file-edit"
+              styleClass="m-2"
+              (click)="editBid(bid)"
+            ></p-button>
+            <p-button
+              type="button"
+              label="Yeni Teklif"
+              icon="pi pi-plus"
+              styleClass="m-2"
+              (click)="newBid(bid)"
+            ></p-button>
         </td>
       </tr>
     </ng-template>

@@ -5,7 +5,7 @@ import { BidService } from '../../../../services/bid.service';
 import { TeklifDetayComponent } from "../../teklif-detay/teklif-detay.component";
 import { TenderBid } from '../../../../models/tender-bid';
 import { AsyncPipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teklif-ozet',
@@ -16,6 +16,8 @@ import { Observable } from 'rxjs';
 })
 export class TeklifOzetComponent {
   currentBid$!: Observable<TenderBid | null>
+  subscription1!: Subscription;
+  subscription2!: Subscription;
   constructor(
     private bidService: BidService,
   ) {}
@@ -24,9 +26,23 @@ export class TeklifOzetComponent {
     this.currentBid$ = this.bidService.bid$;
   }
   createBid() {
-    this.bidService.createBid()?.subscribe({
+    this.subscription1=this.bidService.createBid()?.subscribe({
       next: (result) => console.log(result),
       error: (error) => console.log(error),
     });
+  }
+
+  updateBid() {
+    this.subscription2= this.bidService.updateBid().subscribe(
+      result=> console.log(result,"updated")
+    );
+  }
+  ngOnDestroy() {
+    if(this.subscription1) {
+      this.subscription1.unsubscribe();
+    }
+    if(this.subscription2) {
+      this.subscription2.unsubscribe();
+    }
   }
 }

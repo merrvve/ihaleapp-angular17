@@ -34,76 +34,90 @@ export class BidService {
   constructor(
     private tableService: TablodataService,
     private authService: FirebaseAuthService,
-    private revisionService: RevisionsService
+    private revisionService: RevisionsService,
   ) {}
 
   setBidData() {
+    const currentData = this.bidSubject.getValue();
     const currentTableData = this.tableService.currentData;
     let data: { [key: number]: any } = {};
     for (let i = 0; i < currentTableData.length; i++) {
       data[i] = currentTableData[i];
     }
+    const currentRevision: TenderRevision =
+      this.revisionService.getCurrentRevision();
 
-    const currentRevision : TenderRevision = this.revisionService.getCurrentRevision();
-    let bidData: TenderBid = {
-      bidder_id: this.authService.currentUser.uid,
-      created_at: new Date().toLocaleDateString('tr-TR'),
-      revisionId: currentRevision &&  currentRevision.id ? currentRevision.id : null,
-      revisionName: currentRevision && currentRevision.name ? currentRevision.name : "R1",
-      company_id: this.authService._userDetails.value?.companyId,
-      company_name: this.authService._userDetails.value?.companyName,
-      total_price: this.tableService.allTreeTotal,
-      discovery_data: data,
-    };
-    this.bidSubject.next(bidData);
-    return bidData;
+    if (!currentData.isEditMode) {
+      let bidData: TenderBid = {
+        bidder_id: this.authService.currentUser.uid,
+        created_at: new Date().toLocaleDateString('tr-TR'),
+        revisionId:
+          currentRevision && currentRevision.id ? currentRevision.id : null,
+        revisionName:
+          currentRevision && currentRevision.name ? currentRevision.name : 'R1',
+        company_id: this.authService._userDetails.value?.companyId,
+        company_name: this.authService._userDetails.value?.companyName,
+        total_price: this.tableService.allTreeTotal,
+        discovery_data: data,
+      };
+      this.bidSubject.next(bidData);
+      return bidData;
+    } else {
+      currentData.discovery_data = data;
+      currentData.revisionId =
+        currentRevision && currentRevision.id ? currentRevision.id : null;
+      currentData.revisionName =
+        currentRevision && currentRevision.name ? currentRevision.name : 'R1';
+      currentData.total_price = this.tableService.allTreeTotal;
+      return currentData;
+    }
   }
+
   createBid() {
     const tenderId = this.tenderSubject.value?.id;
     const bidData = this.setBidData();
-    if(tenderId) {
+    if (tenderId) {
       const tenderRef = doc(this.firestore, 'tenders', tenderId);
-      const bidsRef = collection(tenderRef, 'bids'); 
+      const bidsRef = collection(tenderRef, 'bids');
       // First, add the new bid
-        return from(addDoc(bidsRef, bidData)).pipe(
-          switchMap((docRef) => {
-              // After adding the new bid, fetch all the bids including the new one
-              return from(getDocs(bidsRef)).pipe(
-                  map((querySnapshot) => {
-                      // Transform Firestore documents into an array of bids
-                      const bids = querySnapshot.docs.map((doc) => ({
-                          id: doc.id,
-                          ...doc.data()
-                      })) as TenderBid[];
+      return from(addDoc(bidsRef, bidData)).pipe(
+        switchMap((docRef) => {
+          // After adding the new bid, fetch all the bids including the new one
+          return from(getDocs(bidsRef)).pipe(
+            map((querySnapshot) => {
+              // Transform Firestore documents into an array of bids
+              const bids = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              })) as TenderBid[];
 
-                      // Run the createBidsSummary function with the updated bids
-                      const summary = this.createBidsSummary(bids);
-                      if(summary) {
-                        this.updateBidsSummary(summary,tenderId);
-                      }
-                      updateDoc(tenderRef, {
-                        bidsCount: increment(1)
-                      })
-                      .then(() => {
-                        console.log('Tender updated successfully! Bids count incremented.');
-                      })
-                      .catch((error) => {
-                        console.error('Error updating tender:', error);
-                      });
-                      // Return the ID of the newly added bid
-                      return docRef.id;
-                  })
-              );
-          })
+              // Run the createBidsSummary function with the updated bids
+              const summary = this.createBidsSummary(bids);
+              if (summary) {
+                this.updateBidsSummary(summary, tenderId);
+              }
+              updateDoc(tenderRef, {
+                bidsCount: increment(1),
+              })
+                .then(() => {
+                  console.log(
+                    'Tender updated successfully! Bids count incremented.',
+                  );
+                })
+                .catch((error) => {
+                  console.error('Error updating tender:', error);
+                });
+              // Return the ID of the newly added bid
+              return docRef.id;
+            }),
+          );
+        }),
       );
-    //  return from(addDoc(bidsRef, bidData)).pipe(map((docRef) => docRef.id));
-    }
-    else {
-      return from([])
+      //  return from(addDoc(bidsRef, bidData)).pipe(map((docRef) => docRef.id));
+    } else {
+      return from([]);
     }
   }
-
-
 
   getBidsByBidderId(bidderId?: string): Observable<TenderBid[]> {
     if (!bidderId) {
@@ -136,7 +150,7 @@ export class BidService {
             });
           });
         });
-        
+
         return bids;
       }),
     );
@@ -151,109 +165,136 @@ export class BidService {
   }
 
   updateBidsSummary(bidsSummary: TenderBidsSummary, tenderId: string) {
-    
-      const tendersCollection = collection(this.firestore, 'tenders');
- 
-      const tenderRef = doc(tendersCollection, tenderId);
-      
-      updateDoc(tenderRef, {
-        bidsSummary: bidsSummary
+    const tendersCollection = collection(this.firestore, 'tenders');
+
+    const tenderRef = doc(tendersCollection, tenderId);
+
+    updateDoc(tenderRef, {
+      bidsSummary: bidsSummary,
+    })
+      .then(() => {
+        console.log('Tender bids Summary updated successfully!');
       })
-        .then(() => {
-          console.log('Tender bids Summary updated successfully!');
-        })
-        .catch((error) => {
-          console.error('Error updating tender bids summary:', error);
-        });
-    
+      .catch((error) => {
+        console.error('Error updating tender bids summary:', error);
+      });
   }
 
   createBidsSummary(bids: TenderBid[]): TenderBidsSummary | null {
     if (!bids || bids.length < 1) {
-        return null;
+      return null;
     }
 
-    const columns = bids[0].discovery_data["0"]; // Assuming columns are the first row
+    const columns = bids[0].discovery_data['0']; // Assuming columns are the first row
     let minPrices: any = [];
     let maxPrices: any = [];
     let avgPrices: any = [];
 
     // Process each bid
     for (const bid of bids) {
-        // Process each row in the discovery_data
-        for (const [rowIndex, row] of Object.entries(bid.discovery_data)) {
-            const rowNum = parseInt(rowIndex);
+      // Process each row in the discovery_data
+      for (const [rowIndex, row] of Object.entries(bid.discovery_data)) {
+        const rowNum = parseInt(rowIndex);
 
-            // Initialize for this row if not already done
-            if (!minPrices[rowNum]) {
-                minPrices[rowNum] = {};
-                maxPrices[rowNum] = {};
-                avgPrices[rowNum] = {};
+        // Initialize for this row if not already done
+        if (!minPrices[rowNum]) {
+          minPrices[rowNum] = {};
+          maxPrices[rowNum] = {};
+          avgPrices[rowNum] = {};
+        }
+
+        let priceSums: any = {};
+        let priceCounts: any = {};
+
+        // Process each column in the row
+        columns.forEach((column: any, index: number) => {
+          const value = row[index];
+
+          if (value && typeof value === 'number') {
+            // Initialize minPrices, maxPrices, priceSums, and priceCounts for this column if not done yet
+            if (!minPrices[rowNum][column]) {
+              minPrices[rowNum][column] = value;
+              maxPrices[rowNum][column] = value;
+              priceSums[column] = 0;
+              priceCounts[column] = 0;
             }
 
-            let priceSums: any = {};
-            let priceCounts: any = {};
+            // Update minPrices and maxPrices for this row
+            minPrices[rowNum][column] = Math.min(
+              minPrices[rowNum][column],
+              value,
+            );
+            maxPrices[rowNum][column] = Math.max(
+              maxPrices[rowNum][column],
+              value,
+            );
 
-            // Process each column in the row
-            columns.forEach((column: any, index: number) => {
-                const value = row[index];
+            // Accumulate values for averages
+            priceSums[column] += value;
+            priceCounts[column] += 1;
+          }
+        });
 
-                if (value && typeof value === "number") {
-                    // Initialize minPrices, maxPrices, priceSums, and priceCounts for this column if not done yet
-                    if (!minPrices[rowNum][column]) {
-                        minPrices[rowNum][column] = value;
-                        maxPrices[rowNum][column] = value;
-                        priceSums[column] = 0;
-                        priceCounts[column] = 0;
-                    }
-
-                    // Update minPrices and maxPrices for this row
-                    minPrices[rowNum][column] = Math.min(minPrices[rowNum][column], value);
-                    maxPrices[rowNum][column] = Math.max(maxPrices[rowNum][column], value);
-
-                    // Accumulate values for averages
-                    priceSums[column] += value;
-                    priceCounts[column] += 1;
-                }
-            });
-
-            // Calculate the averages for this row
-            columns.forEach((column: any) => {
-                if (priceSums[column] && priceCounts[column]) {
-                    avgPrices[rowNum][column] = (priceSums[column] / priceCounts[column]).toFixed(2);
-                }
-            });
-        }
+        // Calculate the averages for this row
+        columns.forEach((column: any) => {
+          if (priceSums[column] && priceCounts[column]) {
+            avgPrices[rowNum][column] = (
+              priceSums[column] / priceCounts[column]
+            ).toFixed(2);
+          }
+        });
+      }
     }
 
     // Log the results for each row
-    console.log("Min Prices by row:", minPrices);
-    console.log("Max Prices by row:", maxPrices);
-    console.log("Avg Prices by row:", avgPrices);
+    console.log('Min Prices by row:', minPrices);
+    console.log('Max Prices by row:', maxPrices);
+    console.log('Avg Prices by row:', avgPrices);
 
     // Return the result as a summary object
     return { minPrices, maxPrices, avgPrices };
-}
-
-async getBid(tenderId: string, bidId: string) {
-  const bidsDocRef = doc(this.firestore, 'tenders', tenderId, 'bids', bidId);
-
-  try {
-      const docSnap = await getDoc(bidsDocRef);
-      
-      if (docSnap.exists()) {
-          const bid = docSnap.data() as TenderBid; 
-          this.bidSubject.next(bid);
-          //const data = bid.discovery_data;
-          //this.tableDataService.loadData(DictToDataList(data));
-          return bid;
-      } else {
-          return null; // Return null if the document doesn't exist
-      }
-  } catch (error) {
-      console.error("Error fetching revision:", error);
-      throw error; // Throw error for handling in caller function
   }
-}
 
+  async getBid(tenderId: string, bidId: string) {
+    const bidsDocRef = doc(this.firestore, 'tenders', tenderId, 'bids', bidId);
+
+    try {
+      const docSnap = await getDoc(bidsDocRef);
+
+      if (docSnap.exists()) {
+        const bid = docSnap.data() as TenderBid;
+        this.bidSubject.next(bid);
+        //const data = bid.discovery_data;
+        //this.tableDataService.loadData(DictToDataList(data));
+        return bid;
+      } else {
+        return null; // Return null if the document doesn't exist
+      }
+    } catch (error) {
+      console.error('Error fetching revision:', error);
+      throw error; // Throw error for handling in caller function
+    }
+  }
+
+  updateBid() {
+    const tenderId = this.tenderSubject.getValue().id;
+    const bidData = this.bidSubject.getValue();
+    const bidDocRef = doc(
+      this.firestore,
+      'tenders',
+      tenderId,
+      'bids',
+      bidData.id,
+    );
+
+    // Return an observable that performs the update operation
+    return from(updateDoc(bidDocRef, bidData as { [x: string]: any }));
+  }
+
+  setCurrentBid(bid: TenderBid) {
+    this.bidSubject.next(bid);
+  }
+  setCurrentTender(tender: Tender) {
+    this.tenderSubject.next(tender);
+  }
 }

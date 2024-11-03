@@ -67,5 +67,4 @@ export class TamamlaComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  saveRevision() {}
 }

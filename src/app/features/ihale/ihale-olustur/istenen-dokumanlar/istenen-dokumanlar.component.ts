@@ -29,10 +29,11 @@ export class IstenenDokumanlarComponent implements OnInit {
   messages: Message[] = []; // bilgilendirme mesajı
   requestedDocs: RequestedDocument[] = [];
   id: number = 0;
-
+  isEditMode!: boolean;
   constructor(private tenderService: TenderService) {}
 
   ngOnInit(): void {
+    this.isEditMode = this.tenderService._currentTender.value.isEditMode;
     //mesajları oluştur
     this.messages = [
       {

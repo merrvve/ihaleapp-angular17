@@ -11,15 +11,13 @@ import { StepsModule } from 'primeng/steps';
 })
 export class IhaleOlusturComponent implements OnInit {
   steps: any[] = [];
-  @Input() isDraft: boolean = false;
-  @Input() isEditMode:  boolean = false;
+  @Input() isDraft!: boolean;
+  @Input() isEditMode!:  boolean;
   constructor(
-    private route: ActivatedRoute
+    
   ) {}
   ngOnInit(): void {
-    this.route.paramMap.subscribe((param)=>{
-      this.isEditMode = param['params']['isEditMode'] === 'true'; 
-    })
+    
     
     //this.tableService.loadData(this.tableService.ornekData);
 
