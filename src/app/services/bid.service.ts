@@ -5,6 +5,7 @@ import {
   addDoc,
   collection,
   collectionData,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -18,6 +19,7 @@ import { TablodataService } from './tablodata.service';
 import { FirebaseAuthService } from './firebaseauth.service';
 import { TenderBidsSummary } from '../models/tender-bids-summary';
 import { RevisionsService } from './revisions.service';
+import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root',
@@ -31,10 +33,14 @@ export class BidService {
   bidSubject = new BehaviorSubject<TenderBid>(null);
   bid$ = this.bidSubject.asObservable();
 
+  bidsSubject = new BehaviorSubject<TenderBid[]>([]);
+  bids$ = this.bidsSubject.asObservable();
+
   constructor(
     private tableService: TablodataService,
     private authService: FirebaseAuthService,
     private revisionService: RevisionsService,
+    private messageService: MessagesService
   ) {}
 
   setBidData() {
@@ -47,7 +53,7 @@ export class BidService {
     const currentRevision: TenderRevision =
       this.revisionService.getCurrentRevision();
 
-    if (!currentData.isEditMode) {
+    if (!currentData?.isEditMode) {
       let bidData: TenderBid = {
         bidder_id: this.authService.currentUser.uid,
         created_at: new Date().toLocaleDateString('tr-TR'),
@@ -150,7 +156,7 @@ export class BidService {
             });
           });
         });
-
+        this.bidsSubject.next(bids)
         return bids;
       }),
     );
@@ -296,5 +302,25 @@ export class BidService {
   }
   setCurrentTender(tender: Tender) {
     this.tenderSubject.next(tender);
+  }
+
+  deleteBid(bidId: string, tenderId: string) {
+    if(tenderId) {
+      const bidDocRef = doc(this.firestore, 'tenders', tenderId, 'bids', bidId);
+      deleteDoc(bidDocRef).then( ()=> {
+        this.messageService.showSuccess("Teklif başarıyla silindi");
+        const updatedList = this.bidsSubject.getValue().filter(x=>x.id!==bidId);
+        this.bidsSubject.next(updatedList)
+        
+      }
+      )
+      .catch((error)=> {
+        this.messageService.showError("Teklif silinemedi. ", error);
+      });
+    }
+    else {
+      this.messageService.showError("Teklifle ilişkili ihale no bulunamadı");
+    }
+   
   }
 }

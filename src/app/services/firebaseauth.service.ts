@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { UserDetail } from '../models/user-detail.interface';
 import { User } from '../models/user.interface';
+import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,9 @@ export class FirebaseAuthService {
   _userDetails = new BehaviorSubject<UserDetail | null>(null);
   userDetails$ = this._userDetails.asObservable();
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+   private messageService: MessagesService
+  ) {}
 
   private fetchUserDetails(uid: string) {
     const userProfileDocRef = doc(this.firestore, 'users', uid);
@@ -40,20 +43,23 @@ export class FirebaseAuthService {
           console.log(this._userDetails.value, this.currentUser);
         } else {
           // Document not found
-          console.log('No such document!');
+          this.messageService.showError("Kullanıcı bilgileri alınamadı. ");
         }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        this.messageService.showError("Kullanıcı bilgileri alınamadı. " + error.message)
+      });
   }
 
   login(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password)
       .then((aUser) => {
         this.getUserInfo(aUser.user);
+        this.messageService.showSuccess("Giriş Başarılı");
         this._isLoggedInSubject.next(true);
         this.fetchUserDetails(aUser.user.uid);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => this.messageService.showError("Giriş Başarısız. " + error.message));
   }
 
   getUserInfo(firebaseResult: any) {

@@ -6,6 +6,7 @@ import { TeklifDetayComponent } from "../../teklif-detay/teklif-detay.component"
 import { TenderBid } from '../../../../models/tender-bid';
 import { AsyncPipe } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
+import { MessagesService } from '../../../../services/messages.service';
 
 @Component({
   selector: 'app-teklif-ozet',
@@ -20,6 +21,8 @@ export class TeklifOzetComponent {
   subscription2!: Subscription;
   constructor(
     private bidService: BidService,
+    private messagesService: MessagesService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.bidService.setBidData();
@@ -27,14 +30,20 @@ export class TeklifOzetComponent {
   }
   createBid() {
     this.subscription1=this.bidService.createBid()?.subscribe({
-      next: (result) => console.log(result),
-      error: (error) => console.log(error),
+      next: (result) => {this.messagesService.showSuccess("Teklif başarıyla oluşturuldu");
+        this.router.navigate(['/teklifci/tekliflerim'])
+      },
+      error: (error) => this.messagesService.showError("Teklif oluşturulamadı. " + error.message),
     });
   }
 
   updateBid() {
-    this.subscription2= this.bidService.updateBid().subscribe(
-      result=> console.log(result,"updated")
+    this.subscription2= this.bidService.updateBid().subscribe({
+      next: () => {this.messagesService.showSuccess("Teklif başarıyla güncellendi");
+        this.router.navigate(['/teklif/tekliflerim'])
+      },
+      error: (error) => this.messagesService.showError("Teklif güncellenemedi. " + error.message),
+    }
     );
   }
   ngOnDestroy() {

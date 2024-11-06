@@ -23,6 +23,9 @@ import { Budget } from '../models/budget';
 import { BudgetService } from './budget.service';
 import { RevisionsService } from './revisions.service';
 import { ListToDict } from '../utils/functions/ListToDict';
+import { MessageService } from 'primeng/api/messageservice';
+import { MessagesService } from './messages.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +36,8 @@ export class TenderService {
     owner_id: '',
     name: '',
     description: '',
-    created_at: Date.now().toLocaleString(),
-    currency: '',
+    created_at: Date.now().toString(),
+    currency: 'TL',
     cost: 0,
     requestedDocuments: [],
     tenderFiles: [],
@@ -58,18 +61,35 @@ export class TenderService {
     private authService: FirebaseAuthService,
     private tableData: TablodataService,
     private budgetService: BudgetService,
-    private revisionsService: RevisionsService
+    private revisionsService: RevisionsService,
+    private messageService: MessagesService,
+    private router: Router
+    
   ) {
     this.tendersCollection = collection(this.firestore, 'tenders');
   }
 
   createTender(isDraft = false) {
     const tender = this._currentTender.getValue();
+    const owner_id = this.authService.getUser()?.uid;
+    if(!owner_id) {
+      this.messageService.showError("Kullanıcı girişi olmadan ihale oluşturulamaz.");
+      return;
+    }
+    if(tender.name.length<1) {
+      this.messageService.showError("Lütfen ihale adı bilgisini doldurunuz.");
+      return;
+    }
+    if(tender.bidders.length<1) {
+      this.messageService.showWarning("Bu ihaleye henüz teklifçi eklemediniz.");
+    }
+
+    
     const currentTableData = this.tableData.currentData;
     const data = ListToDict(currentTableData);
     
     tender.discoveryData = data;
-    tender.owner_id = this.authService.getUser()?.uid || '';
+    tender.owner_id = owner_id;
     tender.isDraft = isDraft;
     
     tender.bidsSummary = {
@@ -96,6 +116,7 @@ export class TenderService {
     addDoc(this.tendersCollection, tender).then(
       (documentReference: DocumentReference) => {
         console.log(documentReference);
+        this.messageService.showSuccess(`${documentReference.id} nolu ihale başarıyla oluşturuldu.`);
         const budget : Budget = {
           name: 'default',
           tender_id: documentReference.id,
@@ -104,6 +125,7 @@ export class TenderService {
           revisionName: "R1"
         }
         this.budgetService.createBudget(budget);
+        this.router.navigate(['/ihale'])
       },
     );
   }
@@ -130,10 +152,10 @@ export class TenderService {
     // Perform an update on the tender document with the provided data
     updateDoc(tenderRef, tender as object)
       .then(() => {
-        console.log('Tender updated successfully!');
+        this.messageService.showSuccess(`${tender.id} nolu ihale başarıyla güncellendi.`);
       })
       .catch((error) => {
-        console.error('Error updating tender:', error);
+        this.messageService.showError(`${tender.id} nolu ihale güncellenirken hata oluştu.` + error.message);
       });
   }
 
@@ -205,12 +227,10 @@ export class TenderService {
     // Delete the tender document
     deleteDoc(tenderRef)
       .then(() => {
-        console.log('Tender deleted successfully!');
-        // Optional: Handle success scenarios (e.g., emit an event, show a success message)
+        this.messageService.showSuccess(`${tenderId} nolu ihale silindi.`);
       })
       .catch((error) => {
-        console.error('Error deleting tender:', error);
-        // Handle error scenarios (e.g., display an error message to the user)
+        this.messageService.showError(`${tenderId} nolu ihale silinirken hata oluştu.` + error.message);
       });
   }
 

@@ -23,18 +23,13 @@ import { RouterLink } from '@angular/router';
 })
 export class TamamlaComponent implements OnInit {
   tender$!: Observable<Tender>;
-  isModalVisible: boolean = false;
-  isLoading: boolean = false;
-
   constructor(private tenderService: TenderService) {}
   ngOnInit(): void {
     this.tender$ = this.tenderService.currentTender$;
   }
 
   onSubmit(isDraft = false, currentTenderIsDraft = false, isEditMode = false) {
-    this.isLoading = true;
-    this.isModalVisible = true;
-
+   
     //Save as draft
     if (isDraft) {
       //if current tender is draft, update it
@@ -63,8 +58,5 @@ export class TamamlaComponent implements OnInit {
     }
   }
 
-  showDialog() {
-    this.isModalVisible = true;
-  }
-
+ 
 }

@@ -131,8 +131,8 @@
             <td>{{ tender.name }}</td>
             <td>{{ tender.description }}</td>
             <td>{{ tender.isCompleted ? "Tamamlandı" : "Devam Ediyor" }}</td>
-            <td></td>
-            <td></td>
+            <td>{{ tender.isCompleted ? tender.companyWin : "Tamamlanmadı" }}</td>
+            <td>{{ tender.isCompleted ? tender.bidderWin : "Tamamlanmadı" }}</td>
             <td>{{ tender.created_at | date }}</td>
             <td>{{ tender.completed_at | date }}</td>
             <td>{{ tender.cost }}</td>

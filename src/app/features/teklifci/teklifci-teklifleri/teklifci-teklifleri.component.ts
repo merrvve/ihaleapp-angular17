@@ -33,7 +33,7 @@ export class TeklifciTeklifleriComponent implements OnInit {
     private router: Router,
   ) {}
   ngOnInit(): void {
-    this.bids$ = this.bidService.getBidsByBidderId();
+    this.bids$ = this.bidService.bids$;
   }
 
   getEditItems(bid: TenderBid) {
@@ -120,9 +120,13 @@ export class TeklifciTeklifleriComponent implements OnInit {
     
   }
 
+  deleteBid(bidId: string, tenderId: string) {
+    this.bidService.deleteBid(bidId, tenderId);
+  }
   ngOnDestroy() {
     if(this.subscription) {
       this.subscription.unsubscribe();
     }
   }
+
 }

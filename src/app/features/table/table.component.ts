@@ -1,10 +1,9 @@
 import {
   Component,
-  EventEmitter,
+ 
   Input,
   OnInit,
-  Output,
-  ViewChild,
+ 
 } from '@angular/core';
 import { MenuItem, Message, MessageService, TreeNode } from 'primeng/api';
 import { TablodataService } from '../../services/tablodata.service';
@@ -21,7 +20,6 @@ import { ContextMenuModule } from 'primeng/contextmenu';
 import { DialogModule } from 'primeng/dialog';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { Subscription } from 'rxjs';
@@ -45,7 +43,6 @@ import { FirebaseAuthService } from '../../services/firebaseauth.service';
     FormsModule,
     TreeTableModule,
     InputNumberModule,
-    ToastModule,
     DropdownModule,
     ContextMenuModule,
     NgClass,
@@ -119,10 +116,19 @@ export class TableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.userRole = this.authService.getUserRole();
     // verileri yükle
     this.subscription = this.dataService.cols$.subscribe({
-      next: (v) => {
-        this.cols = v;
+      next: (columns) => {
+        this.cols = columns;
+        if(this.userRole==="TENDERER") {
+          this.cols.forEach(col=>{
+            if(col.isBirim) {
+              col.editable=false;
+            }
+          })
+        }
+        
         this.selectedColumns = this.cols;
         console.log(this.cols);
       },
@@ -143,7 +149,7 @@ export class TableComponent implements OnInit {
       complete: () => console.info('complete'),
     });
 
-    this.userRole = this.authService.getUserRole();
+    
     // menüleri oluştur
     this.tableMenuItems = [
       {

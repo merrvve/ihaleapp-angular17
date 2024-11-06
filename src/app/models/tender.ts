@@ -28,6 +28,8 @@ export interface Tender {
   messages?: TenderMessage[]; 
   reportSetting?: ReportSettings
   bidsSummary?: TenderBidsSummary
+  companyWin?: string;
+  bidderWin?: string;
 }
 
 export interface TenderFile {
