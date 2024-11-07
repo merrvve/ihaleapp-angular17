@@ -6,32 +6,43 @@ import { ButtonModule } from 'primeng/button';
 import { TenderBid } from '../../../models/tender-bid';
 import { BidService } from '../../../services/bid.service';
 import { TablodataService } from '../../../services/tablodata.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { TenderService } from '../../../services/tender.service';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-teklifci-teklifleri',
   standalone: true,
-  imports: [AsyncPipe, TableModule, ButtonModule, InputIconModule, IconFieldModule, InputTextModule, SplitButtonModule],
+  imports: [AsyncPipe, TableModule, ButtonModule, InputIconModule, IconFieldModule, InputTextModule, SplitButtonModule, TooltipModule],
   templateUrl: './teklifci-teklifleri.component.html',
   styleUrl: './teklifci-teklifleri.component.scss',
 })
 export class TeklifciTeklifleriComponent implements OnInit {
   bids$!: Observable<TenderBid[] | null>;
   subscription!: Subscription;
-  
+  paramSupscription!: Subscription;
+  tenderId!: string;
   constructor(
     private bidService: BidService,
     private tenderService: TenderService,
     private tableService: TablodataService,
     private router: Router,
+    private route: ActivatedRoute
   ) {}
   ngOnInit(): void {
     this.bids$ = this.bidService.bids$;
+    this.paramSupscription= this.route.paramMap.subscribe(
+      (params) => {
+        this.tenderId = params.get('id');
+        if (this.tenderId) {
+          this.bidService.filterBidsByTenderId(this.tenderId);
+        } 
+      }
+    )
   }
 
   getEditItems(bid: TenderBid) {
@@ -124,6 +135,9 @@ export class TeklifciTeklifleriComponent implements OnInit {
   ngOnDestroy() {
     if(this.subscription) {
       this.subscription.unsubscribe();
+    }
+    if(this.paramSupscription) {
+      this.paramSupscription.unsubscribe();
     }
   }
 

@@ -11,11 +11,12 @@ import { BidService } from '../../../services/bid.service';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-teklifci-ihaleleri',
   standalone: true,
-  imports: [TableModule, ButtonModule, AsyncPipe,InputIconModule, IconFieldModule, InputTextModule],
+  imports: [TableModule, ButtonModule, AsyncPipe,InputIconModule, IconFieldModule, InputTextModule, TooltipModule],
   templateUrl: './teklifci-ihaleleri.component.html',
   styleUrl: './teklifci-ihaleleri.component.scss',
 })
@@ -59,5 +60,9 @@ export class TeklifciIhaleleriComponent implements OnInit {
   }
   getEventValue($event: any): string {
     return $event.target.value;
+  }
+
+  seeMyBids(tenderId: string) {
+    this.router.navigate([`/teklifci/ihale/${tenderId}/tekliflerim`])
   }
 }

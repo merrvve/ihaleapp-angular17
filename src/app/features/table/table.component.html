@@ -220,7 +220,7 @@
   #dataTreeTable
   [autoLayout]="true"
   [resizableColumns]="true"
-  [reorderableColumns]="true"
+  [reorderableColumns]="userRole && userRole==='TENDERER'?  true : false"
   [value]="files"
   columnResizeMode="expand"
   selectionMode="checkbox"

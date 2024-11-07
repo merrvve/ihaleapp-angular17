@@ -1,6 +1,11 @@
 @if (bids$ | async; as bids) {
 <div class="container mb-5">
-  <h2 class="p-2">Tekliflerim</h2>
+  <h2 class="p-2">
+    @if(tenderId) {
+      <span> {{tenderId}} No'lu İhale  </span>
+    }
+    
+    Tekliflerim</h2>
 </div>
 
 <div class="card">
@@ -31,7 +36,7 @@
         <th pSortableColumn="revisionName">Revizyon No <p-sortIcon field="revisionName" /></th>
         <th pSortableColumn="created_at">Teklif Tarihi <p-sortIcon field="created_at" /></th>
         <th pSortableColumn="total_price">Toplam Bedel <p-sortIcon field="total_price" /></th>
-        <th>İşlem</th>
+        <th style="width: 20rem;">İşlem</th>
       </tr>
       <tr>
         <th>
@@ -49,7 +54,7 @@
         <th>
           <p-columnFilter type="text" field="total_price" placeholder="Ara..." ariaLabel="Toplam Bedel ile ara" />
         </th>
-        <th></th>
+        <th> </th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-bid>
@@ -65,26 +70,32 @@
           severity="danger"
           icon="pi pi-trash"
           styleClass="m-2"
+          pTooltip="Teklifi Sil"
+          tooltipPosition="bottom" 
           (click)="deleteBid(bid.id, bid.tenderId)"
         ></p-button>
           <p-button
                 type="button"
                 icon="pi pi-eye"
                 severity="secondary"
+                tooltipPosition="bottom" 
                 styleClass="m-2"
+                pTooltip="Teklif Detayı"
                 (click)="seeTenderBidDetails(bid)"
               ></p-button>
               <p-button
               type="button"
-              label="Düzenle"
               severity="info"
               icon="pi pi-file-edit"
+              pTooltip="Teklifi Düzenle"
+              tooltipPosition="bottom" 
               styleClass="m-2"
               (click)="editBid(bid)"
             ></p-button>
             <p-button
               type="button"
-              label="Yeni Teklif"
+              pTooltip="Yeni Teklif"
+              tooltipPosition="bottom" 
               icon="pi pi-plus"
               styleClass="m-2"
               (click)="newBid(bid)"

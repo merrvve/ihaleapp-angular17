@@ -26,6 +26,7 @@ export const TEKLIFCI_ROUTES: Route[] = [
     ]
     },
   { path: 'tekliflerim', component: TeklifciTeklifleriComponent },
+  { path: 'ihale/:id/tekliflerim', component: TeklifciTeklifleriComponent },
   { path: 'dashboard', component: TeklifciComponent },
   { path: 'kesif-detay', component: TableComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

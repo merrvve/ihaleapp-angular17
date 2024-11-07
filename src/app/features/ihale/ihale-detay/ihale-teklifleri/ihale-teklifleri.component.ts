@@ -52,10 +52,11 @@ export class IhaleTeklifleriComponent {
     private menuService: MenuService,
   ) {}
   ngOnInit() {
-    this.currentTender = this.tenderService._currentTender.value;
+    this.currentTender = this.tenderService._currentTender.getValue();
     this.paramSubscription = this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       this.menuService.setItems(id || '');
+      console.log(id, this.currentTender?.id)
       if (id && id !== this.currentTender?.id) {
         this.tenderService.getTenderById(id).subscribe({
           next: (result) => {
@@ -70,8 +71,12 @@ export class IhaleTeklifleriComponent {
       }
     });
     if (this.currentTender?.id) {
+      console.log(this.currentTender.id)
       this.bidSubscription = this.bidService.getBidsByTenderId(this.currentTender?.id).subscribe(
-        () => this.bids$ = this.bidService.bids$
+        (result) => {
+          this.bidService.bidsSubject.next(result);
+          this.bids$ = this.bidService.bids$; 
+        }
       );
     }
   }

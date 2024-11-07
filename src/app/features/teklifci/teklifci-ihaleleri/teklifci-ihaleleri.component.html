@@ -132,16 +132,29 @@
           <td>
             <p-button
                 type="button"
-                icon="pi pi-eye"
-                severity="info"
+                icon="pi pi-file"
+                pTooltip="İhale Detayı" 
+                tooltipPosition="bottom" 
+                severity="secondary"
                 class="m-1"
                 (click)="selectTender(tender.id)"
+              ></p-button>
+              <p-button
+                type="button"
+                icon="pi pi-eye"
+                pTooltip="Tekliflerimi Gör" 
+                tooltipPosition="bottom" 
+                severity="info"
+                class="m-1"
+                (click)="seeMyBids(tender.id)"
               ></p-button>
             <p-button
               type="button"
               pRipple
               class="m-1"
-              icon="pi pi-file-edit"
+              icon="pi pi-plus"
+              pTooltip="Teklif Ver" 
+              tooltipPosition="bottom" 
               (click)="createBid(tender.id)"
             >
             </p-button>

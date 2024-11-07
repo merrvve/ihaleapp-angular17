@@ -64,7 +64,7 @@ export class TableComponent implements OnInit {
   files!: TreeNode[]; // tüm tablo
   cols!: Column[]; // tüm sütun nesneleri
 
-  userRole!: string;
+  @Input() userRole!: string;
   keepOriginal: boolean = true;
   selectedColumns!: Column[]; // görüntülenecek sütunlar
   selectionKeys: any = {};
@@ -116,7 +116,10 @@ export class TableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userRole = this.authService.getUserRole();
+    if(!this.userRole) {
+      this.userRole = this.authService.getUserRole();
+    }
+   
     // verileri yükle
     this.subscription = this.dataService.cols$.subscribe({
       next: (columns) => {

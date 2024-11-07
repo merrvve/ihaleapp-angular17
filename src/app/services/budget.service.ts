@@ -14,6 +14,9 @@ import {
 import { Budget } from '../models/budget';
 import { RevisionsService } from './revisions.service';
 import { TenderRevision } from '../models/tender';
+import { MessagesService } from './messages.service';
+import { Location } from '@angular/common';
+
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +29,9 @@ export class BudgetService {
   budgetsCollection!: CollectionReference;
 
   constructor(
-    private revisionService: RevisionsService
+    private revisionService: RevisionsService,
+    private messagesService: MessagesService,
+    private location: Location
   ) {
     this.budgetsCollection = collection(this.firestore, 'budgets');
   }
@@ -70,7 +75,7 @@ export class BudgetService {
       });
       return budgets;
     } catch (error) {
-      console.log('Error getting documents: ', error);
+      console.log("bütçe bilgisi alınamadı",error);
       return null;
     }
   }
@@ -78,9 +83,13 @@ export class BudgetService {
   createBudget(budget: Budget) {
     this.currentBudget = budget;
     addDoc(this.budgetsCollection, budget).then(
-      (documentReference: DocumentReference) => {
-        console.log(documentReference);
+      () => {
+        this.messagesService.showSuccess("Bütçe Oluşturuldu.");
+        this.location.back();
       },
+    )
+    .catch(
+      (error)=> this.messagesService.showError("Bütçe Oluşturulamadı. " +error.message)
     );
   }
 
@@ -90,10 +99,11 @@ export class BudgetService {
 
     updateDoc(budgetRef, budget as object)
       .then(() => {
-        console.log('Tender updated successfully!');
+        this.messagesService.showSuccess("Bütçe Güncellendi.");
+        this.location.back();
       })
       .catch((error) => {
-        console.error('Error updating tender:', error);
+        this.messagesService.showError("Bütçe Güncellenemedi. " +error.message)
       });
   }
 }

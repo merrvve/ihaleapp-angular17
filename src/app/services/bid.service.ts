@@ -130,6 +130,7 @@ export class BidService {
       bidderId = this.authService.getUser()?.uid || '';
     }
 
+
     const tendersCollection = collection(this.firestore, 'tenders');
     const tendersQuery = query(tendersCollection); // Reference tenders collection
 
@@ -138,7 +139,7 @@ export class BidService {
         const bids: TenderBid[] = [];
         querySnapshot.forEach((tenderDoc) => {
           const tenderData = tenderDoc.data() as Tender;
-
+         
           // Check if bidder ID matches (optional, based on your requirements)
 
           const tenderId = tenderDoc.id;
@@ -322,5 +323,10 @@ export class BidService {
       this.messageService.showError("Teklifle ilişkili ihale no bulunamadı");
     }
    
+  }
+
+  filterBidsByTenderId(tenderId: string) {
+    const filteredBids = this.bidsSubject.getValue().filter(x=> x.tenderId===tenderId);
+    this.bidsSubject.next(filteredBids);
   }
 }
