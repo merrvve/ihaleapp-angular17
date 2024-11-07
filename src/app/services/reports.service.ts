@@ -129,18 +129,19 @@ export class ReportsService {
               //skip this column
           }
           else {
-            if(row[0].includes('.') && !reportSetting.showSubHeading) {
+            console.log(row[0], typeof(row[0]))
+            if(row[0].toString().includes('.') && !reportSetting.showSubHeading) {
               
             }
             // if(!row[0].includes('.') && !reportSetting.showAllTotal) {
             //   // skip this
             // }
             else {
-              if(!reportSetting.showAllTotal && row[1].toLowerCase().includes('Toplam')) {
+              if(!reportSetting.showAllTotal && row[1]?.toLowerCase().includes('Toplam')) {
                 // skip this
                
               }
-              if(!reportSetting.showAllRows && row[0].includes('.')) {
+              if(!reportSetting.showAllRows && row[0].toString().includes('.')) {
                 // skip this
                 
               }

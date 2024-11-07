@@ -12,8 +12,6 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 import { TenderService } from '../../../services/tender.service';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { MenuItem } from 'primeng/api/menuitem';
-import { Tender } from '../../../models/tender';
 
 @Component({
   selector: 'app-teklifci-teklifleri',
