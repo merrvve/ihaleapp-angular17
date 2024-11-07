@@ -49,6 +49,7 @@ export class TablodataService {
   }
 
   loadData(datalist: any[]) {
+    this.currentData = datalist;
     this._colsSubject.next(this.columns(datalist));
     this._datatreeSubject.next(
       this.convertToTreeTable(datalist, this._colsSubject.getValue()),
