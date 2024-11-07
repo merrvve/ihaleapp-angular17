@@ -9,6 +9,7 @@ import { ReportsService } from '../../../../services/reports.service';
 import { ReportData } from '../../../../models/report-data';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-firma-raporlari',
@@ -21,6 +22,7 @@ export class FirmaRaporlariComponent {
   tenderId!: string | null;
   tender$!: Observable<Tender | null>;
   reports$!: Observable<ReportData[]>;
+  subscription!: Subscription;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,12 +37,21 @@ export class FirmaRaporlariComponent {
       if (this.tenderId) {
         this.tender$ = this.tenderService.currentTender$;
         this.menuService.setItems(this.tenderId);
-        this.reports$ = this.reportService.getReportsByTenderId(this.tenderId);
+        this.subscription = this.reportService.getReportsByTenderId(this.tenderId).subscribe(
+          ()=> this.reports$ = this.reportService.reports$
+        );
       }
     });
   }
 
+  deleteReport(reportId: string) {
+    this.reportService.deleteReport(reportId);
+  }
+
   ngOnDestroy() {
     this.menuService.clearItems();
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

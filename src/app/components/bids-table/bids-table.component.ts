@@ -36,9 +36,8 @@ export class BidsTableComponent {
   @Input() compare!: boolean;
   @Input() tender!: Tender;
 
-  @Output() createReports = new EventEmitter<void>();
-
-  @Output() selectedBids!: TenderBid[];
+  selectedBid!: TenderBid;
+  selectedBids!: TenderBid[];
 
   constructor(
     private tableService: TablodataService,
@@ -53,6 +52,7 @@ export class BidsTableComponent {
     return $event.target.value;
   }
 
+  
   compareBids() {
     if (this.selectedBids) {
         let previousRev = null;

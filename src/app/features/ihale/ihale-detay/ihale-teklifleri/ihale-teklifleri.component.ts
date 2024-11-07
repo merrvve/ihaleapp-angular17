@@ -39,6 +39,7 @@ export class IhaleTeklifleriComponent {
   bids$!: Observable<TenderBid[]>;
   selectedBids!: TenderBid[];
   paramSubscription!: Subscription;
+  bidSubscription!: Subscription;
   compare = true;
 
   constructor(
@@ -69,7 +70,9 @@ export class IhaleTeklifleriComponent {
       }
     });
     if (this.currentTender?.id) {
-      this.bids$ = this.bidService.getBidsByTenderId(this.currentTender?.id);
+      this.bidSubscription = this.bidService.getBidsByTenderId(this.currentTender?.id).subscribe(
+        () => this.bids$ = this.bidService.bids$
+      );
     }
   }
 
@@ -98,6 +101,12 @@ export class IhaleTeklifleriComponent {
 
   ngOnDestroy() {
     this.menuService.clearItems();
-    this.paramSubscription.unsubscribe();
+    if(this.paramSubscription) {
+      this.paramSubscription.unsubscribe();
+    }
+    if(this.bidSubscription) {
+      this.bidSubscription.unsubscribe();
+    }
+    
   }
 }

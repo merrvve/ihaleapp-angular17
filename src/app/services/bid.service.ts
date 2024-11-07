@@ -96,7 +96,7 @@ export class BidService {
                 id: doc.id,
                 ...doc.data(),
               })) as TenderBid[];
-
+              this.bidsSubject.next(bids)
               // Run the createBidsSummary function with the updated bids
               const summary = this.createBidsSummary(bids);
               if (summary) {

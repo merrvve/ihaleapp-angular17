@@ -6,10 +6,12 @@ import { BehaviorSubject, from, map, Observable, of } from 'rxjs';
 import { ReportStatement } from '../models/report-statement';
 import { ReportTableCell } from '../models/report-table-cell';
 import { ReportData } from '../models/report-data';
-import { addDoc, collection, CollectionReference, Firestore, getDocs } from '@angular/fire/firestore';
+import { addDoc, collection, CollectionReference, deleteDoc, doc, Firestore, getDocs } from '@angular/fire/firestore';
 import { BudgetService } from './budget.service';
 import { Budget } from '../models/budget';
 import { TenderService } from './tender.service';
+import { MessagesService } from './messages.service';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -31,10 +33,15 @@ export class ReportsService {
   
   private _currentReport = new BehaviorSubject<ReportData>(undefined)
   currentReport$ = this._currentReport.asObservable(); 
+
+  private _reports = new BehaviorSubject<ReportData[]>(undefined)
+  reports$ = this._reports.asObservable(); 
   
   budget!: Budget;
   constructor(
     private budgetService: BudgetService,
+    private messageService: MessagesService,
+    private router: Router
     
   ) {
     this.reportsCollection =collection(this.firestore, 'reports');
@@ -186,9 +193,15 @@ export class ReportsService {
   saveReport() {
     const report : ReportData = this._currentReport.getValue();
     if(report) {
-      console.log(report);
+      addDoc(this.reportsCollection,report).then(()=>{
+        this.messageService.showSuccess("Rapor başarıyla oluşturuldu.");
+        this.router.navigate([`/ihale/ihale/${report.tender_id}/firma-raporlari`])
+      })
+      .catch((error)=>{
+        this.messageService.showError("Rapor oluşturulamadı. " + error)
+      });
     }
-    addDoc(this.reportsCollection,report).then(()=>console.log("Report is created successfully"));
+    
   }
 
   getReportsByTenderId(tenderId: string) {
@@ -202,11 +215,25 @@ export class ReportsService {
             reports.push(report)
           }
         });
+        this._reports.next(reports)
         return reports;
       }),
     );
   }
 
+  deleteReport(reportId: string) {
+    const reportRef = doc(this.reportsCollection, reportId)
+    // Delete the tender document
+    deleteDoc(reportRef)
+      .then(() => {
+        this.messageService.showSuccess(`${reportId} nolu rapor silindi.`);
+        const deletedList = this._reports.getValue().filter(x=> x.id!==reportId);
+        this._reports.next(deletedList);
+      })
+      .catch((error) => {
+        this.messageService.showError(`${reportId} nolu rapor silinirken hata oluştu.` + error.message);
+      });
+  }
 
   async getBudget(tenderId: string): Promise<any> {
     try {
