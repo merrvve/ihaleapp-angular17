@@ -43,7 +43,7 @@ export class BidService {
     private messageService: MessagesService
   ) {}
 
-  setBidData() {
+  setBidData(tenderId?: string) {
     const currentData = this.bidSubject.getValue();
     const currentTableData = this.tableService.currentData;
     let data: { [key: number]: any } = {};
@@ -57,6 +57,7 @@ export class BidService {
       let bidData: TenderBid = {
         bidder_id: this.authService.currentUser.uid,
         created_at: new Date().toLocaleDateString('tr-TR'),
+        tenderId: tenderId ? tenderId : null,
         revisionId:
           currentRevision && currentRevision.id ? currentRevision.id : null,
         revisionName:
@@ -81,7 +82,7 @@ export class BidService {
 
   createBid() {
     const tenderId = this.tenderSubject.value?.id;
-    const bidData = this.setBidData();
+    const bidData = this.setBidData(tenderId);
     if (tenderId) {
       const tenderRef = doc(this.firestore, 'tenders', tenderId);
       const bidsRef = collection(tenderRef, 'bids');

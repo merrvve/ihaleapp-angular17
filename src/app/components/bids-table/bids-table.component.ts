@@ -110,15 +110,7 @@ export class BidsTableComponent {
   }
 
   seeTenderBidDetails(bid: TenderBid) {
-    let tableData = [];
-    if (bid.discovery_data) {
-      for (const key in bid.discovery_data) {
-        tableData.push(bid.discovery_data[key]);
-      }
-      this.tableService.loadData(tableData);
-      this.router.navigate(['/ihale/kesif-detay']);
-    } else {
-      console.log('no discovery data');
-    }
+    this.router.navigate([`ihale/ihale/${bid.tenderId}/teklifler/${bid.id}`]);
+    
   }
 }

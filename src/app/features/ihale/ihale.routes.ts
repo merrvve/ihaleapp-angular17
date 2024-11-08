@@ -22,6 +22,7 @@ import { SoruCevapComponent } from './ihale-detay/soru-cevap/soru-cevap.componen
 import { ToplantilarComponent } from './ihale-detay/toplantilar/toplantilar.component';
 import { RaporViewComponent } from './ihale-detay/firma-raporlari/rapor-olustur/rapor-view/rapor-view.component';
 import { YeniToplantiComponent } from './ihale-detay/toplantilar/yeni-toplanti/yeni-toplanti.component';
+import { TeklifDetayiComponent } from './ihale-detay/ihale-teklifleri/teklif-detayi/teklif-detayi.component';
 
 export const IHALE_ROUTES: Route[] = [
   {
@@ -39,6 +40,8 @@ export const IHALE_ROUTES: Route[] = [
   { path: 'ihale/:id/dosyalar', component: IhaleDosyalariComponent },
   { path: 'ihale/:id/revizyonlar', component: RevizyonlarComponent },
   { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },
+  { path: 'ihale/:id/teklifler/:teklifid', component: TeklifDetayiComponent },
+  { path: 'ihale/:id/teklifler/:teklifid/kesif-detay', component: KesifDetayComponent },
   {
     path: 'ihale/:id/teklifler/firma/:firmaid',
     component: FirmaTeklifleriComponent,
