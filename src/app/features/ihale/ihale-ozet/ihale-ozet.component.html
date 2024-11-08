@@ -67,8 +67,9 @@
         <tr>
           <td>Davet Edilen Teklifçi Sayısı</td>
           <td>:</td>
-
+          <a [routerLink]="['/ihale/ihale/'+ tender.id +'/ihale-detay']">
           <td>{{ tender.bidders.length }}</td>
+          </a>
         </tr>
         <tr>
           <td>Talep Edilen Belgeler</td>
@@ -87,7 +88,8 @@
               </ul>
             }
             @else {
-              {{tender.requestedDocuments.length}} adet
+              <a [routerLink]="['/ihale/ihale/'+ tender.id +'/ihale-detay']">{{tender.requestedDocuments.length}} adet</a>
+              
             }
             
           </td>
@@ -101,14 +103,16 @@
         <tr>
           <td>Para Birimi</td>
           <td>:</td>
-
+          <a [routerLink]="['/ihale/ihale/'+ tender.id +'/ihale-detay']">
           <td>{{ tender.currency }}</td>
+          </a>
         </tr>
         <tr>
           <td>Revizyon Sayısı</td>
           <td>:</td>
-
+          <a [routerLink]="['/ihale/ihale/'+ tender.id +'/ihale-detay']">
           <td>{{ tender.revisionsCount || '0' }}</td>
+          </a>
         </tr>
         @if(isOwner) {
 

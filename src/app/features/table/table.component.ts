@@ -32,6 +32,7 @@ import { RevisionsService } from '../../services/revisions.service';
 import { TenderRevision } from '../../models/tender';
 import { ListToDict } from '../../utils/functions/ListToDict';
 import { FirebaseAuthService } from '../../services/firebaseauth.service';
+import { DictToDataList } from '../../utils/functions/DictToDataList';
 
 @Component({
   selector: 'app-table',
@@ -767,6 +768,12 @@ export class TableComponent implements OnInit {
     if(revisionId) {
       this.revisionsService.getRevision(this.tenderId,revisionId);
       this.updateView();
+    }
+    else {
+      const data = DictToDataList(this.tenderService._currentTender.getValue().discoveryData);
+      if(data) {
+        this.dataService.loadData(data);
+      }
     }
   }
   
