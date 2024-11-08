@@ -19,7 +19,6 @@ import { InputTextModule } from 'primeng/inputtext';
     ButtonModule,
     AsyncPipe,
     LoadingSpinnerComponent,
-    JsonPipe,
     DatePipe,
     IconFieldModule,
     InputIconModule,
@@ -41,7 +40,7 @@ export class IhaleListeleComponent implements OnInit {
   }
 
   selectTender(tenderId: number) {
-    this.router.navigate(['ihale/ihale/', tenderId],{queryParams:{isEditMode: true}});
+    this.router.navigate(['ihale/ihale/', tenderId]);
   }
   editTender(tender: Tender) {
     tender.isEditMode = true;

@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
 import { TableModule } from 'primeng/table';
-import { Observable, Subscription } from 'rxjs';
+import { map, Observable, Subscription } from 'rxjs';
 import { PickListModule } from 'primeng/picklist';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DialogModule } from 'primeng/dialog';
@@ -21,16 +21,12 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './teklifci-ekleme.component.html',
   styleUrl: './teklifci-ekleme.component.scss',
   imports: [
-    MessagesModule,
     ButtonModule,
     RouterLink,
     IhaleOlusturComponent,
     TableModule,
     PickListModule,
     DragDropModule,
-    DialogModule,
-    ProgressSpinnerModule,
-
     AsyncPipe,
   ],
 })
@@ -49,18 +45,20 @@ export class TeklifciEklemeComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     // Teklifçi bilgilerini al
-    this.bidders$ = this.bidderService.getBidders();
+    const bidderIds = this.tenderService._currentTender.getValue().bidders;
+    this.bidders$ = this.bidderService.getBidders().pipe(
+      map((bidders) => {
+        // Filter bidders based on IDs
+        this.selectedBidders = bidders.filter(bidder => bidderIds.includes(bidder.uid));
+        
+        return bidders.filter(bidder => !bidderIds.includes(bidder.uid)) // Still return bidders for `bidders$` observable
+      })
+    );
     this.isEditMode = this.tenderService._currentTender.value.isEditMode;
+   
+
+
     
-    //mesajları oluştur
-    this.messages = [
-      {
-        severity: 'info',
-        summary: 'Teklifçi Ekleme',
-        detail:
-          'Bu adımda listeden teklifçi seçebilir ya da yeni teklifçi oluşturabilirsiniz.',
-      },
-    ];
   }
 
   ngOnDestroy() {

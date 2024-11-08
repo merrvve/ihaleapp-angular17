@@ -554,10 +554,9 @@ export class IhaleKarsilastirComponent implements OnInit {
         if (i === 0) {
           this.selectedTableData.push(this.tableData[i]);
         } else {
-          const countDot = this.tableData[i][0].match(/./g || [].length);
-          const countDotNext = this.tableData[i + 1][0].match(
-            /./g || [].length,
-          );
+          const countDot = (this.tableData[i][0].match(/./g) || []).length;
+          const countDotNext = (this.tableData[i + 1][0].match(/./g) || []).length;
+
           if (countDot < countDotNext) {
             this.selectedTableData.push(this.tableData[i]);
           } else if (countDot === 0) {

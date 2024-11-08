@@ -37,6 +37,7 @@ export const IHALE_ROUTES: Route[] = [
     ],
   },
   { path: 'ihale/:id', component: IhaleDetayComponent },
+  { path: 'ihale/:id/ihale-detay', component: IhaleBilgileriComponent },
   { path: 'ihale/:id/dosyalar', component: IhaleDosyalariComponent },
   { path: 'ihale/:id/revizyonlar', component: RevizyonlarComponent },
   { path: 'ihale/:id/teklifler', component: IhaleTeklifleriComponent },

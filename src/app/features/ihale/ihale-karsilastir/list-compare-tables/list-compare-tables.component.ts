@@ -77,5 +77,6 @@ export class ListCompareTablesComponent {
 
   deleteTable(tableid: string) {
     this.compareTableService.deleteTable(tableid);
+    this.compareTables = this.compareTables.filter(x=>x.id!==tableid);
   }
 }

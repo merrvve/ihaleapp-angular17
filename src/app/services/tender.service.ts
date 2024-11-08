@@ -23,9 +23,9 @@ import { Budget } from '../models/budget';
 import { BudgetService } from './budget.service';
 import { RevisionsService } from './revisions.service';
 import { ListToDict } from '../utils/functions/ListToDict';
-import { MessageService } from 'primeng/api/messageservice';
 import { MessagesService } from './messages.service';
 import { Router } from '@angular/router';
+import { DictToDataList } from '../utils/functions/DictToDataList';
 
 @Injectable({
   providedIn: 'root',
@@ -136,7 +136,7 @@ export class TenderService {
     const currentTableData = this.tableData.currentData;
     const data = ListToDict(currentTableData);
     const currentRevision = this.revisionsService.getCurrentRevision();
-    if(currentRevision.id) {
+    if(currentRevision && currentRevision.id) {
       currentRevision.discoveryData = data;
       this.revisionsService.updateRevision(tender.id, currentRevision.id, currentRevision)
     }
@@ -187,6 +187,9 @@ export class TenderService {
         if (docSnapshot.exists()) {
           let tenderData = docSnapshot.data() as Tender;
           tenderData.id = docSnapshot.id;
+          tenderData.isEditMode=true;
+          const data = DictToDataList(tenderData.discoveryData);
+          this.tableData.loadData(data);
           this._currentTender.next(tenderData);
           return tenderData;
         } else {

@@ -58,7 +58,11 @@
           <td>Keşif Tablosu</td>
           <td>:</td>
 
-          <td>Detay</td>
+          <td>
+            <a [routerLink]="['/ihale/ihale/'+ tender.id +'/ihale-detay']">
+              Detay
+            </a>
+            </td>
         </tr>
         <tr>
           <td>Davet Edilen Teklifçi Sayısı</td>

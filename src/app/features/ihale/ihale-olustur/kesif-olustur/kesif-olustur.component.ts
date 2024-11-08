@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { TableComponent } from '../../../table/table.component';
 import { IhaleOlusturComponent } from '../ihale-olustur.component';
 import { ButtonModule } from 'primeng/button';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { TenderService } from '../../../../services/tender.service';
 import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { TablodataService } from '../../../../services/tablodata.service';
+import { DictToDataList } from '../../../../utils/functions/DictToDataList';
 
 @Component({
   selector: 'app-kesif-olustur',
@@ -18,14 +20,20 @@ export class KesifOlusturComponent implements OnInit {
   currency!: string;
   isEditMode!: boolean;
   constructor(private tenderService: TenderService,
+    private tableService: TablodataService
    
   ) {}
   ngOnInit(): void {
-    
-    this.currency = this.tenderService._currentTender.value.currency;
-    this.isEditMode = this.tenderService._currentTender.value.isEditMode;
-    
-    
- 
+    const tender = this.tenderService._currentTender.getValue();
+    if(tender) {
+      this.currency = tender.currency;
+      this.isEditMode = tender.isEditMode;
+      const data = DictToDataList(tender.discoveryData);
+      if(data) {
+        this.tableService.loadData(data);
+      }
+      
+    }
+  
   }
 }

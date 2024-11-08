@@ -13,6 +13,8 @@ import {
   updateDoc,
   where,
 } from '@angular/fire/firestore';
+import { MessagesService } from './messages.service';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +24,10 @@ export class CompareTablesService {
 
   tablesCollection!: CollectionReference;
 
-  constructor() {
+  constructor(
+    private messagesService: MessagesService,
+    private location: Location
+  ) {
     this.tablesCollection = collection(this.firestore, 'compareTables');
   }
 
@@ -49,10 +54,11 @@ export class CompareTablesService {
   createTable(compareTable: CompareTable) {
     console.log(compareTable, this.tablesCollection);
     addDoc(this.tablesCollection, compareTable).then(
-      (documentReference: DocumentReference) => {
-        console.log(documentReference);
+      () => {
+        this.messagesService.showSuccess("Karşılaştırma tablosu kaydedildi.");
+        this.location.back();
       },
-    );
+    ).catch((error)=> this.messagesService.showError("Tablo kaydedilemedi. "+ error.message));
   }
 
   updateTable(compareTable: CompareTable) {
@@ -60,10 +66,11 @@ export class CompareTablesService {
 
     updateDoc(tableRef, compareTable as object)
       .then(() => {
-        console.log('Tender updated successfully!');
+        this.messagesService.showSuccess("Karşılaştırma tablosu güncellendi.");
+        this.location.back();
       })
       .catch((error) => {
-        console.error('Error updating tender:', error);
+        this.messagesService.showError("Tablo güncellenemedi. "+ error.message);
       });
   }
 
@@ -72,10 +79,10 @@ export class CompareTablesService {
 
     deleteDoc(tableRef)
       .then(() => {
-        console.log('Table deleted successfully!');
+        this.messagesService.showSuccess("Karşılaştırma tablosu silindi.");
       })
       .catch((error) => {
-        console.error('Error deleting table:', error);
+        this.messagesService.showError("Tablo silinemedi. "+ error.message);
       });
   }
 }
