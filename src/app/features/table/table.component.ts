@@ -766,14 +766,20 @@ export class TableComponent implements OnInit {
   selectRevision(revisionId: string) {
     console.log(this.tenderId, revisionId, "rev")
     if(revisionId) {
-      this.revisionsService.getRevision(this.tenderId,revisionId);
+      if(!this.revisionsService.getRevision(this.tenderId,revisionId)) {
+        const data = DictToDataList(this.tenderService._currentTender.getValue().discoveryData);
+        if(data) {
+          this.dataService.loadData(data);
+        }
+      };
       this.updateView();
     }
     else {
       const data = DictToDataList(this.tenderService._currentTender.getValue().discoveryData);
-      if(data) {
-        this.dataService.loadData(data);
-      }
+        if(data) {
+          this.dataService.loadData(data);
+        }
+        this.updateView();
     }
   }
   

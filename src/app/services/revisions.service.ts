@@ -6,6 +6,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { BehaviorSubject } from 'rxjs';
 import { DictToDataList } from '../utils/functions/DictToDataList';
 import { TablodataService } from './tablodata.service';
+import { TenderService } from './tender.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class RevisionsService {
   private _currentRevision = new BehaviorSubject<TenderRevision|null>(null);
   currentRevision$ = this._currentRevision.asObservable();
   constructor(
-    private tableDataService: TablodataService
+    private tableDataService: TablodataService,
   ) { }
 
   createRevision(tenderId: string, discovery_data: any,name: string) {
@@ -66,7 +67,7 @@ export class RevisionsService {
             this.tableDataService.loadData(DictToDataList(data));
             return revision;
         } else {
-            return null; // Return null if the document doesn't exist
+          return null;
         }
     } catch (error) {
         console.error("Error fetching revision:", error);
