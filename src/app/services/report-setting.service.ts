@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { collection, CollectionReference, doc, DocumentReference, Firestore, updateDoc } from '@angular/fire/firestore';
 import { ReportSettings } from '../models/report-settings';
+import { MessagesService } from './messages.service';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,10 @@ export class ReportSettingService {
   
   tendersCollection!: CollectionReference;
   currentSetting!: ReportSettings;
-  constructor() {
+  constructor(
+    private messagesService: MessagesService,
+    private location: Location
+  ) {
     this.tendersCollection = collection(this.firestore, 'tenders');
   }
 
@@ -24,10 +29,11 @@ export class ReportSettingService {
       reportSetting: reportSetting
     })
       .then(() => {
-        console.log('Tender report setting updated successfully!');
+        this.messagesService.showSuccess("Rapor ayarları başarıyla güncellendi.");
+        this.location.back();
       })
       .catch((error) => {
-        console.error('Error updating tender report setting:', error);
+        this.messagesService.showError("Rapor ayarları güncellenemedi. "+ error.message)
       });
   }
  

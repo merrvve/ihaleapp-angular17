@@ -77,7 +77,7 @@ export class CompareBidsService {
       );
       if (this.tender.id) {
         this.budgetService
-          .getBudgetsByTenderId(this.tender.id)
+          .getBudgetsByTenderId(this.tender.id, revisionName)
           .then((budgets) => {
             if (budgets && budgets[0]?.discovery_data) {
               this.budget = budgets[0];

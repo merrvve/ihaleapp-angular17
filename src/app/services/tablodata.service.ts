@@ -49,6 +49,7 @@ export class TablodataService {
   }
 
   loadData(datalist: any[]) {
+    
     this.currentData = datalist;
     this._colsSubject.next(this.columns(datalist));
     this._datatreeSubject.next(
@@ -57,6 +58,7 @@ export class TablodataService {
   }
 
   loadDataByColandDataTree(cols: Column[], datatree: TreeNode[]) {
+    console.log(datatree)
     this._colsSubject.next(cols);
     this._datatreeSubject.next(datatree);
   }

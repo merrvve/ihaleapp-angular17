@@ -7,9 +7,7 @@ import { ReportStatement } from '../models/report-statement';
 import { ReportTableCell } from '../models/report-table-cell';
 import { ReportData } from '../models/report-data';
 import { addDoc, collection, CollectionReference, deleteDoc, doc, Firestore, getDocs } from '@angular/fire/firestore';
-import { BudgetService } from './budget.service';
 import { Budget } from '../models/budget';
-import { TenderService } from './tender.service';
 import { MessagesService } from './messages.service';
 import { Router } from '@angular/router';
 
@@ -39,7 +37,7 @@ export class ReportsService {
   
   budget!: Budget;
   constructor(
-    private budgetService: BudgetService,
+    
     private messageService: MessagesService,
     private router: Router
     
@@ -50,7 +48,7 @@ export class ReportsService {
   ngOnInit() {
     
   }
-  createReport(bid: TenderBid, reportSetting: ReportSettings, bidsSummary: TenderBidsSummary, tenderId: string, tenderName: string, budgetData: any) {
+  createReport(bid: TenderBid, reportSetting: ReportSettings, bidsSummary: TenderBidsSummary, tenderId: string, tenderName: string, budgetData: any, isSent:boolean = false) {
     this._currentReport.next({
       bid_id: bid.id,
       tender_id: tenderId,
@@ -58,7 +56,7 @@ export class ReportsService {
       company_name: bid.company_name,
       reportSettings: reportSetting,
       bidsSummary: bidsSummary,
-      isSent: false
+      isSent: isSent
     });
 
     this._reportStatementsSubject.next({
@@ -71,7 +69,7 @@ export class ReportsService {
 
     let positiveStatements = [];
     let negativeStatements = [];
-    let descriptionStatements = [`xxx İhalesi ${bid.company_name} Firması ${bid.id} no'lu Teklif Raporu`];
+    let descriptionStatements = [`${tenderName} İhalesi ${bid.company_name} Firması ${bid.id} no'lu Teklif Raporu`];
 
 
     if(!reportSetting) {
@@ -235,41 +233,8 @@ export class ReportsService {
       });
   }
 
-  async getBudget(tenderId: string): Promise<any> {
-    try {
-      const result = await this.budgetService.getBudgetsByTenderId(tenderId);
-      
-      const discovery_data = result[0].discovery_data;
-      const columns = discovery_data["0"];
-      let budgetPrices = {}
-      for (const [rowIndex, row] of Object.entries(discovery_data)) {
-        const rowNum = parseInt(rowIndex);
-        if (!budgetPrices[rowNum]) {
-          budgetPrices[rowNum] = {};
-      }
-        columns.forEach((column: any, index: number) => {
-         
-          const value = row[index];
-
-          if (value && typeof value === "number") {
-             budgetPrices[rowNum][column] = value;
-            
-          }
-        });
-      }
-      return budgetPrices;
-      
-    } catch (error) {
-      console.error('Error fetching budget:', error);
-      return null; // Return null in case of error
-    }
-  }
-
-  async fetchBudgetValue(tenderId: string): Promise<any> {
-    let baseValue = await this.getBudget(tenderId); // Assign the result of getBudget to baseValue
-    return baseValue; // Log or further use baseValue as needed
-  }
-      
+  
+  
     
     
   }

@@ -93,7 +93,7 @@ export class BidsTableComponent {
       return;
     }
     if(this.tender) {
-      this.budgetService.getBudgetsByTenderId(this.tender.id).then(
+      this.budgetService.getBudgetsByTenderId(this.tender.id,bids[0].revisionName).then(
         (budgets)=> {
           const budget = budgets[0].discovery_data;
           for (const bid of bids) {

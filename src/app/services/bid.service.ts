@@ -43,7 +43,7 @@ export class BidService {
     private messageService: MessagesService
   ) {}
 
-  setBidData(tenderId?: string) {
+  setBidData(tenderId: string) {
     const currentData = this.bidSubject.getValue();
     const currentTableData = this.tableService.currentData;
     let data: { [key: number]: any } = {};
@@ -57,7 +57,7 @@ export class BidService {
       let bidData: TenderBid = {
         bidder_id: this.authService.currentUser.uid,
         created_at: new Date().toLocaleDateString('tr-TR'),
-        tenderId: tenderId ? tenderId : null,
+        tenderId: tenderId,
         revisionId:
           currentRevision && currentRevision.id ? currentRevision.id : null,
         revisionName:
@@ -71,10 +71,6 @@ export class BidService {
       return bidData;
     } else {
       currentData.discovery_data = data;
-      currentData.revisionId =
-        currentRevision && currentRevision.id ? currentRevision.id : null;
-      currentData.revisionName =
-        currentRevision && currentRevision.name ? currentRevision.name : 'R1';
       currentData.total_price = this.tableService.allTreeTotal;
       return currentData;
     }

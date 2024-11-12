@@ -59,7 +59,7 @@ export class BudgetService {
     }
   }
 
-  async getBudgetsByTenderId(tenderid: string) {
+  async getBudgetsByTenderId(tenderid: string, revisionName: string = "R1") {
     const budgetQuery = query(
       this.budgetsCollection,
       where('tender_id', '==', tenderid),
@@ -70,7 +70,10 @@ export class BudgetService {
       querySnapshot.forEach((doc) => {
         let budget = doc.data() as Budget;
         budget.id = doc.id;
-        budgets.push(budget);
+        if(budget.revisionName===revisionName) {
+          budgets.push(budget);
+        }
+        
         this.currentBudget = budget;
       });
       return budgets;

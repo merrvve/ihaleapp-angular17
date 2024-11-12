@@ -3,7 +3,7 @@ import { addDoc, collection, CollectionReference, deleteDoc, doc, Firestore, get
 import { TenderRevision } from '../models/tender';
 import { from } from 'rxjs/internal/observable/from';
 import { map } from 'rxjs/internal/operators/map';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { DictToDataList } from '../utils/functions/DictToDataList';
 import { TablodataService } from './tablodata.service';
 import { TenderService } from './tender.service';
@@ -76,6 +76,11 @@ export class RevisionsService {
 }
 
   getAllRevisions(tenderId: string) {
+    if (!tenderId) {
+      console.error("Invalid tenderId:", tenderId);
+      return of([]); // or throw an error if tenderId is required
+    }
+    console.log(tenderId, "getall")
     const revisionsRef = collection(this.firestore, 'tenders', tenderId, 'revisions');
     
     return from(getDocs(revisionsRef)).pipe(
@@ -117,5 +122,21 @@ export class RevisionsService {
       return null;
     }
     
+  }
+
+  setCurrentRevision(tenderId: string,revisionName: string) {
+    this.getAllRevisions(tenderId).subscribe((revisions)=> {
+      const revision = revisions.find(rev=>rev.name===revisionName);
+      if(revision) {
+        this._currentRevision.next(revision)
+      }
+      else {
+        this._currentRevision.next({
+          name: "R1",
+          created_at: '',
+          discoveryData: undefined
+        })
+      }
+    })
   }
 }

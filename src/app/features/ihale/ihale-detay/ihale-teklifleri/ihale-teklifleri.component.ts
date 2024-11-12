@@ -21,14 +21,12 @@ import { BidsTableComponent } from '../../../../components/bids-table/bids-table
   selector: 'app-ihale-teklifleri',
   standalone: true,
   imports: [
-    AsyncPipe,
-    LoadingSpinnerComponent,
     TableModule,
     ButtonModule,
     IconFieldModule,
     InputIconModule,
     InputTextModule,
-    RouterLink,
+
     BidsTableComponent,
   ],
   templateUrl: './ihale-teklifleri.component.html',
@@ -56,7 +54,7 @@ export class IhaleTeklifleriComponent {
     this.paramSubscription = this.route.paramMap.subscribe((params) => {
       const id = params.get('id');
       this.menuService.setItems(id || '');
-      console.log(id, this.currentTender?.id)
+      console.log(id, this.currentTender?.id);
       if (id && id !== this.currentTender?.id) {
         this.tenderService.getTenderById(id).subscribe({
           next: (result) => {
@@ -71,13 +69,13 @@ export class IhaleTeklifleriComponent {
       }
     });
     if (this.currentTender?.id) {
-      console.log(this.currentTender.id)
-      this.bidSubscription = this.bidService.getBidsByTenderId(this.currentTender?.id).subscribe(
-        (result) => {
+      console.log(this.currentTender.id);
+      this.bidSubscription = this.bidService
+        .getBidsByTenderId(this.currentTender?.id)
+        .subscribe((result) => {
           this.bidService.bidsSubject.next(result);
-          this.bids$ = this.bidService.bids$; 
-        }
-      );
+          this.bids$ = this.bidService.bids$;
+        });
     }
   }
 
@@ -106,12 +104,11 @@ export class IhaleTeklifleriComponent {
 
   ngOnDestroy() {
     this.menuService.clearItems();
-    if(this.paramSubscription) {
+    if (this.paramSubscription) {
       this.paramSubscription.unsubscribe();
     }
-    if(this.bidSubscription) {
+    if (this.bidSubscription) {
       this.bidSubscription.unsubscribe();
     }
-    
   }
 }

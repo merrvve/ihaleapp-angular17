@@ -49,7 +49,6 @@ import { DictToDataList } from '../../utils/functions/DictToDataList';
     NgClass,
     InputTextModule,
     DialogModule,
-    RouterLink,
     ButtonModule,
     SplitButtonModule,
     MenubarModule,
@@ -134,7 +133,7 @@ export class TableComponent implements OnInit {
         }
         
         this.selectedColumns = this.cols;
-        console.log(this.cols);
+  
       },
       error: (e) => console.error(e),
       complete: () => console.info('complete'),
@@ -292,10 +291,10 @@ export class TableComponent implements OnInit {
     if(this.tenderService._currentTender.getValue().id) {
       
       this.revSubs = this.revisionsService.getAllRevisions(this.tenderId).subscribe(result=>{this.revisions=this.revisions.concat(result);
-        const currentId = this.revisionsService.getCurrentRevision()?.id;
+        const currentName = this.revisionsService.getCurrentRevision()?.name;
         
-         if(currentId) {
-          this.selectedRevision = this.revisions.find(x=>x.id==currentId);
+         if(currentName) {
+          this.selectedRevision = this.revisions.find(x=>x.name==currentName);
          }
          else {
           this.selectedRevision = this.revisions[0]

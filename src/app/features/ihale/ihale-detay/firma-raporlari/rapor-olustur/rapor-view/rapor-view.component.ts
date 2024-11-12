@@ -6,9 +6,11 @@ import { ReportStatement } from '../../../../../../models/report-statement';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { ReportTableCell } from '../../../../../../models/report-table-cell';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { TooltipModule } from 'primeng/tooltip';
 import { NumberFormatPipe } from '../../../../../../utils/number-format.pipe';
+import { MenuService } from '../../../../../../services/menu.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -21,13 +23,21 @@ import { NumberFormatPipe } from '../../../../../../utils/number-format.pipe';
 export class RaporViewComponent {
   reportStatements$!: Observable<ReportStatement>;
   reportTableData$!: Observable<Array<ReportTableCell[]>>
-
+  tenderId!: string;
   columns!: string[];
-  constructor(private reportService: ReportsService) {
+  subscription!: Subscription;
+
+  constructor(private reportService: ReportsService,
+    private menuService: MenuService,
+    private route: ActivatedRoute
+  ) {
 
   }
   ngOnInit() {
-   
+    this.subscription=this.route.paramMap.subscribe((params) => {
+      this.tenderId = params.get('id'); 
+      this.menuService.setItems(this.tenderId);
+    });
     this.reportStatements$ = this.reportService.reportStatements$;
     this.reportTableData$ = this.reportService.reportTableData$.pipe(
       tap(data => {
@@ -42,5 +52,12 @@ export class RaporViewComponent {
 
   saveReport() {
     this.reportService.saveReport();
+  }
+
+  ngOnDestroy() {
+    this.menuService.clearItems();
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

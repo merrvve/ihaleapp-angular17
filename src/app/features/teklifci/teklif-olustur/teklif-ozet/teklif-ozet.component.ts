@@ -25,7 +25,7 @@ export class TeklifOzetComponent {
     private router: Router
   ) {}
   ngOnInit(): void {
-    this.bidService.setBidData();
+    this.bidService.setBidData(this.bidService.tenderSubject.getValue().id);
     this.currentBid$ = this.bidService.bid$;
   }
   createBid() {
