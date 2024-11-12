@@ -49,7 +49,7 @@ export class TablodataService {
   }
 
   loadData(datalist: any[]) {
-    
+    console.log(datalist)
     this.currentData = datalist;
     this._colsSubject.next(this.columns(datalist));
     this._datatreeSubject.next(

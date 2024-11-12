@@ -583,6 +583,7 @@ export class TableComponent implements OnInit {
     );
 
     this.dataService.currentData = tabloData;
+    console.log(tabloData)
     this.dataService.setCols(this.cols);
     this.dataService.setData(this.files);
     this.subscription.unsubscribe();

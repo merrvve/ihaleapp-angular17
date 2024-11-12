@@ -79,6 +79,7 @@ export class BidService {
   createBid() {
     const tenderId = this.tenderSubject.value?.id;
     const bidData = this.setBidData(tenderId);
+    console.log(bidData)
     if (tenderId) {
       const tenderRef = doc(this.firestore, 'tenders', tenderId);
       const bidsRef = collection(tenderRef, 'bids');

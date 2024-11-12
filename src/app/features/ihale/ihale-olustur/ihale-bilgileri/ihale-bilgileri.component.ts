@@ -26,7 +26,6 @@ interface UploadEvent {
     RadioButtonModule,
     FormsModule,
     ButtonModule,
-    RouterLink,
     FileUploadModule,
     CalendarModule,
     AsyncPipe,

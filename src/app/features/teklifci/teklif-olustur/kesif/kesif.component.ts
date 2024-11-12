@@ -8,6 +8,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessagesModule } from 'primeng/messages';
 import { Message } from 'primeng/api';
 import { BidService } from '../../../../services/bid.service';
+import { TablodataService } from '../../../../services/tablodata.service';
 
 @Component({
   selector: 'app-kesif',
@@ -22,27 +23,15 @@ import { BidService } from '../../../../services/bid.service';
   ],
 })
 export class KesifComponent implements OnInit {
-  isLoading: boolean = false;
-  isTeklifModalVisible: boolean = false;
-  messages!: Message[];
-  error: boolean = false;
+  
 
   constructor(
-    private router: Router,
-    private bidService: BidService,
+   private dataService: TablodataService
   ) {}
   ngOnInit(): void {}
-  createBid() {
-    this.bidService.createBid()?.subscribe({
-      next: (result) => console.log(result),
-      error: (error) => console.log(error),
-    });
+  
+  ngOnDestroy() {
+    
   }
 
-  completed() {
-    this.isTeklifModalVisible = false;
-    if (!this.error) {
-      this.router.navigate(['/teklifci']);
-    }
-  }
 }

@@ -17,7 +17,16 @@ import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-teklifci-teklifleri',
   standalone: true,
-  imports: [AsyncPipe, TableModule, ButtonModule, InputIconModule, IconFieldModule, InputTextModule, SplitButtonModule, TooltipModule],
+  imports: [
+    AsyncPipe,
+    TableModule,
+    ButtonModule,
+    InputIconModule,
+    IconFieldModule,
+    InputTextModule,
+    SplitButtonModule,
+    TooltipModule,
+  ],
   templateUrl: './teklifci-teklifleri.component.html',
   styleUrl: './teklifci-teklifleri.component.scss',
 })
@@ -31,18 +40,16 @@ export class TeklifciTeklifleriComponent implements OnInit {
     private tenderService: TenderService,
     private tableService: TablodataService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
   ngOnInit(): void {
     this.bids$ = this.bidService.bids$;
-    this.paramSupscription= this.route.paramMap.subscribe(
-      (params) => {
-        this.tenderId = params.get('id');
-        if (this.tenderId) {
-          this.bidService.filterBidsByTenderId(this.tenderId);
-        } 
+    this.paramSupscription = this.route.paramMap.subscribe((params) => {
+      this.tenderId = params.get('id');
+      if (this.tenderId) {
+        this.bidService.filterBidsByTenderId(this.tenderId);
       }
-    )
+    });
   }
 
   getEditItems(bid: TenderBid) {
@@ -51,13 +58,13 @@ export class TeklifciTeklifleriComponent implements OnInit {
         label: 'Düzenle',
         command: () => {
           this.editBid(bid); // Pass bid to editBid
-        }
+        },
       },
       {
         label: 'Yeni Teklif Oluştur',
         command: () => {
           this.newBid(bid); // Pass bid to editBid
-        }
+        },
       },
     ];
   }
@@ -66,7 +73,6 @@ export class TeklifciTeklifleriComponent implements OnInit {
     this.tenderService.getTenderById(bid.tenderId).subscribe({
       next: (result) => {
         if (result) {
-          
           this.bidService.tenderSubject.next(result);
           let tableData = [];
           if (result.discoveryData) {
@@ -81,7 +87,7 @@ export class TeklifciTeklifleriComponent implements OnInit {
             bidder_id: bid.bidder_id,
             created_at: new Date().toLocaleDateString('tr-TR'),
             revisionId: null,
-            revisionName:'R1',
+            revisionName: 'R1',
             company_id: bid.company_id,
             company_name: bid.company_name,
             total_price: this.tableService.allTreeTotal,
@@ -93,7 +99,6 @@ export class TeklifciTeklifleriComponent implements OnInit {
     });
   }
 
-
   seeTenderBidDetails(bid: TenderBid) {
     let tableData = [];
     if (bid.discovery_data) {
@@ -101,6 +106,7 @@ export class TeklifciTeklifleriComponent implements OnInit {
         tableData.push(bid.discovery_data[key]);
       }
       this.tableService.loadData(tableData);
+      console.log(tableData);
       this.router.navigate(['/teklifci/kesif-detay']);
     } else {
       console.log('no discovery data');
@@ -111,34 +117,32 @@ export class TeklifciTeklifleriComponent implements OnInit {
   }
 
   editBid(bid: TenderBid) {
-    let tableData = [];
-    if (bid.discovery_data) {
-      for (const key in bid.discovery_data) {
-        tableData.push(bid.discovery_data[key]);
-      }
-      this.tableService.loadData(tableData);
-    }
     bid.isEditMode = true;
-    this.subscription= this.tenderService.getTenderById(bid.tenderId).subscribe(
-      result=> {
+    this.subscription = this.tenderService
+      .getTenderById(bid.tenderId)
+      .subscribe((result) => {
         this.bidService.setCurrentTender(result);
         this.bidService.setCurrentBid(bid);
+        let tableData = [];
+        if (bid.discovery_data) {
+          for (const key in bid.discovery_data) {
+            tableData.push(bid.discovery_data[key]);
+          }
+          this.tableService.loadData(tableData);
+        }
         this.router.navigate(['/teklifci/teklif-olustur']);
-      }
-    )
-    
+      });
   }
 
   deleteBid(bidId: string, tenderId: string) {
     this.bidService.deleteBid(bidId, tenderId);
   }
   ngOnDestroy() {
-    if(this.subscription) {
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    if(this.paramSupscription) {
+    if (this.paramSupscription) {
       this.paramSupscription.unsubscribe();
     }
   }
-
 }
