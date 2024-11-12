@@ -49,8 +49,8 @@ export class CompareBidsService {
     let table: CompareTableRow[] = [];
     let tableData: any = [];
     let currentData: any;
-    const revisionName = bids[0].revisionName;
-    const revisionId = bids[0].revisionId;
+    const revisionName = bids[0]?.revisionName || "R1";
+    const revisionId = bids[0]?.revisionId || null;
     if (revisionName !== "R1" && revisionId) {
       const currentRevision = await this.revisionService.getRevision(this.tender.id, revisionId);
       currentData= currentRevision.discoveryData;

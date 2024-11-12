@@ -67,7 +67,9 @@ export class ListCompareTablesComponent {
                 }
               }
             });
+            console.log(bidsList);
             this.compareBidsService.compareBids = bidsList;
+            this.compareBidsService.createTableData(bidsList);
             this.router.navigate(['/ihale/karsilastir']);
           });
         }
